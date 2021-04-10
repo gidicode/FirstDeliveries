@@ -1,0 +1,216 @@
+{% extends "FDS_app/base.html" %}
+{% load static %}
+
+{% block title %} Home {% endblock title%}
+
+{% block content %}
+
+<!--Slide-->
+<div class="row" >
+  <div class="col-md-0"></div>
+  
+  <div class="col-md-12" >
+    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+    <div class="carousel-inner" style="height: 400px;">
+      <div class="carousel-item active" >
+        <img src="/static/FDS_app/FdsImage1.jpeg" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="/static/FDS_app/FdsImage4.jpeg" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="/static/FDS_app/FdsImage2.jpg" class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  </div>
+
+  <div class="col-md-0 " ></div>
+</div>
+
+<br>
+
+<div class="jumbotron p-3 container bg-dark">
+  <div class="container text-center text-white"> 
+  <h1 class="display-4">Hello, there!</h1>
+  <p class="lead">With First Deliveries we take the stress and worries of delivery and let you focus on what you do best. </p>
+  <hr class="my-4">
+  <p>We are just a few clicks away from delivering your item.</p>
+  <a class="btn btn-warning btn-lg text-white" href="#" role="button">Learn more</a>
+</div>
+</div>
+    
+
+<!--Text Display-->
+<div class="container">
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+
+      <div>
+      {% if user.is_authenticated %}
+          <div class="text-white bg bg-secondary p-1 shadow-sm text-center">
+          <h6 class="h6"> Your most relaible Delivery service in Calabar Metropolis 
+            <span class=" btn btn-sm btn-warning "> 
+              <a class="text-white text-decoration-none" href="{% url 'dashboard' user.id %}"> Request Dispatch </a></span>
+          </h6>
+        </div>
+      {% else %}
+      </div>
+
+        <div class="card bg bg-secondary p-1 shadow-sm text-center">
+          <br>
+          <p class="lead text-white">Create an account and create a request for our dispatch Riders
+            <span class=" btn btn-sm btn-light"> 
+              <a class="text-dark text-decoration-none" href="{% url 'register' %}"> Sign up</a></span>
+            </p>
+      {% endif %}
+          </p>
+        </div>
+    </div>
+    
+    <div class="col-md-1"></div>
+  </div>
+</div>
+
+<!--Text Display -->
+<br>
+
+<div class="jumbotron jumbotron-fluid bg-primary shadow text-white">
+  <div class="container"> 
+    <div class="row">
+          <div class="col-md-2">
+            <img src="/static/FDS_app/angry.jpg" class="p-2 rounded-circle rounded-sm border-warning" alt="girl">
+          </div>
+        
+          <div class="col-md-2"></div>
+          <div class="col-md-2"></div>
+
+          <div class="col-md-6">
+          <div class="text-left ">
+            <h1 class="display-4 text-left">Hey Vendor!</h1>
+            <p class="display-4"> Lets help make things easier for your business,</p>
+            <p class="lead"> Manage all your deliveries with us on your dashboard,</p>
+            <p class="lead"> Track all your request deliveries,</p>
+            <p class="lead"> Get your total count to help you make better business decisions</p>
+            <h4 class="h4"> And many more.</h4>
+            {% if user.is_authenticated %}
+           {% else %}
+           <p> Create and account to begin 
+             <a class="" href="{% url 'register' %}"> 
+               <button class="btn btn-light"> Click here</button>
+            {% endif %}
+             </a>
+           </p>
+          </div>
+          </div>
+        </div>
+
+    
+  
+
+  
+  
+</div>
+</div>
+
+
+
+
+
+<div class="container-fluid">
+<div class="row">
+    <!--First column-->
+<div class="col-md-3 container-fluid bg-warning d-inline-block rounded shadow p-3 mb-5">
+    <div class="text-center p-4">      
+
+    <dl> 
+        <dt> CENTER </dt>
+        <dd> Call us on: +234 7067320119</dd>
+        <dt> WORKING HOURS </dt>
+        <dd>Mon-Fri 8AM-6PM</dd>
+        <dd> Sat 8AM-5pm</dd>
+        <dt> OUR LOCATION</dt>
+        <dd> we are located at number 5 new obutong street clabar</dd>
+    </dl>
+    </div>
+</div>
+
+    <!--second column-->
+<div class="col-md-8 container bg-light d-inline-block text-muted rounded shadow p-3 mb-5">
+    <div>
+        <h1> OUR SERVICES</h1>
+        <h5> OUR SERVICES WE CAN RENDER FOR YOU</h5>
+        <ul>
+        <li> Welcome to First Delivery Logistics, for the main time our services can be rendered within the calabar metropolice.</li>
+        <li>We convey parsel and luggage of all kind for an affordable fee, we ensure the security of your items from point of origin to Delivery</li>
+        <li>We provide short time warehousing of deliveries to be delivered at a certain day, max 3 days.</li>
+        <li> Feeling lazy or too busy to go shopping, Dont worry we could go shopping for you for an affordable fee</li>
+        </ul>
+    </div>
+    
+    <!--third-->
+<div class="col-md-1 container bg-light d-inline-block"> </div>
+</div>
+</div>
+
+<!-- Nect-->
+
+<div class="jumbotron jumbotron-fluid bg-dark shadow text-white">
+  <div class="container"> 
+    <div class="row">
+          <div class="col-md-4 p-3">
+            <div class="card card-body bg bg-danger text-white text-center text-truancate " style=" height: 15rem;"> 
+              <br>
+              <h3>Make payments easily with our multiple payment channels </h5>
+                <p class="lead"> <a class="text-decoration-none btn btn-light btn-sm" href="#">Click</a></p>
+                  
+                
+            </div>
+            
+          </div>
+        
+          <div class="col-md-4 p-3 ">
+            <div class="card card-body bg bg-info text-white text-center" style=" height: 15rem;"> 
+              <br>
+              <h4> You need help shopping? 
+                <p class="lead"> We provide aid shopping service, following your description,</p>
+              <p> More info 
+                <a class="text-decoration-none btn btn-light btn-sm" href="#">Click</a>
+              </p>
+              
+              </h4>
+            </div>
+          </div>
+          <div class="col-md-4 p-3">
+            <div class="card card-body bg bg-light text-dark text-center" style=" height: 15rem;"> 
+              <br>
+              <h4> Bigger Space? </h4>
+              <p> Our various transport means have all space you will need to deliver your items in good condition 
+                <a class="text-decoration-none btn btn-info btn-sm" href="#">Click</a>
+              </p>
+            </div>
+          </div>
+        </div>
+</div>
+</div>
+
+
+
+
+
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-3"></div>
+</div>
+
+{% endblock content %}

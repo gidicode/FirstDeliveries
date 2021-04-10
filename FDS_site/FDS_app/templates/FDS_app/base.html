@@ -1,0 +1,114 @@
+{% load bootstrap4 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %} FDL {% endblock title %}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='{% static "/FDS_app/main.css" %}' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" 
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+</head>
+
+<script>
+  $(function () {
+    var nua = navigator.userAgent
+    var isAndroid = (nua.indexOf('Mozilla/5.0') > -1 && nua.indexOf('Android ') > -1 && nua.indexOf('AppleWebKit') > -1 && nua.indexOf('Chrome') === -1)
+    if (isAndroid) {
+      $('select.form-control').removeClass('form-control').css('width', '100%')
+    }
+  })
+  </script>
+
+
+<body style="background-color: rgb(247, 247, 247);">
+
+<div id="navbar-nav">
+  <nav class="container-fluid navbar navbar-expand-md text-truncate navbar-dark fixed-top shadow-none p-3 mb-5" style="background-color: rgb(48, 3, 3);" >
+    <a class="navbar-brand font-weight-bold" href="{% url 'fds-home' %}"> First Deliveries Service</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
+      <span class="fas fa-bars"></span>
+    </button>
+  <div class=" collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'fds-home' %}">Home</a>
+      </li>
+      <li class="nav-item"> 
+        <a class="nav-link" href="{% url 'fds-about' %}">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'fds-pricing' %}"> Pricing </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"> Order Pickup</a>
+      </li>
+    </ul>
+    <div>
+      {% if user.is_authenticated %}
+      
+      <button type="button" class="btn btn-outline-warning btn-sm">
+        <a  href="{% url 'dashboard' user.id  %}" class=" text-white">Dashboard</a> </button>
+      </div>
+      <button type="button" class="btn btn-warning btn-sm">
+        <a  href="{% url 'logout' %}" class=" text-white">Logout</a></button>
+      {% else%}
+
+    <ul class="navbar-nav" >
+        <li>
+          <button type="button" class="btn btn-warning btn-sm">
+            <a  href="{% url 'register' %}" class=" text-white">Sign up</a></button>
+  
+          <button type="button" class="btn btn-light btn-sm">
+          <a class="nav-item" href="{% url 'login' %}" class=" text-secondary">Sign In</a></button>
+      </li>
+    </ul>
+    {% endif %}
+
+  </div>
+  </div>
+  </nav>
+</div>
+
+<main role="main" style="padding-top: 4rem;">
+  <div >
+{% block content %}
+<nav style="padding-top: 5rem;" class="container sticky-md-top">
+  <div>
+    <button type="button" class="shadow-sm p-3 mb-1 btn btn-warning btn-block font-weight-bold"  data-mdb-toggle="animation" data-mdb-animation-reset="true" data-mdb-animation="slide-out-right"> 
+      Signup Now to Order for your Pickup
+    </button>
+  </div>
+  
+</nav>
+
+
+<nav class="navbar fixed navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Fixed bottom</a>
+  </div>
+</nav>
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">
+  {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock content %}
+</div>
+
+</main>
+
+</body>
+</html> 

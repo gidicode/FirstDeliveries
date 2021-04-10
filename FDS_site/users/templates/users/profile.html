@@ -1,0 +1,78 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Welocme {{user.username }}-FDS {% endblock title %}
+
+
+{% block content2 %}
+{% if messages %}
+<div class="messages p-3 container justify-content-center">
+    {% for message in messages %}
+    <div {% if message.tags %} class=" alert alert-{{message.tags}}" {% endif %}>{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="container">
+{% include 'users/status.html' %}
+</div>
+
+<div class="row container-fluid">
+    <div class="col-md-4">
+        <h5> Customers </h5>
+        <hr>
+        <div class="card card-body">
+            <a class="btn btn-primary btn-sm btn-block" href="#">Create Customer</a>
+            <table class="table table-sm">
+                <tr>
+                    <th>Customer</th>
+                    <th> Phone Number</th>
+                </tr>
+                {% for c in customers %}
+                    <tr>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'dashboard' c.id %}">view</a></td> 
+                        <td>{{c.user.username}}</td>
+                        <td>{{c.user.reciever_phone_number}}</td>
+                    </tr>
+                {% endfor%}
+            </table>
+        </div>
+    </div> 
+    
+    <div class="col-lg-8">
+        <h5>Last 5 Request</h5>
+        <hr>
+        <div class="card card-body">
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address </th>
+                        <th> phone </th>
+                        <th> Date </th>
+                        <th>TP</th>
+                        <th>Location</th>
+                        <th> Status</th>
+                        <th> Amount </th>
+                        <th> Update</th>
+                        <th> Remove</th>
+                    </tr>
+                 {% for i in request1 %}
+                    <tr>
+                        <td>{{i.reciever_name}}</td>
+                        <td>{{i.Address_of_reciever}}</td>
+                        <td>{{i.reciever_phone_number}}</td>
+                        <td>{{i.time_submited}}</td>
+                        <td>{{i.Choice_for_TP}}</td>
+                        <td>{{i.Your_location}}</td>
+                        <td>{{i.status}}</td> 
+                        <td>{{i.amount}}</td> 
+                        <td><a class="btn btn-sm btn-info" href="{% url 'updateRequest' i.id %}">Update</a></td>   
+                        <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequest' i.id%}">Cancel</a></td> 
+                    </tr>
+                {% endfor %}   
+                </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content2 %}

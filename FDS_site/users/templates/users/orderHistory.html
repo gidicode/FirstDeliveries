@@ -1,0 +1,135 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Transaction History-FDS {% endblock title %}
+
+
+{% block content2 %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-4">
+            <div class="card card-body shadow bg p-3 mb-5 bg-white rounded " style="text-align:left; padding: 10px;">
+                <div style="text-align:center; padding: 10px;">
+                    <h4> Total Order (Payments Online)</h4>
+                    <h2> <span class="badge badge-dark shadow">{{request_count}}</span></h2>
+                    <span class="sr-only">Total Count</span>
+                </div>  
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-body shadow bg p-3 mb-5 bg-white rounded " style="text-align:left; padding: 10px;">
+                <div style="text-align:center; padding: 10px;">
+                    <h4> Total Order (CashPayments)</h4>
+                    <h2> <span class="badge badge-dark shadow">{{request2_count}}</span></h2>
+                </div>  
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+    </div>
+</div>
+ 
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2 p-4"></div>
+            <div class="col-md-8"> 
+                <div class="btn btn-light rounded shadow pr-4 p-3">
+                    <form class="form-inline my-3 mx-4 my-lg-1 bd-highlight font-weight-bold text-dark">   
+                        {{myFilter.form|crispy }}
+                        <button class="btn btn-outline-secondary my-sm-2" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row"> 
+        <div class="col-md-4 p-3"> 
+            <div class=" bg bg-primary shadow-sm rounded">
+                <div> 
+                    <h5 class="text-white p-4">Total Request (E-payment)</h5> 
+                </div>
+                {% for i in request1 %}
+                <div class="bg bg-white shadow p-3">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><strong>Name:</strong> {{i.reciever_name}}</li>
+                    <li class="list-inline-item"> <strong>Address:</strong> {{i.Address_of_reciever}}</li>
+                    <li class="list-inline-item"><strong>Contact:</strong> {{i.reciever_phone_number}}</li>
+                    <li class="list-inline-item"><strong>Package Description:</strong> {{i.Package_description}}</li>
+                    <li class="list-inline-item" class="text-info"><strong>DATE CREATED:</strong> {{i.date_created}}</li>
+                    <li class="list-inline-item"><strong>Mode: </strong> {{i.Choice_for_TP}}</li>
+                    <li class="list-inline-item"><strong>Location:</strong> {{i.Your_location}}</li>
+                    <li class="list-inline-item"><strong>Status: </strong> {{i.status}}</li> 
+                    <li class="list-inline-item"><strong>Paid:</strong> {{i.paid}}</li>
+                    <li class="list-inline-item"><strong>Delivery Amount:</strong> {{i.Amount}}</li>
+                </ul>
+                </div>
+                <br>
+                {% endfor %}   
+            </div>
+        </div>
+
+        <div class="col-md-4 p-3">
+            <div class=" bg bg-danger">
+                <h5 class="text-white p4 text-center p-4">Shopping History </h5>
+                <p class="text-white "></p> 
+                
+                {% for i in shop_request %}
+                    <div class=" bg bg-light bg-gradient shadow p-3">
+                        <ul class="list-inline">
+                        <li class="list-inline-item"><strong> Items:</strong> {{i.List_Items}}</li>
+                        <li class="list-inline-item"> <strong>Purchase Location:</strong> {{i.Place_of_purchase}}</li>
+                        <li class="list-inline-item"><strong>Note:</strong> {{i.Note}}</li>
+                        <li class="list-inline-item" class="text-info"><strong>Address For Delivery:</strong> {{i.Address}}</li>
+                        <li class="list-inline-item"><strong>Amount Intended </strong> {{i.Amount}}</li>
+                        <li class="list-inline-item"><strong>Terms Agreement</strong> {{i.Accept_Terms}}</li>
+                        <li class="list-inline-item"><strong>Date Created</strong> {{i.date_created}}</li>
+                        <li class="list-inline-item"><strong>Delivery Status: </strong> {{i.status}}</li> 
+                        <li class="list-inline-item"><strong>Amount Paid:</strong> {{i.amount_paid}}</li>
+                        <li class="list-inline-item"><strong>FDS Charge</strong> {{i.Charge}}</li>
+                        <li class="list-inline-item"><strong>Cost of Purchase:</strong> {{i.Item_Cost}}</li>
+                        <li class="list-inline-item"><strong>Amount Total:</strong> {{i.Total}}</li>
+                        <li class="list-inline-item"><strong>Amount Refunded:</strong> {{i.Amount_Refunded}}</li>
+                    </div>
+                </ul>
+                    <br>
+                {% endfor %}
+            </div>
+        </div>
+
+            <div class="col-md-4 p-3">
+                
+                    
+                    <div class=" bg bg-dark">
+                        <h5 class="text-white p-4"> Total Request (cash-payment)</h5>
+                        {% for i in request2 %}
+                            <div class=" bg bg-light bg-gradient shadow p-3">
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><strong> Name:</strong> {{i.reciever_name}}</li>
+                                <li class="list-inline-item"> <strong> Adress:</strong> {{i.Address_of_reciever}}</li>
+                                <li class="list-inline-item"><strong>Contact:</strong> {{i.reciever_phone_number}}</li>
+                                <li class=" list-inline-item text-info"><strong>Date :</strong> {{i.time_submited}}</li>
+                                <li class="list-inline-item"><strong>Mode: </strong> {{i.Choice_for_TP}}</li>
+                                <li class="list-inline-item"><strong>Location:</strong> {{i.Your_location}}</li>
+                                <li class="list-inline-item"><strong>Description:</strong> {{i.Package_description}}</li>
+                                <li class="list-inline-item"><strong>Status: </strong> {{i.status}}</li> 
+                                <li class="list-inline-item"><strong>Delivery Amount:</strong> {{i.amount}}</li>
+                            </ul>
+                            </div>
+                            <br>
+                    {% endfor %}
+                </div>
+           
+                
+            </div>
+    </div>
+</div>
+
+{% endblock content2 %}

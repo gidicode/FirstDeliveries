@@ -1,0 +1,34 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Log in-FDS {% endblock title%}
+
+{% block content %}
+<div class="row order-3 p-5 bd-highlight">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="card card-body shadow mb-3 rounded">
+            <form method="POST" enctype="multipart/form-data"> 
+                {% csrf_token %}
+                <fieldset class="form-group">
+  
+                    {{form|crispy }}
+                </fieldset>
+
+                <button class="btn btn-outline-info" type="submit">Log In</button>
+            </form>
+            <div class="border-top pt-3">
+                <small class="text-muted"> 
+                    Dont have an account sign up<a calss="ml-2" href="{% url 'register' %}"> Sign Up</a>
+                   </small>
+                   <br>
+                   <small>
+                       Forgot password?<a calss="ml-2" href="{% url 'password_reset' %}"> Reset Password</a>
+                   </small>
+               </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Log in-FDS {% endblock title%}
+
+{% block content %}
+<div class="row order-3 p-5 bd-highlight">
+    <div class="col-md-3"></div>
+    <div class="col-md-5">
+        <div class="card card-body shadow-sm rounded text-center">
+            <h3 class="display-4">You are logged out. </h3>
+            <br>
+            <small class="text-muted text-center"> 
+                <a calss="ml-2" href="{% url 'login' %}"> Log in again</a>
+               </small>
+            <div class="d-flex justify-content-center">
+               <div class="spinner-grow  text-danger d-flex justify-content-center" role="status">
+                <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+{% endblock %}

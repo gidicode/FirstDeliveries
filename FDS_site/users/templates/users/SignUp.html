@@ -1,0 +1,30 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Sign Up {% endblock title%}
+
+{% block content %}
+<div class="row order-3 p-4 bd-highlight">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="card card-body shadow mb-3 rounded">
+            <form method="POST" enctype="multipart/form-data"> 
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Sign Up </legend>
+                    {{form|crispy }}
+        
+                </fieldset>
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </form>
+            <div class="border-top pt-3">
+                <small class="text-muted"> 
+                    Already have and Account <a calss="ml-2" href="{% url 'login' %}"> Sign In</a>
+                   </small>
+               </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+{% endblock %}

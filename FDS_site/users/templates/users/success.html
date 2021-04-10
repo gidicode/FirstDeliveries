@@ -1,0 +1,16 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Payment success {% endblock title%}
+
+{% block content %}
+
+<div id='box' >
+    <h4 class="card card-body"> Your payment of NGN{{amount}} is successful</h4>
+
+    <small class="myButton" href="#"> return back to dashboard</small>
+</div>
+
+
+{% endblock %}

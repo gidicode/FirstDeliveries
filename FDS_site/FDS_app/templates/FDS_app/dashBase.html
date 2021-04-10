@@ -1,0 +1,44 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %} Welocme {{user.username }} {% endblock title %}
+
+{% block content %}
+<main  style="background-color:rgb(255, 255, 255);">
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm p-3 mb-5 breadcrumb d-flex bd-highlight" style="background-color: rgb(255, 255, 255);">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="fas fa-angle-double-down"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link breadcrumb-item p-2 bd-highlight" href="{% url 'orderHistory' user.id %}">Request History <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link breadcrumb-item p-2 bd-highlight" href="{% url 'profileUpdate' user.id %}">Update Profile</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle breadcrumb-item p-2 bd-highlight" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Terms
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Terms & Condition</a>
+              <a class="dropdown-item" href="#">Contact details</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Chat us up</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+{% block content2 %} 
+
+{% endblock content2 %}    
+
+</main>
+{% endblock content %}

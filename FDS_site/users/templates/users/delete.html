@@ -1,0 +1,17 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Welocme {{user.username }} {% endblock title %}
+
+{% block content2 %}
+
+<div class="card card-body contianer">
+  <p>Are you sure you want to Cancel Order to "{{item}}"</p>
+  <form action = "{% url 'cancelRequest' item.id %}" method="POST">
+    {% csrf_token %}
+<a href="{% url 'adminDashboard' %}"> Cancel </a>
+<input type="submit" name="Confirm">
+  </form>
+</div>
+
+{% endblock content2 %} 

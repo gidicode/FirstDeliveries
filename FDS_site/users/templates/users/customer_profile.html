@@ -1,0 +1,43 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Welocme {{user.username }}-FDS {% endblock title %}
+
+
+{% block content2 %}
+    <div class="container">
+    <div class="row">
+        
+        <div class="col-md-4">
+            <div class="card card-body bg bg-light shadow"> 
+                <h5>Hello {{user.first_name}} {{user.last_name}}</h5>
+                <br>
+                <div class="card card-body bg-primary text-white shadow">
+                  <img src="{{customer.image.url}}" alt="" class="img-thumbnail rounded-circle ml-7" width="100" height="300">
+                    <h6> <strong> Username-</strong> {{user.username}}</h6>
+                    <h6> <strong> First Name-</strong> {{user.first_name}}</h6>
+                    <h6> <strong> Last Name-</strong> {{user.last_name}}</h6>
+                    <h6> <strong> Email-</strong> {{user.email}}</h6>
+                    <h6> <strong> Phone Number-</strong>  {{customer.phone_number}}</h6>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8 p-3">
+            <div class="card card-body bg-light shadow">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+            {{ u_form|crispy }}
+            {{ p_form|crispy }}
+            </form>
+
+            <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+            <br>
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock content2 %}
