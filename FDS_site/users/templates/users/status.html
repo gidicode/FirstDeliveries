@@ -1,68 +1,188 @@
-<br>
 
-<div class="row">
-    <div class="col">
-        <div class="col-md">
-        <div class="card text-center text-white bg-primary mb-3" id="total_orders">
-            <div class="card-header">
-                <h5 class="card-title"> Total Request</h5>
-            </div>
-            <div class="card-body">
-                <h3>{{total_request}}</h3>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="container-fluid bg-dark">
+    <br>
+    <div class="row d-flex flex-nowrap">
 
-
-    <div class="col">
-        <div class="col-md">
-        <div class="card text-center text-white bg-primary mb-3" id="total_orders">
-            <div class="card-header">
-                <h5 class="card-title"> Request Delivered</h5>
-            </div>
-            <div class="card-body">
-                <h3>{{delivered}}</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white bg-primary mb-3" id="total_orders">
+        <div class="col-md-4">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
                 <div class="card-header">
-                    <h5 class="card-title"> Pending Deliveries</h5>
+                    <h5 class="card-title"> Total Request E-payment</h5>
                 </div>
                 <div class="card-body">
-                <h3>{{pending}}</h3>
+                    <h3>{{total_request_online}}</h3>
+                </div>
             </div>
         </div>
-    </div>
 
 
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white bg-primary mb-3" id="total_orders">
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title"> Delivered</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{delivered}}</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title">Pending</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{pending}}</h3>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="col-md-">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
                 <div class="card-header">
                     <h5 class="card-title"> Out For Delivery</h5>
                 </div>
-                    <div class="card-body">
-                        <h3>{{out_for_delivery}}</h3>
-                    </div>
+                <div class="card-body">
+                    <h3>{{out_for_delivery}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                        <h5 class="card-title"> Canceled </h5>
+                </div>
+                <div class="card-body">
+                        <h3>{{ canceled }}</h3>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white bg-primary mb-3" id="total_orders">
+
+    <!--For Cash Payment-->
+   
+    <div class="row d-flex flex-nowrap">
+    
+        <div class="col-md-4">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
                 <div class="card-header">
-                    <h5 class="card-title"> Canceled </h5>
+                    <h5 class="card-title"> Total Request Cash</h5>
                 </div>
-                    <div class="card-body">
-                        <h3>{{ canceled }}</h3>
-                    </div>
+                <div class="card-body">
+                    <h3>{{total_request_cash}}</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title">  Delivered</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{delivered1}}</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title"> Pending</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{pending1}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-">
+            <div class="card text-center text-white bg-secondary" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title"> Out For Delivery</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{out_for_delivery1}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                        <h5 class="card-title"> Canceled </h5>
+                </div>
+                <div class="card-body">
+                        <h3>{{ canceled1}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row d-flex flex-nowrap">
+        
+        <div class="col-md-4">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title"> Shopping</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{total_request_shopping}}</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title"> Delivered</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{delivered2}}</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title"> Pending</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{pending2}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                    <h5 class="card-title"> At the Mall</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{at_the_mall}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
+                <div class="card-header">
+                        <h5 class="card-title"> Canceled </h5>
+                </div>
+                <div class="card-body">
+                        <h3>{{ canceled2}}</h3>
+                </div>
             </div>
         </div>
     </div>

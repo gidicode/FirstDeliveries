@@ -1,7 +1,7 @@
 {% extends "FDS_app/dashBase.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Transaction History-FDS {% endblock title %}
+{% block title %} History -FDLS {% endblock title %}
 
 
 {% block content2 %}
@@ -12,7 +12,7 @@
         <div class="col-md-4">
             <div class="card card-body shadow bg p-3 mb-5 bg-white rounded " style="text-align:left; padding: 10px;">
                 <div style="text-align:center; padding: 10px;">
-                    <h4> Total Order (Payments Online)</h4>
+                    <h4> Total Order (E-Payments)</h4>
                     <h2> <span class="badge badge-dark shadow">{{request_count}}</span></h2>
                     <span class="sr-only">Total Count</span>
                 </div>  
@@ -69,6 +69,7 @@
                     <li class="list-inline-item"><strong>Status: </strong> {{i.status}}</li> 
                     <li class="list-inline-item"><strong>Paid:</strong> {{i.paid}}</li>
                     <li class="list-inline-item"><strong>Delivery Amount:</strong> {{i.Amount}}</li>
+                    <li class="list-inline-item"><strong> Order ID:</strong> {{i.order_id}}</li>
                 </ul>
                 </div>
                 <br>
@@ -96,6 +97,7 @@
                         <li class="list-inline-item"><strong>FDS Charge</strong> {{i.Charge}}</li>
                         <li class="list-inline-item"><strong>Cost of Purchase:</strong> {{i.Item_Cost}}</li>
                         <li class="list-inline-item"><strong>Amount Total:</strong> {{i.Total}}</li>
+                        <li class="list-inline-item"><strong> Order ID:</strong> {{i.order_id}}</li>
                         <li class="list-inline-item"><strong>Amount Refunded:</strong> {{i.Amount_Refunded}}</li>
                     </div>
                 </ul>
@@ -121,6 +123,7 @@
                                 <li class="list-inline-item"><strong>Description:</strong> {{i.Package_description}}</li>
                                 <li class="list-inline-item"><strong>Status: </strong> {{i.status}}</li> 
                                 <li class="list-inline-item"><strong>Delivery Amount:</strong> {{i.amount}}</li>
+                                <li class="list-inline-item"><strong> Order ID:</strong> {{i.order_id}}</li>
                             </ul>
                             </div>
                             <br>

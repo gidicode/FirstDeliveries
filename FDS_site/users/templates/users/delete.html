@@ -1,17 +1,24 @@
 {% extends "FDS_app/dashBase.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Welocme {{user.username }} {% endblock title %}
+{% block title %} Delete Order - FDLS {% endblock title %}
 
 {% block content2 %}
 
 <div class="card card-body contianer">
-  <p>Are you sure you want to Cancel Order to "{{item}}"</p>
-  <form action = "{% url 'cancelRequest' item.id %}" method="POST">
-    {% csrf_token %}
-<a href="{% url 'adminDashboard' %}"> Cancel </a>
-<input type="submit" name="Confirm">
-  </form>
+  <div class="row">
+
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <p>Are you sure you want to Delete Order to "{{item}}"</p>
+        <form action = "{% url 'cancelRequest' item.id %}" method="POST">
+          {% csrf_token %}
+        <a href="{% url 'adminDashboard' %}"> Cancel </a>
+        <input class="btn btn-dark" type="submit" name="Confirm">
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+ 
 </div>
 
 {% endblock content2 %} 

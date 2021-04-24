@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from users.models import Customer, Delivered, adminNotification
 
 # Create your views here.
 def index(request):
@@ -41,8 +42,15 @@ def userSettings(request):
 def signup(request):
     return render(request, 'FDS_app/signup.html')
 
-def dashBase(request):
-    return render(request, 'FDS_app/dashBase.html')
+def dashBase(request, user):
+    customer = Customer.objects.get(user= user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
+
+    notification_filter = customer.adminNotification_set.all()
+    
+    notify = notification_filter.filter(viewed = False)
+    return render(request, 'FDS_app/dashBase.html', {'customer':customer, 'n':n, 'notify':notify})
 
 def password_reset(request):
     return render(request, 'FDS_app/password_reset.html')

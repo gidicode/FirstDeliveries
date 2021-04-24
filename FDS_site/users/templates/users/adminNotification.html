@@ -1,0 +1,48 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} {% if notify.count > 0 %}
+({{notify.count}})
+{% endif %} Admin Notification-FDLS {{user.username }} 
+
+
+{% endblock title %}
+
+{% block content2 %}
+<div class="container">
+    <div class="row  d-flex">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 d-flex flex-nowrap p-4">
+            <div class="card card-body shadow  rounded bg-light shadow">
+            
+                <h3>Notifications!</h3>
+                    {% if notify.count == 0 %}
+                        <p> You have no Request yet </p>
+                        <a class="btn btn-secondary" href="{% url 'adminDashboard' %}"> Return to Dashboard</a>
+                        <a class="btn btn-secondary" href="{% url 'customers-list' %}"> Customers List</a>
+                    {% endif %}
+
+                {% for n in notify %}
+                <div class="card card-body shadow_sm p-3">
+                    <h5 class="text-success"> You got a Request</h5>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">Customer Name: {{n.customer}}</li >
+                        <li class="list-inline-item">List: {{n.item_created}} </li>
+                        <li class="list-inline-item">Order ID: {{n.order_id}} </li>
+                        <li class="list-inline-item">Time: {{n.date_created|timesince}} ago</li>
+                        <a href="{% url 'adminNotificationDelete' n.pk %}">
+                        <button class="btn btn-warning " type="submit"> Mark as read</button>
+                        </a>
+                    </ul>
+                </div>
+                <br>
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+
+{% endblock content2 %}

@@ -1,0 +1,36 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Notification - FDLS {% endblock title %}
+
+{% block content2 %}
+<div class="container">
+    <div class="row  d-flex">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 d-flex flex-nowrap p-4">
+            <div class="card card-body shadow  rounded bg-light shadow">
+            
+                <h1>Notifications</h1>
+                {% if n.count == 0 %}
+                <p> You have no Notifications Yet </p>
+                {% endif %}
+                {% for not in n%}
+                <div class="card card-body shadow_sm p-3">
+                    <h2 class="text-success">{{not.title}}</h2>
+                    <p>{{not.Message}}</p>
+                    <p>{{not.date_created|timesince}} ago</p>
+                    <a href="{% url 'delete_Notification' not.id %}">
+                    <button class="btn btn-warning " type="submit"> Mark as read</button>
+                    </a>
+                </div>
+                <br>
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+
+{% endblock content2 %}

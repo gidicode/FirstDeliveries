@@ -1,5 +1,9 @@
 from . import views
 from django.urls import path
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.urls import include, path
+from django.views.generic.base import RedirectView
+from django.conf import settings
  
 
 urlpatterns = [
@@ -15,6 +19,10 @@ urlpatterns = [
     path('payment_success/', views.payment_success, name='fds-payment_success'),
     path('pricing/', views.pricing, name='fds-pricing'),
     path('signup/', views.signup, name='fds-signup'),
-    path('dashBase/', views.dashBase, name='dashbase'), 
+    path('dashBase/<str:user>/', views.dashBase, name='dashBase'),
+     path(
+        "favicon.ico",
+        RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),
+    ), 
     #path('password_reset/', views.password_reset, name='password_reset'),
 ] 

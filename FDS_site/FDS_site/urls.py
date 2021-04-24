@@ -1,18 +1,4 @@
-"""FDS_site URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import include, path
 from users import views as user_views
@@ -30,7 +16,7 @@ urlpatterns = [
 
     path('profileUpdate/<str:user>/', user_views.customerProfileUpdatePage, name='profileUpdate'),
 
-    path('success/', user_views.successPage, name='success'),
+    path('success/<str:user>/', user_views.successPage, name='success'),
 
     path('requestForm_Online/<int:user>/', user_views.requestForm_Online, name='requestForm_Online'),
 
@@ -42,13 +28,26 @@ urlpatterns = [
 
     path('orderHistory/<str:user>/', user_views.orderHistory, name='orderHistory'),
 
+    path('customers-list/', user_views.customers_list, name='customers-list'),
+
     path('adminDashboard/', user_views.AdminDashboard, name='adminDashboard'),
 
     path(r'<int:user>/', user_views.customerDashboardPage, name='dashboard'),
 
     path('updateRequest/<str:pk>/', user_views.updateRequestForm, name='updateRequest'),
+    path('updateRequestCash/<str:pk>/', user_views.updateRequestFormCash, name='updateRequestCash'),
+    path('updateRequestShopping/<str:pk>/', user_views.updateRequestFormShopping, name='updateRequestShopping'),
 
     path('cancelRequest/<str:pk>/', user_views.cancelRequest, name='cancelRequest'),
+    path('cancelRequestCash/<str:pk>/', user_views.cancelRequestCash, name='cancelRequestCash'),
+    path('cancelRequestShopping/<str:pk>/', user_views.cancelRequestShopping, name='cancelRequestShopping'),
+
+    path('show_Notification/<str:user>/', user_views.Notifications_show, name='show_Notification'),
+    path('delete_Notification/<str:pk>/', user_views.Notifications_delete, name='delete_Notification'),
+
+    path('adminNotificationShow/', user_views.adminNotificationShow, name='adminNotificationShow'),
+    path('adminNotificationDelete/<str:pk>/', user_views.adminNotificationDelete, name='adminNotificationDelete'),
+
 
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
@@ -63,7 +62,6 @@ urlpatterns = [
 
     path('password-reset-complete/', 
         auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), name='password_reset_complete'),
-    path ('', include('FDS_app.urls',)),
 ]
  
 urlpatterns += staticfiles_urlpatterns()

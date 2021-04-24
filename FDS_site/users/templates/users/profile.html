@@ -1,7 +1,7 @@
 {% extends "FDS_app/dashBase.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Welocme {{user.username }}-FDS {% endblock title %}
+{% block title %} Admin Dashboard - FDLS {% endblock title %}
 
 
 {% block content2 %}
@@ -13,26 +13,29 @@
 </div>
 {% endif %}
 
-<div class="container">
+<div class="container-fluid">
 {% include 'users/status.html' %}
 </div>
 
 <div class="row container-fluid">
     <div class="col-md-4">
-        <h5> Customers </h5>
-        <hr>
         <div class="card card-body">
-            <a class="btn btn-primary btn-sm btn-block" href="#">Create Customer</a>
+            <form class="form-inline my-3 mx-4 my-lg-1 bd-highlight font-weight-bold text-dark">   
+                {{myFilter5.form|crispy }}
+                <button class="btn btn-outline-secondary  my-sm-2" type="submit">Search</button>
+            </form>
+            <a class="btn btn-primary btn-sm btn-block" href="#"><h5> Customers </h5></a>
             <table class="table table-sm">
                 <tr>
-                    <th>Customer</th>
+                    <th>Customers</th>
+                    <th>Username</th>
                     <th> Phone Number</th>
                 </tr>
                 {% for c in customers %}
                     <tr>
                         <td><a class="btn btn-sm btn-info" href="{% url 'dashboard' c.id %}">view</a></td> 
                         <td>{{c.user.username}}</td>
-                        <td>{{c.user.reciever_phone_number}}</td>
+                        <td>{{c.phone_number}}</td>
                     </tr>
                 {% endfor%}
             </table>
@@ -40,37 +43,167 @@
     </div> 
     
     <div class="col-lg-8">
-        <h5>Last 5 Request</h5>
-        <hr>
         <div class="card card-body">
-                <table>
+
+            <div class="btn btn-light bd-highlight rounded shadow pr-4 p-3">
+                <a class="text-decoration-none text-dark" href="{%url 'customers-list' %}">Search Request</a>
+            </div>
+            <br>
+
+            <table>
+                <h4 class="card card-body bg-secondary  bd-highlight text-white">FOR ONLINE PAYMENTS</h4>
+                <tr>
+                    <th>Customer</th>
+                    <th>Name</th>
+                    <th> Date </th>
+                    <th>TP</th>
+                    <th> Status</th>
+                    <th> Amount </th>
+                    <th> Paid Status </th>
+                    <th> Reference Num </th>
+                    <th> Order ID </th>
+                    <th> Update</th>
+                    <th> Remove</th>
+                </tr>
+            {% for i in page_obj %}
+                   
                     <tr>
-                        <th>Name</th>
-                        <th>Address </th>
-                        <th> phone </th>
-                        <th> Date </th>
-                        <th>TP</th>
-                        <th>Location</th>
-                        <th> Status</th>
-                        <th> Amount </th>
-                        <th> Update</th>
-                        <th> Remove</th>
-                    </tr>
-                 {% for i in request1 %}
-                    <tr>
+                        <td>{{i.customer}}</td>
                         <td>{{i.reciever_name}}</td>
-                        <td>{{i.Address_of_reciever}}</td>
-                        <td>{{i.reciever_phone_number}}</td>
-                        <td>{{i.time_submited}}</td>
+                        <td>{{i.date_created|timesince}}</td>
                         <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.Your_location}}</td>
                         <td>{{i.status}}</td> 
-                        <td>{{i.amount}}</td> 
+                        <td>{{i.Amount}}</td> 
+                        <td>{{i.paid}}</td> 
+                        <td>{{i.charge_id}}</td> 
+                        <td>{{i.order_id}}</td>
                         <td><a class="btn btn-sm btn-info" href="{% url 'updateRequest' i.id %}">Update</a></td>   
                         <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequest' i.id%}">Cancel</a></td> 
                     </tr>
-                {% endfor %}   
+            {% endfor %}
+
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a class="btn btn-warning" href="?page=1">&laquo; first</a>
+                        <a class="btn btn-danger" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a class="btn btn-warning" href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a class="btn btn-danger" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+            </table>
+
+                <!--FOR CASH PAYMENTS-->
+                <br>
+                <table>
+                    <h4 class="card card-body bg-secondary text-white">FOR CASH PAYMENTS</h4>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Name</th>
+                        <th> Date </th>
+                        <th>TP</th>
+                        <th> Status</th>
+                        <th> Amount </th>
+                        <th> Paid Status </th>
+                        <th> Order ID </th>
+                        <th> Update</th>
+                        <th> Remove</th>
+                    </tr>
+                 {% for i in page_obj2 %}
+                    <tr>
+                        <td>{{i.customer}}</td>
+                        <td>{{i.reciever_name}}</td>
+                        <td>{{i.date_created|timesince}}</td>
+                        <td>{{i.Choice_for_TP}}</td>
+                        <td>{{i.status}}</td> 
+                        <td>{{i.Amount_Paid}}</td> 
+                        <td>{{i.paid}}</td> 
+                        <td>{{i.order_id}}</td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'updateRequestCash' i.id %}">Update</a></td>   
+                        <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequestCash' i.id%}">Cancel</a></td> 
+                    </tr>
+                {% endfor %} 
+                
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj2.has_previous %}
+                            <a class="btn btn-warning" href="?page=1">&laquo; first</a>
+                            <a class="btn btn-danger" href="?page={{ page_obj2.previous_page_number }}">previous</a>
+                        {% endif %}
+    
+                        <span class="current">
+                            Page {{ page_obj2.number }} of {{ page_obj2.paginator.num_pages }}
+                        </span>
+    
+                        {% if page_obj2.has_next %}
+                            <a class="btn btn-warning" href="?page={{ page_obj2.next_page_number }}">next</a>
+                            <a class="btn btn-danger" href="?page={{ page_obj2.paginator2.num_pages }}">last &raquo;</a>
+                        {% endif %}
                 </table>
+
+                <br>
+                <!--For Shopping List-->
+                <table>
+                    <h4 class="card card-body bg-secondary text-white">Shopping Request</h4>
+                    <tr>
+                        <th>Customer</th>
+                        <th> Date </th>
+                        <th>TP Choice</th>
+                        <th> Status</th>
+                        <th> Amount Paid </th>
+                        <th> Service Charged</th>
+                        <th> Item Cost </th>
+                        <th> Total Amt Spent </th>
+                        <th>Amount Refunded </th>
+                        <th>Order ID </th>
+                        <th> Update</th>
+                        <th> Remove</th>
+                    </tr>
+                 {% for i in page_obj3 %}
+                    <tr>
+                        <td>{{i.customer}}</td>
+                        <td>{{i.date_created|timesince}}</td>
+                        <td>{{i.Choice_for_TP}}</td>
+                        <td>{{i.status}}</td> 
+                        <td>{{i.amount_paid}}</td> 
+                        <td>{{i.Charged}}</td> 
+                        <td>{{i.Item_Cost}}</td> 
+                        <td>{{i.Total}}</td>
+                        <td>{{i.Amount_Refunded}}</td>
+                        <td>{{i.order_id}}</td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'updateRequestShopping' i.id %}">Update</a></td>   
+                        <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequestShopping' i.id%}">Cancel</a></td> 
+                    </tr>
+                {% endfor %} 
+                
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj3.has_previous %}
+                            <a class="btn btn-warning" href="?page=1">&laquo; first</a>
+                            <a class="btn btn-danger" href="?page={{ page_obj3.previous_page_number }}">previous</a>
+                        {% endif %}
+    
+                        <span class="current">
+                            Page {{ page_obj3.number }} of {{ page_obj3.paginator.num_pages }}.
+                        </span>
+    
+                        {% if page_obj3.has_next %}
+                            <a class="btn btn-warning" href="?page={{ page_obj3.next_page_number }}">next</a>
+                            <a class="btn btn-danger" href="?page={{ page_obj3.paginator3.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                </table>
+
+
+
+            
+                </span>
+            </div>
         </div>
     </div>
 </div>

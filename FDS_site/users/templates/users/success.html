@@ -2,14 +2,28 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %} Payment success {% endblock title%}
+{% block title %} Payment success - FDLS {% endblock title%}
 
 {% block content %}
 
-<div id='box' >
-    <h4 class="card card-body"> Your payment of NGN{{amount}} is successful</h4>
+<br>
+<br>
 
-    <small class="myButton" href="#"> return back to dashboard</small>
+<div class="row order-3 p-5 d-sm-flex flex-lg-wrap bd-highlight">
+    <div class="col-md-3"></div>
+    <div class="col-sm-6  d-flex justify-content-center">
+        <div class=" mb-3 rounded text-center  ">
+            <div>
+                <button class=" btn btn-outline-success btn-lg"> 
+                    <h3><i class="fas fa-check-circle"></i></h3></button>
+                    </div>
+                <h5> Your payment is successful </h5>    
+               <button class="btn btn-light"> <a class="text-decoration-none text-secondary" href="{% url 'dashboard' user.id%}"> Return to Dashboard</a></button>
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-md-3"></div>
 </div>
 
 

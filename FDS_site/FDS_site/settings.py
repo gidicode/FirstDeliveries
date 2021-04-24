@@ -26,7 +26,7 @@ SECRET_KEY = '2u0mu_b=7%76tif8&_sx#mu+m@g!j5o3kvm2qeo+3$2^!1g7i-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '3cea35fc01e7.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'cb0960be82eb.ngrok.io']
 
 
 # Application definition
@@ -136,13 +136,12 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = 'login'
 
 SITE_ID = 1
-
-#EMAIL_HOST = "localhost"
-#EMAIL_PORT = "1025"
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

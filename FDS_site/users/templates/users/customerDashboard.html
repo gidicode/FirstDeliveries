@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %} Welocme {{user.username }}-FDS {% endblock title %}
+{% block title %} {{user.username }}:Dashboard - FDLS {% endblock title %}
 
 
 {% block content2 %}
@@ -58,10 +58,9 @@
 </div>
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-
+    <div class="row d-flex flex-md-nowrap">
+      <div class="col-md-2"></div>
+        <div class="col-md-8 col-md-auto">
             <!--For online pending payment-->
             {% for i in pending1 %}
             <table class="table table-hover table-borderless table-warning">
@@ -71,6 +70,7 @@
                     <th scope="col">Reciever Name</th>
                     <th scope="col">Address of Reciever</th>
                     <th scope="col">Reciever Contact</th>
+                    <th scope="col">Order ID</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -79,11 +79,10 @@
                     <td>{{i.reciever_name}}</td>
                     <td>{{i.Address_of_reciever}}</td>
                     <td> {{i.reciever_phone_number}}</td>
+                    <td> {{i.id}}</td>
                   </tr>
                 </tbody>
               </table>
-
-        </div>
         {% endfor%}
 
         {% for i in pending2 %}
@@ -94,6 +93,7 @@
                 <th scope="col">Reciever Name</th>
                 <th scope="col">Address of Reciever</th>
                 <th scope="col">Reciever Contact</th>
+                <th scope="col">Order ID</th>
               </tr>
             </thead>
             <tbody>
@@ -102,12 +102,11 @@
                 <td>{{i.reciever_name}}</td>
                 <td>{{i.Address_of_reciever}}</td>
                 <td> {{i.reciever_phone_number}}</td>
+                <td> {{i.id}}</td>
               </tr>
             </tbody>
           </table>
-
-    </div>
-    {% endfor%}
+        {% endfor%}
 
 
         {% for i in out_for_delivery %}
@@ -118,6 +117,7 @@
                     <th scope="col">Reciever Name</th>
                     <th scope="col">Address of Reciever</th>
                     <th scope="col">Reciever Contact</th>
+                    <th scope="col">Order ID</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -126,10 +126,10 @@
                     <td>{{i.reciever_name}}</td>
                     <td>{{i.Address_of_reciever}}</td>
                     <td> {{i.reciever_phone_number}}</td>
+                    <td> {{i.id}}</td>
                   </tr>
                 </tbody>
             </table>
-        </div>
         {% endfor%}
 
         {% for i in out_for_delivery2 %}
@@ -140,6 +140,7 @@
                     <th scope="col">Reciever Name</th>
                     <th scope="col">Address of Reciever</th>
                     <th scope="col">Reciever Contact</th>
+                    <th scope="col">Order ID</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -148,12 +149,12 @@
                     <td>{{i.reciever_name}}</td>
                     <td>{{i.Address_of_reciever}}</td>
                     <td> {{i.reciever_phone_number}}</td>
+                    <td> {{i.id}}</td>
                   </tr>
                 </tbody>
             </table>
-        </div>
         {% endfor%}
-        <div class="col-md-1"></div>
+        <div class="col-md-2 col-md-auto"></div>
     </div>
 </div>
   </main>
