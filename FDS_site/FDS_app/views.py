@@ -1,10 +1,46 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from users.models import Customer, Delivered, adminNotification
+from users.models import Customer, adminNotification, Anonymous
+from users.forms import  AnonForm
+from django.contrib import messages
+from hashid_field import Hashid
+from django.db.models import Q
 
 # Create your views here.
+
 def index(request):
-    return render(request, 'FDS_app/index.html')
+    if request.method == 'POST':
+        c_form = AnonForm(request.POST)
+        if c_form.is_valid():
+            instance = c_form.save(commit=False)
+            instance.save()
+        
+            h = Hashid(instance.id)
+            Anonymous.objects.filter(pk = instance.id).update(order_id= h)
+            adminNotification.objects.create(
+                item_created = instance,
+                order_id = h,
+                email = instance.email
+            ) 
+            messages.success(request, f'Your Request for pickup is Successful, you will recieve a call from us shortly')
+            tp_choice_1 = Anonymous.objects.filter(order_id = h).filter(Choice_for_TP= 'Bike' )
+            if tp_choice_1:
+                messages.success(request, f'Your mode of transportation is Bike Your delivery Fee is N500. Your Request Refrence ID is "{h}" ')
+                messages.warning(request, f' An email containing this transaction details has been sent to you, Please Create an account to access more services')
+            else:
+                messages.success(request, f'Your mode of transportation is Tricycle(Keke) Your delivery Fee is N1000. Your Request Refrence ID is "{h}" ')
+                messages.warning(request, f' An email containing this transaction details has been sent to you, Please Create an account to access more services')
+
+            
+
+            return redirect('register')
+    else:
+        c_form = AnonForm()
+                
+    context = {
+        'c_form': c_form,
+        }
+    return render(request, 'FDS_app/index.html', context)
 
 def about(request):
     return render(request, 'FDS_app/about.html')
@@ -18,8 +54,18 @@ def billing(request):
 def error(request):
     return render(request, 'FDS_app/error.html')
 
-def history(request):
-    return render(request, 'FDS_app/history.html')
+def search(request):
+    results = []
+
+    if request.method == "GET":
+        query = request.GET.get('order_id')
+
+        if query == '':
+            query = 'None'
+        results = Anonymous.objects.filter(Q(order_id = query))
+        
+    
+    return render(request, 'FDS_app/Search.html', {'query': query, 'results':results})
 
 def notification(request):
     return render(request, 'FDS_app/notification.html')

@@ -1,47 +1,64 @@
 from django.shortcuts import render, redirect
+
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+
 from django.contrib.auth.models import Group
+from .models import *
+
 from django.contrib.auth.forms import UserCreationForm
+
 from django.forms import inlineformset_factory
 from django.contrib import messages #flash message
 from .forms import *
-from django.contrib.auth.decorators import login_required
+
 from django.views.generic import ListView
-from .models import *
+
 from .filters import OrderFilter, AdminFilter, AdminFilterUsers
+
 from .decorators import unauthenticated_user, allowed_user, admin_only
+
 import requests
+
 from django.core.paginator import Paginator
+
+from hashid_field import Hashid
 
 import json
 
-# Create your views here.
 
+
+#Error 404 page
+def response_error_handler(request, exception = None):
+    return render(request, 'users/404.html', status=404)
+
+#Register Page
 @unauthenticated_user
 def register(request):
-    form = UserRegisterForm()
+    form = UserRegisterForm
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.refresh_from_db()
             user.customer.first_name = form.cleaned_data.get('first_name')
             user.customer.last_name = form.cleaned_data.get('last_name')
             user.customer.phone_number = form.cleaned_data.get('phone_number')
             user.customer.email = form.cleaned_data.get('email')
+            username = form.cleaned_data.get( 'username')
             group = Group.objects.get(name='customer')
             user.groups.add(group)
             user.save()
-            username = form.cleaned_data.get( 'username')
+            
             messages.success(request, f' Hello {username} Your account has been created! You are now able to log in !')
             return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'users/signUp.html', {'form':form})
 
-
+#Profile update Page
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def customerProfileUpdatePage(request, user):
@@ -65,6 +82,7 @@ def customerProfileUpdatePage(request, user):
 
     return render(request, 'users/customer_profile.html', context)
 
+# Cash Request
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def requestForm_Cash(request, user):
@@ -78,10 +96,11 @@ def requestForm_Cash(request, user):
             instance.save()
             messages.success(request, f'Your Request for pickup is Successful, you will recieve a call from us shortly')
 
-            MakeRequestCash.objects.filter(pk = instance.id).update(order_id=instance.id)
-            req = instance.id
+            h = Hashid(instance.id)
+            MakeRequestCash.objects.filter(pk = instance.id).update(order_id= h)
+            print(h)
     
-            tp_choice_1 = MakeRequestCash.objects.filter(order_id= req).filter(Choice_for_TP= 'Bike' )
+            tp_choice_1 = MakeRequestCash.objects.filter(order_id = h).filter(Choice_for_TP= 'Bike' )
             if tp_choice_1:
                 messages.success(request, f'Your mode of transportation is Bike Your delivery Fee is NGN 500')
             else:
@@ -90,13 +109,13 @@ def requestForm_Cash(request, user):
             ForPayments.objects.create(
                 customer = customer,
                 For_cash_payment = instance,
-                order_id = instance.id
+                order_id = h
             )
 
             adminNotification.objects.create(
                 customer=instance.customer,
                 item_created = instance,
-                order_id = instance.id   
+                order_id = h   
             ) 
 
             return redirect('dashboard', user=user)
@@ -109,7 +128,7 @@ def requestForm_Cash(request, user):
         }
     return render(request, 'users/requestForm_Cash.html', context)
 
-
+#Online payment request
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def requestForm_Online(request, user):
@@ -122,10 +141,10 @@ def requestForm_Online(request, user):
             instance.save()
             messages.success(request, f'Your Request for pickup is Successful, you will recieve a call from us shortly')
 
-            MakeRequest.objects.filter(pk = instance.id).update(order_id=instance.id)
-            req = instance.id
-            #request1 = MakeRequestCash.objects.get(Choice_for_TP)
-            tp_choice_1 = MakeRequest.objects.filter(order_id= req).filter(Choice_for_TP= 'Bike')
+            h = Hashid(instance.id)
+            MakeRequest.objects.filter(pk = instance.id).update(order_id=h)
+           
+            tp_choice_1 = MakeRequest.objects.filter(order_id= h).filter(Choice_for_TP= 'Bike')
             if tp_choice_1:
                 messages.success(request, f'Your mode of transportation is Bike Your delivery Fee is NGN 500')
             else:
@@ -134,14 +153,14 @@ def requestForm_Online(request, user):
             ForPayments.objects.create(
                 customer = customer,
                 For_online_payment = instance,
-                order_id = instance.id,
+                order_id = h,
                 Mode_of_Transport =instance.Choice_for_TP,
             ) 
 
             adminNotification.objects.create(
                 customer=instance.customer,
                 item_created = instance,
-                order_id = instance.id   
+                order_id = h  
             ) 
             return redirect('Initialize_requestForm', user=user)       
     else:
@@ -152,6 +171,7 @@ def requestForm_Online(request, user):
          }
     return render(request, 'users/requestForm.html', context)         
 
+#Shopping Request
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def ShoppingForm(request, user):
@@ -162,17 +182,19 @@ def ShoppingForm(request, user):
             instance = s_form.save(commit=False)
             instance.customer = customer
             instance.save()
-            Shopping.objects.filter(pk = instance.id).update(order_id=instance.id)
+
+            h = Hashid(instance.id)
+            Shopping.objects.filter(pk = instance.id).update(order_id=h)
             ForPayments.objects.create(
                 customer = customer,
                 For_shopping_payment = instance,
-                order_id = instance.id
+                order_id = h
             )
 
             adminNotification.objects.create(
                 customer=instance.customer,
                 item_created = instance,
-                order_id = instance.id   
+                order_id = h   
             ) 
 
             messages.success(request, f'Your Request is Successful, Make Your Transfer to the following account  235334666 ')
@@ -209,6 +231,7 @@ def multipleRequest_cash(request, user):
          }
     return render(request, 'users/multipleRequest.html', context)         
 
+#Initialize Payment
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def Initialize_requestForm(request, user):
@@ -273,7 +296,7 @@ def Initialize_requestForm(request, user):
     messages.success(request, f'Your Payment Is Successful')
     return render(request, 'users/requestForm.html', context)
     
-
+#Success Page
 @login_required(login_url='login')
 def successPage(request, user):
     reference = request.GET.get('reference')
@@ -303,8 +326,6 @@ def successPage(request, user):
             return result
     
     initialized = verify_payment(request)
-    print(initialized['data']['status'])
-    print(initialized['data']['reference'])
     if initialized['data']['status'] == 'success':
         ForPayments.objects.filter(charge_id=initialized['data']['reference']).update(paid=True, money_paid=initialized['data']['amount']/100)
         customer = Customer.objects.get(user=request.user )
@@ -314,12 +335,14 @@ def successPage(request, user):
         MakeRequest.objects.filter(order_id=req2).update(paid=True, charge_id = initialized['data']['reference'], Amount=initialized['data']['amount']/100)
     return render(request, 'users/success.html')
 
+#Admin Dashboard
 @login_required(login_url='login')
 @admin_only
 def AdminDashboard(request):
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
 
     paginator = Paginator(request1, 10)
     page_number = request.GET.get('page')
@@ -333,6 +356,10 @@ def AdminDashboard(request):
     page_number3 = request.GET.get('page')
     page_obj3 = paginator3.get_page(page_number3)
 
+    paginator4 = Paginator(request4, 10)
+    page_number4 = request.GET.get('page')
+    page_obj4 = paginator4.get_page(page_number4)
+
     notify = adminNotification.objects.all()
     
     customer = Customer.objects.get( user= request.user )
@@ -345,6 +372,7 @@ def AdminDashboard(request):
     total_request_online = request1.count()
     total_request_cash = request2.count()
     total_request_shopping = request3.count()
+    total_request_anonymous = Anonymous.objects.count()
 
     delivered = request1.filter(status='Delivered').count()
     pending = request1.filter(status='Pending').count()
@@ -361,6 +389,10 @@ def AdminDashboard(request):
     canceled2 = request3.filter(status='Canceled').count()
     at_the_mall = request3.filter(status='At the Mall').count()
 
+    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
+    pending3 = Anonymous.objects.filter(status = 'Pending').count()
+    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
+    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
 
     notification_filter = adminNotification.objects.all()
     notify = notification_filter.filter(viewed = False)
@@ -368,28 +400,52 @@ def AdminDashboard(request):
     
     context = {
         'myFilter5':myFilter5,
-        'notify':notify, 'page_obj':page_obj,
-        'page_obj3':page_obj3, 'page_obj2':page_obj2, 
-        'request1': request1, 'request2':request2,
+        'notify':notify, 
+        'page_obj':page_obj,
+        'page_obj2':page_obj2, 
+        'page_obj3':page_obj3, 
+        'page_obj4':page_obj4, 
+
+        'request1': request1, 
+        'request2':request2,
         'request3':request3,
-        'customer':customer,'customers' : customers,
+        'request4':request4,
+
+        'customer':customer,
+        'customers' : customers,
 
         'total_request_online': total_request_online,
         'total_request_cash':total_request_cash,
         'total_request_shopping':total_request_shopping,
+        'total_request_anonymous':total_request_anonymous ,
 
-        'delivered': delivered,'pending': pending,
-        'canceled': canceled, 'out_for_delivery':out_for_delivery,
+        
+        'out_for_delivery':out_for_delivery,
+        'out_for_delivery1':out_for_delivery1,
+        'out_for_delivery2':out_for_delivery2,
 
-        'delivered1': delivered1,'pending1': pending1,
-        'canceled1': canceled1, 'out_for_delivery1':out_for_delivery1,
+        'pending': pending,
+        'pending1': pending1,
+        'pending2': pending2,
+        'pending3': pending3,
 
-        'delivered2': delivered2,'pending2': pending2,
-        'canceled2': canceled2, 'at_the_mall': at_the_mall,
+        'canceled': canceled,
+        'canceled1': canceled1,
+        'canceled2': canceled2, 
+        'canceled3': canceled3,        
+
+        'delivered': delivered,
+        'delivered1': delivered1,
+        'delivered2': delivered2,
+        'delivered3':delivered3,
+
+        'at_the_mall': at_the_mall,
+
         }
 
     return render(request, 'users/profile.html', context)
 
+#General Order
 @login_required(login_url='login')
 @admin_only
 def customers_list(request):
@@ -414,7 +470,7 @@ def customers_list(request):
     return render(request, 'users/customer_list.html', context)
 
 
-
+#Customer Dashboard
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def customerDashboardPage(request, user):
@@ -446,6 +502,41 @@ def customerDashboardPage(request, user):
     }
     return render(request, 'users/customerDashboard.html', context)
 
+#Update request Anon
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
+def updateRequestAnon(request, pk):
+
+    r_request = Anonymous.objects.get(id=pk)
+    a_form = AdminAnonForm(instance= r_request)
+
+    if request.method == 'POST':
+        a_form = AdminAnonForm(request.POST,instance=r_request)
+        if a_form.is_valid():
+            instance = a_form.save(commit=False)
+            instance.save()
+            messages.success(request, f'You just updated a customer satus to delivered')
+
+            return redirect('adminDashboard')
+    context = {'a_form': a_form}
+    return render(request, 'users/anonform.html', context)
+
+#Delete Request Anon
+@login_required(login_url='login')
+@admin_only
+def cancelRequestAnon(request, pk):
+    r_request2 =Anonymous.objects.get(id=pk)
+    if request.method == "POST":
+        r_request2.delete()  
+        messages.success(request, f'You just deleted an order')
+        return redirect('adminDashboard')
+    context = {
+        'item3':r_request2
+    }
+    return render(request, 'users/deleteAnon.html', context)
+
+
+#Update Request 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def updateRequestForm(request, pk):
@@ -461,7 +552,7 @@ def updateRequestForm(request, pk):
             obj = o_form.save(commit=False)
             by_user = request.user
             obj.save()
-            get_user = obj.id
+            get_user = obj.order_id
             tp_choice_2 = MakeRequest.objects.filter(order_id = get_user ).filter(status= 'Delivered').exists()   
             if tp_choice_2 == True:
                 Delivered.objects.create(
@@ -477,7 +568,7 @@ def updateRequestForm(request, pk):
               }
     return render(request, 'users/requestForm.html', context)
 
-
+#Update Request Cash
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def updateRequestFormCash(request, pk):
@@ -493,7 +584,7 @@ def updateRequestFormCash(request, pk):
             obj = c_form.save(commit=False)
             by_user = request.user
             obj.save()
-            get_user = obj.id
+            get_user = obj.order_id
             tp_choice_2 = MakeRequestCash.objects.filter(order_id = get_user ).filter(status= 'Delivered').exists()   
             
             if tp_choice_2 == True:
@@ -512,6 +603,7 @@ def updateRequestFormCash(request, pk):
     return render(request, 'users/requestForm_Cash.html', context)
 
 
+#Update Request Shopping
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def updateRequestFormShopping(request, pk):
@@ -527,7 +619,7 @@ def updateRequestFormShopping(request, pk):
             obj = s_form.save(commit=False)
             by_user = request.user
             obj.save()
-            get_user = obj.id
+            get_user = obj.order_id
             tp_choice_2 = Shopping.objects.filter(order_id = get_user ).filter(status= 'Delivered').exists()   
             if tp_choice_2 == True:
                 Delivered.objects.create(
@@ -544,6 +636,7 @@ def updateRequestFormShopping(request, pk):
     return render(request, 'users/shopping.html', context)
 
 
+#Delete Request
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def deleteRequestForm(request, pk):
@@ -559,8 +652,7 @@ def deleteRequestForm(request, pk):
             obj.save()
             return redirect('adminDashboard')
             messages.success(f'You just deleted {obj.customer} order')
-    context = {'o_form': o_form,
-              'customer':customer }
+    context = {'o_form': o_form}
     return render(request, 'users/requestForm.html', context)
 
 @login_required(login_url='login')
@@ -574,7 +666,7 @@ def cancelRequest(request, pk):
     context = {'item':r_request}
     return render(request, 'users/delete.html', context)
 
-
+#Delete Request Cash
 @login_required(login_url='login')
 @admin_only
 def cancelRequestCash(request, pk):
@@ -588,6 +680,7 @@ def cancelRequestCash(request, pk):
     }
     return render(request, 'users/deleteCash.html', context)
 
+#delete request Shopping
 @login_required(login_url='login')
 @admin_only
 def cancelRequestShopping(request, pk):
@@ -601,6 +694,7 @@ def cancelRequestShopping(request, pk):
     }
     return render(request, 'users/deleteShopping.html', context)
 
+#Delete Request Order History
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def orderHistory(request, user):
@@ -637,7 +731,7 @@ def orderHistory(request, user):
     }
     return render(request, 'users/orderHistory.html', context)
 
-
+#Customer Notification
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def Notifications_show(request, user): 
@@ -646,6 +740,7 @@ def Notifications_show(request, user):
     n = n_filter.filter(viewed = False)
     return render(request, 'users/notification.html', {'n':n, 'customer':customer})
 
+#Mark As Read
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def Notifications_delete(request, pk):    
@@ -654,7 +749,7 @@ def Notifications_delete(request, pk):
     cust.save()
     return redirect('show_Notification', user=request.user.id)
 
-
+#Admin Notification
 @login_required(login_url='login')
 @admin_only 
 def adminNotificationShow(request):
@@ -664,6 +759,7 @@ def adminNotificationShow(request):
     return render(request, 'users/adminNotification.html', {'notify':notify, 'customer':customer})
 
 
+#Admin Notification Delete
 @login_required(login_url='login')
 @admin_only
 def adminNotificationDelete(request, pk): 

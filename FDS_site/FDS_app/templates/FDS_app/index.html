@@ -1,136 +1,190 @@
 {% extends "FDS_app/base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
-{% block title %} Home-FirstLaurelLogistics {% endblock title%}
+{% block title %} Home-First Laurel Logistics {% endblock title%}
 
 {% block content %}
-
-<br>
-<div class="container-fluid"> 
+<div class="pt-5" style="background-color: rgb(0, 66, 92);">
+<div class="container-fluid" > 
   <div class="row align-items-lg-center mb-2 pb-md-2">
     <div class="col-md-1 order-1"></div>  
-    <div class="col-md-6  container order-6">
-      <div class=" text-md-center" >
-        <h1 class="mb font-weight-bold "> Welcome to First Laurel Logistics, <strong>Need Deliveries?</strong> </h1>
-        <h5> Just relax and lets take care of all your Delivery needs. </h5>
-        <h5>Our Delivery Service coverage is just within Calabar.</h5>
-        <button type="button" class="btn btn-lg btn-danger mb-3 me-md-3">
-          {% if user.is_authenticated %}
-          <a  href="{% url 'dashboard' user.id  %}" class=" text-white text-decoration-none">Get Started</a> </button>
-           {% else %}
-          <a  href="{% url 'register'  %}" class=" text-white text-decoration-none">Get Started</a> </button>
-          {% endif %}
-      </div>
+        <div class="col-md-6  text-white container order-6">
+          <div class="text-center text-lg-left" >
+            <h1 class="font-weight-bold" style="font-family:'Comfortaa', cursive;"> Welcome to First Laurel Logistics, <strong>Need Deliveries?</strong> </h1>
+            <h5> Just relax and let us take take care of all your Delivery needs. </h5>
+            <h5>Our Delivery Service coverage is within Calabar geographical location, for the main time.</h5>
+
+            <div class="dropdown" id="myDropdown">
+              <button class="btn btn-lg btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Get Started
+              </button>
+
+              <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                {% if user.is_authenticated %}
+                  <a  href="{% url 'dashboard' user.id  %}" class=" text-dark text-decoration-none">Dashboard</a> </button>
+                  {% else %}
+                  <a  href="#" class="text-dark text-decoration-none text-center" data-toggle="modal" data-target="#CashRequestForm">Request Dispatch</a> </button>
+                  <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+                {% endif %}
+                
+              </div>
+            </div>
+          </div>
+          
+          <form action="{% url 'search' %}" method="get">
+            <div class="form-group" id="div_id_order_id" >
+              <label for="id_order_id" class></label>
+
+              <div class>
+                <input type="text" 
+                       name="order_id"  
+                       class="textinput textInput form-control" 
+                       id="id_order_id" 
+                       {% if myFilter2.name.value != None %}value="{{ form.name.value|stringformat:'s' }}"{% endif %}
+                       placeholder="Enter Ref ID to check Your Request order Status">
+              </div>
+            </div>
+            <button class="btn btn-outline-secondary btn-block my-sm-2" type="submit">Search
+            </button>
+        </form>
+        </div>
+    <div class="col-md-5 text-center order-1 order-md-6">
+
+      <img src="/static/FDS_app/6447.png" id="center" class="p-2 img-fluid" alt="Landing Image">
+      <a href='https://www.freepik.com/vectors/logo'class="text-decoration-none text-dark">Logo vector created by pch.vector - www.freepik.com</a>
     </div>
-    <div class="col-md-5 order-1  order-md-6">
-      <img src="/static/FDS_app/6447.gif" class="p-2  img-fluid" alt="girl">
-      <a href='https://www.freepik.com/vectors/logo' class="text-decoration-none text-light">Logo vector created by pch.vector - www.freepik.com</a>
-    </div>
-  
   </div>
 </div>
+<br>
+<br>
 
+<!--NEXT -->
+<div class=" card container card-body text-white" style="background-color: rgb(3, 103, 143);">
+  <div class="" > 
+    <div class="row p-3">
+          <div class="col-md-4 p-2 ">
+            <div class="card card-body bg bg-dark text-white text-center text-lg-left text-truancate shadow-lg mb-2 rounded" style=" height: 15rem;"> 
+              <br>
+              <h4>With over 20 Dispatch Riders! </h4>
+                <p class="lead">  and experienced management, we give you the best of delivery service in Calabar you can rely on </p>
+            </div>
+            
+          </div>
+        
+          <div class="col-md-4 p-2 ">
+            <div class="card card-body bg bg-dark text-white text-center text-lg-left shadow-lg mb-2 rounded" style=" height: 15rem;"> 
+              <br>
+              <h4> You need help Shopping? </h4>
+              <p class="lead"> Our shopping service is fast, reliable & Efficient, we 
+                  take your shopping list to the market/store and get your items as requested.
+                <button type="button" class="text-decoration-none btn btn-light btn-sm" data-toggle="modal" data-target="#staticBackdrop" href="#">Click for more</button>
+              </p>    
+              
+            </div>
+          </div>
+          <div class="col-md-4 p-2">
+            <div class="card card-body bg bg-dark text-center text-lg-left text-white shadow-lg mb-2 rounded" style=" height: 15rem;"> 
+              <br>
+              <h4> You Need a larger Space? </h4>
+              <p class="lead"> Our Tricycle(keke) and other heavy duty truck are available to meet your required needs.</p>
+            </div>
+          </div>
+        </div>
+</div>
+</div>
+<!--End-->
+<br>
 
-
-<div class="jumbotron container-fluid bg-light shadow p-4 mb-2">
+<div class="jumbotron container-fluid shadow mx-auto justify-content-center p-3" style="background-color: rgb(8, 149, 204);">
   <div class="row">
     <div class="col-md-5 mx-auto justify-content-center order-1">
       <img src="/static/FDS_app/Tricycle.png" class="p-2 rounded float-right img-fluid" alt="Tricycle">
     </div>
 
     <div class="col-md-7 order-md-6 ">
-      <div class="text-md-start  text-dark"> 
-        <h2>How Large is Your Item?</h2>
-        <p class="lead"> Our Tricycle is fit to carry larger parcel to every location around Calabar </p>
-        <p class="lead"> What if you feel the need to have your Package transported in a more perfect conditon and not being squeezed </p>
-        <h5>Our Tricycle is spaceous enough, No worries about bad handling </h5>
-        <a class="btn btn-danger btn-sm text-white" href="#" role="button">Learn more</a>
+      <div class="text-center text-md-left text-white"> 
+        <br>
+        <br>
+        <h2 class="font-weight-bold ">With as low as <span class="display-4 font-weight-bold">N500</span> You can have your items delivered around Calabar.</h2>
+        <p class="lead"> Price may Vary if your item is going to locations outside Calabar like (8miles, Anantiga, Odukpani, Akpabuyo.) </p>
+        <p class="lead"> If we shop for you, the price may vary on the quantiy of items we purchase. </p>
+        <a class="btn btn-danger btn-lg text-white" href="{% url 'fds-pricing' %}" role="button">Learn more</a>
       </div>
     </div> 
       <div class="col-md-1 order-md-6"></div>
   </div>
 </div>
 
-<div class="jumbotron container-fluid bg-white shadow-md p-4 mb-5">
-  <div class="row">
+<div class=" container p-4">
+  <div class="container mb-3">
+    <div class="row">
+      <div class="col-md-auto col-md-2"></div>
+      <div class="col-md-auto col-md-8 pt-2 text-center bg-light rounded-pill shadow">
+        <h4 class="text-danger font-weight-bold">Our Delivery Service Covers...</h3>
+      </div>
+      <div class="col-md-auto col-md-2"></div>
+    </div>
+  </div>
 
-    <div class="col-md-5 order-md-6">
-      <img src="/static/FDS_app/FdsImage1.jpeg" class="p-2 rounded float-left img-fluid" alt="Tricycle">
-    </div> 
+    <div class="">
+      <div class="card card-body d-flex flex-row bd-highlight justify-content-center text-center text-md-left">
 
-    <div class="col-md-6 justify-content-center order-1">
-      <br>
-      <div class=" text-dark text-md-start p-4"> 
-        <h4> With about 10 delivery bikes,</h4>
-        <h6 > We are confident to say we are reliable </h6>
-        <h6> We could meet up your shortest time frame on emergency deliveries. </h6>
-        <h6>With our Trained dispatch riders, you are rest assured that your parcel are in safe hands. </h6>
+        <div class=" p-2 bd-highlight">
+          <div class=" shadow-sm p-2">
+            <h5 class="text-info">Home Delivery Service</h5>
+            <hr>
+            <p >All Kind of Delivery Service</p>
+            <p >Parcel, food, envelopes e.t.c. </p>
+            <br>
+          </div>
+        </div> 
+
+        <div class=" p-2 bd-highlight">
+          <div class=" shadow-sm p-2">
+            <h5 class="text-info"> Special Delivery Service</h5>
+            <hr>
+            <p > Pick up order/shopping</p>
+            <p>Inn Shopping </p>
+          </div>
+        </div>
+
+          <div class="p-2 bd-highlight">
+            <div class=" shadow-sm p-2">
+              <h5 class="text-info">Special Logistics Service</h5>
+              <hr>
+              <p> Cargo Haulage</p>
+              <p> Heavy Duty Packages</p>
+            </div>
+          </div>
+
       </div>
     </div>
-      <div class="col-md-1 order-md-6"></div>
-  </div>
 </div>
 
 
 <!--Next-->
-<div class="jumbotron jumbotron-fluid text-white">
-  <div class="container" > 
-    <div class="row p-3">
-          <div class="col-md-4 p-2 ">
-            <div class="card card-body bg bg-light text-dark text-center text-truancate shadow-lg mb-2 rounded" style=" height: 15rem;"> 
-              <br>
-              <h3>Make payments easily with our multiple payment channels </h5>
-                <p class="lead"> <a class="text-decoration-none btn btn-dark btn-sm " href="#">Click</a></p>
-            </div>
-            
-          </div>
-        
-          <div class="col-md-4 p-2 ">
-            <div class="card card-body bg bg-info text-white text-center shadow-lg mb-2 rounded" style=" height: 15rem;"> 
-              <br>
-              <h4> You need help shopping? 
-                <h6 class="lead"> We provide aid shopping service, following your description,</h6>
-              <p> More info 
-                <a class="text-decoration-none btn btn-light btn-sm" href="#">Click</a>
-              </p>
-              
-              </h4>
-            </div>
-          </div>
-          <div class="col-md-4 p-2">
-            <div class="card card-body bg bg-light text-dark text-center shadow-lg mb-2 rounded" style=" height: 15rem;"> 
-              <br>
-              <h4> Bigger Space? </h4>
-              <h6> Our various transport means have all space you will need to deliver your items in good condition 
-                <a class="text-decoration-none btn btn-info btn-sm" href="#">Click</a>
-              </h6>
-            </div>
-          </div>
-        </div>
-</div>
-</div>
+
     
 
 <!--Text Display-->
-<div class="container">
+<div class="container p-4" style="background-color: rgb(20, 159, 240);">
   <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-
       <div>
       {% if user.is_authenticated %}
-          <div class="text-white bg bg-secondary p-1 shadow-sm text-center">
-          <h6 class="h6"> Your most relaible Delivery service in Calabar Metropolis 
-            <span class=" btn btn-sm btn-warning "> 
-              <a class="text-white text-decoration-none" href="{% url 'dashboard' user.id %}"> Request Dispatch </a></span>
+          <div class="text-white text-center">
+          <h6 class="lead "> Your most relaible Delivery service in Calabar Metropolis 
+            <button type = "button" class=" btn btn-sm btn-danger "> 
+              <a class="text-white text-decoration-none" href="{% url 'dashboard' user.id %}"> Request Dispatch </a></button>
           </h6>
         </div>
       {% else %}
       </div>
 
-        <div class="card bg bg-secondary p-1 shadow-sm text-center">
-          <br>
-          <p class="lead text-white">Create an account and create a request for our dispatch Riders
+        <div class="text-center" style="background-color: rgb(20, 159, 240);">
+          <p class="lead text-white pt-2 " >Create an account and create a request for our dispatch Riders
             <span class=" btn btn-sm btn-light"> 
               <a class="text-dark text-decoration-none" href="{% url 'register' %}"> Sign up</a></span>
             </p>
@@ -145,40 +199,53 @@
 
 <!--Text Display -->
 
-<div class="container">
-  <div class="row shadow">
+<div class="container p-4">
+  <div class="row d-flex justify-content-center">
         <!--First column-->
-    <div class="col-md-3 container-fluid bg-danger d-inline-block rounded shadow p-3 mb-5">
-        <div class="text-center text-white ">      
-
-        <dl> 
-            <dt> CENTER </dt>
-            <dd class=" text-white text-decoration-none"> Call us on: +234 7067320119</dd>
-            <dt> WORKING HOURS </dt>
-            <dd>Mon-Fri 8AM-6PM</dd>
-            <dd> Sat 8AM-5pm</dd>
-            <dt> OUR LOCATION</dt>
-            <dd> we are located at number 5 new obutong street clabar</dd>
-        </dl>
+    <div class="col-md-3 bg-danger d-inline-block rounded shadow p-3 mr-2 mb-2">
+      <div class="container">
+        <div class="text-center text-sm-right text-white ">
+          <dl> 
+              <dt> REACH OUT TO US! </dt>
+              <dd class=" text-white text-decoration-none"> Call us on: +234 90134439919,</dd>
+              <dd class=" text-white text-decoration-none"> +234 8125089369,</dd>
+              <dd class=" text-white text-decoration-none">+234 9138143504</dd>
+              <hr>
+              <dt> WORKING HOURS </dt>
+              <dd>Mon-Fri 8AM-6PM</dd>
+              <dd> Sat 8AM-5pm</dd>
+              <hr>
+              <dt> OUR LOCATION</dt>
+              <dd> No 10 Asi Abang Extention off Murtala Mohammed Highway Cross River State, Calabar.</dd>
+          </dl>
         </div>
+      </div>
     </div>
 
         <!--second column-->
-    <div class="col-md-8 container bg-light d-inline-block text-muted rounded shadow p-3 mb-5">
-        <div>
-            <h1> OUR SERVICES</h1>
-            <h5> OUR SERVICES WE CAN RENDER FOR YOU</h5>
-            <ul>
-            <li> Welcome to First Delivery Logistics, for the main time our services can be rendered within the calabar metropolice.</li>
-            <li>We convey parsel and luggage of all kind for an affordable fee, we ensure the security of your items from point of origin to Delivery</li>
-            <li>We provide short time warehousing of deliveries to be delivered at a certain day, max 3 days.</li>
-            <li> Feeling lazy or too busy to go shopping, Dont worry we could go shopping for you for an affordable fee</li>
-            </ul>
+    
+      <div class="col-md-8 bg-light d-inline-block text-muted rounded shadow p-3 mr-2 mb-2">
+        <div class="container">
+          <br>
+          <br>
+          <div>
+              <h1> OUR SERVICES</h1>
+              <h5> BECASUSE WE UNDERSTAND THE GROWING NEED OF LOGISTICS SERVICES IN RECENT TIMES,</h5>
+                <ul>
+                  <li> First Laurel Logistics, ensures safe delivery of all items in our care.</li>
+                    <li>We convey parcels, goods, items of all kind and of all sizes and shape to your door step.</li>
+                      <li>We provide Shopping Services; " Our specified dispatch riders go to the Mall or Market to purchase items you have submitted on the form in your dashboard".</li>
+                        <li>We ensure items we purchase are not expired or spoilt, we buy at your specified loation if specified when submitting the form.</li>
+                        <li> Efficient tracking system for all our dispatch riders to make sure your items are safe, and there are no delays in between deliveries.</li>
+                </ul>
+          </div>
         </div>
-    </div>
+      </div>
+    
         <!--third-->
-    <div class="col-md-1 container bg-light d-inline-block"> </div>
+    <div class="col-md-1"> </div>
   </div>
+</div>
 </div>
 
 <!-- Nect-->
@@ -195,25 +262,28 @@
     </div>
     <div class="col-md-4 col-md-auto">
       <p>CONTACT US</p>
-      <p> TEL: +234 080XXXXXX</p>
-      <p> TEL: +234 080XXXXXX</p>  
+      <p> TEL: +234 90134439919</p>
+      <p> TEL: +234 8125089369</p> 
+      <p> TEL: +234 9138143504</p>  
       <p> Email: firstdeliveries@gmail.com</p>
       <h6></h6>
     </div>
     <div class="col-md-4 col-md-auto">
       <div class="row d-flex flex-nowrap">
-        <div class="col-md-auto"><button class="btn btn-warning btn-md"><i class="fab fa-facebook"></i> 
-        </button>
+        <div class="col-md-auto">
         </div>
 
         <div class="col-md-auto">
+          <button class="btn btn-warning btn-md"><i class="fab fa-facebook"></i> 
+          </button>
           <button type="button" class="btn btn-warning btn-md"><i class="fab fa-instagram"></i> 
           </button>
+          <button type="button" class="btn btn-warning btn-md"><i class="fab fa-twitter-square"></i>
+          </button>
         </div>
 
         <div class="col-md-auto">
-          <button type="button" class="btn btn-warning btn-md"><i class="fab fa-twitter-square"></i>
-          </button>
+          
         </div>
         </div>
       
@@ -222,6 +292,96 @@
   </div>
   
 </div>
+</div>
+<!--Modal-->
+
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">SHOPPING REQUEST INFORMATION</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <p> With our Shopping Service we save you the time and stress needed to carter for some of your shopping needs, be it in the market or store.</p>
+          <h6>To place a Shopping Request, You have to create an account, log into your dashboard and create a Shopping request</h6>
+          <h6>Transfer the estimated amount for purchase to our account number displayed on the green notifcation, Or check for our account number on your menu bar.</h6>
+          <h6> When we confirm payment, we access the shopping list submitted to determine the space it would occupy, <strong>If all items can fit in the bike bucket, the cost would be N500 else the cost is N1000. </strong></h6>
+          <h6>We will first deduct the cost of delivery and the purchase service fee which is <strong> N600 </strong>, before going to purchase your items.</h6>
+          <h5> Note: <span> <h6> If the cost of the items at the market is more than the money at hand, you will be contacted to for further decision, if you have a balance left from the purchase, it will be returned to you or you choose to leave it in your wallet with us for future purchase.</h6></span></h5>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {% if user.is_authenticated %}
+        <button type = "button" class=" btn btn-sm btn-danger "> 
+          <a class="text-white text-decoration-none" href="{% url 'dashboard' user.id %}"> Create Request </a></button>
+        {% else %}
+        <button type = "button" class=" btn btn-danger "> 
+          <a class="text-white text-decoration-none" href="{% url 'register' %}"> Get Started </a></button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
 
 
+<div class="modal fade" id="CashRequestForm" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong>Request For Dispatch Rider</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="">
+          <form method="POST" enctype="multipart/form-data"> 
+              {% csrf_token %}                    
+                  {{ c_form|crispy }}</li>
+                <button class="btn btn-outline-danger btn-block" type="submit">Request</button> 
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {% if user.is_authenticated %}
+        <button type = "button" class=" btn btn-sm btn-danger "> 
+          <a class="text-white text-decoration-none" href="{% url 'dashboard' user.id %}"> Create Request </a></button>
+        {% else %}
+        <button type = "button" class=" btn btn-danger"> 
+          <a class="text-white text-decoration-none" href="{% url 'register' %}">SignUp </a></button>
+          <small>Create an account to view more more delivery option.</small>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="SearchForm" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong>Request For Dispatch Rider</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div> 
+         
+        </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}

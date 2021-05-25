@@ -1,0 +1,56 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Search Result - FDLS {% endblock title %}
+
+{% block content %}
+<br>
+<div class="row order-3 p-3 bd-highlight">
+    <div class="col-md-4"></div>
+    <div class="col-lg-4">
+        <div class=" card card-body text-dark shadow rounded-lg " style="background-color: rgb(235, 240, 241);">
+        {% if query %}
+            {%with results.count as total_results %}
+            Found {{ total_results }} result{{ total_results|pluralize }}
+            {% endwith %}
+            <br>
+            <ul>
+            {% for r in results %}
+                <li> Item Description: {{r.Package_description}}</li>
+                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
+                <li> Pickup location : {{ r.Your_location }}</li>
+                <li> Your Phone Number : {{r.Your_phone_number}}</li>
+                <li> Your Email : {{r.email}}</li>
+                <li> Reciever Name: {{r.reciever_name}}</li>
+                <li> Reciever Address: {{r.reciever_address}}</li>
+                <li> Reciever Number: {{r.reciever_contact}}</li>
+                <li> Date Created : {{r.date_created}}</li>
+
+                {% if r.status == 'Pending' %}
+                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
+
+                {% elif r.status == 'Out for delivery' %}
+                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
+                {% elif r.status == 'Delivered' %}
+                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
+                {% else%}
+                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+                {% endif %}
+                <li> Amount paid : N{{r.Amount_Paid}}</li>
+                <li> Reference Number : {{r.order_id}}</li>
+                <br>
+                {% empty %}
+                <small>No results Found: Request for dispatch and fill in your Reference ID to view your request status.</small>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        </div>
+
+    </div>
+    <div class="col-md-4"></div>
+
+</div>
+
+
+{% endblock content %}

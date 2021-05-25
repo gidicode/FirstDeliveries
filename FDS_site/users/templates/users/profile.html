@@ -6,7 +6,7 @@
 
 {% block content2 %}
 {% if messages %}
-<div class="messages p-3 container justify-content-center">
+<div class="messages p-3 container text-center">
     {% for message in messages %}
     <div {% if message.tags %} class=" alert alert-{{message.tags}}" {% endif %}>{{ message }}</div>
     {% endfor %}
@@ -199,9 +199,50 @@
                         {% endif %}
                 </table>
 
-
-
-            
+                <!--Anonymous-->
+                <table>
+                    <h4 class="card card-body bg-secondary text-white">Anonymous</h4>
+                    <tr>
+                        <th> Date </th>
+                        <th>TP Choice</th>
+                        <th> Status</th>
+                        <th> Amount Paid </th>
+                        <th> Package description </th>
+                        <th>Phone Number </th >
+                        <th> Update</th>
+                        <th> Remove</th>
+                    </tr>
+                 {% for i in page_obj4 %}
+                    <tr>
+                        <td>{{i.date_created|timesince}}</td>
+                        <td>{{i.Choice_for_TP}}</td>
+                        <td>{{i.status}}</td> 
+                        <td>{{i.Amount_paid}}</td> 
+                        <td>{{i.Package_description}}</td> 
+                        <td>{{i.email}}</td>
+                        <td>{{i.Your_phone_number}}</td>
+                        <td>{{i.order_id}}</td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'updateRequestAnon' i.id %}">Update</a></td>   
+                        <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequestAnon' i.id%}">Cancel</a></td> 
+                    </tr>
+                {% endfor %} 
+                
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj4.has_previous %}
+                            <a class="btn btn-warning" href="?page=1">&laquo; first</a>
+                            <a class="btn btn-danger" href="?page={{ page_obj4.previous_page_number }}">previous</a>
+                        {% endif %}
+    
+                        <span class="current">
+                            Page {{ page_obj4.number }} of {{ page_obj4.paginator.num_pages }}.
+                        </span>
+    
+                        {% if page_obj4.has_next %}
+                            <a class="btn btn-warning" href="?page={{ page_obj4.next_page_number }}">next</a>
+                            <a class="btn btn-danger" href="?page={{ page_obj4.paginator3.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                </table>
                 </span>
             </div>
         </div>

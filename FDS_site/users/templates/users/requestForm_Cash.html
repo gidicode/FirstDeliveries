@@ -7,19 +7,17 @@
 <div class="row order-3 p-3 bd-highlight">
     <div class="col-md-4"></div>
     <div class="col-sm-4">
-        <div class="card card-body shadow mb-3 rounded">
+        <div class="shadow rounded-lg ">
             <form method="POST" enctype="multipart/form-data"> 
-                {% csrf_token %}
-                <fieldset class="form-group">
-                    <small class="border-bottom mb-4 card card-header text-white bg bg-danger">Request For Dispatch Rider </small>
-                    <strong>Cash Payments.</strong>
-                    <br>
-                    <br>
-                    {{ c_form|crispy }}
-        
-                </fieldset>
-                <button class="btn btn-outline-danger" type="submit">Request</button>
+                {% csrf_token %}                    
+                    <ul class="list-group">
+                        <li class="list-group-item active" aria-current="true"><strong>Request For Dispatch Rider (Cash)</strong></li>
+                        <li class="list-group-item list-group-item-action list-group-item-light">  {{ c_form|crispy }}</li>
+                        <li class="list-group-item list-group-item-action list-group-item-light"><button class="btn btn-outline-danger" type="submit">Request</button></li>
+                    </ul>
+                
             </form>
+                </div>
         </div>
 
     </div>

@@ -8,4 +8,5 @@ admin.site.register(ForPayments)
 admin.site.register(Shopping) 
 admin.site.register(Delivered) 
 admin.site.register(adminNotification) 
+admin.site.register(Anonymous) 
 

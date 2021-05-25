@@ -9,14 +9,66 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='{% static "/FDS_app/main.css" %}' rel='stylesheet' type='text/css'>
+    <link href="https://unpkg.com/@popperjs/core@2">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nunito:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@1,700&family=Red+Hat+Display:wght@900&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" 
     integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="shortcut icon" type="image/png" href="{% static 'FDS_app/favicon.ico' %}"/>
-</head>
+    <script>
+      $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
+
+    <style>
+      .zoom {
+    width: 300px;
+    }
+
+    .zoom img {
+        transition: 1s all ease-in-out;
+    }
+
+    .zoom:hover img {
+      transform: scale(1.1);
+    }
+
+    .dot {
+    height: 15px;
+    width: 15px;
+    background-color: rgb(235, 0, 0);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+
+    div:nth-child(1) {
+      font-family: 'Nunito', sans-serif;
+    }
+
+    h1:nth-child(1) {
+      font-family: 'Red Hat Display', cursive;
+    }
+
+    h2,h3,h4,dt:nth-child(2) {
+      font-family: "Red Hat Display", sans-serif;
+    }
+    </style>
+  <script>
+    $('#myModal').on('shown.bs.modal', function () {
+  $('#myInput').trigger('focus')
+})
+  </script>
 
 <script>
   $(function () {
@@ -27,77 +79,78 @@
     }
   })
   </script>
+    
+</head>
+
+
 
 
 <body>
 
 <div id="navbar-nav">
-  <nav class="container-fluid navbar navbar-expand-md text-truncate navbar-dark fixed-top shadow-none p-3 mb-5" style="background-color: rgb(255, 109, 109);" >
-    <a class="navbar-brand font-weight-bold" href="{% url 'fds-home' %}"> First Laurel Logistics</a>
+  <nav class="container-fluid navbar navbar-expand-md text-truncate navbar-dark fixed-top shadow-none" style="background-color: rgb(221, 77, 77);" >
+    <a class="navbar-brand font-weight-bold" href="{% url 'fds-home' %}"> 
+      <img src="/static/FDS_app/FLLS LOGO.png" class="img-fluid" alt="Flls Logo">
+    </a>
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
       <span class="fas fa-bars"></span>
     </button>
-  <div class=" collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'fds-home' %}">Home</a>
-      </li>
-      <li class="nav-item"> 
-        <a class="nav-link" href="{% url 'fds-about' %}">About</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'fds-pricing' %}"> Pricing </a>
-      </li>
-    </ul>
-    <div>
-      {% if user.is_authenticated %}
-      
-      <button type="button" class="btn btn-dark btn-sm mb-2 mr-2">
-        <a  href="{% url 'dashboard' user.id  %}" class=" text-white text-decoration-none">Dashboard</a> </button>
-      </div>
-      <button type="button" class="btn btn-outline-secondary btn-sm mb-2">
-        <a  href="{% url 'logout' %}" class=" text-white text-decoration-none">Logout</a></button>
-      {% else%}
 
-    <ul class="navbar-nav" >
-        <li>
-          <button type="button" class="btn btn-light btn-sm">
-            <a  href="{% url 'register' %}" class=" text-dark text-decoration-none">Sign Up</a></button>
-  
-          <button type="button" class="btn btn-secondary btn-sm">
-          <a  href="{% url 'login' %}" class=" text-white text-decoration-none">Sign In</a></button>
-      </li>
-    </ul>
-    {% endif %}
-  </div>
-  </div>
+    <div class=" collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item  active">
+          <a class="nav-link" href="{% url 'fds-home' %}">Home</a>
+        </li>
+
+        <li class="nav-item  active"> 
+          <a class="nav-link " href="{% url 'fds-about' %}">About</a>
+        </li>
+
+        <li class="nav-item  active">
+          <a class="nav-link" href="{% url 'fds-pricing' %}"> Pricing </a>
+        </li>
+
+      </ul>
+    </div>
+        {% if user.is_authenticated %}
+        
+        <ul class="navbar-nav">
+          <li>
+            <button type="button" class="btn btn-dark btn-sm mb-2 mr-2">
+              <a  href="{% url 'dashboard' user.id %}" class=" text-white text-decoration-none">Dashboard</a> 
+            </button>
+
+            <button type="button" class="btn btn-outline-secondary btn-sm mb-2">
+              <a  href="{% url 'logout' %}" class=" text-white text-decoration-none">Logout</a>
+            </button>
+          </li>
+        </ul>
+        {% else%}
+
+      <ul class="navbar-nav" >
+          <li>
+            <button type="button" class="btn btn-light btn-sm">
+              <a  href="{% url 'register' %}" class=" text-dark text-decoration-none">Sign Up</a></button>
+    
+            <button type="button" class="btn btn-secondary btn-sm">
+            <a  href="{% url 'login' %}" class=" text-white text-decoration-none">Sign In</a></button>
+        </li>
+      </ul>
+      {% endif %}
+ 
   </nav>
 </div>
 
-<main role="main" style="padding-top: 4rem;">
+<main role="main" style="padding-top: 3rem;">
   <div >
 {% block content %}
-<nav style="padding-top: 5rem;" class="container sticky-md-top">
-  <div>
-    <button type="button" class="shadow-sm p-3 mb-1 btn btn-warning btn-block font-weight-bold"  data-mdb-toggle="animation" data-mdb-animation-reset="true" data-mdb-animation="slide-out-right"> 
-      Signup Now to Order for your Pickup
-    </button>
-  </div>
-</nav>
 
-
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }}">
-  {{ message }}
-</div>
-{% endfor %}
-{% endif %}
 
 {% endblock content %}
 </div>
 
-<div class="chatservice">
+<div class="chatservice mr-4">
   <div class="row">
     <div class=" col-md-auto"></div>
     <div class=" col-md-auto"></div>
@@ -105,9 +158,11 @@
       <button type="button" class="btn btn-outline-danger shadow" data-toggle="tooltip" data-placement="top" title="You Need Support? Chat Us!">
         <a class=" text-decoration-none" href="https://api.whatsapp.com/send?phone=+2347067320119">
         <i class="fab fa-whatsapp text-muted"> </i></a> 
-    </button>
+      </button>
     </div>
 </div>
+
+<br>
   
 
 </div>

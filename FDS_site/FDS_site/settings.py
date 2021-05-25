@@ -26,7 +26,7 @@ SECRET_KEY = '2u0mu_b=7%76tif8&_sx#mu+m@g!j5o3kvm2qeo+3$2^!1g7i-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'cb0960be82eb.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', '365d3884188d.ngrok.io']
 
 
 # Application definition
@@ -153,6 +153,11 @@ EMAIL_HOST_USER = 'usuugwo@gmail.com'
 EMAIL_HOST_PASSWORD = 'ujlelybirixcrlpc'
 EMAIL_USE_TLS = True
 
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+HASHIDS_SALT = "HdfF342RkL89uUoNsS6Yy8Pc"
+HASHID_FIELD_SALT = "ac748295efghi6b01d3"
 
 PAYSTACK_PUBLIC_KEY = 'pk_test_3d14df0e542eeff499eca1f35dd563d3885e9a2d'
 PAYSTACK_SCRET_KEY = 'sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec'

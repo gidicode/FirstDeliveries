@@ -5,7 +5,7 @@
 
 {% block content %}
 <main>
-  <nav class="navbar navbar-expand-lg navbar-light shadow p-2 bg-light breadcrumb d-flex bd-highlight"  >
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm p-2 bg-light breadcrumb d-flex bd-highlight"  >
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="fas fa-angle-double-down"></span>
         </button>
@@ -34,35 +34,45 @@
 
         <div class="row p-2 d-flex flex-nowrap nav-item">
 
-          <div class="col-md-4 d-flex flex-nowrap p-3">
+          <div class="col-md-auto d-flex flex-nowrap">
               {% if n.count > 0 %}
               <small class="justify-content-center">
-                <a href="{% url 'show_Notification' user.id %}"><button type="button" class="btn btn-danger btn-sm align-self-stretch ">
-                  Notifications <span class="badge badge-light">{{n.count}}</span>
+                <a href="{% url 'show_Notification' user.id %}">
+                  <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="You have {{n.count}} Notifications">
+                  <i class="fas fa-bell"></i> <span class="badge badge-light"></span>{{n.count}}</span>
                 </button></a>
               </small>
               {% endif %}
 
               {% if notify.count > 0 %}
-              <small class="justify-content-center">
-                <a href="{% url 'adminNotificationShow'%}"><button type="button" class="btn btn-danger btn-sm align-self-stretch ">
-                  Notifications <span class="badge badge-light">{{notify.count}}</span>
-                </button></a>
+              <small >
+                <a href="{% url 'adminNotificationShow' %}"> 
+                  <button type = "button" class="btn btn-danger btn-sm " data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications">
+                  <i class="fas fa-bell pr-1"></i><span class="badge badge-light">{{notify.count}}</span>
+                  </button>
+                </a>
               </small>
               {% endif %}
 
           </div>
-            <div class="col-sm-3 "> 
-              <img src="{{user.customer.image.url}}" alt=" Profile Picture" class=" rounded-circle " style="width: 40px; height: 40px;">  
+            <div class="col-md-auto"> 
+              <img src="{{user.customer.image.url}}" alt=" Profile Picture" class="rounded-circle" style="width: 40px; height: 43px;">  
             </div>
 
-            <div class="col-md-5 container d-flex flex-nowrap">
+            <div class="col-md-auto pl-3">
               <ul class="list-inline">
                 <li> <small> Username: {{user.username}} </small></li> 
+                
               </ul>    
             </div>
   </nav>
 </main>
+
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 {% block content2 %} 
 
   {% endblock content2 %}  

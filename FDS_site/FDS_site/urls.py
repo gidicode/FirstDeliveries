@@ -1,6 +1,8 @@
 
+from django.conf.urls import handler404
+
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, register_converter
 from users import views as user_views
 from django.contrib.auth import views as auth_views #2nd
 from django.conf import settings
@@ -8,45 +10,56 @@ from django.conf.urls.static import static
 from . import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+#from django.views.static import serve 
+
+from users.utils import HashIdConverter
+register_converter(HashIdConverter, "hashid")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('FDS_app.urls')),
+
+    #path(r'static/(?P<path>.*)', serve,{'document_root': settings.STATIC_ROOT}), 
+
+    path('404/', user_views.response_error_handler),
+
     path('register/', user_views.register, name='register'),
 
     path('profileUpdate/<str:user>/', user_views.customerProfileUpdatePage, name='profileUpdate'),
 
-    path('success/<str:user>/', user_views.successPage, name='success'),
+    path('success/<hashid:user>/', user_views.successPage, name='success'),
 
-    path('requestForm_Online/<int:user>/', user_views.requestForm_Online, name='requestForm_Online'),
+    path('requestForm_Online/<hashid:user>/',  user_views.requestForm_Online, name='requestForm_Online'),
 
-    path('requestForm_Cash/<int:user>/', user_views.requestForm_Cash, name='requestForm_Cash'),
+    path('requestForm_Cash/<hashid:user>/', user_views.requestForm_Cash, name='requestForm_Cash'),
 
-    path('shopping/<str:user>/', user_views.ShoppingForm, name='shopping'),
+    path('shopping/<hashid:user>/', user_views.ShoppingForm, name='shopping'),
 
-    path('Initialize_requestForm/<int:user>/', user_views.Initialize_requestForm, name='Initialize_requestForm'),
+    path('Initialize_requestForm/<hashid:user>/', user_views.Initialize_requestForm, name='Initialize_requestForm'),
 
-    path('orderHistory/<str:user>/', user_views.orderHistory, name='orderHistory'),
+    path('orderHistory/<hashid:user>/', user_views.orderHistory, name='orderHistory'),
 
     path('customers-list/', user_views.customers_list, name='customers-list'),
 
     path('adminDashboard/', user_views.AdminDashboard, name='adminDashboard'),
 
-    path(r'<int:user>/', user_views.customerDashboardPage, name='dashboard'),
+    path('dashboard/<hashid:user>/', user_views.customerDashboardPage, name='dashboard'),
 
-    path('updateRequest/<str:pk>/', user_views.updateRequestForm, name='updateRequest'),
-    path('updateRequestCash/<str:pk>/', user_views.updateRequestFormCash, name='updateRequestCash'),
-    path('updateRequestShopping/<str:pk>/', user_views.updateRequestFormShopping, name='updateRequestShopping'),
+    path('updateRequest/<hashid:pk>/', user_views.updateRequestForm, name='updateRequest'),
+    path('updateRequestCash/<hashid:pk>/', user_views.updateRequestFormCash, name='updateRequestCash'),
+    path('updateRequestShopping/<hashid:pk>/', user_views.updateRequestFormShopping, name='updateRequestShopping'),
+    path('updateRequestAnon/<hashid:pk>/', user_views.updateRequestAnon, name='updateRequestAnon'),
 
-    path('cancelRequest/<str:pk>/', user_views.cancelRequest, name='cancelRequest'),
-    path('cancelRequestCash/<str:pk>/', user_views.cancelRequestCash, name='cancelRequestCash'),
-    path('cancelRequestShopping/<str:pk>/', user_views.cancelRequestShopping, name='cancelRequestShopping'),
+    path('cancelRequest/<hashid:pk>/', user_views.cancelRequest, name='cancelRequest'),
+    path('cancelRequestCash/<hashid:pk>/', user_views.cancelRequestCash, name='cancelRequestCash'),
+    path('cancelRequestShopping/<hashid:pk>/', user_views.cancelRequestShopping, name='cancelRequestShopping'),
+    path('cancelRequestAnon/<hashid:pk>/', user_views.cancelRequestAnon, name='cancelRequestAnon'),
 
-    path('show_Notification/<str:user>/', user_views.Notifications_show, name='show_Notification'),
-    path('delete_Notification/<str:pk>/', user_views.Notifications_delete, name='delete_Notification'),
+    path('show_Notification/<hashid:user>/', user_views.Notifications_show, name='show_Notification'),
+    path('delete_Notification/<hashid:pk>/', user_views.Notifications_delete, name='delete_Notification'),
 
     path('adminNotificationShow/', user_views.adminNotificationShow, name='adminNotificationShow'),
-    path('adminNotificationDelete/<str:pk>/', user_views.adminNotificationDelete, name='adminNotificationDelete'),
+    path('adminNotificationDelete/<hashid:pk>/', user_views.adminNotificationDelete, name='adminNotificationDelete'),
 
 
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
@@ -68,3 +81,5 @@ urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = 'users.views.response_error_handler'

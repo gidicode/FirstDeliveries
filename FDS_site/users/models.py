@@ -4,10 +4,13 @@ from django.contrib.auth.models import User
 from PIL import Image
 from django.core.validators import RegexValidator
 from datetime import date
+from django.dispatch.dispatcher import receiver
 from django.utils import timezone
 from django.conf import settings
 
+
 User = settings.AUTH_USER_MODEL
+
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -62,7 +65,7 @@ class MakeRequest(models.Model):
     Amount = models.CharField(null=True, max_length=20, default=0)
     charge_id = models.CharField(max_length=100, null=True, validators=[alphanumeric])
     paid = models.BooleanField(default=False)
-    order_id=models.CharField(null=True, max_length=20, default=0)
+    order_id= models.CharField(max_length=10, null=True, default=0)
     
 
     def __str__(self):
@@ -87,20 +90,65 @@ class MakeRequestCash(models.Model):
 
     customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
     reciever_name = models.CharField(max_length=20, null=True)
-    Address_of_reciever = models.CharField( max_length=50, null=True)
+    Address_of_reciever = models.CharField( max_length=100, null=True)
     Package_description = models.CharField(max_length=100, null=True, blank=True)
     Choice_for_TP = models.CharField(max_length=20, choices=OPTIONS1, default='Bike', null=True)
-    Your_location = models.CharField(max_length=30, null=True)
+    Your_location = models.CharField(max_length=100, null=True, verbose_name="Pickup Location", help_text="The location we would pick the item from")
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
-    reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True)
+    reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Reciever Phone Number", 
+                            help_text="Enter phone number of the person to recieve this or pick item from")
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
     paid = models.BooleanField(default=False)
     Amount_Paid = models.CharField(null=True, max_length=20, default=0)
-    order_id =models.CharField(null=True, max_length=20, default=0)
+    order_id= models.CharField(max_length=10, null=True, default=0)
 
     def __str__(self):
         return f'{self.reciever_name, self.reciever_phone_number, self.order_id}'
+
+    class Meta:
+        ordering = ('-date_created',)
+
+class Anonymous(models.Model):
+    OPTIONS2 = [
+            ("Bike", "Bike"),
+            ( "Tricycle", "Tricycle (Keke)"),
+    ]
+
+    STATUS = {
+        ('Pending', 'Pending'),
+        ('Canceled', 'Canceled'),
+        ('Out for delivery', 'Out for delivery'),
+        ('Delivered', 'Delivered'),
+    }
+
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
+
+    Package_description = models.CharField(max_length=100, null=True, blank=True, help_text="The current location of the reciever.")
+    Choice_for_TP = models.CharField(max_length=20, choices=OPTIONS2, default='Bike', null=True, 
+                    help_text="Depending on the item size, choose what best suit your item best handling. COST: Bike N500, Tricycle N1000")
+    Your_location = models.CharField(max_length=100, null=True, verbose_name="Pickup Location", help_text="The location we would pick your item from")  
+    Your_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Your Phone Number", 
+                            help_text="Enter an active phone number")
+    date_created = models.DateTimeField(default=timezone.now, null=True)
+    status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
+    paid = models.BooleanField(default=False)
+    email = models.EmailField(max_length=100, null=True)
+    Amount_Paid = models.CharField(null=True, max_length=20, default=0.00)
+    order_id= models.CharField(max_length=10, null=True, default=0)
+    receiver_name = models.CharField(null=True, max_length=100, default = "Not Given" )
+    receiver_address = models.CharField(null=True, max_length=100, default = "Not Given")
+    receiver_contact = models.CharField(null=True, max_length=100, default = "Not Given")
+
+
+    def __str__(self):
+        return f"""
+        Package Description -- {self.Package_description },\n 
+        Pickup Location -- {self.Your_location},\n
+        Your Contact -- {self.Your_phone_number},\n
+        Mode of Transport -- {self.Choice_for_TP},\n
+        Delivery Fee -- {self.Amount_Paid}
+        """
 
     class Meta:
         ordering = ('-date_created',)
@@ -128,7 +176,7 @@ class Shopping(models.Model):
     Item_Cost = models.CharField(max_length=100, null=True)
     Total = models.CharField(max_length=100, null=True)
     Amount_Refunded = models.CharField(max_length=100, null=True)
-    order_id=models.CharField(null=True, max_length=20, default=0)
+    order_id= models.CharField(max_length=10, null=True, default=0)
 
     
     def __str__(self):
@@ -155,7 +203,7 @@ class ForPayments(models.Model):
     charge_id = models.CharField(max_length=100, null=True, validators=[alphanumeric])
     date_created = models.DateTimeField(default=timezone.now, null=True)
     money_paid = models.CharField(null=True, max_length = 10, default="None")
-    order_id=models.CharField(null=True, max_length=20, default=0)
+    order_id= models.CharField(max_length=10, null=True, default=0)
     Mode_of_Transport = models.CharField(null=True, max_length = 10, default="None")
 
     def __str__(self):
@@ -165,7 +213,7 @@ class Delivered(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
     Item_delivered = models.CharField(max_length=200, null=True)
     date_created = models.DateTimeField(default=timezone.now, null=True)
-    order_id=models.CharField(null=True, max_length=20, default=0)
+    order_id= models.CharField(max_length=10, null=True, default=0)
     viewed = models.BooleanField(default=False)
     title = models.CharField(max_length=100, null=True)
     Message = models.TextField(max_length=500, null=True)
@@ -173,15 +221,17 @@ class Delivered(models.Model):
     def __str__(self):
         return f'{self.customer, self.date_created}'
 
+
 class adminNotification(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
     viewed = models.BooleanField(default=False)
     item_created = models.CharField(max_length = 200, null=True)
     date_created = models.DateTimeField(default=timezone.now, null=True)
-    order_id = models.CharField(max_length=200, null=True)
+    order_id= models.CharField(max_length=10, null=True, default=0)
+    email = models.EmailField(max_length=100, null=True)
 
     def __str__(self):
-        return f'{self.customer, self.viewed}'
-
-    
-
+        if self.customer == None:
+         return f'Anonymous, {self.viewed, self.item_created}'
+        else:
+            return f'{self.customer, self.viewed}'
