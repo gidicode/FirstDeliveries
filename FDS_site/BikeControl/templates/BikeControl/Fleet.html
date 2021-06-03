@@ -1,0 +1,62 @@
+{% extends "BikeControl/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Fleet Vechiles - FDLS{% endblock title%}
+
+{% block contentbike %}
+<br>
+<div class="container-fluid bg-white">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 ">
+            <h4 class="shadow text-center text-secondary bg-white rounded-pill p-3">ALL FLEET VECHILE INFORMATION</h4>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <br>
+<!--FLEET INFO-->
+    <div class="row">
+        <div class="col-md-2">
+            <div class="alert alert-primary rounded-pill" role="alert">
+                <h6 class="text-nowrap font-weight-bold">Bike Fleet <span class="badge badge-light">{{bike_fleet}}</span></h6>
+            </div>
+
+            <div class="alert alert-primary rounded-pill" role="alert">   
+                <h6 class="text-nowrap font-weight-bold">Tricycle Fleet <span class="badge badge-light">{{tricycle}}</span></h6>
+            </div>
+
+            <div class="alert alert-primary rounded-pill" role="alert">
+                <h6 class="text-nowrap font-weight-bold">Car Fleet <span class="badge badge-light">None</span></h6>
+            </div>
+
+            <div class="alert alert-primary rounded-pill" role="alert">           
+                <h6 class="text-nowrap font-weight-bold">Truck Fleet <span class="badge badge-light">None</span></h6>
+            </div>
+        </div>
+            <div class="col-md-5  p-3">
+                <h4 class="text-info">Bike Fleet</h4>
+                {% for i in bike_fleet_all%}
+                    <div class=" p-3 mb-3 shadow-sm bg-primary text-white">
+                        <p><strong> PLATE NUMBER: </strong>{{i.fleet_plate_number}}</p>
+                        <p><strong> CATEGORY: </strong>{{i.category}}</p>
+                        <p><strong> VECHILE NAME: </strong>{{i.vechile_name}}</p>
+                        <p><strong> DATE CREATED: </strong>{{i.date_created}}</p>
+                    </div>
+                {% endfor %}  
+            </div>
+
+            <div class="col-md-5  p-3 ">
+                <h4 class="text-info">Tricycle Fleet</h4>
+                {% for i in tricycle_fleet_all%}
+                    <div class=" p-3 mb-3 bg-info text-white shadow-sm">
+                        <p><strong> PLATE NUMBER: </strong>{{i.fleet_plate_number}}</p>
+                        <p><strong> CATEGORY: </strong>{{i.category}}</p>
+                        <p><strong> VECHILE NAME: </strong>{{i.vechile_name}}</p>
+                        <p> <strong> DATE CREATED: </strong>{{i.date_created}}</p>
+                    </div>
+                {% endfor %}    
+            </div>
+    </div>
+</div>
+{% endblock contentbike %}

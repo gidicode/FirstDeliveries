@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Textarea, fields
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -60,18 +59,20 @@ class adminform(forms.ModelForm):
     class Meta:
         model = MakeRequest
         fields = '__all__'
+        exclude = ['assigned']
 
 class adminformCash(forms.ModelForm): 
     class Meta:
         model = MakeRequestCash
         fields = '__all__'
+        exclude = ['assigned']
 
 class adminformShopping(forms.ModelForm): 
     class Meta:
         model = Shopping
         fields = '__all__'
+        exclude = ['assigned']
         
-
 class Request_Cash(forms.ModelForm): 
     
     class Meta:
@@ -84,7 +85,7 @@ class Shopping_Form(forms.ModelForm):
     class Meta:
         model = Shopping
         fields ='__all__'
-        exclude = ['customer', 'status', 'charge_id', 'date_created', 'amount_paid', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded', 'order_id']
+        exclude = ['customer', 'status', 'charge_id', 'date_created', 'amount_paid', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded', 'order_id', 'assigned']
         widgets = {
             'List_Items':Textarea(attrs={'cols': 80, 'row':20})
             
@@ -99,3 +100,4 @@ class AdminAnonForm(forms.ModelForm):
     class Meta:
         model = Anonymous
         fields = '__all__'
+        exclude =['assigned']

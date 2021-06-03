@@ -1,0 +1,93 @@
+{% extends "users/profile.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Anonymous Dashboard - FDLS {% endblock title %}
+
+{% block contentadmin %}
+ <!--Anonymous-->
+ <div class="row">
+    <div class="col-md-12 col-sm- 12, col-xl-12">
+        <h6 class="p-3 position-static shadow-sm text-center text-dark">ANONYMOUS REQUEST</h6>
+        <table class="table table-striped table-dark">
+            <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Date</th>
+                <th scope="col">TP Choice</th>
+                <th scope="col">Status</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Request Details</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Email</th>
+                <th scope="col">Assigned</th>
+                <th scope="col">Update</th>
+                <th scope="col">Remove</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in page_obj4 %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{i.date_created|timesince}}</td>
+                <td>{{i.Choice_for_TP}}</td>
+                <td>{{i.status}}</td> 
+                <td>{{i.Amount_Paid}}</td>
+                <td>
+                    <div class="dropdown">
+                        <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          r
+                        </p>
+                        <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                          <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
+                          <br>
+                          <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_contact}} </small>
+                          <br>
+                          <small class=" text-white"><strong>Address of Reciever:</strong> {{i.reciever_address}} </small>
+                          <br>
+                          <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
+                          <br>
+                          <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                    </div>
+                </td>
+                <td>{{i.Your_phone_number}}</td>
+                <td>
+                    <div class="dropdown">
+                        <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          e
+                        </p>
+                        <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                          <p class=" text-white"> {{i.email}} </p>
+                    </div>
+                    </td>
+                <td>{{i.order_id}}</td> 
+                <td class="text-center">
+                    {% if i.assigned == True%}
+                            <i class="fas fa-check-circle text-success">
+                    {% else %}
+                            <i class="fas fa-check-circle text-danger"></i>
+                    {% endif %}
+                </td>
+                <td><a class="btn btn-sm rounded-pill btn-info" href="{% url 'updateRequestAnon' i.id %}">Update</a></td>   
+                <td><a class="btn btn-sm rounded-pill btn-danger" href="{% url 'cancelRequestAnon' i.id%}">Cancel</a></td>
+                {% endfor %}
+            </tr>
+            
+            <div class="pagination mb-3">
+                <span class="step-links">
+                    {% if page_obj4.has_previous %}
+                        <a class="btn btn-warning" href="?page=1">&laquo; first</a>
+                        <a class="btn btn-danger" href="?page={{ page_obj4.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ page_obj4.number }} of {{ page_obj4.paginator.num_pages }}.
+                    </span>
+            
+                    {% if page_obj4.has_next %}
+                        <a class="btn btn-warning" href="?page={{ page_obj4.next_page_number }}">next</a>
+                        <a class="btn btn-danger" href="?page={{ page_obj4.paginator3.num_pages }}">last &raquo;</a>
+                    {% endif %}
+        </table>
+    </div>
+</div>
+{% endblock contentadmin %}

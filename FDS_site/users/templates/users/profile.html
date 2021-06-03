@@ -5,248 +5,136 @@
 
 
 {% block content2 %}
-{% if messages %}
-<div class="messages p-3 container text-center">
-    {% for message in messages %}
-    <div {% if message.tags %} class=" alert alert-{{message.tags}}" {% endif %}>{{ message }}</div>
-    {% endfor %}
-</div>
-{% endif %}
-
 <div class="container-fluid">
-{% include 'users/status.html' %}
-</div>
-
-<div class="row container-fluid">
-    <div class="col-md-4">
-        <div class="card card-body">
-            <form class="form-inline my-3 mx-4 my-lg-1 bd-highlight font-weight-bold text-dark">   
-                {{myFilter5.form|crispy }}
-                <button class="btn btn-outline-secondary  my-sm-2" type="submit">Search</button>
-            </form>
-            <a class="btn btn-primary btn-sm btn-block" href="#"><h5> Customers </h5></a>
-            <table class="table table-sm">
-                <tr>
-                    <th>Customers</th>
-                    <th>Username</th>
-                    <th> Phone Number</th>
-                </tr>
-                {% for c in customers %}
-                    <tr>
-                        <td><a class="btn btn-sm btn-info" href="{% url 'dashboard' c.id %}">view</a></td> 
-                        <td>{{c.user.username}}</td>
-                        <td>{{c.phone_number}}</td>
-                    </tr>
-                {% endfor%}
-            </table>
+    <div class="row">
+        <div class="col-md-2 col-sm-2 col-xl-2 bg-dark ">
+            <br> 
+            {% if messages %}
+            <div class="messages p-3 container text-center">
+                {% for message in messages %}
+                <div {% if message.tags %} class=" alert alert-{{message.tags}}" {% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+                <h5 class="p-4 font-weight-bolder text-white text-left"> ADMIN DASHBOARD</h5>
+                <div class="btn-group-vertical btn-block btn-group-toggle text-left" data-toggle="buttons">
+                    <a class="btn btn-dark  btn-block text-left" href="{% url 'adminDashboard' %}" role="button">Home</a>
+                    <a class="btn btn-dark text-left" href="{% url 'assignedRides' %}" role="button">Riders Dashboard</a>
+                    <hr class="my-12"/>
+                    <a class="btn btn-dark text-left" href="" data-toggle="modal" data-target="#DispatchSummary" role="button">Order Summary</a>
+                    <a class="btn btn-dark text-left" href="" data-toggle="modal" data-target="#CustomerSummary" role="button">All Customers</a> 
+                    <a class="btn btn-dark text-left" href="{% url 'e-request' %}" role="button">E-payment Request</a>
+                    <a class="btn btn-dark text-left" href="{% url 'cash-request' %}" role="button">Cash Payment Request</a>
+                    <a class="btn btn-dark text-left" href="{% url 'shopping-request' %}" role="button">Shopping Request</a>
+                    <a class="btn btn-dark text-left" href="{% url 'anonymous-request' %}" role="button">Anonymous Request</a>
+                </div>
         </div>
-    </div> 
-    
-    <div class="col-lg-8">
-        <div class="card card-body">
 
-            <div class="btn btn-light bd-highlight rounded shadow pr-4 p-3">
-                <a class="text-decoration-none text-dark" href="{%url 'customers-list' %}">Search Request</a>
-            </div>
-            <br>
+        <div class="col-md-10 p-2"> 
+            {% block contentadmin %}
+                <div class="d-flex  p-5 flex-row bd-highlight justify-content-center">
+                    <div class="bd-highlight mr-2 d-inline-flex">
+                        <a class="btn btn-info rounded-pill text-left" href="{%url 'customers-list' %}" role="button">Search Request</a>
+                    </div>
 
-            <table>
-                <h4 class="card card-body bg-secondary  bd-highlight text-white">FOR ONLINE PAYMENTS</h4>
-                <tr>
-                    <th>Customer</th>
-                    <th>Name</th>
-                    <th> Date </th>
-                    <th>TP</th>
-                    <th> Status</th>
-                    <th> Amount </th>
-                    <th> Paid Status </th>
-                    <th> Reference Num </th>
-                    <th> Order ID </th>
-                    <th> Update</th>
-                    <th> Remove</th>
-                </tr>
-            {% for i in page_obj %}
-                   
-                    <tr>
-                        <td>{{i.customer}}</td>
-                        <td>{{i.reciever_name}}</td>
-                        <td>{{i.date_created|timesince}}</td>
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.Amount}}</td> 
-                        <td>{{i.paid}}</td> 
-                        <td>{{i.charge_id}}</td> 
-                        <td>{{i.order_id}}</td>
-                        <td><a class="btn btn-sm btn-info" href="{% url 'updateRequest' i.id %}">Update</a></td>   
-                        <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequest' i.id%}">Cancel</a></td> 
-                    </tr>
-            {% endfor %}
+                    <div class=" bd-highlight d-inline-flex">
+                        <a class="btn btn-info rounded-pill text-left" href="{%url 'drivers_dashboard' %}" role="button">Riders Management</a>
+                    </div>
+                </div>
 
-            <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a class="btn btn-warning" href="?page=1">&laquo; first</a>
-                        <a class="btn btn-danger" href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
+                <div class="container">
+                    <div class="row"> 
+                        <div class="col-md-4 col-sm-4 col-xl-4 bgilight">
+                            <div class="alert bg-info shadow rounded-lg text-center p-5 " style="height: 270px;"> 
+                                <h3 class="text-white text-left pt-4" > <i class="fas fa-money-bill"></i> </h3>
+                                <h4 style="font-family:'Comfortaa', cursive;" class="text-white text-left"> INCOME GENERATED</h4>
 
-                    <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
+                            </div>                            
+                        </div>
+                        
+                        <div class="col-md-8">
+                            <!--Row1-->
+                            <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                            <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> E-Request</h6>
+                                            <h3> N{{e_req.Amount__sum}} </h3>
+                                            <a class="btn btn-info btn-sm rounded-pill" href="{% url 'anonymous-request' %}" role="button">view</a>
+                                        </div>
+                                    </div>
 
-                    {% if page_obj.has_next %}
-                        <a class="btn btn-warning" href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a class="btn btn-danger" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-            </table>
-
-                <!--FOR CASH PAYMENTS-->
-                <br>
-                <table>
-                    <h4 class="card card-body bg-secondary text-white">FOR CASH PAYMENTS</h4>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Name</th>
-                        <th> Date </th>
-                        <th>TP</th>
-                        <th> Status</th>
-                        <th> Amount </th>
-                        <th> Paid Status </th>
-                        <th> Order ID </th>
-                        <th> Update</th>
-                        <th> Remove</th>
-                    </tr>
-                 {% for i in page_obj2 %}
-                    <tr>
-                        <td>{{i.customer}}</td>
-                        <td>{{i.reciever_name}}</td>
-                        <td>{{i.date_created|timesince}}</td>
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.Amount_Paid}}</td> 
-                        <td>{{i.paid}}</td> 
-                        <td>{{i.order_id}}</td>
-                        <td><a class="btn btn-sm btn-info" href="{% url 'updateRequestCash' i.id %}">Update</a></td>   
-                        <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequestCash' i.id%}">Cancel</a></td> 
-                    </tr>
-                {% endfor %} 
-                
-                <div class="pagination">
-                    <span class="step-links">
-                        {% if page_obj2.has_previous %}
-                            <a class="btn btn-warning" href="?page=1">&laquo; first</a>
-                            <a class="btn btn-danger" href="?page={{ page_obj2.previous_page_number }}">previous</a>
-                        {% endif %}
-    
-                        <span class="current">
-                            Page {{ page_obj2.number }} of {{ page_obj2.paginator.num_pages }}
-                        </span>
-    
-                        {% if page_obj2.has_next %}
-                            <a class="btn btn-warning" href="?page={{ page_obj2.next_page_number }}">next</a>
-                            <a class="btn btn-danger" href="?page={{ page_obj2.paginator2.num_pages }}">last &raquo;</a>
-                        {% endif %}
-                </table>
-
-                <br>
-                <!--For Shopping List-->
-                <table>
-                    <h4 class="card card-body bg-secondary text-white">Shopping Request</h4>
-                    <tr>
-                        <th>Customer</th>
-                        <th> Date </th>
-                        <th>TP Choice</th>
-                        <th> Status</th>
-                        <th> Amount Paid </th>
-                        <th> Service Charged</th>
-                        <th> Item Cost </th>
-                        <th> Total Amt Spent </th>
-                        <th>Amount Refunded </th>
-                        <th>Order ID </th>
-                        <th> Update</th>
-                        <th> Remove</th>
-                    </tr>
-                 {% for i in page_obj3 %}
-                    <tr>
-                        <td>{{i.customer}}</td>
-                        <td>{{i.date_created|timesince}}</td>
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.amount_paid}}</td> 
-                        <td>{{i.Charged}}</td> 
-                        <td>{{i.Item_Cost}}</td> 
-                        <td>{{i.Total}}</td>
-                        <td>{{i.Amount_Refunded}}</td>
-                        <td>{{i.order_id}}</td>
-                        <td><a class="btn btn-sm btn-info" href="{% url 'updateRequestShopping' i.id %}">Update</a></td>   
-                        <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequestShopping' i.id%}">Cancel</a></td> 
-                    </tr>
-                {% endfor %} 
-                
-                <div class="pagination">
-                    <span class="step-links">
-                        {% if page_obj3.has_previous %}
-                            <a class="btn btn-warning" href="?page=1">&laquo; first</a>
-                            <a class="btn btn-danger" href="?page={{ page_obj3.previous_page_number }}">previous</a>
-                        {% endif %}
-    
-                        <span class="current">
-                            Page {{ page_obj3.number }} of {{ page_obj3.paginator.num_pages }}.
-                        </span>
-    
-                        {% if page_obj3.has_next %}
-                            <a class="btn btn-warning" href="?page={{ page_obj3.next_page_number }}">next</a>
-                            <a class="btn btn-danger" href="?page={{ page_obj3.paginator3.num_pages }}">last &raquo;</a>
-                        {% endif %}
-                </table>
-
-                <!--Anonymous-->
-                <table>
-                    <h4 class="card card-body bg-secondary text-white">Anonymous</h4>
-                    <tr>
-                        <th> Date </th>
-                        <th>TP Choice</th>
-                        <th> Status</th>
-                        <th> Amount Paid </th>
-                        <th> Package description </th>
-                        <th>Phone Number </th >
-                        <th> Update</th>
-                        <th> Remove</th>
-                    </tr>
-                 {% for i in page_obj4 %}
-                    <tr>
-                        <td>{{i.date_created|timesince}}</td>
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.Amount_paid}}</td> 
-                        <td>{{i.Package_description}}</td> 
-                        <td>{{i.email}}</td>
-                        <td>{{i.Your_phone_number}}</td>
-                        <td>{{i.order_id}}</td>
-                        <td><a class="btn btn-sm btn-info" href="{% url 'updateRequestAnon' i.id %}">Update</a></td>   
-                        <td><a class="btn btn-sm btn-danger" href="{% url 'cancelRequestAnon' i.id%}">Cancel</a></td> 
-                    </tr>
-                {% endfor %} 
-                
-                <div class="pagination">
-                    <span class="step-links">
-                        {% if page_obj4.has_previous %}
-                            <a class="btn btn-warning" href="?page=1">&laquo; first</a>
-                            <a class="btn btn-danger" href="?page={{ page_obj4.previous_page_number }}">previous</a>
-                        {% endif %}
-    
-                        <span class="current">
-                            Page {{ page_obj4.number }} of {{ page_obj4.paginator.num_pages }}.
-                        </span>
-    
-                        {% if page_obj4.has_next %}
-                            <a class="btn btn-warning" href="?page={{ page_obj4.next_page_number }}">next</a>
-                            <a class="btn btn-danger" href="?page={{ page_obj4.paginator3.num_pages }}">last &raquo;</a>
-                        {% endif %}
-                </table>
-                </span>
-            </div>
+                                    <div class="col-md-6">
+                                        <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                            <h6 class="" style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Cash-Request</h6>
+                                            <h3> N{{e_cash.Amount_Paid__sum}} </h3>
+                                            <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="{% url 'anonymous-request' %}" role="button">view</a>
+                                        </div>
+                                    </div>
+                            </div>
+                            <!--Row2-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                        <h6 style="font-family:'Comfortaa', cursive;" >
+                                            <i class="fas fa-money-bill"></i> Shopping-Request</h6>
+                                        <h3> N{{e_shop.Charge__sum}}</h3>
+                                        <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="{% url 'anonymous-request' %}" role="button">view</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                        <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Anon-Request</h6>
+                                        <h3> N{{e_anon.Amount_Paid__sum}} </h3>
+                                        <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="{% url 'anonymous-request' %}" role="button">view</a>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock contentadmin %}
         </div>
     </div>
 </div>
+
+  <!-- All Deliveries -->
+  <div class="modal fade" id="DispatchSummary" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"> All Dispatch Request Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            {% include 'users/status.html' %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Customers -->
+  <div class="modal fade" id="CustomerSummary" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"> All Customers</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>  
+        <div class="modal-body">
+            {% include 'users/all_customersAdmin.html' %}
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock content2 %}

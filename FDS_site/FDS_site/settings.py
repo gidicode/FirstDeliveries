@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'crispy_forms',
 
     'FDS_app.apps.FdsAppConfig',
+    
+    'BikeControl.apps.BikecontrolConfig',
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -162,3 +165,6 @@ HASHID_FIELD_SALT = "ac748295efghi6b01d3"
 PAYSTACK_PUBLIC_KEY = 'pk_test_3d14df0e542eeff499eca1f35dd563d3885e9a2d'
 PAYSTACK_SCRET_KEY = 'sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec'
 
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}

@@ -1,0 +1,136 @@
+{% extends "BikeControl/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Assigned Dispatch Deliveries - FDLS{% endblock title%}
+
+{% block contentbike %}
+<div class="container p-3">
+    <div class="row">
+        <div class="col-md-4"> 
+            <a class="btn btn-dark text-warning  btn-block rounded-pill font-weight-bolder shadow-sm" data-toggle="modal" data-target="#staticBackdrop" href="" role="button">Assign</a>
+        </div> 
+
+            <div class="col-md-4"> 
+              <a class="btn btn-dark text-warning  btn-block rounded-pill font-weight-bolder shadow-sm" data-toggle="modal" data-target="#SearchRider" href="" role="button"><i class="fas fa-search"></i> Rider Related Request</a>
+                {% if messages %}
+                  <div class="messages text-center">
+                      {% for message in messages %}
+                      <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}</div>
+                      {% endfor %}
+                  </div>
+                {% endif %}
+            </div>
+
+        <div class="col-md-4">
+        <button type="button" class="btn btn-dark shadow-sm font-weight-bold text-warning rounded-pill mb-3">
+            Total Deliveries <span class="badge badge-light">{{all_deliveries}}</span>
+        </button>
+
+        <button type="button" class="btn btn-dark shadow-sm font-weight-bold text-warning rounded-pill mb-3">
+          Total Pending <span class="badge badge-light">{{all_pending}}</span>
+        </button>
+        </div>
+
+    </div>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Rider</th>
+        <th scope="col">Vechile</th>
+        <th scope="col">Request Handled</th>
+        <th scope="col">Status</th>
+        <th scope="col">Dispute</th>
+        <th scope="col">Date assigned</th>
+        <th scope="col"> Update</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for i in assigned_deliveries %}
+      <tr>
+    
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{i.rider}}</td>
+        <td>{{i.veichle_used}}</td>
+        <td>
+        {{ i.cash_request|default:" "}}
+        {{ i.e_payment_request|default:" " }}
+        {{ i.shopping|default:" " }}
+        {{ i.anonymous|default:" " }}
+        </td>
+        <td>
+          {% if i.staus == "Delivered" %}
+          <i class="fas fa-check-circle text-success"> </i>
+            {% else %}
+              {{i.staus}}
+            {% endif %}
+        </td>
+        <td>{{i.dispute}}</td>
+        <td>{{i.date_created}}</td>
+        <td>
+            <a class="btn btn-success btn-sm" href="{% url 'update_assigned_deliveries' i.id %}" role="button">Update</a>
+        </td>
+      </tr>
+        {% empty %}
+        <h4 class="text-center text-danger">No result found</h4>
+      {% endfor %}
+ 
+    </tbody>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Assign delivery items to dispatch Riders</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data"> 
+                {% csrf_token %}                    
+                    
+                {{ as_form|crispy }}</li>
+                <button class="btn btn-outline-danger btn-block" type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Search -->
+  <div class="modal fade" id="SearchRider" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Search Request handled by rider</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="bg bg-success p-2 rounded text-white font-weight-bold">
+        </div>
+          <form method="get">
+            {{ filter.form|crispy }}
+            <input class="btn btn-danger rounded-pill btn-block" type="submit" />
+          </form>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% endblock contentbike %}

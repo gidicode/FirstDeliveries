@@ -1,0 +1,192 @@
+{% extends "BikeControl/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} All Riders Deliveries - FDLS{% endblock title%}
+
+{% block contentbike %}
+<br>
+<div class="container-fluid">
+<!--FLEET INFO-->
+    <div class="row">
+        <div class="col-md-2 pt-5">
+            <div class="card card-body bg-dark font-weight-bold text-warning rounded"> 
+                <h6 class="font-weight-bold" data-toggle="modal" data-target="#success" >Successful Deliveries</h6>
+                    <h5 class="font-weight-bold">{{success}}</h5>
+                <hr>
+                <h6 class="font-weight-bold" data-toggle="modal" data-target="#canceled">Canceled Deliveries</h6>
+                    <h5 class="font-weight-bold">{{cancled}}</h5>
+                <hr>
+                <h6 class="font-weight-bold" data-toggle="modal" data-target="#transfered" >Transfered Deliveries</h6>
+                    <h5 class="font-weight-bold">{{transfered}}</h5>
+                <hr>
+                <h6 class="font-weight-bold" data-toggle="modal" data-target="#pending" > Pending Deliveries</h6>
+                    <h5 class="font-weight-bold">{{pending}}</h5>
+            </div>
+
+        </div>
+
+        <div class="col-md-8"> 
+            <br>
+
+            <h5 class="shadow mb-3 text-center text-primary bg-white rounded-pill p-3"> All Dispatch Activities of <strong> {{for_rider.first_name}}  {{for_rider.last_name}} </strong> </h5> 
+
+            {% for i in all_deliveries %}
+                <div class="mb-3 p-3 bg-highlight rounded bg-white shadow" >
+                    <!--<img src="..." class="card-img-top" alt="...">-->
+                    <div class="">
+                        <!--Inner Row-->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="card-title"><strong>Rider Name:</strong> {{i.rider}} </p>
+                                <hr>
+                                <p class="card-text"><strong>Vechile Used:</strong>  {{i.veichle_used}}</p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <p class="card-text"> <strong> Dispatch Request:</strong> 
+                                    {{ i.cash_request|default:" "}}
+                                    {{ i.e_payment_request|default:" " }}
+                                    {{ i.shopping|default:" " }}
+                                    {{ i.anonymous|default:" " }}
+                                </p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <p class="card-text "> <strong>Satus:</strong>{{i.staus}}</p>
+                                <p class="card-text"> <strong>Dispute:</strong>{{i.dispute}}</p>
+                                <p class="card-text"><strong>Date Created :</strong>{{i.date_created}}</p>
+                            </div>
+                        </div>      
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        <div class="col-md-2 "></div>
+        
+    </div>
+
+
+<!--Successful delieries-->
+    <div class="modal fade" id="success" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">All {{for_rider.first_name}} Successful deliveries</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body bg-dark ">
+               {% for i in success_show%}
+               <div class="shadow-sm bg-danger rounded text-white mb-2 p-2">
+                    <p > <strong>ITEM DELIVERED:</strong>
+                        {{ i.cash_request|default:" "}}
+                        {{ i.e_payment_request|default:" " }}
+                        {{ i.shopping|default:" " }}
+                        {{ i.anonymous|default:" " }}
+                    </p>
+                    <p> <strong>DATE CREATED:</strong> {{i.date_created}}</p>
+                </div>
+               {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger btn-block" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Canceled Deliveries-->
+      <div class="modal fade" id="canceled" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">All {{for_rider.first_name}} Canceled deliveries</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body bg-dark ">
+               {% for i in cancled_show%}
+               <div class="shadow-sm bg-danger rounded text-white mb-2 p-2">
+                    <p > <strong>ITEM DELIVERED:</strong>
+                        {{ i.cash_request|default:" "}}
+                        {{ i.e_payment_request|default:" " }}
+                        {{ i.shopping|default:" " }}
+                        {{ i.anonymous|default:" " }}
+                    </p>
+                    <p> <strong>DATE CREATED:</strong> {{i.date_created}}</p>
+                </div>
+               {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger btn-block" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!--Transfered Deliveries-->
+    <div class="modal fade" id="transfered" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">All {{for_rider.first_name}} Transfered deliveries</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body bg-dark ">
+            {% for i in transfered_show%}
+            <div class="shadow-sm bg-danger rounded text-white mb-2 p-2">
+                <p > <strong>ITEM DELIVERED:</strong>
+                    {{ i.cash_request|default:" "}}
+                    {{ i.e_payment_request|default:" " }}
+                    {{ i.shopping|default:" " }}
+                    {{ i.anonymous|default:" " }}
+                </p>
+                <p> <strong>DATE CREATED:</strong> {{i.date_created}}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger btn-block" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+     <!--Pending Deliveries-->
+     <div class="modal fade" id="pending" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">All {{for_rider.first_name}} Pending deliveries</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body bg-dark ">
+               {% for i in pending_show%}
+               <div class="shadow-sm bg-danger rounded text-white mb-2 p-2">
+                    <p > <strong>ITEM DELIVERED:</strong>
+                        {{ i.cash_request|default:" "}}
+                        {{ i.e_payment_request|default:" " }}
+                        {{ i.shopping|default:" " }}
+                        {{ i.anonymous|default:" " }}
+                    </p>
+                    <p> <strong>DATE CREATED:</strong> {{i.date_created}}</p>
+                </div>
+               {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger btn-block" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+</div>
+{% endblock contentbike %}

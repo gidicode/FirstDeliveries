@@ -1,0 +1,34 @@
+
+{% load crispy_forms_tags %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="shadow-sm">
+            <form class="form-inline my-3 mx-4 my-lg-1 bd-highlight font-weight-bold text-dark">   
+                {{myFilter5.form|crispy }}
+                <button class="btn btn-outline-secondary  my-sm-2" type="submit">Search</button>
+            </form>
+                <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">View</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Phone Lines</th>
+                      </tr>
+                    </thead>     
+                    <tbody>
+                        {% for c in customers %}
+                      <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a class="btn btn-sm btn-info"  role="button" href="{% url 'dashboard' c.id %}">view</a></td>
+                        <td>{{c.user.username}}</td>
+                        <td>{{c.phone_number}}</td>   
+                      </tr>
+                        {% endfor %}
+                    </tbody>
+                   
+                </table> 
+        </div>
+    </div> 
+</div>

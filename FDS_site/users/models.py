@@ -62,14 +62,15 @@ class MakeRequest(models.Model):
     reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True)
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
-    Amount = models.CharField(null=True, max_length=20, default=0)
+    Amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     charge_id = models.CharField(max_length=100, null=True, validators=[alphanumeric])
     paid = models.BooleanField(default=False)
     order_id= models.CharField(max_length=10, null=True, default=0)
+    assigned = models.BooleanField(default=False)
     
 
     def __str__(self):
-        return f'{self.reciever_name, self.charge_id, self.paid, self.order_id, self.Choice_for_TP }'
+        return f'Customer:{self.customer}, Order ID:{self.order_id}'
 
     class Meta:
         ordering = ('-date_created',)
@@ -100,11 +101,12 @@ class MakeRequestCash(models.Model):
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
     paid = models.BooleanField(default=False)
-    Amount_Paid = models.CharField(null=True, max_length=20, default=0)
+    Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     order_id= models.CharField(max_length=10, null=True, default=0)
+    assigned = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.reciever_name, self.reciever_phone_number, self.order_id}'
+        return f'Customer:{self.customer}, Order ID:{self.order_id}'
 
     class Meta:
         ordering = ('-date_created',)
@@ -134,11 +136,12 @@ class Anonymous(models.Model):
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
     paid = models.BooleanField(default=False)
     email = models.EmailField(max_length=100, null=True)
-    Amount_Paid = models.CharField(null=True, max_length=20, default=0.00)
+    Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     order_id= models.CharField(max_length=10, null=True, default=0)
     receiver_name = models.CharField(null=True, max_length=100, default = "Not Given" )
     receiver_address = models.CharField(null=True, max_length=100, default = "Not Given")
     receiver_contact = models.CharField(null=True, max_length=100, default = "Not Given")
+    assigned = models.BooleanField(default=False)
 
 
     def __str__(self):
@@ -167,20 +170,21 @@ class Shopping(models.Model):
     Place_of_purchase = models.CharField(max_length=100, null=True, help_text='Specify a place of for purchase if any.')
     Note = models.CharField(max_length=200, null=True, help_text='Any further description')
     Address = models.CharField(max_length=200, null=True, help_text='Specify the address we would deliver Your items to')
-    Amount=models.CharField(max_length=7, null=True, help_text= 'Enter an estimated amount, our charges Inclusive')
+    Amount= models.DecimalField(max_digits=10, decimal_places=2, help_text= 'Enter an estimated amount, our charges Inclusive', default=0)
     Accept_Terms = models.BooleanField(default=False, help_text='Accept our Terms and Condition as regards this method')
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
-    amount_paid = models.CharField(max_length=100, null=True)
-    Charge = models.CharField(max_length=100, null=True)
-    Item_Cost = models.CharField(max_length=100, null=True)
-    Total = models.CharField(max_length=100, null=True)
-    Amount_Refunded = models.CharField(max_length=100, null=True)
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Charge = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Item_Cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Amount_Refunded = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     order_id= models.CharField(max_length=10, null=True, default=0)
+    assigned = models.BooleanField(default=False)
 
     
     def __str__(self):
-        return f'{self.customer, self.List_Items, self.Amount, self.order_id}'
+        return f'Customer:{self.customer}, Order ID:{self.order_id}'
 
     class Meta:
         ordering = ('-date_created',)
@@ -207,7 +211,7 @@ class ForPayments(models.Model):
     Mode_of_Transport = models.CharField(null=True, max_length = 10, default="None")
 
     def __str__(self):
-        return f'{self.customer, self.date_created, self.order_id, self.paid, self.Mode_of_Transport}'
+        return f' Customer:{self.customer}, Order ID:{self.order_id}'
 
 class Delivered(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)

@@ -1,0 +1,79 @@
+{% extends "BikeControl/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Riders Profile - FDLS{% endblock title%}
+
+{% block contentbike %}
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 ">
+            <h4 class="bg-white shadow-sm rounded text-center text-secondary p-3">ALL DISPATCH RIDERS INFORMATION</h4>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <br>
+<!--FLEET INFO-->
+    <div class="row">
+        <div class="col-md-2 ">
+            <button type="button" class="btn btn-light shadow btn-block text-primary rounded-pill mb-3">
+                Total Drivers <span class="badge badge-light ">{{driver_count}}</span>
+            </button>
+
+            <button type="button" class="btn btn-light btn-block shadow-sm  text-primary rounded-pill mb-3">
+                 Bike Riders <span class="badge badge-light">{{total_drivers_bike}}</span>
+            </button>
+
+            <button type="button" class="btn btn-light shadow-sm btn-block text-primary rounded-pill mb-3">
+                Tricycle Riders <span class="badge badge-light">{{total_drivers_tricycle}}</span>
+            </button>
+
+            <button type="button" class="btn btn-light shadow-sm btn-block text-primary rounded-pill mb-3">
+                Car Drivers <span class="badge badge-light">None</span>
+            </button>
+
+            <button type="button" class="btn btn-light shadow-sm btn-block text-primary rounded-pill mb-3">
+                Truck Drivers <span class="badge badge-light">N</span>
+            </button>
+        </div>
+
+        
+        <div class="col-md-10">  
+            {% for i in profile %}
+                <div class="mb-3 p-3 bg-highlight rounded bg-white shadow" >
+                    <!--<img src="..." class="card-img-top" alt="...">-->
+                    <div class="">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5 class="card-title"><i class="fas fa-male text-danger"></i> {{i.first_name}} {{i.last_name}}</h5>
+                            <p class="card-text"><i class="fas fa-motorcycle text-danger"></i>  {{i.attached_bike}}</p>
+                            <p class="card-text"> <i class="fas fa-phone-volume text-danger"></i> {{i.phone_number}}</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <p class="card-text"><i class="fas fa-map-marker-alt text-danger"></i> {{i.Address}}</p>
+                            <p class="card-text"><strong>Gurantor Verified :</strong> 
+                                {% if i.verified_gurantor == True%}
+                                    <p class=" text-success font-weight-bold">{{i.verified_gurantor}}</p>
+                                    {% else %}
+                                    <p class="text-danger font-weight-bold">{{i.verified_gurantor}}</p>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <p class="card-text"><strong>Gurantor Name :</strong>{{i.gurantor_name}}</p>
+                            <p class="card-text"><strong>Gurantor Address :</strong>{{i.gurantor_address}}</p>
+                            <a href="{% url 'allRiderDeliveries' i.id%}" class="btn btn-outline-primary rounded-pill btn-block">All Deliveries</a>
+                        </div>
+                    </div>      
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+</div>
+{% endblock contentbike %}

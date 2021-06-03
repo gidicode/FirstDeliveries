@@ -1,0 +1,34 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Bikers Dashboard - FDLS{% endblock title%}
+
+{% block content %}
+<div class="p-2">
+   
+    <div class="row">
+        <div class="col-md-2 bg-dark">
+            <br>
+            <br>
+            <h5 class="p-4 font-weight-bolder text-white text-left"> RIDERS DASHBOARD</h5>
+            <div class="btn-group-vertical btn-block btn-group-toggle text-left" data-toggle="buttons">
+                <a class="btn btn-dark text-left" href="{% url 'adminDashboard' %}" role="button">Admin Dashboard</a>
+                <a class="btn btn-dark text-left" href="{% url 'all_Fleet' %}" role="button">Fleet Information</a> 
+                <a class="btn btn-dark text-left" href="{% url 'Riders_Profile' %}" role="button">Riders Profile</a>
+                <a class="btn btn-dark text-left" href="{% url 'assignedRides' %}" role="button">Assigned Deliveries</a>
+                <button type="button" class="btn btn-dark text-left">Fleet Info</button>
+            </div>
+        </div>
+            <div class="col-md-10 p-2">
+                
+                {% block contentbike %}
+                <div class="text-center p-5 ">
+                    <h4> Hello welocme to dashboard</h4>
+                </div>
+                {% endblock contentbike %}
+            </div>
+    </div>
+</div>
+
+{% endblock %}

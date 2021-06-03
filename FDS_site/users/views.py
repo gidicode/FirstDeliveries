@@ -8,6 +8,9 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 
 from django.contrib.auth.models import Group
 from .models import *
+from BikeControl.models import RidersDeliveries
+
+from django.db.models import Sum
 
 from django.contrib.auth.forms import UserCreationForm
 
@@ -344,30 +347,20 @@ def AdminDashboard(request):
     request3 = Shopping.objects.all()
     request4 = Anonymous.objects.all()
 
-    paginator = Paginator(request1, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    #total amount
 
-    paginator2 = Paginator(request2, 10)
-    page_number2 = request.GET.get('page')
-    page_obj2 = paginator2.get_page(page_number2)
-
-    paginator3 = Paginator(request3, 10)
-    page_number3 = request.GET.get('page')
-    page_obj3 = paginator3.get_page(page_number3)
-
-    paginator4 = Paginator(request4, 10)
-    page_number4 = request.GET.get('page')
-    page_obj4 = paginator4.get_page(page_number4)
-
+    e_req = request1.aggregate(Sum('Amount'))
+    e_cash = request2.aggregate(Sum('Amount_Paid'))
+    e_shop = request3.aggregate(Sum('Charge'))
+    e_anon = request4.aggregate(Sum('Amount_Paid'))
+   
     notify = adminNotification.objects.all()
     
     customer = Customer.objects.get( user= request.user )
     customers = Customer.objects.all()
 
     myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
-    request4 = myFilter5.qs
-    
+    customers = myFilter5.qs
 
     total_request_online = request1.count()
     total_request_cash = request2.count()
@@ -395,16 +388,15 @@ def AdminDashboard(request):
     out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
 
     notification_filter = adminNotification.objects.all()
-    notify = notification_filter.filter(viewed = False)
-
+    notify = notification_filter.filter(viewed = False) 
     
     context = {
+        'e_req':e_req,
+        'e_cash': e_cash,
+        'e_shop':e_shop,
+        'e_anon':e_anon,
         'myFilter5':myFilter5,
         'notify':notify, 
-        'page_obj':page_obj,
-        'page_obj2':page_obj2, 
-        'page_obj3':page_obj3, 
-        'page_obj4':page_obj4, 
 
         'request1': request1, 
         'request2':request2,
@@ -445,6 +437,361 @@ def AdminDashboard(request):
 
     return render(request, 'users/profile.html', context)
 
+
+def allE_request(request):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+
+    paginator = Paginator(request1, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    notify = adminNotification.objects.all()
+    
+    customer = Customer.objects.get( user= request.user )
+    customers = Customer.objects.all()
+
+    myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
+    customers = myFilter5.qs
+
+    total_request_online = request1.count()
+    total_request_cash = request2.count()
+    total_request_shopping = request3.count()
+    total_request_anonymous = Anonymous.objects.count()
+
+    delivered = request1.filter(status='Delivered').count()
+    pending = request1.filter(status='Pending').count()
+    canceled = request1.filter(status='Canceled').count()
+    out_for_delivery = request1.filter(status='Out for delivery').count()
+
+    delivered1 = request2.filter(status='Delivered').count()
+    pending1 = request2.filter(status='Pending').count()
+    canceled1 = request2.filter(status='Canceled').count()
+    out_for_delivery1 = request2.filter(status='Out for delivery').count()
+
+    delivered2 = request3.filter(status='Delivered').count()
+    pending2 = request3.filter(status='Pending').count()
+    canceled2 = request3.filter(status='Canceled').count()
+    at_the_mall = request3.filter(status='At the Mall').count()
+
+    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
+    pending3 = Anonymous.objects.filter(status = 'Pending').count()
+    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
+    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
+
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    context = {
+        'myFilter5':myFilter5, 'notify':notify, 'page_obj':page_obj, 'request1':request1,
+        'request2':request2,
+        'request3':request3,
+        'request4':request4,
+
+        'customer':customer,
+        'customers' : customers,
+
+        'total_request_online': total_request_online,
+        'total_request_cash':total_request_cash,
+        'total_request_shopping':total_request_shopping,
+        'total_request_anonymous':total_request_anonymous ,
+
+        
+        'out_for_delivery':out_for_delivery,
+        'out_for_delivery1':out_for_delivery1,
+        'out_for_delivery2':out_for_delivery2,
+
+        'pending': pending,
+        'pending1': pending1,
+        'pending2': pending2,
+        'pending3': pending3,
+
+        'canceled': canceled,
+        'canceled1': canceled1,
+        'canceled2': canceled2, 
+        'canceled3': canceled3,        
+
+        'delivered': delivered,
+        'delivered1': delivered1,
+        'delivered2': delivered2,
+        'delivered3':delivered3,
+
+        'at_the_mall': at_the_mall,
+    }
+    return render(request, 'users/allEpaymentsRequest.html', context )
+
+def allCash_Request(request):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+
+    paginator2 = Paginator(request2, 10)
+    page_number2 = request.GET.get('page')
+    page_obj2 = paginator2.get_page(page_number2)
+
+    notify = adminNotification.objects.all()
+    
+    customer = Customer.objects.get( user= request.user )
+    customers = Customer.objects.all()
+
+    myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
+    customers = myFilter5.qs
+
+    total_request_online = request1.count()
+    total_request_cash = request2.count()
+    total_request_shopping = request3.count()
+    total_request_anonymous = Anonymous.objects.count()
+
+    delivered = request1.filter(status='Delivered').count()
+    pending = request1.filter(status='Pending').count()
+    canceled = request1.filter(status='Canceled').count()
+    out_for_delivery = request1.filter(status='Out for delivery').count()
+
+    delivered1 = request2.filter(status='Delivered').count()
+    pending1 = request2.filter(status='Pending').count()
+    canceled1 = request2.filter(status='Canceled').count()
+    out_for_delivery1 = request2.filter(status='Out for delivery').count()
+
+    delivered2 = request3.filter(status='Delivered').count()
+    pending2 = request3.filter(status='Pending').count()
+    canceled2 = request3.filter(status='Canceled').count()
+    at_the_mall = request3.filter(status='At the Mall').count()
+
+    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
+    pending3 = Anonymous.objects.filter(status = 'Pending').count()
+    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
+    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
+
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    context = {
+        'myFilter5':myFilter5, 
+
+        'notify':notify, 
+
+        'page_obj2':page_obj2, 
+
+        'request1':request1,
+        'request2':request2,
+        'request3':request3,
+        'request4':request4,
+
+        'customer':customer,
+        'customers' : customers,
+
+        'total_request_online': total_request_online,
+        'total_request_cash':total_request_cash,
+        'total_request_shopping':total_request_shopping,
+        'total_request_anonymous':total_request_anonymous ,
+
+        
+        'out_for_delivery':out_for_delivery,
+        'out_for_delivery1':out_for_delivery1,
+        'out_for_delivery2':out_for_delivery2,
+
+        'pending': pending,
+        'pending1': pending1,
+        'pending2': pending2,
+        'pending3': pending3,
+
+        'canceled': canceled,
+        'canceled1': canceled1,
+        'canceled2': canceled2, 
+        'canceled3': canceled3,        
+
+        'delivered': delivered,
+        'delivered1': delivered1,
+        'delivered2': delivered2,
+        'delivered3':delivered3,
+
+        'at_the_mall': at_the_mall,
+    }
+    return render(request, 'users/allCashRequest.html', context )
+
+def allShopping_Request(request):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+
+    paginator3 = Paginator(request3, 10)
+    page_number3 = request.GET.get('page')
+    page_obj3 = paginator3.get_page(page_number3)
+
+    notify = adminNotification.objects.all()
+    
+    customer = Customer.objects.get( user= request.user )
+    customers = Customer.objects.all()
+
+    myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
+    customers = myFilter5.qs
+
+    total_request_online = request1.count()
+    total_request_cash = request2.count()
+    total_request_shopping = request3.count()
+    total_request_anonymous = Anonymous.objects.count()
+
+    delivered = request1.filter(status='Delivered').count()
+    pending = request1.filter(status='Pending').count()
+    canceled = request1.filter(status='Canceled').count()
+    out_for_delivery = request1.filter(status='Out for delivery').count()
+
+    delivered1 = request2.filter(status='Delivered').count()
+    pending1 = request2.filter(status='Pending').count()
+    canceled1 = request2.filter(status='Canceled').count()
+    out_for_delivery1 = request2.filter(status='Out for delivery').count()
+
+    delivered2 = request3.filter(status='Delivered').count()
+    pending2 = request3.filter(status='Pending').count()
+    canceled2 = request3.filter(status='Canceled').count()
+    at_the_mall = request3.filter(status='At the Mall').count()
+
+    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
+    pending3 = Anonymous.objects.filter(status = 'Pending').count()
+    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
+    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
+
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    context = {
+        'myFilter5':myFilter5, 
+        
+        'notify':notify, 
+
+        'page_obj3':page_obj3, 
+
+        'request1':request1,
+        'request2':request2,
+        'request3':request3,
+        'request4':request4,
+
+        'customer':customer,
+        'customers' : customers,
+
+        'total_request_online': total_request_online,
+        'total_request_cash':total_request_cash,
+        'total_request_shopping':total_request_shopping,
+        'total_request_anonymous':total_request_anonymous ,
+
+        
+        'out_for_delivery':out_for_delivery,
+        'out_for_delivery1':out_for_delivery1,
+        'out_for_delivery2':out_for_delivery2,
+
+        'pending': pending,
+        'pending1': pending1,
+        'pending2': pending2,
+        'pending3': pending3,
+
+        'canceled': canceled,
+        'canceled1': canceled1,
+        'canceled2': canceled2, 
+        'canceled3': canceled3,        
+
+        'delivered': delivered,
+        'delivered1': delivered1,
+        'delivered2': delivered2,
+        'delivered3':delivered3,
+
+        'at_the_mall': at_the_mall,
+    }
+    return render(request, 'users/allShoppingRequest.html', context )
+
+def allAnonymous_Request(request):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+
+    paginator4 = Paginator(request4, 10)
+    page_number4 = request.GET.get('page')
+    page_obj4 = paginator4.get_page(page_number4)
+
+    notify = adminNotification.objects.all()
+    
+    customer = Customer.objects.get( user= request.user )
+    customers = Customer.objects.all()
+
+    myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
+    customers = myFilter5.qs
+
+    total_request_online = request1.count()
+    total_request_cash = request2.count()
+    total_request_shopping = request3.count()
+    total_request_anonymous = Anonymous.objects.count()
+
+    delivered = request1.filter(status='Delivered').count()
+    pending = request1.filter(status='Pending').count()
+    canceled = request1.filter(status='Canceled').count()
+    out_for_delivery = request1.filter(status='Out for delivery').count()
+
+    delivered1 = request2.filter(status='Delivered').count()
+    pending1 = request2.filter(status='Pending').count()
+    canceled1 = request2.filter(status='Canceled').count()
+    out_for_delivery1 = request2.filter(status='Out for delivery').count()
+
+    delivered2 = request3.filter(status='Delivered').count()
+    pending2 = request3.filter(status='Pending').count()
+    canceled2 = request3.filter(status='Canceled').count()
+    at_the_mall = request3.filter(status='At the Mall').count()
+
+    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
+    pending3 = Anonymous.objects.filter(status = 'Pending').count()
+    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
+    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
+
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    context = {
+        'myFilter5':myFilter5, 
+        'notify':notify, 
+
+        'page_obj4':page_obj4, 
+        
+        'request1':request1,
+        'request2':request2,
+        'request3':request3,
+        'request4':request4,
+
+        'customer':customer,
+        'customers' : customers,
+
+        'total_request_online': total_request_online,
+        'total_request_cash':total_request_cash,
+        'total_request_shopping':total_request_shopping,
+        'total_request_anonymous':total_request_anonymous ,
+
+        
+        'out_for_delivery':out_for_delivery,
+        'out_for_delivery1':out_for_delivery1,
+        'out_for_delivery2':out_for_delivery2,
+
+        'pending': pending,
+        'pending1': pending1,
+        'pending2': pending2,
+        'pending3': pending3,
+
+        'canceled': canceled,
+        'canceled1': canceled1,
+        'canceled2': canceled2, 
+        'canceled3': canceled3,        
+
+        'delivered': delivered,
+        'delivered1': delivered1,
+        'delivered2': delivered2,
+        'delivered3':delivered3,
+
+        'at_the_mall': at_the_mall,
+    }
+    return render(request, 'users/allAnonymousRequest.html', context )
+
+
 #General Order
 @login_required(login_url='login')
 @admin_only
@@ -452,6 +799,7 @@ def customers_list(request):
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
 
     myFilter2 = AdminFilter(request.GET, queryset = request1)
     request1 = myFilter2.qs
@@ -462,10 +810,14 @@ def customers_list(request):
     myFilter4 = AdminFilter(request.GET, queryset = request3)
     request3 = myFilter4.qs
 
+    myFilter5 = AdminFilter(request.GET, queryset = request4)
+    request4 = myFilter5.qs
+
     context = {
+
         'myFilter2':myFilter2,
         'request1': request1, 'request2':request2,
-        'request3':request3,
+        'request3':request3, 'request4':request4,
     }
     return render(request, 'users/customer_list.html', context)
 

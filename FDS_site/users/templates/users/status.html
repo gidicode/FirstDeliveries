@@ -1,64 +1,35 @@
 
-<div class="container-fluid bg-dark">
+<div class="container-fluid">
     <br>
-    <div class="row d-flex flex-nowrap">
-
-        <div class="col-md-4">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Total Request E-payment</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{total_request_online}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Delivered</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{delivered}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title">Pending</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{pending}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        <div class="col-md-">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Out For Delivery</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{out_for_delivery}}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                        <h5 class="card-title"> Canceled </h5>
-                </div>
-                <div class="card-body">
-                        <h3>{{ canceled }}</h3>
+    <div class="row d-flex flex-nowrap"> 
+        <div class="col-md-12">
+            <div class="shadow-sm mb-2 p-2 text-left">
+                <div class="d-flex flex-row bd-highlight justify-content-between mb-3">
+                    <div class="p-2 bd-highlight">
+                        <h5> Total Request E-payment</h5>
+                        <hr>
+                        <h3>{{total_request_online}}</h3>
+                    </div>
+                        <div class="p-2 bd-highlight">
+                            <h5> Delivered</h5>
+                            <hr>
+                            <h3>{{delivered}}</h3>
+                        </div>
+                            <div class="p-2 bd-highlight">
+                                <h5>Pending</h5>
+                                <hr>
+                                <h3>{{pending}}</h3>
+                            </div>
+                                <div class="p-2 bd-highlight">
+                                    <h5> Out For Delivery</h5>
+                                    <hr>
+                                    <h3><h3>{{out_for_delivery}}</h3></h3>
+                                </div>
+                                    <div class="p-2 bd-highlight">
+                                        <h5> Canceled </h5>
+                                        <hr>
+                                        <h3>{{ canceled }}</h3>
+                                    </div>
                 </div>
             </div>
         </div>
@@ -66,186 +37,106 @@
 
 
     <!--For Cash Payment-->
-   
-    <div class="row d-flex flex-nowrap">
-    
-        <div class="col-md-4">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Total Request Cash</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{total_request_cash}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title">  Delivered</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{delivered1}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Pending</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{pending1}}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-">
-            <div class="card text-center text-white bg-secondary" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Out For Delivery</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{out_for_delivery1}}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                        <h5 class="card-title"> Canceled </h5>
-                </div>
-                <div class="card-body">
-                        <h3>{{ canceled1}}</h3>
+    <div class="row ">
+        <div class="col-md-12">
+            <div class="shadow-sm mb-2 p-3 bg-primary text-white text-left">
+                <div class="d-flex flex-row bd-highlight justify-content-between mb-3">
+                    <div class="p-2 bd-highlight">
+                        <h5> Total Request Cash</h5>
+                        <hr>
+                        <h3>{{total_request_cash}}</h3>
+                    </div>
+                        <div class="p-2 bd-highlight">
+                            <h5> Delivered</h5>
+                            <hr>
+                            <h3>{{delivered1}}</h3>
+                        </div>
+                            <div class="p-2 bd-highlight">
+                                <h5>Pending</h5>
+                                <hr>
+                                <h3>{{pending1}}</h3>
+                            </div>
+                                <div class="p-2 bd-highlight">
+                                    <h5> Out For Delivery</h5>
+                                    <hr>
+                                    <h3>{{out_for_delivery1}}</h3>
+                                </div>
+                                    <div class="p-2 bd-highlight">
+                                        <h5> Canceled </h5>
+                                        <hr>
+                                        <h3>{{ canceled1 }}</h3>
+                                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row d-flex flex-nowrap">
-        
-        <div class="col-md-4">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Shopping</h5>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="shadow-sm mb-2 p-3 text-left">
+                <div class="d-flex flex-row bd-highlight justify-content-between mb-3">
+                    <div class="p-2 bd-highlight">
+                        <h5> Shopping</h5>
+                        <hr>
+                        <h3>{{total_request_shopping}}<h3>
+                    </div>
+                        <div class="p-2 bd-highlight">
+                            <h5> Delivered</h5>
+                            <hr>
+                            <h3>{{delivered2}}</h3>
+                        </div>
+                            <div class="p-2 bd-highlight">
+                                <h5>Pending</h5>
+                                <hr>
+                                <h3>{{pending2}}</h3>
+                            </div>
+                                <div class="p-2 bd-highlight">
+                                    <h5>At the Mall</h5>
+                                    <hr>
+                                    <h3>{{at_the_mall}}</h3>
+                                </div>
+                                    <div class="p-2 bd-highlight">
+                                        <h5> Canceled </h5>
+                                        <hr>
+                                        <h3>{{ canceled2 }}</h3>
+                                    </div>
                 </div>
-                <div class="card-body">
-                    <h3>{{total_request_shopping}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Delivered</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{delivered2}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Pending</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{pending2}}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> At the Mall</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{at_the_mall}}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                        <h5 class="card-title"> Canceled </h5>
-                </div>
-                <div class="card-body">
-                        <h3>{{ canceled2}}</h3>
-                </div>
-            </div>
+            </div>                           
         </div>
     </div>
 
 
-    <div class="row d-flex flex-nowrap">
-        
-        <div class="col-md-4">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Anonymous</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{total_request_anonymous}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Delivered</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{delivered3}}</h3>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> Pending</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{pending3}}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                    <h5 class="card-title"> At the Mall</h5>
-                </div>
-                <div class="card-body">
-                    <h3>{{out_for_delivery2}}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="card text-center text-white bg-secondary mb-3" id="total_orders">
-                <div class="card-header">
-                        <h5 class="card-title"> Canceled </h5>
-                </div>
-                <div class="card-body">
-                        <h3>{{ canceled3}}</h3>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="shadow-sm mb-2 p-3 bg-primary text-white ext-left">
+                <div class="d-flex flex-row bd-highlight justify-content-between mb-3">
+                    <div class="p-2 bd-highlight">
+                        <h5> Anonymous</h5>
+                        <hr>
+                        <h3>{{total_request_anonymous}}</h3>
+                    </div>
+                        <div class="p-2 bd-highlight">
+                            <h5> Delivered</h5>
+                            <hr>
+                            <h3>{{delivered3}}</h3>
+                        </div>
+                            <div class="p-2 bd-highlight">
+                                <h5>Pending</h5>
+                                <hr>
+                                <h3>{{pending3}}</h3>
+                            </div>
+                                <div class="p-2 bd-highlight">
+                                    <h5>Out for delivery</h5>
+                                    <hr>
+                                    <h3><h3>{{out_for_delivery2}}</h3></h3>
+                                </div>
+                                    <div class="p-2 bd-highlight">
+                                        <h5> Canceled </h5>
+                                        <hr>
+                                        <h3>{{ canceled3 }}</h3>
+                                    </div>
+                </div>                  
+            </div>                           
         </div>
     </div>
 </div>
-

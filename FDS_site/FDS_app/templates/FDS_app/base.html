@@ -86,91 +86,89 @@
 
 
 <body>
+  <div id="navbar-nav">
+    <nav class="container-fluid navbar navbar-expand-md text-truncate navbar-dark fixed-top shadow-none" style="background-color: rgb(221, 77, 77);" >
+      <a class="navbar-brand font-weight-bold" href="{% url 'fds-home' %}"> 
+        <img src="/static/FDS_app/FLLS LOGO.png" class="img-fluid" alt="Flls Logo">
+      </a>
 
-<div id="navbar-nav">
-  <nav class="container-fluid navbar navbar-expand-md text-truncate navbar-dark fixed-top shadow-none" style="background-color: rgb(221, 77, 77);" >
-    <a class="navbar-brand font-weight-bold" href="{% url 'fds-home' %}"> 
-      <img src="/static/FDS_app/FLLS LOGO.png" class="img-fluid" alt="Flls Logo">
-    </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
+        <span class="fas fa-bars"></span>
+      </button>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
-      <span class="fas fa-bars"></span>
-    </button>
+      <div class=" collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item  active">
+            <a class="nav-link" href="{% url 'fds-home' %}">Home</a>
+          </li>
 
-    <div class=" collapse navbar-collapse" id="collapsibleNavbar">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item  active">
-          <a class="nav-link" href="{% url 'fds-home' %}">Home</a>
-        </li>
+          <li class="nav-item  active"> 
+            <a class="nav-link " href="{% url 'fds-about' %}">About</a>
+          </li>
 
-        <li class="nav-item  active"> 
-          <a class="nav-link " href="{% url 'fds-about' %}">About</a>
-        </li>
+          <li class="nav-item  active">
+            <a class="nav-link" href="{% url 'fds-pricing' %}"> Pricing </a>
+          </li>
 
-        <li class="nav-item  active">
-          <a class="nav-link" href="{% url 'fds-pricing' %}"> Pricing </a>
-        </li>
+        </ul>
+      </div>
+          {% if user.is_authenticated %}
+          
+          <ul class="navbar-nav">
+            <li>
+              <button type="button" class="btn btn-dark btn-sm mb-2 mr-2">
+                <a  href="{% url 'dashboard' user.id %}" class=" text-white text-decoration-none">Dashboard</a> 
+              </button>
 
-      </ul>
-    </div>
-        {% if user.is_authenticated %}
-        
-        <ul class="navbar-nav">
-          <li>
-            <button type="button" class="btn btn-dark btn-sm mb-2 mr-2">
-              <a  href="{% url 'dashboard' user.id %}" class=" text-white text-decoration-none">Dashboard</a> 
-            </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm mb-2">
+                <a  href="{% url 'logout' %}" class=" text-white text-decoration-none">Logout</a>
+              </button>
+            </li>
+          </ul>
+          {% else%}
 
-            <button type="button" class="btn btn-outline-secondary btn-sm mb-2">
-              <a  href="{% url 'logout' %}" class=" text-white text-decoration-none">Logout</a>
-            </button>
+        <ul class="navbar-nav" >
+            <li>
+              <button type="button" class="btn btn-light btn-sm">
+                <a  href="{% url 'register' %}" class=" text-dark text-decoration-none">Sign Up</a></button>
+      
+              <button type="button" class="btn btn-secondary btn-sm">
+              <a  href="{% url 'login' %}" class=" text-white text-decoration-none">Sign In</a></button>
           </li>
         </ul>
-        {% else%}
-
-      <ul class="navbar-nav" >
-          <li>
-            <button type="button" class="btn btn-light btn-sm">
-              <a  href="{% url 'register' %}" class=" text-dark text-decoration-none">Sign Up</a></button>
-    
-            <button type="button" class="btn btn-secondary btn-sm">
-            <a  href="{% url 'login' %}" class=" text-white text-decoration-none">Sign In</a></button>
-        </li>
-      </ul>
-      {% endif %}
- 
-  </nav>
-</div>
-
-<main role="main" style="padding-top: 3rem;">
-  <div >
-{% block content %}
-
-
-{% endblock content %}
-</div>
-
-<div class="chatservice mr-4">
-  <div class="row">
-    <div class=" col-md-auto"></div>
-    <div class=" col-md-auto"></div>
-    <div class=" col-md-auto d-flex justify-content-center">
-      <button type="button" class="btn btn-outline-danger shadow" data-toggle="tooltip" data-placement="top" title="You Need Support? Chat Us!">
-        <a class=" text-decoration-none" href="https://api.whatsapp.com/send?phone=+2347067320119">
-        <i class="fab fa-whatsapp text-muted"> </i></a> 
-      </button>
-    </div>
-</div>
-
-<br>
+        {% endif %}
   
+    </nav>
+  </div>
 
-</div>
-<!--Footer-->
-{% block contentf %}
+  <main role="main" style="padding-top: 3rem;">
+    <div >
+  {% block content %}
 
-{% endblock contentf %}
-</main>
 
+  {% endblock content %}
+  </div>
+
+  <div class="chatservice mr-4">
+    <div class="row">
+      <div class=" col-md-auto"></div>
+      <div class=" col-md-auto"></div>
+      <div class=" col-md-auto d-flex justify-content-center">
+        <button type="button" class="btn btn-outline-danger shadow" data-toggle="tooltip" data-placement="top" title="You Need Support? Chat Us!">
+          <a class=" text-decoration-none" href="https://api.whatsapp.com/send?phone=+2347067320119">
+          <i class="fab fa-whatsapp text-muted"> </i></a> 
+        </button>
+      </div>
+  </div>
+
+  <br>
+    
+
+  </div>
+  <!--Footer-->
+  {% block contentf %}
+
+  {% endblock contentf %}
+  </main>
 </body>
 </html> 

@@ -19,6 +19,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('FDS_app.urls')),
 
+    path('', include('BikeControl.urls')),
+
     #path(r'static/(?P<path>.*)', serve,{'document_root': settings.STATIC_ROOT}), 
 
     path('404/', user_views.response_error_handler),
@@ -42,6 +44,14 @@ urlpatterns = [
     path('customers-list/', user_views.customers_list, name='customers-list'),
 
     path('adminDashboard/', user_views.AdminDashboard, name='adminDashboard'),
+
+    path('e-request/', user_views.allE_request, name='e-request'),
+
+    path('cash-request/', user_views.allCash_Request, name='cash-request'),
+
+    path('shopping-request/', user_views.allShopping_Request, name='shopping-request'),
+
+    path('anonymous-request/', user_views.allAnonymous_Request, name='anonymous-request'),
 
     path('dashboard/<hashid:user>/', user_views.customerDashboardPage, name='dashboard'),
 

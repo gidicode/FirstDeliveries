@@ -5,67 +5,75 @@
 
 {% block content %}
 <main>
-  <nav class="navbar navbar-expand-lg navbar-light shadow-sm p-2 bg-light breadcrumb d-flex bd-highlight"  >
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm pt-3 bg-light d-flex bd-highlight"  >
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="fas fa-angle-double-down"></span>
-        </button>
+      </button>
       
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link breadcrumb-item p-2 bd-highlight" href="{% url 'orderHistory' user.id %}">Request History <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link breadcrumb-item p-2 bd-highlight" href="{% url 'profileUpdate' user.id %}">Update Profile</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle breadcrumb-item p-2 bd-highlight" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Terms
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link p-2 btn btn-light text-left" href="{% url 'orderHistory' user.id %}" role="button" >Request History <span class="sr-only">(current)</span></a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link p-2 btn btn-light text-left " href="{% url 'profileUpdate' user.id %}" role="button" >Update Profile</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle p-2 btn btn-light text-left " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Terms
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Terms & Condition</a>
+              <a class="dropdown-item" href="#">Contact details</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Chat us up</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="row p-2 d-flex flex-nowrap nav-item">
+        <div class="col-md-auto d-flex flex-nowrap">
+            {% if n.count > 0 %}
+            <small class="justify-content-center">
+              <a href="{% url 'show_Notification' user.id %}">
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="You have {{n.count}} Notifications">
+                  <i class="fas fa-bell"></i> <span class="badge badge-light"></span>{{n.count}}</span>
+                </button>
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Terms & Condition</a>
-                <a class="dropdown-item" href="#">Contact details</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Chat us up</a>
-              </div>
-            </li>
-          </ul>
+            </small>
+            {% endif %}
+
+            {% if notify.count > 0 %}
+            <small >
+              <a href="{% url 'adminNotificationShow' %}"> 
+                <button type = "button" class="btn btn-danger btn-sm " data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications">
+                  <i class="fas fa-bell pr-1"></i><span class="badge badge-light">{{notify.count}}</span>
+                </button>
+              </a>
+            </small>
+            {% endif %}
         </div>
 
-        <div class="row p-2 d-flex flex-nowrap nav-item">
+        <div class="col-md-auto"> 
+            <img src="{{user.customer.image.url}}" alt=" Profile Picture" class="rounded-circle" style="width: 40px; height: 43px;">  
+        </div>
 
-          <div class="col-md-auto d-flex flex-nowrap">
-              {% if n.count > 0 %}
-              <small class="justify-content-center">
-                <a href="{% url 'show_Notification' user.id %}">
-                  <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="You have {{n.count}} Notifications">
-                  <i class="fas fa-bell"></i> <span class="badge badge-light"></span>{{n.count}}</span>
-                </button></a>
-              </small>
-              {% endif %}
-
-              {% if notify.count > 0 %}
-              <small >
-                <a href="{% url 'adminNotificationShow' %}"> 
-                  <button type = "button" class="btn btn-danger btn-sm " data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications">
-                  <i class="fas fa-bell pr-1"></i><span class="badge badge-light">{{notify.count}}</span>
-                  </button>
-                </a>
-              </small>
-              {% endif %}
-
-          </div>
-            <div class="col-md-auto"> 
-              <img src="{{user.customer.image.url}}" alt=" Profile Picture" class="rounded-circle" style="width: 40px; height: 43px;">  
-            </div>
-
-            <div class="col-md-auto pl-3">
-              <ul class="list-inline">
-                <li> <small> Username: {{user.username}} </small></li> 
-                
-              </ul>    
-            </div>
+        <div class="col-md-auto pl-3">
+          <ul class="list-inline">
+            <li> 
+              <small> Username: {{user.username}} </small>
+            </li>  
+          </ul>    
+        </div>
   </nav>
+
+<main role="main" style="padding-bottom: 4rem;">
+  {% block content2 %} 
+
+  {% endblock content2 %} 
 </main>
 
 <script>
@@ -73,7 +81,5 @@
   $('[data-toggle="tooltip"]').tooltip()
 })
 </script>
-{% block content2 %} 
-
-  {% endblock content2 %}  
+</main>
 {% endblock content %}

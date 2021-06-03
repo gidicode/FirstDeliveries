@@ -9,6 +9,7 @@
 <div class="container-fluid" > 
   <div class="row align-items-lg-center mb-2 pb-md-2">
     <div class="col-md-1 order-1"></div>  
+
         <div class="col-md-6  text-white container order-6">
           <div class="text-center text-lg-left" >
             <h1 class="font-weight-bold" style="font-family:'Comfortaa', cursive;"> Welcome to First Laurel Logistics, <strong>Need Deliveries?</strong> </h1>
@@ -16,7 +17,7 @@
             <h5>Our Delivery Service coverage is within Calabar geographical location, for the main time.</h5>
 
             <div class="dropdown" id="myDropdown">
-              <button class="btn btn-lg btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-lg btn-danger rounded-pill dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Get Started
               </button>
 
@@ -25,7 +26,11 @@
                   <a  href="{% url 'dashboard' user.id  %}" class=" text-dark text-decoration-none">Dashboard</a> </button>
                   {% else %}
                   <a  href="#" class="text-dark text-decoration-none text-center" data-toggle="modal" data-target="#CashRequestForm">Request Dispatch</a> </button>
+                  <hr>
+                  <p>Call: +234 90134439919 </p>
+                  <hr>
                   <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+                  
                 {% endif %}
                 
               </div>
@@ -35,23 +40,21 @@
           <form action="{% url 'search' %}" method="get">
             <div class="form-group" id="div_id_order_id" >
               <label for="id_order_id" class></label>
-
-              <div class>
+              <div>
                 <input type="text" 
                        name="order_id"  
                        class="textinput textInput form-control" 
                        id="id_order_id" 
                        {% if myFilter2.name.value != None %}value="{{ form.name.value|stringformat:'s' }}"{% endif %}
-                       placeholder="Enter Ref ID to check Your Request order Status">
+                       placeholder="Enter Reference ID to check Your Request order Status">
               </div>
-            </div>
-            <button class="btn btn-outline-secondary btn-block my-sm-2" type="submit">Search
-            </button>
+              <button class="mt-2 btn btn-outline-secondary rounded-pill btn-block my-sm-2" type="submit">Search</button>
+            </div>    
         </form>
         </div>
     <div class="col-md-5 text-center order-1 order-md-6">
 
-      <img src="/static/FDS_app/6447.png" id="center" class="p-2 img-fluid" alt="Landing Image">
+      <img src="/static/FDS_app/6447.png" class="img-fluid mx-auto d-block" alt="Landing Image">
       <a href='https://www.freepik.com/vectors/logo'class="text-decoration-none text-dark">Logo vector created by pch.vector - www.freepik.com</a>
     </div>
   </div>
