@@ -4,8 +4,8 @@
 {% block title %} Welocme {{user.username }} {% endblock title %}
 
 {% block content %}
-<main>
-  <nav class="navbar navbar-expand-lg navbar-light shadow-sm pt-3 bg-light d-flex bd-highlight"  >
+<main class="">
+  <nav class="navbar navbar-expand-lg navbar navbar-expand-sm navbar-expand-md container-fluid navbar-light shadow-sm bg-light"  >
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="fas fa-angle-double-down"></span>
       </button>
@@ -33,43 +33,53 @@
           </li>
         </ul>
       </div>
-
-      <div class="row p-2 d-flex flex-nowrap nav-item">
-        <div class="col-md-auto d-flex flex-nowrap">
-            {% if n.count > 0 %}
+      <!--Notification and profile-->
+      <div class="d-flex flex-row bd-highlight">
+        <div class="bd-highlight">
+          {% if n.count > 0 %}
             <small class="justify-content-center">
               <a href="{% url 'show_Notification' user.id %}">
-                <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="You have {{n.count}} Notifications">
-                  <i class="fas fa-bell"></i> <span class="badge badge-light"></span>{{n.count}}</span>
-                </button>
+                <p class="text-danger " data-toggle="tooltip" data-placement="top" title="You have {{n.count}} Notifications">
+                  <i class="fas fa-bell btn btn-md "></i> <span class="badge badge-light"></span>{{n.count}}</span>
+                </p>
               </a>
             </small>
-            {% endif %}
+          {% else %}
+            <div class="" data-toggle="tooltip" data-placement="top" title="You have 0 Notifications">
+            <i class="fas fa-bell btn btn-md"></i>
+            </div>
+          {% endif %}
 
-            {% if notify.count > 0 %}
+          {% if notify.count > 0 %}
             <small >
               <a href="{% url 'adminNotificationShow' %}"> 
-                <button type = "button" class="btn btn-danger btn-sm " data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications">
-                  <i class="fas fa-bell pr-1"></i><span class="badge badge-light">{{notify.count}}</span>
+                <button type = "button" class="btn btn-danger  " data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications">
+                  <i class="fas fa-bell btn btn-md"></i><span class="badge badge-light">{{notify.count}}</span>
                 </button>
               </a>
             </small>
-            {% endif %}
+          {% endif %}
         </div>
 
-        <div class="col-md-auto"> 
-            <img src="{{user.customer.image.url}}" alt=" Profile Picture" class="rounded-circle" style="width: 40px; height: 43px;">  
-        </div>
-
-        <div class="col-md-auto pl-3">
-          <ul class="list-inline">
-            <li> 
-              <small> Username: {{user.username}} </small>
-            </li>  
-          </ul>    
-        </div>
+        <div class="bd-highlight">
+          <div class="btn-group dropleft">
+            <button type="button" class="btn btn-md  dropdown-toggle text-danger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="text-danger far fa-user-circle"></i>
+            </button>
+            <div class="dropdown-menu rounded-lg bg-light shadow ">
+              <div class="dropdown-item"><img src="{{user.customer.image.url}}" alt=" Profile Picture" class="  rounded-circle" style="width: 40px; height: 43px;">  </div>
+              <p class="dropdown-item">Username: {{user.username}}</p>
+              <p class="dropdown-item">{{user.first_name}} {{user.last_name}}</p>
+              <p class="dropdown-item">{{user.email}}</p>
+              <p class="dropdown-item">{{customer.phone_number}}</p>
+              <div class="dropdown-divider"></div>
+              <a class="btn btn-danger ml-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'logout' %}" role="button">Log out</a>
+            </div>
+          </div>   
+        </div>    
+      </div>
   </nav>
-
+</main>
 <main role="main" style="padding-bottom: 4rem;">
   {% block content2 %} 
 
@@ -81,5 +91,5 @@
   $('[data-toggle="tooltip"]').tooltip()
 })
 </script>
-</main>
+
 {% endblock content %}

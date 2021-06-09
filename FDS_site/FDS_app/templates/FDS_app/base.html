@@ -17,6 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nunito:wght@300&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@1,700&family=Red+Hat+Display:wght@900&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -83,17 +85,23 @@
 </head>
 
 
-
-
 <body>
-  <div id="navbar-nav">
-    <nav class="container-fluid navbar navbar-expand-md text-truncate navbar-dark fixed-top shadow-none" style="background-color: rgb(221, 77, 77);" >
+<div class="container-fliud">
+  <ul class="nav justify-content-end">
+   
+    <li class="nav-item">
+      <p class="nav-link text-muted" style="height: 25px;">Call: +234 90134439919</p>
+    </li>
+    
+  </ul>
+  <div id="navbar-nav" class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar navbar-expand-sm navbar-expand-md text-truncate navbar-dark  shadow-sm" style="background-image: linear-gradient(to right, rgb(0, 55, 107),rgb(0, 91, 209));" >
       <a class="navbar-brand font-weight-bold" href="{% url 'fds-home' %}"> 
-        <img src="/static/FDS_app/FLLS LOGO.png" class="img-fluid" alt="Flls Logo">
+        <img src="/static/FDS_app/FLLS LOGO.png" class="img-fluid" style="width: 110px; height: 43px" alt="Flls Logo">
       </a>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
-        <span class="fas fa-bars"></span>
+      <button class="navbar-toggler mr-4" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
+        <span class=" fas fa-bars"></span>
       </button>
 
       <div class=" collapse navbar-collapse" id="collapsibleNavbar">
@@ -112,28 +120,20 @@
 
         </ul>
       </div>
+      
           {% if user.is_authenticated %}
           
           <ul class="navbar-nav">
             <li>
-              <button type="button" class="btn btn-dark btn-sm mb-2 mr-2">
-                <a  href="{% url 'dashboard' user.id %}" class=" text-white text-decoration-none">Dashboard</a> 
-              </button>
-
-              <button type="button" class="btn btn-outline-secondary btn-sm mb-2">
-                <a  href="{% url 'logout' %}" class=" text-white text-decoration-none">Logout</a>
-              </button>
+              <a class="btn btn-danger font-weight-bold btn-sm rounded-pill mr-2" href="{% url 'dashboard' user.id %}" role="button">Dashboard</a>  
             </li>
           </ul>
           {% else%}
 
-        <ul class="navbar-nav" >
+        <ul class="navbar-nav mr-2" >
             <li>
-              <button type="button" class="btn btn-light btn-sm">
-                <a  href="{% url 'register' %}" class=" text-dark text-decoration-none">Sign Up</a></button>
-      
-              <button type="button" class="btn btn-secondary btn-sm">
-              <a  href="{% url 'login' %}" class=" text-white text-decoration-none">Sign In</a></button>
+              <button type="button" class="btn btn-danger rounded-pill btn-sm">
+              <a  href="{% url 'login' %}" class=" text-white font-weight-bold text-decoration-none">Sign In</a></button>
           </li>
         </ul>
         {% endif %}
@@ -141,7 +141,7 @@
     </nav>
   </div>
 
-  <main role="main" style="padding-top: 3rem;">
+  <main role="main" style="padding-top: -2rem;">
     <div >
   {% block content %}
 
@@ -170,5 +170,7 @@
 
   {% endblock contentf %}
   </main>
+</div>
 </body>
+
 </html> 

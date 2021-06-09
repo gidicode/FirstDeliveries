@@ -18,27 +18,33 @@ def chk_number(value):
 
 
 class UserRegisterForm(UserCreationForm):
-    first_name = forms.CharField(label='First Name', max_length=15, required=True)
-    last_name = forms.CharField(label='Last Name', max_length= 15, help_text='Last name', required=True)
-    email = forms.EmailField(max_length=30, validators= [chk_email])
-    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', 
-                    help_text='Enter your phone number in this format 070xxxxxxxx',
-                    validators= [chk_number] )
+    first_name = forms.CharField(label='', max_length=15, widget= forms.TextInput
+                           (attrs={'placeholder':'First Name'}), required=True)
+    last_name = forms.CharField(label='', max_length= 15, widget= forms.TextInput
+                           (attrs={'placeholder':'Last Name'}), required=True)
+    email = forms.EmailField(label='', max_length=30, validators= [chk_email], widget= forms.EmailInput
+                           (attrs={'placeholder':'Email'}),)
+    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required=True,
+                    help_text='In this format 070xxxxxxxx',
+                    validators= [chk_number], widget= forms.TextInput
+                           (attrs={'placeholder':'070xxxxxxx'}))
+    Alt_phone_num = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    validators= [chk_number], widget= forms.TextInput
+                           (attrs={'placeholder':'Alternative Phone Number'}))
+    username = forms.CharField(label="", max_length=10, required=True, widget= forms.TextInput
+                           (attrs={'placeholder':'Username'}) )
+
     
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email',  'phone_number', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email',  'phone_number', 'Alt_phone_num', 'password1', 'password2']
 
 
-class UserUpdateForm(forms.ModelForm):
-    first_name = forms.CharField(label='First Name', max_length=15, required=True)
-    last_name = forms.CharField(label='Last Name', max_length= 15, required=True)
-    email = forms.EmailField(max_length=30)
-    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', help_text='Enter your phone number in this format 070xxxxxxxx')
+class UserUpdateForm(forms.ModelForm):    
 
     class Meta: #gives us a nested name space for configuration keeping it one place
         model = Customer
-        fields = ['email', 'first_name', 'last_name', 'phone_number']
+        fields = ['email', 'Alt_phone_num']
 
 #Profile Update Form
 class ProfileUpdateForm(forms.ModelForm):
@@ -48,12 +54,20 @@ class ProfileUpdateForm(forms.ModelForm):
 
 
 class OrderForm(forms.ModelForm): 
+    OPTIONS2 = [
+            ( "Van", "Van"),
+            ("Bike", "Bike"),
+            ( "Tricycle", "Tricycle (Keke)"),
+            
+    ]
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
+    reciever_name = forms.CharField
     class Meta:
         model = MakeRequest
-        fields = [
-            'reciever_name', 'Address_of_reciever', 
-            'Package_description', 'Choice_for_TP', 
-            'Your_location', 'reciever_phone_number',]
+        fields = ['reciever_phone_number', 'Address_of_reciever',
+                'reciever_name', 'Package_description', 'Your_location',
+                'Choice_for_TP', 
+                 ]
 
 class adminform(forms.ModelForm): 
     class Meta:
@@ -73,15 +87,30 @@ class adminformShopping(forms.ModelForm):
         fields = '__all__'
         exclude = ['assigned']
         
-class Request_Cash(forms.ModelForm): 
+class Request_Cash(forms.ModelForm):
+    OPTIONS2 = [
+            ( "Van", "Van"),
+            ("Bike", "Bike"),
+            ( "Tricycle", "Tricycle (Keke)"),
+            
+    ]
+
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
     
     class Meta:
         model = MakeRequestCash
-        fields =['reciever_name', 'Address_of_reciever', 
-            'Package_description', 'Choice_for_TP', 
-            'Your_location', 'reciever_phone_number',]
+        fields = '__all__'
+        exclude = ['type', 'Amount_Paid', 'customer', 'date_created', 'status', 'paid',  'order_id', 'assigned', ]
 
-class Shopping_Form(forms.ModelForm): 
+class Shopping_Form(forms.ModelForm):
+    OPTIONS2 = [
+            ( "Van", "Van"),
+            ("Bike", "Bike"),
+            ( "Tricycle", "Tricycle (Keke)"),
+            
+    ]
+
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ") 
     class Meta:
         model = Shopping
         fields ='__all__'
@@ -92,11 +121,20 @@ class Shopping_Form(forms.ModelForm):
             }
 
 class AnonForm(forms.ModelForm):
+    OPTIONS2 = [
+            ( "Van", "Van"),
+            ("Bike", "Bike"),
+            ( "Tricycle", "Tricycle (Keke)"),
+            
+    ]
+
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
     class Meta:
         model = Anonymous 
-        fields = ['Package_description', 'email', 'Choice_for_TP', 'Your_location', 'Your_phone_number']
+        fields = [ 'Package_description', 'Your_phone_number', 'Your_location', 'email', 'Choice_for_TP',  ]
 
 class AdminAnonForm(forms.ModelForm):
+    
     class Meta:
         model = Anonymous
         fields = '__all__'

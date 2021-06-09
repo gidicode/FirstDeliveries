@@ -9,9 +9,9 @@
 <br>
 <br>
 
-<div class="row order-3 p-3 d-sm-flex flex-lg-wrap bd-highlight">
+<div class="row pb-5">
     <div class="col-md-4"></div>
-    <div class="col-md-4 ">
+    <div class="col-md-4 p-4">
         {% if messages %}
         <div class="messages p-3 container align-self-center">
             {% for message in messages %}
@@ -22,19 +22,22 @@
               </button> 
         </div>
     {% endif %}
-        <div class="card card-body shadow mb-3 rounded ">
-            <form method="POST" enctype="multipart/form-data"> 
-                {% csrf_token %}
-                <fieldset class="form-group">
-                    {{form|crispy}}
-                </fieldset>
+        <div class="shadow-sm shadow bg-light mb-3 rounded-lg">
+            <div class="p-4">
+                <form method="POST" enctype="multipart/form-data"> 
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        {{form|crispy}}
+                    </fieldset>
 
-                <button class="btn btn-outline-info btn-block" type="submit">Log In</button>
-            </form>
-            <div class="border-top pt-3">
-                <small class="text-muted"> 
-                    Dont have an account sign up<a calss="ml-2" href="{% url 'register' %}"> Sign Up</a>
+                    <button class="btn btn-outline-info btn-block" type="submit">Log In</button>
+                </form>
+            </div>
+            <div class=" pt-3 p-3 text-center ">
+                <small class="text-muted "> 
+                    Dont have an account sign up
                    </small>
+                   <a role="button" href="{% url 'register' %}" class="btn btn-success btn-block">Sign Up</a>
                    <br>
                    <small>
                        Forgot password?<a calss="ml-2" href="{% url 'password_reset' %}"> Reset Password</a>

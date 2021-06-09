@@ -5,17 +5,17 @@
 
 {% block content2 %}
 <div class="container">
-    <div class="row  d-flex">
+    <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8 d-flex flex-nowrap p-4">
-            <div class="card card-body shadow  rounded bg-light shadow">
+            <div class="p-3">
             
-                <h1>Notifications</h1>
+                <h3>Notifications</h3>
                 {% if n.count == 0 %}
                 <p> You have no Notifications Yet </p>
                 {% endif %}
                 {% for not in n%}
-                <div class="card card-body shadow_sm p-3">
+                <div class=" shadow-sm p-3">
                     <h2 class="text-success">{{not.title}}</h2>
                     <p>{{not.Message}}</p>
                     <p>{{not.date_created|timesince}} ago</p>

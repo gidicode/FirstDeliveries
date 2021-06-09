@@ -18,6 +18,7 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=15, null=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
     phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True)
+    Alt_phone_num = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Phone Number (2nd)")
     image = models.ImageField(default='default.jpg', upload_to='profile_pics', null=True)
     email = models.EmailField(max_length=100, null=True)
     signup_confirmation = models.BooleanField(default=False)
@@ -41,6 +42,7 @@ class MakeRequest(models.Model):
     OPTIONS1 = [
                 ("Bike", "Bike"),
                 ( "Tricycle", "Tricycle (Keke)"),
+                ( "Van", "Van"),
     ]
 
     STATUS = {
@@ -80,6 +82,7 @@ class MakeRequestCash(models.Model):
     OPTIONS1 = [
                 ("Bike", "Bike"),
                 ( "Tricycle", "Tricycle (Keke)"),
+                ( "Van", "Van"),
     ]
 
     STATUS = {
@@ -88,16 +91,42 @@ class MakeRequestCash(models.Model):
         ('Out for delivery', 'Out for delivery'),
         ('Delivered', 'Delivered'),
     }
+    
+    Typeof = {
+        ('Single', 'Single'),
+        ('Multiple', 'Multiple'),
+    }
 
+    type = models.CharField(max_length=50, choices=Typeof, default='Single', null=True)
     customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
-    reciever_name = models.CharField(max_length=20, null=True)
-    Address_of_reciever = models.CharField( max_length=100, null=True)
-    Package_description = models.CharField(max_length=100, null=True, blank=True)
-    Choice_for_TP = models.CharField(max_length=20, choices=OPTIONS1, default='Bike', null=True)
+    reciever_name = models.CharField(max_length=20, null=True, blank=True)
+    reciever_name2 = models.CharField(max_length=20, null=True, blank=True, verbose_name="Reciever Name (2)")
+    reciever_name3 = models.CharField(max_length=20, null=True, blank=True, verbose_name="Reciever Name (3)")
+    reciever_name4 = models.CharField(max_length=20, null=True, blank=True, verbose_name="Reciever Name (4)")
+    reciever_name5 = models.CharField(max_length=20, null=True, blank=True, verbose_name="Reciever Name (5)")
+
+    Address_of_reciever = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address")
+    Address_of_reciever2 = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address (2)")
+    Address_of_reciever3 = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address (3)")
+    Address_of_reciever4 = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address (4)")
+    Address_of_reciever5 = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address (5)")
+
+    Package_description = models.CharField(max_length=100, blank=True, null=True)
+    Package_description2 = models.CharField(max_length=100, blank=True, null=True, verbose_name="Package Description (2)")
+    Package_description3 = models.CharField(max_length=100, blank=True, null=True, verbose_name="Package Description (3)")
+    Package_description4 = models.CharField(max_length=100, blank=True, null=True, verbose_name="Package Description (4)")
+    Package_description5 = models.CharField(max_length=100, blank=True, null=True, verbose_name="Package Description (5)")
+
+    Choice_for_TP = models.CharField(max_length=100, choices=OPTIONS1, default='Bike', null=True)
     Your_location = models.CharField(max_length=100, null=True, verbose_name="Pickup Location", help_text="The location we would pick the item from")
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
-    reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Reciever Phone Number", 
-                            help_text="Enter phone number of the person to recieve this or pick item from")
+    reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Reciever Number", blank=True, 
+                            help_text="This Format:070xxxxxxxx")
+    reciever_phone_number2 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(2)") 
+    reciever_phone_number3 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(3)", )
+    reciever_phone_number4 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(4)", )
+    reciever_phone_number5 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(5)", )
+
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
     paid = models.BooleanField(default=False)
@@ -115,6 +144,7 @@ class Anonymous(models.Model):
     OPTIONS2 = [
             ("Bike", "Bike"),
             ( "Tricycle", "Tricycle (Keke)"),
+            ( "Van", "Van"),
     ]
 
     STATUS = {
@@ -126,12 +156,11 @@ class Anonymous(models.Model):
 
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
 
-    Package_description = models.CharField(max_length=100, null=True, blank=True, help_text="The current location of the reciever.")
+    Package_description = models.CharField(max_length=100, null=True, blank=True)
     Choice_for_TP = models.CharField(max_length=20, choices=OPTIONS2, default='Bike', null=True, 
-                    help_text="Depending on the item size, choose what best suit your item best handling. COST: Bike N500, Tricycle N1000")
+                    help_text=" COST: Bike N500, Tricycle N1000")
     Your_location = models.CharField(max_length=100, null=True, verbose_name="Pickup Location", help_text="The location we would pick your item from")  
-    Your_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Your Phone Number", 
-                            help_text="Enter an active phone number")
+    Your_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Your Phone Number")
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
     paid = models.BooleanField(default=False)

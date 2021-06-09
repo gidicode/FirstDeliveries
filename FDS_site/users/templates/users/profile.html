@@ -59,7 +59,7 @@
                                         <div class="alert alert-light text-center shadow-sm rounded-lg">
                                             <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> E-Request</h6>
                                             <h3> N{{e_req.Amount__sum}} </h3>
-                                            <a class="btn btn-info btn-sm rounded-pill" href="{% url 'anonymous-request' %}" role="button">view</a>
+                                            <a class="btn btn-info btn-sm rounded-pill" href="" data-toggle="modal" data-target="#ErequestDetails" role="button">view</a>
                                         </div>
                                     </div>
 
@@ -67,7 +67,7 @@
                                         <div class="alert alert-light text-center shadow-sm rounded-lg">
                                             <h6 class="" style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Cash-Request</h6>
                                             <h3> N{{e_cash.Amount_Paid__sum}} </h3>
-                                            <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="{% url 'anonymous-request' %}" role="button">view</a>
+                                            <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="" data-toggle="modal" data-target="#CashrequestDetails" role="button">view</a>
                                         </div>
                                     </div>
                             </div>
@@ -78,14 +78,14 @@
                                         <h6 style="font-family:'Comfortaa', cursive;" >
                                             <i class="fas fa-money-bill"></i> Shopping-Request</h6>
                                         <h3> N{{e_shop.Charge__sum}}</h3>
-                                        <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="{% url 'anonymous-request' %}" role="button">view</a>
+                                        <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="" data-toggle="modal" data-target="#ShoppingrequestDetails" role="button">view</a>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="alert alert-light text-center shadow-sm rounded-lg">
                                         <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Anon-Request</h6>
                                         <h3> N{{e_anon.Amount_Paid__sum}} </h3>
-                                        <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="{% url 'anonymous-request' %}" role="button">view</a>
+                                        <a class="btn btn-info btn-sm rounded-pill justify-content-right" href="" data-toggle="modal" data-target="#AnonrequestDetails" role="button">view</a>
                                     </div>
                                 </div>
                         </div>
@@ -137,4 +137,194 @@
     </div>
   </div>
 
+
+  <!--Erequest Details-->
+  <div class="modal fade" id="ErequestDetails" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"> E Request income Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>  
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex flex-column justify-content-between bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Tricycle Income</h6>
+                                <h3> N{{a_req_2.Amount__sum}} </h3>
+                            </div>
+                        </div>
+
+                        <div class="p-2 bd-highlight">
+                            <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Bike Income</h6>
+                                <h3> N{{a_req_1.Amount__sum}} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <!--Cashrequest Details-->
+  <div class="modal fade" id="CashrequestDetails" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"> Cash Request income Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>  
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex flex-column justify-content-between bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Tricycle Income</h6>
+                                <h3> N{{a_cash_2.Amount_Paid__sum}}</h3>
+                            </div>
+                        </div>
+
+                        <div class="p-2 bd-highlight">
+                            <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Bike Income</h6>
+                                <h3> N{{a_cash_1.Amount_Paid__sum}} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Shoppingrequest Details-->
+  <div class="modal fade" id="ShoppingrequestDetails" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"> Shopping Request income & purchases Total</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>  
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="p-2 bd-highlight">
+                                <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                    <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Total Cash for shopping</h6>
+                                    <h3> N{{a_shop_paid.amount_paid__sum}} </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md"> 
+                          <div class="p-2 bd-highlight">
+                            <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Service Charge, (dispatch/purchase)</h6>
+                                <h3> N{{a_shop_charge.Charge__sum}} </h3>
+                            </div>
+                          </div>
+                        </div>
+          
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+              </div>
+
+              <div class="col-md-8">
+                <div class="row">
+                  <div class="col-md">
+                    <div class="p-2 bd-highlight">
+                      <div class="alert alert-light text-center shadow-sm rounded-lg">
+                          <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Items Purchased Cost</h6>
+                          <h3> N{{a_shop_cost.Item_Cost__sum}} </h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md"> 
+                    <div class="p-2 bd-highlight">
+                      <div class="alert alert-light text-center shadow-sm rounded-lg">
+                          <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Refunds</h6>
+                          <h3> N{{a_shop_refund.Amount_Refunded__sum}} </h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Anonrequest Details-->
+  <div class="modal fade" id="AnonrequestDetails" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"> Anon Request income Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>  
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex flex-column justify-content-between bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Tricycle Income</h6>
+                                <h3> N{{a_anon_2.Amount_Paid__sum}}</h3>
+                            </div>
+                        </div>
+
+                        <div class="p-2 bd-highlight">
+                            <div class="alert alert-light text-center shadow-sm rounded-lg">
+                                <h6 style="font-family:'Comfortaa', cursive;" ><i class="fas fa-money-bill"></i> Bike Income</h6>
+                                <h3> N{{a_anon_1.Amount_Paid__sum}} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content2 %}

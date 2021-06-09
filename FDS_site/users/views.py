@@ -347,12 +347,26 @@ def AdminDashboard(request):
     request3 = Shopping.objects.all()
     request4 = Anonymous.objects.all()
 
-    #total amount
-
+    #total amount through diff chanels
     e_req = request1.aggregate(Sum('Amount'))
     e_cash = request2.aggregate(Sum('Amount_Paid'))
     e_shop = request3.aggregate(Sum('Charge'))
     e_anon = request4.aggregate(Sum('Amount_Paid'))
+
+    #amount breakdown
+    a_req_1 = request1.filter(Choice_for_TP = "Bike").aggregate(Sum('Amount'))
+    a_req_2 = request1.filter(Choice_for_TP = "Tricycle").aggregate(Sum('Amount'))
+
+    a_cash_1 = request2.filter(Choice_for_TP = "Bike").aggregate(Sum('Amount_Paid'))
+    a_cash_2 = request2.filter(Choice_for_TP = "Tricycle").aggregate(Sum('Amount_Paid'))
+
+    a_anon_1 = request4.filter(Choice_for_TP = "Bike").aggregate(Sum('Amount_Paid'))
+    a_anon_2 = request4.filter(Choice_for_TP = "Tricycle").aggregate(Sum('Amount_Paid'))
+
+    a_shop_paid = request3.aggregate(Sum('amount_paid'))
+    a_shop_charge = request3.aggregate(Sum('Charge'))
+    a_shop_cost = request3.aggregate(Sum('Item_Cost'))
+    a_shop_refund = request3.aggregate(Sum('Amount_Refunded'))
    
     notify = adminNotification.objects.all()
     
@@ -391,10 +405,23 @@ def AdminDashboard(request):
     notify = notification_filter.filter(viewed = False) 
     
     context = {
+        'a_shop_paid':a_shop_paid,
+        'a_shop_charge':a_shop_charge,
+        'a_shop_cost':a_shop_cost,
+        'a_shop_refund':a_shop_refund,
+
+        'a_req_1':a_req_1,
+        'a_req_2':a_req_2,
+        'a_cash_1':a_cash_1,
+        'a_cash_2':a_cash_2,
+        'a_anon_1':a_anon_1,
+        'a_anon_2':a_anon_2,
+
         'e_req':e_req,
         'e_cash': e_cash,
         'e_shop':e_shop,
         'e_anon':e_anon,
+
         'myFilter5':myFilter5,
         'notify':notify, 
 
@@ -910,7 +937,7 @@ def updateRequestForm(request, pk):
                 Delivered.objects.create(
                     customer=obj.customer,
                     Item_delivered = obj,
-                    order_id = obj.id
+                    order_id = get_user
                 )
                 messages.success(request, f'You just updated a customer satus to delivered')
 
@@ -943,7 +970,7 @@ def updateRequestFormCash(request, pk):
                 Delivered.objects.create(
                     customer=obj.customer,
                     Item_delivered = obj,
-                    order_id = obj.id
+                    order_id = get_user
 
                 )
                 messages.success(request, f'You just updated a customer satus to delivered')
@@ -977,7 +1004,7 @@ def updateRequestFormShopping(request, pk):
                 Delivered.objects.create(
                     customer=obj.customer,
                     Item_delivered = obj,
-                    order_id = obj.id
+                    order_id = get_user
 
                 )
                 messages.success(request, f'You just updated a customer satus to delivered')

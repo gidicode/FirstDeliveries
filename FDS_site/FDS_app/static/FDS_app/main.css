@@ -39,7 +39,7 @@ background-position-y: -5rem;
     left: 0;
     bottom: 100;
     width: 100%;
-    background-color: rgb(59, 0, 0);
+    background-image: linear-gradient(to right, rgb(0, 40, 58),rgb(0, 95, 133));
     color: rgb(255, 255, 255);
     text-align: center;
  }

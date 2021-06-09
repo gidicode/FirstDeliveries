@@ -4,23 +4,24 @@
 {% block title %} Shopping List - FDLS {% endblock title %}
 
 {% block content2 %}
-<div class="row order-3 p-4 bd-highlight">
-    <div class="col-md-4"></div>
-    <div class="col-sm-4">
-        <div class="shadow mb-3 rounded">
-            <form method="POST" enctype="multipart/form-data"> 
-                {% csrf_token %}                    
-                    <ul class="list-group">
-                        <li class="list-group-item active" aria-current="true"><strong>Input the items for purchase below</strong></li>
-                        <li class="list-group-item list-group-item-action list-group-item-light">  {{ s_form|crispy }}</li>
-                        <li class="list-group-item"><button class="btn btn-outline-danger" type="submit">Request</button></li>
-                    </ul>
-                
-            </form>
+<div class="pb-5">
+    <div class="row p-3" >
+        <div class="col-md-4"></div>
+        <div class="col-sm-4">
+            <div class="shadow mb-3 rounded">
+                <form method="POST" enctype="multipart/form-data"> 
+                    {% csrf_token %}                    
+                        <ul class="list-group">
+                            <li class="list-group-item active" aria-current="true"><strong>Input the items for purchase below</strong></li>
+                            <li class="list-group-item list-group-item-light">  {{ s_form|crispy }}</li>
+                            <li class="list-group-item"><button class="btn btn-danger btn-block rounded-pill" type="submit">Request</button></li>
+                        </ul>
+                    
+                </form>
+            </div>
+
         </div>
-
+        <div class="col-md-4"></div>
     </div>
-    <div class="col-md-4"></div>
-
 </div>
 {% endblock content2 %}

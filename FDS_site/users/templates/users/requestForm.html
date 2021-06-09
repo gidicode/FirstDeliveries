@@ -5,24 +5,26 @@
 
 {% block content2 %}
 
-<div class="row p-3 bd-highlight">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-        <div class="shadow rounded">
-            <form method="POST" enctype="multipart/form-data"> 
-                {% csrf_token %}                    
-                    <ul class="list-group">
-                        <li class="list-group-item active" aria-current="true"><strong>Request For Dispatch Rider (E-payment)</strong></li>
-                        <li class="list-group-item list-group-item-action list-group-item-light">  {{ o_form|crispy }}</li>
-                        <li class="list-group-item"><button class="btn btn-outline-danger" type="submit">Request</button></li>
-                    </ul>
-                
-            </form>
+<div class="pb-5">
+    <div class="row p-3">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="shadow rounded">
+                <form method="POST" enctype="multipart/form-data"> 
+                    {% csrf_token %}                    
+                        <ul class="list-group">
+                            <li class="list-group-item active" aria-current="true"><strong>Request For Dispatch Rider</strong></li>
+                            <li class="list-group-item  list-group-item-light">  {{ o_form|crispy }}</li>
+                            <li class="list-group-item"><button class="btn btn-outline-danger btn-block rounded-pill" type="submit">Request</button></li>
+                        </ul>
+                    
+                </form>
+            </div>
+
         </div>
+        <div class="col-md-4"></div>
 
     </div>
-    <div class="col-md-4"></div>
-
 </div>
 
 {% endblock content2 %}

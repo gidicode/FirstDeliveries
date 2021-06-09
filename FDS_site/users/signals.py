@@ -25,6 +25,7 @@ def Delivered_signals(sender, instance, created, **kwargs):
         customer.delivered_set.filter(order_id = instance.order_id).update(
                                 title = 'Delivered!',
                                 Message= f"Hello {instance.customer} Your parcel with the following refrence Number '{instance.order_id}' has been Delivered, Thanks for using our service.")
+        print(instance.order_id)
 
 
 @receiver(post_save, sender=MakeRequest)
