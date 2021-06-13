@@ -8,53 +8,64 @@
     <div class="row p-3 ">
         <div class="col-md-4"></div>
         <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-            <div class="bg-primary"><p>Fill the form to complete your Request</p></div>
-            <div class="shadow rounded-lg p-3 ">
-                <form method="POST" enctype="multipart/form-data"> 
-                    {% csrf_token %}                    
-                    
-                    <div class="form-row ">
-                        <div class="col">
-                            {{ c_form.reciever_name|as_crispy_field }}
+            <div class="shadow rounded-lg ">
+                <p class="text-dark rounded-top text-center p-2" style="background-color: rgb(255, 246, 234);">Fill the form to complete your request</p>
+                <div class=" p-3">
+                    <form method="POST" enctype="multipart/form-data"> 
+                        {% csrf_token %}                    
+                        
+                        <div class="form-row">
+                            <div class="col">
+                                {{ c_form.reciever_name|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ c_form.Address_of_reciever|as_crispy_field }}
+                            </div>
                         </div>
-                        <div class="col">
-                            {{ c_form.Address_of_reciever|as_crispy_field }}
-                        </div>
-                    </div>
 
-                    <div class="form-row">
-                        <div class="col">
-                            {{ c_form.Package_description|as_crispy_field }}
+                        <div class="form-row">
+                            <div class="col">
+                                {{ c_form.Package_description|as_crispy_field }}
+                            </div> 
+                            <div class=" col">
+                                {{ c_form.reciever_phone_number|as_crispy_field }}
+                            </div>
                         </div> 
-                        <div class=" col">
-                            {{ c_form.reciever_phone_number|as_crispy_field }}
+
+                        <div class="add-sewer-form">
+                            <i style="font-size: 15px;" class="text-success fas fa-plus-circle"><span> <small> Multiple Deliveries? View or add more fields  </small></span></i> 
+                        </div> 
+                        <div class="mb-3">
+                            <small class="text-muted">Confirm the phone numbers are correct</small>  
+                        </div>   
+                        
+                        <div id="additional-forms"></div>
+                        <div id="additional-forms2"></div>
+                        <div id="additional-forms3"></div>
+                        <div id="additional-forms4"></div>
+
+                        <div class="form-row">
+                            <div class="col">
+                                {{ c_form.Your_location|as_crispy_field }}
+                            </div>
                         </div>
-                    </div> 
 
-                    <div>
-                        <i style="font-size: 20px;" class="text text-success add-sewer-form fas fa-plus-circle mb-3" data-toggle="tooltip" data-placement="top" title="For Multiple Deliveries"><span> <small> Sending to several locations? Add more fields  </small></span></i> 
-                    </div>    
-                    
-                    <div id="additional-forms"></div>
-                    <div id="additional-forms2"></div>
-                    <div id="additional-forms3"></div>
-                    <div id="additional-forms4"></div>
-
-                    <div class="form-row">
-                        <div class="col">
-                            {{ c_form.Your_location|as_crispy_field }}
+                        <div class="form-row">
+                            <div class="col">
+                                {{ c_form.Choice_for_TP|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-outline-light text-success add-sewer-form5 "><small>Loading/Off Loading?</small></button> 
+                                </div>      
+                                <div id="loading"></div>
+                            </div>
                         </div>
-                    </div>
+                        <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>
+                    </form>
+                </div>
 
-                    <div class="form-row">
-                        <div class="col">
-                            {{ c_form.Choice_for_TP|as_crispy_field }}
-                        </div>
-                    </div>
-                    <button class="btn btn-danger btn-block rounded-lg" type="submit">Sign Up</button>
-                </form>
-
-                <div id="add-form" style="display: none;">
+                <div id="add-form" style="display: none;"> 
                     <div class="sew-form">
                         <hr>
                         <div class="form-row ">
@@ -63,6 +74,7 @@
                             </div>
                             <div class="col">
                                 {{ c_form.Address_of_reciever2|as_crispy_field }}
+                                
                             </div>
                         </div>
 
@@ -74,9 +86,12 @@
                                 {{ c_form.reciever_phone_number2|as_crispy_field }}
                             </div>
                         </div>
+
                         <!--Addmore-->
                         <div>
-                            <i style="font-size: 20px;" class="text text-success add-sewer-form2 fas fa-plus-circle" data-toggle="tooltip" data-placement="top" title="For Multiple Deliveries"><small> Add more fields  </small></i> 
+                            <i style="font-size:15px;" class="text text-success add-sewer-form2 fas fa-plus-circle">
+                                <small>View/Add more fields</small>
+                            </i> 
                         </div>      
                     </div>
                 </div>
@@ -103,7 +118,9 @@
                         </div> 
                         <!--Addmore2-->
                         <div>
-                            <i style="font-size: 20px;" class="text text-success add-sewer-form3 fas fa-plus-circle" data-toggle="tooltip" data-placement="top" title="For Multiple Deliveries"><small> Add more fields  </small></i> 
+                            <i style="font-size: 15px;" class="text text-success add-sewer-form3 fas fa-plus-circle">
+                                <small>View/Add more fields</small>
+                            </i> 
                         </div>      
                     </div>
                 </div>
@@ -130,7 +147,9 @@
                         </div>
                          <!--Addmore3-->
                         <div>
-                            <i style="font-size: 20px;" class="text text-success add-sewer-form4 fas fa-plus-circle" data-toggle="tooltip" data-placement="top" title="For Multiple Deliveries"><small> Add more fields</small></i> 
+                            <i style="font-size: 15px;" class="text text-success add-sewer-form4 fas fa-plus-circle">
+                                <small>View/Add more fields</small>
+                            </i> 
                         </div>  
                     </div>  
                 </div>
@@ -158,7 +177,17 @@
                         <!--Addmore-->
                         <div>
                             <small class="text-danger"> Maximum fields allowed on this form  </small>
-                        </div>       
+                        </div>  
+                        <!--More-->
+                    <div id="add-form5" style="display: none;">
+                        <div class="sew-form5">
+                            <div class="form-row">
+                                <div class="col">
+                                    {{ c_form.Loading_choice|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>     
                     </div>
                 </div>
             </div>
@@ -168,14 +197,14 @@
 </div>
 
 
-
-
 <script>
     //Reciever1
     $('.add-sewer-form').click(function(){
    let sewer_form = $('#add-form .sew-form:first').clone(true);
    $(sewer_form).appendTo($('#additional-forms'))
     });
+
+   
 
     //Reciever 2
     $('.add-sewer-form2').click(function(){
@@ -193,6 +222,12 @@
     $('.add-sewer-form4').click(function(){
    let sewer_form = $('#add-form4 .sew-form4:first').clone(true);
    $(sewer_form).appendTo($('#additional-forms4'))
+    });
+
+    //Reciever5
+     $('.add-sewer-form5').click(function(){
+   let sewer_form = $('#add-form5 .sew-form5:first').clone(true);
+   $(sewer_form).appendTo($('#loading'))
     });
 
     //Hide Buttons
@@ -219,6 +254,26 @@
     $(this).hide();
     });
     });
+
+    $(document).ready(function(){
+    $(".add-sewer-form4").click(function(){
+    $(this).hide();
+    });
+    }); 
+
+    //hide Elements
+    $(document).ready(function(){
+    $(".hide-sew").click(function(){
+    $(".sew-form").hide();
+    });
+    }); 
+
+    $(document).ready(function(){
+    $(".add-sewer-form5").click(function(){
+    $(this).hide();
+    });
+    });
+    
 </script>
 
 

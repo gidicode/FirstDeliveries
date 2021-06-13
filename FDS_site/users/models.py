@@ -52,23 +52,58 @@ class MakeRequest(models.Model):
         ('Delivered', 'Delivered'),
     }
 
+    Typeof = {
+        ('Single', 'Single'),
+        ('Multiple', 'Multiple'),
+    }
+
+    LOADING_CHOICE = [
+                ("Loading", "Loading"),
+                ( "Off Loading", "Off Loading"),
+    ]
+
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
     customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
-    reciever_name = models.CharField(max_length=20, null=True)
-    Address_of_reciever = models.CharField( max_length=50, null=True)
-    Package_description = models.CharField(max_length=25, blank=True)
+    type = models.CharField(max_length=50, choices=Typeof, default='Single', null=True)
+    reciever_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Reciever Name")
+    reciever_name2 = models.CharField(max_length=50, null=True, blank=True, verbose_name="Reciever Name (2)")
+    reciever_name3 = models.CharField(max_length=50, null=True, blank=True, verbose_name="Reciever Name (3)")
+    reciever_name4 = models.CharField(max_length=50, null=True, blank=True, verbose_name="Reciever Name (4)")
+    reciever_name5 = models.CharField(max_length=50, null=True, blank=True, verbose_name="Reciever Name (5)")
+
+    Address_of_reciever = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address")
+    Address_of_reciever2 = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address (2)")
+    Address_of_reciever3 = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address (3)")
+    Address_of_reciever4 = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address (4)")
+    Address_of_reciever5 = models.CharField( max_length=100, null=True, blank=True, verbose_name="Reciever Address (5)")
+    
+    Package_description = models.CharField(max_length=100, blank=True, null=True)
+    Package_description2 = models.CharField(max_length=100, blank=True, null=True, verbose_name="Package Description (2)")
+    Package_description3 = models.CharField(max_length=100, blank=True, null=True, verbose_name="Package Description (3)")
+    Package_description4 = models.CharField(max_length=100, blank=True, null=True, verbose_name="Package Description (4)")
+    Package_description5 = models.CharField(max_length=100, blank=True, null=True, verbose_name="Package Description (5)")
+
     Choice_for_TP = models.CharField(max_length=20, choices=OPTIONS1, default='Bike', null=True)
     Your_location = models.CharField(max_length=30, null=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
-    reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True)
+    reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Reciever Number", blank=True, 
+                            help_text="This Format:070xxxxxxxx")
+    reciever_phone_number2 = models.CharField(validators=[phone_regex], max_length=17,  blank=True, verbose_name="Reciever Number(2)") 
+    reciever_phone_number3 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(3)", )
+    reciever_phone_number4 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(4)", )
+    reciever_phone_number5 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(5)", )
+    
+
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
+    Loading_choice = models.CharField(max_length=100, null=True)
     Amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     charge_id = models.CharField(max_length=100, null=True, validators=[alphanumeric])
     paid = models.BooleanField(default=False)
     order_id= models.CharField(max_length=10, null=True, default=0)
     assigned = models.BooleanField(default=False)
+    
     
 
     def __str__(self):
@@ -97,6 +132,11 @@ class MakeRequestCash(models.Model):
         ('Multiple', 'Multiple'),
     }
 
+    LOADING_CHOICE = [
+                ("Loading", "Loading"),
+                ( "Offloading", "Offloading"),
+    ]
+
     type = models.CharField(max_length=50, choices=Typeof, default='Single', null=True)
     customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
     reciever_name = models.CharField(max_length=20, null=True, blank=True)
@@ -122,13 +162,14 @@ class MakeRequestCash(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
     reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Reciever Number", blank=True, 
                             help_text="This Format:070xxxxxxxx")
-    reciever_phone_number2 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(2)") 
+    reciever_phone_number2 = models.CharField(validators=[phone_regex], max_length=17,  blank=True, verbose_name="Reciever Number(2)") 
     reciever_phone_number3 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(3)", )
     reciever_phone_number4 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(4)", )
     reciever_phone_number5 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(5)", )
 
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
+    Loading_choice = models.CharField(max_length=100, null=True)
     paid = models.BooleanField(default=False)
     Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     order_id= models.CharField(max_length=10, null=True, default=0)

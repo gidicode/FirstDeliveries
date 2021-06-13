@@ -27,7 +27,7 @@ SECRET_KEY = '2u0mu_b=7%76tif8&_sx#mu+m@g!j5o3kvm2qeo+3$2^!1g7i-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '3de8cd31a8cb.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', '2035db4f2ee4.ngrok.io']
 
 
 # Application definition
@@ -168,3 +168,6 @@ PAYSTACK_SCRET_KEY = 'sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+
+API_KEY = '65afd942ebf219293a4f4877dcd2b205c78bb8c2'

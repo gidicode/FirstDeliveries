@@ -10,6 +10,8 @@ from django.contrib.auth.models import Group
 from .models import *
 from BikeControl.models import RidersDeliveries
 
+from django.conf import settings
+
 from django.db.models import Sum
 
 from django.contrib.auth.forms import UserCreationForm
@@ -147,11 +149,13 @@ def requestForm_Online(request, user):
             h = Hashid(instance.id)
             MakeRequest.objects.filter(pk = instance.id).update(order_id=h)
            
-            tp_choice_1 = MakeRequest.objects.filter(order_id= h).filter(Choice_for_TP= 'Bike')
-            if tp_choice_1:
+            tp_choice_1 = MakeRequest.objects.filter(order_id= h).filter(Choice_for_TP= instance.Choice_for_TP)
+            if tp_choice_1 == "Bike":
                 messages.success(request, f'Your mode of transportation is Bike Your delivery Fee is NGN 500')
-            else:
+            elif tp_choice_1 == "Tricycle":
                 messages.success(request, f'Your mode of transportation is Tricycle(Keke) Your delivery Fee is NGN 1000')
+            else:
+                messages.success(request, f'Your mode of transportation is Van your ')
 
             ForPayments.objects.create(
                 customer = customer,
@@ -256,11 +260,11 @@ def Initialize_requestForm(request, user):
 
             headers = { 
             "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
-            'Content-Type': 'appliation/json'
+            'Content-Type': 'application/json'
             }
 
             r = requests.request("POST", url, headers=headers, data=payload)
-            print(r.text)
+      
             if r.status_code != 200:
                 return str(r.status_code)
             result = r.json()
@@ -275,7 +279,7 @@ def Initialize_requestForm(request, user):
 
             headers = { 
             "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
-            'Content-Type': 'appliation/json'
+            'Content-Type': 'application/json'
             }
 
             r = requests.request("POST", url, headers=headers, data=payload)
@@ -297,13 +301,12 @@ def Initialize_requestForm(request, user):
     return HttpResponseRedirect(link)
     
     messages.success(request, f'Your Payment Is Successful')
-    return render(request, 'users/requestForm.html', context)
+    return render(request, 'users/requestForm.html')
     
 #Success Page
 @login_required(login_url='login')
 def successPage(request, user):
     reference = request.GET.get('reference')
-    print(reference)
     check_pay = ForPayments.objects.filter(charge_id=reference).exists()
     if check_pay == False:
         print('Error')
@@ -334,7 +337,6 @@ def successPage(request, user):
         customer = Customer.objects.get(user=request.user )
         req= customer.makerequest_set.first()
         req2 = req.order_id 
-        print(req2)
         MakeRequest.objects.filter(order_id=req2).update(paid=True, charge_id = initialized['data']['reference'], Amount=initialized['data']['amount']/100)
     return render(request, 'users/success.html')
 

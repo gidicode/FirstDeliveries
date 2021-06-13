@@ -1,3 +1,4 @@
+from re import template
 from django import forms
 from django.forms import ModelForm, Textarea, fields
 from django.contrib.auth.models import User
@@ -57,17 +58,28 @@ class OrderForm(forms.ModelForm):
     OPTIONS2 = [
             ( "Van", "Van"),
             ("Bike", "Bike"),
-            ( "Tricycle", "Tricycle (Keke)"),
-            
+            ( "Tricycle", "Tricycle (Keke)"),       
+    ]
+    LOADING_CHOICE = [
+            ("loading", "Loading"),
+            ( "off Loading", "Off Loading"),
     ]
     Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
-    reciever_name = forms.CharField
+    reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number', required = False,
+                    min_length=11, widget= forms.TextInput)
+    reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
+                    min_length=11, widget= forms.TextInput)
+    reciever_phone_number3 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
+                    min_length=11, widget= forms.TextInput)
+    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
+                    min_length=11, widget= forms.TextInput)
+    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
+                    min_length=11, widget= forms.TextInput)
+    Loading_choice = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple, choices = LOADING_CHOICE)
     class Meta:
         model = MakeRequest
-        fields = ['reciever_phone_number', 'Address_of_reciever',
-                'reciever_name', 'Package_description', 'Your_location',
-                'Choice_for_TP', 
-                 ]
+        fields = '__all__'
+        exclude = ['customer', 'date_created', 'status', 'Amount', 'charge_id', 'paid', 'order_id', 'assigned', 'type']
 
 class adminform(forms.ModelForm): 
     class Meta:
@@ -92,11 +104,24 @@ class Request_Cash(forms.ModelForm):
             ( "Van", "Van"),
             ("Bike", "Bike"),
             ( "Tricycle", "Tricycle (Keke)"),
-            
+    ]
+    LOADING_CHOICE = [
+            ("loading", "Loading"),
+            ( "off Loading", "Off Loading"),
     ]
 
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
-    
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="PRICE RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
+    reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number', required = False,
+                    min_length=11, widget= forms.TextInput)
+    reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
+                    min_length=11, widget= forms.TextInput)
+    reciever_phone_number3 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
+                    min_length=11, widget= forms.TextInput)
+    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
+                    min_length=11, widget= forms.TextInput)
+    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
+                    min_length=11, widget= forms.TextInput)
+    Loading_choice = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple, choices = LOADING_CHOICE)
     class Meta:
         model = MakeRequestCash
         fields = '__all__'
