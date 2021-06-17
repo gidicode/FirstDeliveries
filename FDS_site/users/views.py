@@ -1,26 +1,23 @@
+from typing import final
+from django.db.models.expressions import F
 from django.shortcuts import render, redirect
 
-from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 
-from django.urls import reverse
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 
 from django.contrib.auth.models import Group
+from hashids import Hashids
 from .models import *
-from BikeControl.models import RidersDeliveries
+
+from decimal import Decimal
 
 from django.conf import settings
 
 from django.db.models import Sum
 
-from django.contrib.auth.forms import UserCreationForm
-
-from django.forms import inlineformset_factory
 from django.contrib import messages #flash message
 from .forms import *
-
-from django.views.generic import ListView
 
 from .filters import OrderFilter, AdminFilter, AdminFilterUsers
 
@@ -30,11 +27,7 @@ import requests
 
 from django.core.paginator import Paginator
 
-from hashid_field import Hashid
-
 import json
-
-
 
 #Error 404 page
 def response_error_handler(request, exception = None):
@@ -101,16 +94,116 @@ def requestForm_Cash(request, user):
             instance.save()
             messages.success(request, f'Your Request for pickup is Successful, you will recieve a call from us shortly')
 
-            h = Hashid(instance.id)
+            hashids = Hashids(salt=settings.HASH, min_length=7)
+            h = hashids.encode(instance.id)
             MakeRequestCash.objects.filter(pk = instance.id).update(order_id= h)
-            print(h)
-    
-            tp_choice_1 = MakeRequestCash.objects.filter(order_id = h).filter(Choice_for_TP= 'Bike' )
-            if tp_choice_1:
-                messages.success(request, f'Your mode of transportation is Bike Your delivery Fee is NGN 500')
-            else:
-                messages.success(request, f'Your mode of transportation is Tricycle(Keke) Your delivery Fee is NGN 1000')
+            
+            tp_choice_1 = customer.makerequestcash_set.filter(order_id = h).filter(Choice_for_TP= 'Bike' )
+            tp_choice_2 = customer.makerequestcash_set.filter(order_id = h).filter(Choice_for_TP= 'Tricycle' )
+            tp_choice_3 = customer.makerequestcash_set.filter(order_id = h).filter(Choice_for_TP= 'Van' )
 
+            #checking for multiple
+            chk_none = customer.makerequestcash_set.get(order_id = h)
+                    
+            item_2 = [
+                    chk_none.Address_of_reciever2, chk_none.reciever_phone_number2, 
+                    chk_none.Package_description2, chk_none.reciever_name2
+                    ]
+            item_3 = [
+                    chk_none.Address_of_reciever3, chk_none.Package_description3,
+                    chk_none.reciever_phone_number3, chk_none.reciever_name3
+                    ]
+            item_4 = [
+                    chk_none.Address_of_reciever4, chk_none.Package_description4,
+                    chk_none.reciever_phone_number4, chk_none.reciever_name4
+                    ]
+            item_5 = [
+                    chk_none.Address_of_reciever5, chk_none.Package_description5,
+                    chk_none.reciever_phone_number5, chk_none.reciever_name5
+                    ]
+            if tp_choice_1:
+                charge_amount = 500
+                count_item2 = item_2.count(None)
+                count_item3 = item_3.count(None)
+                count_item4 = item_4.count(None)
+                count_item5 = item_5.count(None)
+                customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+                if count_item2 >= 3:
+                    pass
+                else:
+                    charge_amount += 500
+                    customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if count_item3 >= 3:
+                    pass
+                else:
+                    charge_amount += 500
+                    customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if count_item4 >= 3:
+                    pass
+                else:
+                    charge_amount += 500
+                    customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+                
+                if count_item5 >= 3:
+                    pass
+                else:
+                    charge_amount += 500
+                    customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if charge_amount == 1000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
+                elif charge_amount == 1500:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
+                elif charge_amount == 2000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
+                elif charge_amount == 2500:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
+                else:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
+            
+            if tp_choice_2:
+                count_item2 = item_2.count(None)
+                count_item3 = item_3.count(None)
+                count_item4 = item_4.count(None)
+                count_item5 = item_5.count(None)
+                charge_amount = 1000
+                customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+                if count_item2 >= 3:
+                    pass
+                else:
+                    charge_amount += 1000
+                    customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if count_item3 >= 3:
+                    pass
+                else:
+                    charge_amount += 1000
+                    customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if count_item4 >= 3:
+                    pass
+                else:
+                    charge_amount += 1000
+                    customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+                
+                if count_item5 >= 3:
+                    pass
+                else:
+                    charge_amount += 1000
+                    customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if charge_amount == 2000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
+                elif charge_amount == 3000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
+                elif charge_amount == 4000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
+                elif charge_amount == 5000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
+                else:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
             ForPayments.objects.create(
                 customer = customer,
                 For_cash_payment = instance,
@@ -146,16 +239,116 @@ def requestForm_Online(request, user):
             instance.save()
             messages.success(request, f'Your Request for pickup is Successful, you will recieve a call from us shortly')
 
-            h = Hashid(instance.id)
+            hashids = Hashids(salt=settings.API_KEY, min_length=7)
+            h = hashids.encode(instance.id)
             MakeRequest.objects.filter(pk = instance.id).update(order_id=h)
-           
-            tp_choice_1 = MakeRequest.objects.filter(order_id= h).filter(Choice_for_TP= instance.Choice_for_TP)
-            if tp_choice_1 == "Bike":
-                messages.success(request, f'Your mode of transportation is Bike Your delivery Fee is NGN 500')
-            elif tp_choice_1 == "Tricycle":
-                messages.success(request, f'Your mode of transportation is Tricycle(Keke) Your delivery Fee is NGN 1000')
-            else:
-                messages.success(request, f'Your mode of transportation is Van your ')
+            
+            tp_choice_1 = customer.makerequest_set.filter(order_id = h).filter(Choice_for_TP= 'Bike' )
+            tp_choice_2 = customer.makerequest_set.filter(order_id = h).filter(Choice_for_TP= 'Tricycle' )
+            tp_choice_3 = customer.makerequest_set.filter(order_id = h).filter(Choice_for_TP= 'Van' )
+
+            #checking for multiple
+            chk_none = customer.makerequest_set.get(order_id = h)
+                    
+            item_2 = [
+                    chk_none.Address_of_reciever2, chk_none.reciever_phone_number2, 
+                    chk_none.Package_description2, chk_none.reciever_name2
+                    ]
+            item_3 = [
+                    chk_none.Address_of_reciever3, chk_none.Package_description3,
+                    chk_none.reciever_phone_number3, chk_none.reciever_name3
+                    ]
+            item_4 = [
+                    chk_none.Address_of_reciever4, chk_none.Package_description4,
+                    chk_none.reciever_phone_number4, chk_none.reciever_name4
+                    ]
+            item_5 = [
+                    chk_none.Address_of_reciever5, chk_none.Package_description5,
+                    chk_none.reciever_phone_number5, chk_none.reciever_name5
+                    ]
+            if tp_choice_1:
+                charge_amount = 500
+                count_item2 = item_2.count(None)
+                count_item3 = item_3.count(None)
+                count_item4 = item_4.count(None)
+                count_item5 = item_5.count(None)
+                customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+                if count_item2 >= 3:
+                    pass
+                else:
+                    charge_amount += 500
+                    customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if count_item3 >= 3:
+                    pass
+                else:
+                    charge_amount += 500
+                    customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if count_item4 >= 3:
+                    pass
+                else:
+                    charge_amount += 500
+                    customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+                
+                if count_item5 >= 3:
+                    pass
+                else:
+                    charge_amount += 500
+                    customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if charge_amount == 1000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
+                elif charge_amount == 1500:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
+                elif charge_amount == 2000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
+                elif charge_amount == 2500:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
+                else:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
+            
+            if tp_choice_2:
+                count_item2 = item_2.count(None)
+                count_item3 = item_3.count(None)
+                count_item4 = item_4.count(None)
+                count_item5 = item_5.count(None)
+                charge_amount = 1000
+                customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+                if count_item2 >= 3:
+                    pass
+                else:
+                    charge_amount += 1000
+                    customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if count_item3 >= 3:
+                    pass
+                else:
+                    charge_amount += 1000
+                    customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if count_item4 >= 3:
+                    pass
+                else:
+                    charge_amount += 1000
+                    customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+                
+                if count_item5 >= 3:
+                    pass
+                else:
+                    charge_amount += 1000
+                    customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
+
+                if charge_amount == 2000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
+                elif charge_amount == 3000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
+                elif charge_amount == 4000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
+                elif charge_amount == 5000:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
+                else:
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
 
             ForPayments.objects.create(
                 customer = customer,
@@ -190,7 +383,9 @@ def ShoppingForm(request, user):
             instance.customer = customer
             instance.save()
 
-            h = Hashid(instance.id)
+            hashids = Hashids(salt=settings.HASHID_FIELD_SALT, min_length=7)
+            h = hashids.encode(instance.id)
+
             Shopping.objects.filter(pk = instance.id).update(order_id=h)
             ForPayments.objects.create(
                 customer = customer,
@@ -210,33 +405,7 @@ def ShoppingForm(request, user):
     else:
         s_form=Shopping_Form(instance=customer)
 
-    return render (request, 'users/shopping.html', {'s_form':s_form})    
-
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
-def multipleRequest_cash(request, user):
-    Request_CashSet = inlineformset_factory(Customer, MakeRequestCash, fields=(
-        'reciever_name', 'Address_of_reciever', 'Package_description', 
-        'Package_description', 'Choice_for_TP', 'reciever_phone_number', 'Your_location'), extra=5)
-    customer = Customer.objects.get(user=request.user)
-    c_formset = Request_CashSet()
-    if request.method == 'POST':
-        c_formset = Request_Cash(request.POST, request.FILES)
-        if c_formset.is_valid() : 
-            instance1 = c_formset.save(commit=False)
-            instance1.customer = customer
-            instance1.save()
-            ForPayments.objects.create(
-                customer = customer,
-                For_cash_payment = instance1
-            )    
-            return redirect('Initialize_requestForm', user=user)       
-    else:
-        c_form = Request_CashSet()
-    context = {
-        'c_formset': c_formset,
-         }
-    return render(request, 'users/multipleRequest.html', context)         
+    return render (request, 'users/shopping.html', {'s_form':s_form})          
 
 #Initialize Payment
 @login_required(login_url='login')
@@ -249,14 +418,26 @@ def Initialize_requestForm(request, user):
         request1= customer.forpayments_set.all()
         
         req= customer.makerequest_set.latest('date_created')
-        req2 = req.Choice_for_TP
-    
+        req2 = req.Amount_Payable
+        
         if req.Choice_for_TP == 'Bike':
             url = "https://api.paystack.co/transaction/initialize"
-            payload =json.dumps ({
-                'email': request.user.email,
-                'amount': '50000', 
-            })
+            if req2 >= 2500:
+                get_amount = 1.5001/100 * req2 + 100
+                amt = req2 + get_amount
+                final_amt = int(amt * 100)
+                payload =json.dumps ({
+                    'email': request.user.email,
+                    'amount': final_amt 
+                })
+            else:
+                get_amount2 = 1.5001/100 * req2
+                amt_2 = req2 + get_amount2
+                final_amt2 = int(amt_2 * 100)
+                payload =json.dumps ({
+                    'email': request.user.email,
+                    'amount': final_amt2 
+                })
 
             headers = { 
             "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
@@ -272,10 +453,22 @@ def Initialize_requestForm(request, user):
 
         else:
             url = "https://api.paystack.co/transaction/initialize"
-            payload =json.dumps ({
-                'email': request.user.email,
-                'amount': '100000', 
-            })
+            if req2 >= 2500:
+                get_amount = 1.50/100 * req2 + 100
+                amt = req2 + get_amount
+                final_amt = int(amt * 100)
+                payload =json.dumps ({
+                    'email': request.user.email,
+                    'amount': final_amt 
+                })
+            else:
+                get_amount2 = 1.50/100 * req2
+                amt_2 = req2 + get_amount2
+                final_amt2 = int(amt_2 * 100)
+                payload =json.dumps ({
+                    'email': request.user.email,
+                    'amount': final_amt2 
+                })
 
             headers = { 
             "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
@@ -299,9 +492,6 @@ def Initialize_requestForm(request, user):
         )
     link = initialized['data']['authorization_url']
     return HttpResponseRedirect(link)
-    
-    messages.success(request, f'Your Payment Is Successful')
-    return render(request, 'users/requestForm.html')
     
 #Success Page
 @login_required(login_url='login')
@@ -943,11 +1133,11 @@ def updateRequestForm(request, pk):
                 )
                 messages.success(request, f'You just updated a customer satus to delivered')
 
-            return redirect('adminDashboard')
+            return redirect('e-request')
     context = {'o_form': o_form,
               'customer':customer 
               }
-    return render(request, 'users/requestForm.html', context)
+    return render(request, 'users/adminUpdateCard.html', context)
 
 #Update Request Cash
 @login_required(login_url='login')
@@ -977,11 +1167,11 @@ def updateRequestFormCash(request, pk):
                 )
                 messages.success(request, f'You just updated a customer satus to delivered')
 
-            return redirect('adminDashboard')
+            return redirect('cash-request')
     context = {'c_form': c_form,
             'customer':customer
              }
-    return render(request, 'users/requestForm_Cash.html', context)
+    return render(request, 'users/adminUpdateCash.html', context)
 
 
 #Update Request Shopping
@@ -1011,10 +1201,10 @@ def updateRequestFormShopping(request, pk):
                 )
                 messages.success(request, f'You just updated a customer satus to delivered')
 
-            return redirect('adminDashboard')
+            return redirect('shopping-request')
     context = {'s_form': s_form,
               'customer':customer }
-    return render(request, 'users/shopping.html', context)
+    return render(request, 'users/adminUpdateShop.html', context)
 
 
 #Delete Request
@@ -1031,7 +1221,7 @@ def deleteRequestForm(request, pk):
             obj = o_form.save(commit=False)
             by_user = request.user
             obj.save()
-            return redirect('adminDashboard')
+            return redirect('e-request')
             messages.success(f'You just deleted {obj.customer} order')
     context = {'o_form': o_form}
     return render(request, 'users/requestForm.html', context)
@@ -1055,7 +1245,7 @@ def cancelRequestCash(request, pk):
     if request.method == "POST":
         r_request2.delete()
         messages.success(request, f'You just deleted an order')
-        return redirect('adminDashboard')
+        return redirect('cash-request')
     context = {
         'item2':r_request2
     }
@@ -1069,7 +1259,7 @@ def cancelRequestShopping(request, pk):
     if request.method == "POST":
         r_request3.delete()
         messages.success(request, f'You just deleted an order')
-        return redirect('adminDashboard')
+        return redirect('shopping-request')
     context = {
         'item3':r_request3
     }
@@ -1148,3 +1338,28 @@ def adminNotificationDelete(request, pk):
     cust1.viewed = True
     cust1.save()
     return redirect('adminNotificationShow')
+
+
+def fuel_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        fuel_form = Fuel_errand(request.POST)
+        if fuel_form.is_valid():
+            instance = fuel_form.save(commit=False)
+            instance.customer = customer
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Errand request is successful')
+            
+            checking_amt_payable = ''
+
+            updating_amt_payable = customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = instance.fuel_per_amount)
+
+            chk_payment_type = customer.errand_service_set.filter(pk = instance.id).filter(payment_channel = 'Card')
+            if chk_payment_type:
+                url = "https://api.paystack.co/transaction/initialize"
+
+    

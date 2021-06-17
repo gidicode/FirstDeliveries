@@ -27,7 +27,7 @@ SECRET_KEY = '2u0mu_b=7%76tif8&_sx#mu+m@g!j5o3kvm2qeo+3$2^!1g7i-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '2035db4f2ee4.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'e52ba68e3d25.ngrok.io']
 
 
 # Application definition
@@ -160,7 +160,7 @@ EMAIL_USE_TLS = True
 
 
 HASHIDS_SALT = "HdfF342RkL89uUoNsS6Yy8Pc"
-HASHID_FIELD_SALT = "ac748295efghi6b01d3"
+HASHID_FIELD_SALT = "ac743a4f4877dcd2b205c78bb8c28295efghi6b01d3"
 
 PAYSTACK_PUBLIC_KEY = 'pk_test_3d14df0e542eeff499eca1f35dd563d3885e9a2d'
 PAYSTACK_SCRET_KEY = 'sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec'
@@ -169,5 +169,12 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
-
 API_KEY = '65afd942ebf219293a4f4877dcd2b205c78bb8c2'
+TOKENID= '9944ED5D44E64014B84A22A6FA5BEA10-02-5'
+TOKENSECRET= 'sMjrbYJPPRbNpfvrccW1#EydjigFv'
+
+HASH = HASHID_FIELD_SALT[0:10] + API_KEY[10:]
+
+HASHANON = HASHID_FIELD_SALT[10] + API_KEY[:20]
+
+ERRAND = PAYSTACK_PUBLIC_KEY[:6]

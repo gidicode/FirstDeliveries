@@ -1,7 +1,7 @@
 {% extends "FDS_app/dashBase.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Request Dispatch(Cash) - FDLS {% endblock title %}
+{% block title %} Request Dispatch(Cash){% endblock title %}
 
 {% block content2 %}
 <div class="pb-5">
@@ -9,7 +9,7 @@
         <div class="col-md-4"></div>
         <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
             <div class="shadow rounded-lg ">
-                <p class="text-dark rounded-top text-center p-2" style="background-color: rgb(255, 246, 234);">Fill the form to complete your request</p>
+                <p class="text-white font-weight-bold rounded-top text-center p-2" style="background-color: rgb(255, 185, 185);">Fill the form to complete your request</p>
                 <div class=" p-3">
                     <form method="POST" enctype="multipart/form-data"> 
                         {% csrf_token %}                    

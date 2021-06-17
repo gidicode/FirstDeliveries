@@ -3,7 +3,7 @@ from django import forms
 from django.forms import ModelForm, Textarea, fields
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import  Anonymous, Customer, MakeRequest, MakeRequestCash, ForPayments, Shopping
+from .models import  Anonymous, Customer, Errand_service, MakeRequest, MakeRequestCash, ForPayments, Shopping
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
@@ -64,7 +64,7 @@ class OrderForm(forms.ModelForm):
             ("loading", "Loading"),
             ( "off Loading", "Off Loading"),
     ]
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500), Tricycle(N1000), Van(negotiable) ")
     reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number', required = False,
                     min_length=11, widget= forms.TextInput)
     reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
@@ -79,25 +79,22 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = MakeRequest
         fields = '__all__'
-        exclude = ['customer', 'date_created', 'status', 'Amount', 'charge_id', 'paid', 'order_id', 'assigned', 'type']
+        exclude = ['customer', 'date_created', 'status', 'Amount', 'charge_id', 'paid', 'order_id', 'assigned', 'type', 'Amount_Payable']
 
 class adminform(forms.ModelForm): 
     class Meta:
         model = MakeRequest
-        fields = '__all__'
-        exclude = ['assigned']
+        fields = ['status']
 
 class adminformCash(forms.ModelForm): 
     class Meta:
         model = MakeRequestCash
-        fields = '__all__'
-        exclude = ['assigned']
+        fields = ['status', 'Amount_Paid', 'paid']
 
 class adminformShopping(forms.ModelForm): 
     class Meta:
         model = Shopping
-        fields = '__all__'
-        exclude = ['assigned']
+        fields = ['amount_paid', 'status', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded']
         
 class Request_Cash(forms.ModelForm):
     OPTIONS2 = [
@@ -110,7 +107,7 @@ class Request_Cash(forms.ModelForm):
             ( "off Loading", "Off Loading"),
     ]
 
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="PRICE RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="PRICE RANGE: Bike(N500), Tricycle(N1000), Van(negotiable) ")
     reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number', required = False,
                     min_length=11, widget= forms.TextInput)
     reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
@@ -125,7 +122,8 @@ class Request_Cash(forms.ModelForm):
     class Meta:
         model = MakeRequestCash
         fields = '__all__'
-        exclude = ['type', 'Amount_Paid', 'customer', 'date_created', 'status', 'paid',  'order_id', 'assigned', ]
+        exclude = ['type', 'Amount_Paid', 'customer', 'date_created', 'status', 'paid',  'order_id', 'assigned', 'Amount_Payable' ]
+
 
 class Shopping_Form(forms.ModelForm):
     OPTIONS2 = [
@@ -153,7 +151,7 @@ class AnonForm(forms.ModelForm):
             
     ]
 
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ")
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500), Tricycle(N1000), Van(negotiable) ")
     class Meta:
         model = Anonymous 
         fields = [ 'Package_description', 'Your_phone_number', 'Your_location', 'email', 'Choice_for_TP',  ]
@@ -164,3 +162,13 @@ class AdminAnonForm(forms.ModelForm):
         model = Anonymous
         fields = '__all__'
         exclude =['assigned']
+
+#
+#
+#Errand Service forms.
+
+class Fuel_errand(forms.ModelForm):
+
+    class Meta:
+        model = Errand_service
+        fields = ['fuel_per_amount', 'payment_channel', 'your_location']

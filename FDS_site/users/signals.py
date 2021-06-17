@@ -56,39 +56,36 @@ def adminNotificationShopping(sender, instance, created, **kwargs):
 def adminNotificationAnon(sender, instance, created, **kwargs):
     
     if created:
-        def SendSms():
-            username = 'gidis'
-            password = "1299211??Gidi"
-            url = "https://api.bulksms.com/v1/messages"
-            link = f'http://127.0.0.1:4433/search/?order_id={instance.order_id}'
-            sms_message = f"Your Request has been Created succesfully, visit link to check the status {link}"
-            number = '+2347067320119'
-            tokenid= '9944ED5D44E64014B84A22A6FA5BEA10-02-5'
-            token_secret= 'sMjrbYJPPRbNpfvrccW1#EydjigFv'
-            to_encode=tokenid + ":" + token_secret
-            message_bytes = to_encode.encode('ascii')
-            base64_bytes = base64.b64encode(message_bytes)
-            base64_message = base64_bytes.decode('ascii')
-            port = 443
+        #def SendSms():
+          #  url = "https://api.bulksms.com/v1/messages"
+           # link = f'http://127.0.0.1:4433/search/?order_id={instance.order_id}'
+            #sms_message = f"Your Request has been Created succesfully, visit link to check the status {link}"
+            #number = '+2347067320119'
+            #tokenid= settings.TOKENID
+            #token_secret= settings.TOKENSECRET
+            #to_encode=tokenid + ":" + token_secret
+            #message_bytes = to_encode.encode('ascii')
+            #base64_bytes = base64.b64encode(message_bytes)
+            #base64_message = base64_bytes.decode('ascii')
 
-            payload = {
-                'from':'Flls',
-                "to" : [number],
-                'body' : sms_message
+            #payload = {
+             #   'from':'Flls',
+              #  "to" : [number],
+               # 'body' : sms_message
                 
-                }
+                #}
             
-            header = {
-                'Authorization': 'Basic'+ " " + base64_message,
-                'Content-Type header':'application/json'
-                }
+            #header = {
+            #    'Authorization': 'Basic'+ " " + base64_message,
+            #    'Content-Type header':'application/json'
+            #    }
             
-            response = requests.post(url, headers=header, data=payload, )
-            print(response.text)
-            print(response)
-            result = response.json()
-            return result
-        SendSms()
+            #response = requests.post(url, headers=header, data=payload, )
+            #print(response.text)
+            #print(response)
+            #result = response.json()
+            #return result
+        #SendSms()
 
         my_email = 'usuugwo@gmail.com'
         email = instance.email

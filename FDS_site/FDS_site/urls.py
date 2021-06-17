@@ -27,9 +27,9 @@ urlpatterns = [
 
     path('register/', user_views.register, name='register'),
 
-    path('profileUpdate/<str:user>/', user_views.customerProfileUpdatePage, name='profileUpdate'),
+    path('profileUpdate/<hashid:user>/', user_views.customerProfileUpdatePage, name='profileUpdate'),
 
-    path('success/<hashid:user>/', user_views.successPage, name='success'),
+    path('success/<str:user>/', user_views.successPage, name='success'),
 
     path('requestForm_Online/<hashid:user>/',  user_views.requestForm_Online, name='requestForm_Online'),
 

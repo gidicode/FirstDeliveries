@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.conf import settings
 from users.models import Customer, adminNotification, Anonymous
 from users.forms import  AnonForm
 from django.contrib import messages
-from hashid_field import Hashid
+from hashids import Hashids
 from django.db.models import Q
 
 # Create your views here.
@@ -14,8 +14,9 @@ def index(request):
         if c_form.is_valid():
             instance = c_form.save(commit=False)
             instance.save()
-        
-            h = Hashid(instance.id)
+
+            hashids = Hashids(salt= settings.HASHANON, min_length=7)
+            h= hashids.encode(instance.id)
             Anonymous.objects.filter(pk = instance.id).update(order_id= h)
             adminNotification.objects.create(
                 item_created = instance,

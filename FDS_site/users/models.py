@@ -64,6 +64,11 @@ class MakeRequest(models.Model):
 
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
+    LOCATION = {
+        ('CALABAR-SOUTH', 'CALABAR-SOUTH'),
+        ('CALABAR-MUNICIPAL', 'CALABAR-MUNICIPAL')
+    }
+
     customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
     type = models.CharField(max_length=50, choices=Typeof, default='Single', null=True)
     reciever_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Reciever Name")
@@ -93,18 +98,16 @@ class MakeRequest(models.Model):
     reciever_phone_number3 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(3)", )
     reciever_phone_number4 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(4)", )
     reciever_phone_number5 = models.CharField(validators=[phone_regex], max_length=17, blank=True, verbose_name="Reciever Number(5)", )
-    
 
     date_created = models.DateTimeField(default=timezone.now, null=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
     Loading_choice = models.CharField(max_length=100, null=True)
     Amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Amount_Payable = models.IntegerField(null= True, default=0, )
     charge_id = models.CharField(max_length=100, null=True, validators=[alphanumeric])
     paid = models.BooleanField(default=False)
     order_id= models.CharField(max_length=10, null=True, default=0)
     assigned = models.BooleanField(default=False)
-    
-    
 
     def __str__(self):
         return f'Customer:{self.customer}, Order ID:{self.order_id}'
@@ -172,6 +175,7 @@ class MakeRequestCash(models.Model):
     Loading_choice = models.CharField(max_length=100, null=True)
     paid = models.BooleanField(default=False)
     Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Amount_Payable = models.IntegerField(null= True, default=0, )
     order_id= models.CharField(max_length=10, null=True, default=0)
     assigned = models.BooleanField(default=False)
 
@@ -207,6 +211,7 @@ class Anonymous(models.Model):
     paid = models.BooleanField(default=False)
     email = models.EmailField(max_length=100, null=True)
     Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Amount_Payable = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     order_id= models.CharField(max_length=10, null=True, default=0)
     receiver_name = models.CharField(null=True, max_length=100, default = "Not Given" )
     receiver_address = models.CharField(null=True, max_length=100, default = "Not Given")
@@ -259,6 +264,57 @@ class Shopping(models.Model):
     class Meta:
         ordering = ('-date_created',)
 
+class Errand_service(models.Model):
+    category_choice = {
+        ('Fuel', 'Fuel'),
+        ('Bread', 'Bread'),
+        ('Drugs', 'Drugs'),
+        ('Gas', 'Gas'),
+        ('Shawarma', 'Shawarma'),
+        ('Pizza', 'Pizza'),
+        ('Ice Cream', 'Ice Cream'),
+        ('Fruits', 'Fruits'),
+    }
+    payment_choice = {
+        ('Cash', 'Cash'),
+        ('Card', 'Card')
+    }
+    Shawarma_type={
+        ('Chicken', 'Chicken'),
+        ('Beef', 'Beef'), 
+        ('Special', 'Special'),
+    }
+
+    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+    category = models.CharField(max_length = 100, null=True, choices=category_choice)
+    fuel_per_amount = models.IntegerField(null=True, verbose_name='Petrol Amount', help_text='25Ltrs max per order (N163/ltr, N4075-25ltrs')
+    payment_channel = models.CharField(max_length=100, choices=payment_choice, null=True, verbose_name='Payment Choice')
+    Bread_brand_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='Bread Name')
+    Quantity = models.CharField(max_length=100, null=True, blank=True)
+    description = models.CharField(max_length=100, null=True, blank=True)
+    Enter_amount = models.IntegerField(null=True, verbose_name='Amount', help_text='Cost to purchase items')
+    Drug_store = models.CharField(max_length = 100, null=True, blank=True)
+    Drug_name = models.CharField(max_length = 200, null=True, help_text='Must be an over the counter drug')
+    Gas_Quantity = models.CharField(max_length=20, null=True, help_text='Kg Amount of Gas you want reffilled')
+    Shawarma_store = models.CharField(max_length=100, null=True, blank=True,)
+    Shawarma_desc = models.CharField(max_length=100, null=True, choices=Shawarma_type, verbose_name='Preference')
+    pizza_store = models.CharField(max_length=100, null=True, verbose_name='Place of Purchase')
+    Pizza_desc = models.CharField(max_length=100, null=True, verbose_name='Type of Pizza')
+    ice_Cream_desc = models.CharField(max_length=100, null=True, verbose_name='Ice Cream Description')
+    ice_Cream_store = models.CharField(max_length=100, null=True)
+    fruits_description = models.CharField(max_length=100, null=True)
+    fruits_purchase_store = models.CharField(max_length=100, null=True, blank=True, verbose_name='Purchase Location')
+    your_location = models.CharField(max_length=100, null=True, blank=True)
+    order_id = models.CharField(max_length=7, null=True)
+    Ps_reference = models.CharField(max_length=10, null=True, )
+    date_created = models.DateTimeField(default=timezone.now, null=True)
+    assigned = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
+    Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Amount_Payable = models.IntegerField(null= True, default=0, )
+
+    def __str__(self):
+        return f' Customer:{self.customer}, Order ID:{self.order_id}, Category:{self.category}'
 
 class ForPayments(models.Model):
     OPTION2 = {

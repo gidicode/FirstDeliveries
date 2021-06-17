@@ -1,0 +1,42 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Update Request(Cash){% endblock title %}
+
+{% block content2 %}
+<div class="pb-5">
+    <div class="row p-3 ">
+        <div class="col-md-4"></div>
+        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="shadow rounded-lg ">
+                <p class="text-dark rounded-top text-center p-2" style="background-color: rgb(150, 197, 219);">Update Form</p>
+                <div class=" p-3">
+                    <form method="POST" enctype="multipart/form-data"> 
+                        {% csrf_token %}                    
+                        
+                        <div class="form-row">
+                            <div class="col">
+                                {{ c_form.status|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ c_form.Amount_Paid|as_crispy_field }}
+                                
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col">
+                                {{ c_form.paid|as_crispy_field }}
+                            </div> 
+                        </div> 
+
+                        
+                        <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+{% endblock content2 %}

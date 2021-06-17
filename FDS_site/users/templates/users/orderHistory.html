@@ -7,38 +7,11 @@
 {% block content2 %}
 <br>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2"></div>
-
-        <div class="col-md-4">
-            <div class="card card-body shadow bg p-3 mb-5 bg-white rounded " style="text-align:left; padding: 10px;">
-                <div style="text-align:center; padding: 10px;">
-                    <h4> Total Order (E-Payments)</h4>
-                    <h2> <span class="badge badge-dark shadow">{{request_count}}</span></h2>
-                    <span class="sr-only">Total Count</span>
-                </div>  
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card card-body shadow bg p-3 mb-5 bg-white rounded " style="text-align:left; padding: 10px;">
-                <div style="text-align:center; padding: 10px;">
-                    <h4> Total Order (CashPayments)</h4>
-                    <h2> <span class="badge badge-dark shadow">{{request2_count}}</span></h2>
-                </div>  
-            </div>
-        </div>
-
-        <div class="col-md-2"></div>
-    </div>
-</div>
- 
-
 <div class="container">
     <div class="row">
         <div class="col-md-2 p-4"></div>
             <div class="col-md-8"> 
-                <div class="btn btn-light rounded shadow pr-4 p-3">
+                <div class="shadow pr-4 p-3">
                     <form class="form-inline my-3 mx-4 my-lg-1 bd-highlight font-weight-bold text-dark">   
                         {{myFilter.form|crispy }}
                         <button class="btn btn-outline-secondary my-sm-2" type="submit">Search</button>
@@ -53,9 +26,9 @@
 <div class="container">
     <div class="row"> 
         <div class="col-md-4 p-3"> 
-            <div class=" bg bg-primary shadow-sm rounded">
+            <div class=" shadow-sm rounded-top" style="background-color: rgb(35, 124, 160);">
                 <div> 
-                    <h5 class="text-white p-4">Total Request (E-payment)</h5> 
+                    <h5 class="text-white p-4" style="font-family: 'Archivo Black', sans-serif;" >E-payment Request</h5> 
                 </div>
                 {% for i in request1 %}
                 <div class="bg bg-white shadow p-3">
@@ -70,7 +43,7 @@
                     <li class="list-inline-item"><strong>Status: </strong> {{i.status}}</li> 
                     <li class="list-inline-item"><strong>Paid:</strong> {{i.paid}}</li>
                     <li class="list-inline-item"><strong>Delivery Amount:</strong> {{i.Amount}}</li>
-                    <li class="list-inline-item"><strong> Order ID:</strong> {{i.order_id}}</li>
+                    <li class="list-inline-item"><strong> Reference ID:</strong> {{i.order_id}}</li>
                 </ul>
                 </div>
                 <br>
@@ -79,8 +52,8 @@
         </div>
 
         <div class="col-md-4 p-3">
-            <div class=" bg bg-danger">
-                <h5 class="text-white p4 text-center p-4">Shopping History </h5>
+            <div class="" style="background-color: rgb(53, 198, 255);">
+                <h5 class="text-white text-center p-4" style="font-family: 'Archivo Black', sans-serif;">Shopping History </h5>
                 <p class="text-white "></p> 
                 
                 {% for i in shop_request %}
@@ -110,8 +83,8 @@
             <div class="col-md-4 p-3">
                 
                     
-                    <div class=" bg bg-dark">
-                        <h5 class="text-white p-4"> Total Request (cash-payment)</h5>
+                    <div class="" style="background-color: rgb(39, 161, 170);">
+                        <h5 class="text-white p-4 font-weight-bolder" style="font-family: 'Archivo Black', sans-serif;"> Cash Payment Request</h5>
                         {% for i in request2 %}
                             <div class=" bg bg-light bg-gradient shadow p-3">
                             <ul class="list-inline">
