@@ -1,0 +1,59 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Fuel Errand{% endblock title%}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row p-4 ">
+        <div class="col-md-4">
+            {% if messages %}
+            <div class="messages p-3 container align-self-center">
+                {% for message in messages %}
+                <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 p-1">
+            <div  id="fuel"> 
+                <div class="d-flex flex-row bd-highlight justify-content-between">
+                    <div class=" bd-highlight">
+                        <h5 class="font-weight-bold">Drugs Errand </h5>
+                    </div>
+                    <div class=" bd-highlight">
+                        <h4> N</h4>
+                    </div>   
+                </div>
+                <small>
+                    The total amount is the amount given plus our delivery fee of N500
+                </small>
+            </div>
+            <div class="bg-white shadow p-3">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}  
+                    {{ drugs_form|crispy }}
+                    <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>
+                </form>
+            </div>
+            
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+<style>
+    #fuel {
+        background-color: crimson;
+        padding: 15px;
+        color: rgb(255, 255, 255);
+        border-start-end-radius: 20px;
+        border-start-start-radius: 20px;
+    }
+</style>
+{% endblock %}

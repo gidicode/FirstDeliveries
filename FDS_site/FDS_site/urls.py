@@ -71,6 +71,18 @@ urlpatterns = [
     path('adminNotificationShow/', user_views.adminNotificationShow, name='adminNotificationShow'),
     path('adminNotificationDelete/<hashid:pk>/', user_views.adminNotificationDelete, name='adminNotificationDelete'),
 
+    path('Errand_Menu/<hashid:user>/', user_views.ErrandMenu, name='errandmenu'),
+    path('Fuel_Errand/<hashid:user>/', user_views.fuel_errand, name='fuelerrand'),
+    path('Gas_Errand/<hashid:user>/', user_views.gas_errand, name='gaserrand'),
+    path('Drugs_Errand/<hashid:user>/', user_views.drugs_errand, name='drugserrand'),
+    path('Bread_Errand/<hashid:user>/', user_views.bread_errand, name='breaderrand'),
+    path('Shawarma_Errand/<hashid:user>/', user_views.shawarma_errand, name='shawarmaerrand'),
+    path('Pizza_Errand/<hashid:user>/', user_views.pizza_errand, name='pizzaerrand'),
+    path('Fruits_Errand/<hashid:user>/', user_views.fruits_errand, name='fruitserrand'),
+    path('Icecream_Errand/<hashid:user>/', user_views.icecream_errand, name='icecreamerrand'),
+    path('Food_Errand/<hashid:user>/', user_views.food_errand, name='fooderrand'),
+    path('Other_Errand/<hashid:user>/', user_views.other_errand, name='othererrand'),
+
 
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),

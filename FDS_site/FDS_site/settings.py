@@ -27,7 +27,7 @@ SECRET_KEY = '2u0mu_b=7%76tif8&_sx#mu+m@g!j5o3kvm2qeo+3$2^!1g7i-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'e52ba68e3d25.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', '60701b06edb8.ngrok.io']
 
 
 # Application definition
@@ -134,12 +134,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = 'login'

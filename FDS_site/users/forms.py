@@ -1,6 +1,7 @@
 from re import template
 from django import forms
-from django.forms import ModelForm, Textarea, fields
+from django.contrib.auth import models
+from django.forms import ModelForm, Textarea, fields, widgets
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import  Anonymous, Customer, Errand_service, MakeRequest, MakeRequestCash, ForPayments, Shopping
@@ -168,7 +169,76 @@ class AdminAnonForm(forms.ModelForm):
 #Errand Service forms.
 
 class Fuel_errand(forms.ModelForm):
-
     class Meta:
         model = Errand_service
         fields = ['fuel_per_amount', 'payment_channel', 'your_location']
+
+
+class Gas_errand(forms.ModelForm):
+
+    class Meta:
+        model = Errand_service
+        fields = ['Gas_Quantity', 'payment_channel', 'your_location']
+
+
+
+def chk_drug(value):
+    illegal_drugs = [
+                    'Codeine', 'Rohypnol', 'GHB', 
+                    'ghb', 'Ghb', 'Ketamine', 'ketamine', 
+                    'methamphetamine', ' heroin', 'diazepam', 
+                    'cough syrup', 'tramadol', 'MDMA', 
+                    'ectasy', 'Ectasy' 'Lysergic acid diethylamide'
+                    'LSD', 'Valium', 'morphine', 'Fentanyl', 'Ritalin',
+                    'Oxymorphon', 'oxymorphon', 'Adderal'
+                    ]
+    if value in illegal_drugs:
+        raise ValidationError((f'{value} falls under the drug abuse category and we cant purchase it.'), params= {'value':value})
+
+class Drugs_errand(forms.ModelForm):
+    Drug_name = forms.CharField(widget=forms.Textarea(attrs={'placeholder':"Enter list of specified drugs", 'row':3}), validators= [chk_drug],  )
+    class Meta:
+
+        model = Errand_service
+        fields = ['Drug_store', 'Drug_name', 'medical_prescription', 'Enter_amount', 'payment_channel', 'your_location']
+
+class Bread_errand(forms.ModelForm):
+    class Meta:
+
+        model = Errand_service
+        fields = ['Bread_brand_name', 'Quantity', 'description', 'Enter_amount', 'payment_channel', 'your_location']
+
+class Shawarma_errand(forms.ModelForm):
+    class Meta:
+
+        model = Errand_service
+        fields = ['Shawarma_store', 'Shawarma_desc', 'description', 'Quantity',  'Enter_amount', 'payment_channel', 'your_location']
+
+class Pizza_errand(forms.ModelForm):
+    class Meta:
+
+        model = Errand_service
+        fields = ['pizza_store', 'Pizza_desc', 'description', 'Quantity',  'Enter_amount', 'payment_channel', 'your_location']
+
+class Fruits_errand(forms.ModelForm):
+    class Meta:
+        fruits_description = forms.CharField(widget=forms.Textarea(attrs={'placeholder':"Name of fruit and the quantity", 'row':2}))
+        model = Errand_service
+        fields = [ 'fruits_purchase_store', 'fruits_description', 'Enter_amount', 'payment_channel', 'your_location']
+
+class Icecream_errand(forms.ModelForm):
+    class Meta:
+        model = Errand_service
+        fields = [ 'ice_Cream_store', 'ice_Cream_desc', 'Enter_amount', 'payment_channel', 'your_location']
+
+class Food_errand(forms.ModelForm):
+    Food_description = forms.CharField(widget=forms.Textarea(attrs={'placeholder':"Food: description; Quantity(plate)", 'row':2}))
+    class Meta:
+        model = Errand_service
+        fields = [ 'Food_Vendor', 'Food_description', 'description', 'Enter_amount', 'payment_channel', 'your_location']
+
+class Other_errand(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder':"Item description and specifications", 'row':2}))
+    class Meta:
+        model = Errand_service
+        fields = [ 'description', 'Quantity', 'Enter_amount', 'payment_channel', 'your_location']

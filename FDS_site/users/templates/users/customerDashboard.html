@@ -29,7 +29,7 @@
             </div>
 
             <div class="p-2  bd-highlight">
-              <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="" role="button">Quick Request</a>
+              <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a>
             </div>
             <div class="p-2 bd-highlight">
               <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'requestForm_Cash' user.id %}" role="button">Request Dispatch</a>
