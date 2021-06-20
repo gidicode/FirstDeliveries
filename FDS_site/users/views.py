@@ -1,3 +1,4 @@
+import re
 from typing import final
 from django.db.models.expressions import F
 from django.shortcuts import render, redirect
@@ -79,6 +80,9 @@ def customerProfileUpdatePage(request, user):
     }
 
     return render(request, 'users/customer_profile.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Fleet Mnager'])
 
 # Cash Request
 @login_required(login_url='login')
@@ -1339,6 +1343,9 @@ def adminNotificationDelete(request, pk):
     cust1.save()
     return redirect('adminNotificationShow')
 
+def ErrandMenu(request, user):
+
+    return render(request, 'users/ErrandService.html')
 
 def fuel_errand(request, user):
     customer = Customer.objects.get(user = request.user)
@@ -1347,19 +1354,799 @@ def fuel_errand(request, user):
         if fuel_form.is_valid():
             instance = fuel_form.save(commit=False)
             instance.customer = customer
+            instance.category = 'Fuel'
             instance.save()
         
             hashids = Hashids(salt = settings.ERRAND, min_length=7)
             h = hashids.encode(instance.id)
             customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
-            messages.success(request, f'Your Errand request is successful')
+            messages.success(request, f'Your Fuel Errand request has been recieved')
             
-            checking_amt_payable = ''
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
 
-            updating_amt_payable = customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = instance.fuel_per_amount)
+            summing_amt_payable = instance.fuel_per_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
 
-            chk_payment_type = customer.errand_service_set.filter(pk = instance.id).filter(payment_channel = 'Card')
-            if chk_payment_type:
-                url = "https://api.paystack.co/transaction/initialize"
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+            print(chk_card)
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update2 = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update2}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
 
-    
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        fuel_form = Fuel_errand(instance = customer) 
+
+    context = {
+        'fuel_form':fuel_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Fuelerrand.html', context)
+
+def gas_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        gas_form = Gas_errand(request.POST)
+        if gas_form.is_valid():
+            instance = gas_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Gas'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Gas Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Gas_Quantity * 460 + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        gas_form = Gas_errand(instance = customer) 
+
+    context = {
+        'gas_form':gas_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Gaserrand.html', context)
+            
+def drugs_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        drugs_form = Drugs_errand(request.POST, request.FILES)
+        if drugs_form.is_valid():
+            instance = drugs_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Drugs'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Drugs Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Enter_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        drugs_form = Drugs_errand(instance = customer) 
+
+    context = {
+        'drugs_form':drugs_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Drugserrand.html', context)
+
+def bread_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        bread_form = Bread_errand(request.POST)
+        if bread_form.is_valid():
+            instance = bread_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Bread'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Bread Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Enter_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)      
+    else:
+        bread_form = Bread_errand(instance=customer) 
+
+    context = {
+        'bread_form':bread_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Breaderrand.html', context)
+
+
+def shawarma_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        shawarma_form = Bread_errand(request.POST)
+        if shawarma_form.is_valid():
+            instance = shawarma_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Shawarma'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Shawarma Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Enter_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (fuel + delivery) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        shawarma_form = Shawarma_errand(instance = customer) 
+
+    context = {
+        'shawarma_form':shawarma_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Shawarmaerrand.html', context)
+
+def pizza_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        pizza_form = Pizza_errand(request.POST)
+        if pizza_form.is_valid():
+            instance = pizza_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Pizza'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Pizza Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Enter_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        pizza_form = Pizza_errand(instance = customer) 
+
+    context = {
+        'pizza_form':pizza_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Pizzaerrand.html', context)
+
+def fruits_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        fruits_form = Fruits_errand(request.POST)
+        if fruits_form.is_valid():
+            instance  = fruits_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Fruits'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Fruits Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Enter_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        fruits_form = Fruits_errand(instance = customer) 
+
+    context = {
+        'fruits_form':fruits_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Fruitserrand.html', context)
+
+
+def icecream_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        icecream_form = Icecream_errand(request.POST)
+        if icecream_form.is_valid():
+            instance = icecream_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Ice Cream'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Ice cream Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Enter_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        icecream_form = Icecream_errand(instance = customer) 
+
+    context = {
+        'icecream_form':icecream_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Icecreamerrand.html', context)
+
+def food_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        food_form = Food_errand(request.POST)
+        if food_form.is_valid():
+            instance = food_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Food'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Food Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Enter_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        food_form = Food_errand(instance = customer) 
+
+    context = {
+        'food_form':food_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Fooderrand.html', context)
+
+
+def other_errand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == 'POST':
+        general_form = Other_errand(request.POST)
+        if general_form.is_valid():
+            instance = general_form.save(commit=False)
+            instance.customer = customer
+            instance.category = 'Other'
+            instance.save()
+        
+            hashids = Hashids(salt = settings.ERRAND, min_length=7)
+            h = hashids.encode(instance.id)
+            customer.errand_service_set.filter(pk = instance.id).update(order_id = h)
+            messages.success(request, f'Your Errand request has been recieved')
+            
+            adminNotification.objects.create(
+                customer = instance.customer,
+                item_created = instance,
+                order_id = h
+            )
+
+            summing_amt_payable = instance.Enter_amount + 500
+            customer.errand_service_set.filter(pk = instance.id).update(Amount_Payable = summing_amt_payable)
+
+            #initalize payment
+            chk_payment_type = customer.errand_service_set.get(pk = instance.id)
+            chk_card = chk_payment_type.payment_channel
+         
+            req = chk_payment_type.Amount_Payable 
+            if chk_card == 'Card':
+                def initialize_fuel_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    if req >= 2500:
+                        get_amount = 1.5001/100 * req + 100
+                        amt = req + get_amount
+                        final_amount = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amount
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    else:
+                        get_amount = 1.5001/100 * req
+                        amt = req + get_amount
+                        final_amt = int(amt * 100)
+                        payload = json.dumps({
+                            'email': request.user.email,
+                            'amount': final_amt,
+                        })
+                        amount_for_update = int(amt)
+                        messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
+                    headers = {
+                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        'Content-Type': 'application/json'
+                    }
+
+                    r = requests.request('POST', url, headers=headers, data=payload)
+
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+                initialized =initialize_fuel_payment(request, user)
+                customer.errand_service_set.filter(pk=instance.id).update(Ps_reference = initialized['data']['reference'])
+                link = initialized['data']['authorization_url']
+                return HttpResponseRedirect(link)  
+            else:
+                messages.success(request, f'Your Total Fee (item cost + delivery fee) is {req}') 
+                return redirect('dashboard', user =user)
+                    
+    else:
+        general_form = Other_errand(instance = customer) 
+
+    context = {
+        'general_form':general_form,
+        'customer':customer,
+    }
+    return render(request, 'users/Othererrand.html', context)
+

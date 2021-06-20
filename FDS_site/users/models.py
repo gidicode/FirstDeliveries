@@ -265,6 +265,13 @@ class Shopping(models.Model):
         ordering = ('-date_created',)
 
 class Errand_service(models.Model):
+    STATUS = {
+        ('Pending', 'Pending'),
+        ('Purchase in Process', 'Purchase in Process'), 
+        ('On Route for Delivery', 'On route for Delivery'),
+        ('Delivered', 'Delivered')
+    }
+
     category_choice = {
         ('Fuel', 'Fuel'),
         ('Bread', 'Bread'),
@@ -274,6 +281,8 @@ class Errand_service(models.Model):
         ('Pizza', 'Pizza'),
         ('Ice Cream', 'Ice Cream'),
         ('Fruits', 'Fruits'),
+        ('Food', 'Food'),
+        ('Others', 'Others'),
     }
     payment_choice = {
         ('Cash', 'Cash'),
@@ -291,11 +300,11 @@ class Errand_service(models.Model):
     payment_channel = models.CharField(max_length=100, choices=payment_choice, null=True, verbose_name='Payment Choice')
     Bread_brand_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='Bread Name')
     Quantity = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=100, null=True, blank=True)
+    description = models.CharField(max_length=100, null=True, blank=True, help_text="Further description")
     Enter_amount = models.IntegerField(null=True, verbose_name='Amount', help_text='Cost to purchase items')
-    Drug_store = models.CharField(max_length = 100, null=True, blank=True)
+    Drug_store = models.CharField(max_length = 100, null= True, verbose_name="Pharmacy Name", help_text="Write 'None' if none")
     Drug_name = models.CharField(max_length = 200, null=True, help_text='Must be an over the counter drug')
-    Gas_Quantity = models.CharField(max_length=20, null=True, help_text='Kg Amount of Gas you want reffilled')
+    Gas_Quantity = models.IntegerField(null=True, help_text='Enter the quantity of gas you want refilled (1-12kg)')
     Shawarma_store = models.CharField(max_length=100, null=True, blank=True,)
     Shawarma_desc = models.CharField(max_length=100, null=True, choices=Shawarma_type, verbose_name='Preference')
     pizza_store = models.CharField(max_length=100, null=True, verbose_name='Place of Purchase')
@@ -304,6 +313,9 @@ class Errand_service(models.Model):
     ice_Cream_store = models.CharField(max_length=100, null=True)
     fruits_description = models.CharField(max_length=100, null=True)
     fruits_purchase_store = models.CharField(max_length=100, null=True, blank=True, verbose_name='Purchase Location')
+    medical_prescription = models.FileField(upload_to='medical_presciption', default= "default.jpg", null=True, blank=True, help_text='Alternatively upload precription')
+    Food_Vendor = models.CharField(max_length=100, null=True, )
+    Food_description = models.CharField(max_length=200, null=True)
     your_location = models.CharField(max_length=100, null=True, blank=True)
     order_id = models.CharField(max_length=7, null=True)
     Ps_reference = models.CharField(max_length=10, null=True, )
@@ -312,9 +324,48 @@ class Errand_service(models.Model):
     paid = models.BooleanField(default=False)
     Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     Amount_Payable = models.IntegerField(null= True, default=0, )
+    status = models.CharField(max_length=100, choices=STATUS, default='Pending', null=True)
 
     def __str__(self):
         return f' Customer:{self.customer}, Order ID:{self.order_id}, Category:{self.category}'
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs) 
+
+        img = Image.open(self.medical_prescription.path)
+
+        if img.height > 500 or img.width > 500:
+            output_size = (500, 500)
+            img.thumbnail(output_size)
+            img.save(self.medical_prescription.path)
+
+class Front_desk(models.Model): 
+    OPTIONS2 = [
+        ("Bike", "Bike"),
+        ( "Tricycle", "Tricycle (Keke)"),
+        ( "Van", "Van"),
+    ]
+
+    TYPE = [
+        ('single', 'single'),
+        ('multiple', 'multiple'),
+    ]
+    delivery_type = [
+        ('Pick & Drop', 'Pick & Drop')
+        ('Errand', 'Errand')
+    ]
+
+    customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
+    customer_name = models.CharField(max_length=100, null=True, blank=True)
+    item_description = models.CharField(max_length=200, null=True, blank=True)
+    customer_location = models.CharField(max_length=100, null=True, blank=True)
+    delivery_destination = models.CharField(max_length=200, null=True, blank=True)
+    Choice_for_TP = models.CharField(max_length=20, choices=OPTIONS2, null=True)
+    Delivery_type = models.CharField(max_length=20, choices=TYPE, null=True)
+    Quantity = models.IntegerField(null=True, blank=True)
+    Enter_amount = models.IntegerField(null=True, verbose_name='Amount', help_text='Cost to purchase items')
+    
+
 
 class ForPayments(models.Model):
     OPTION2 = {
