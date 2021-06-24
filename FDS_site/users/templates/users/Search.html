@@ -1,0 +1,213 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Search Result - FDLS {% endblock title %}
+
+{% block content %}
+<br>
+<div class="row order-3 p-3 bd-highlight">
+    <div class="col-md-4"></div>
+    <div class="col-lg-4">
+        <div class=" p-2 text-dark shadow rounded-lg ">
+        {% if query %}
+        
+            <ul>
+            {% for r in results %}
+            <h4>Anonymous Request</h4>
+                <li> Item Description: {{r.Package_description}}</li>
+                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
+                <li> Pickup location : {{ r.Your_location }}</li>
+                <li> Your Phone Number : {{r.Your_phone_number}}</li>
+                <li> Your Email : {{r.email}}</li>
+                <li> Reciever Name: {{r.reciever_name}}</li>
+                <li> Reciever Address: {{r.reciever_address}}</li>
+                <li> Reciever Number: {{r.reciever_contact}}</li>
+                <li> Date Created : {{r.date_created}}</li>
+
+                {% if r.status == 'Pending' %}
+                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
+
+                {% elif r.status == 'Out for delivery' %}
+                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
+                {% elif r.status == 'Delivered' %}
+                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
+                {% else%}
+                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+                {% endif %}
+                <li> Amount paid : N{{r.Amount_Paid}}</li>
+                <li> Reference Number : {{r.order_id}}</li>
+                <br>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+
+        {% if query %}
+            <ul>
+            {% for r in results2 %}
+            <h4>Errand Service Request</h4>
+                <li> Item Description: {{r.Package_description}}</li>
+                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
+                <li> Pickup location : {{ r.Your_location }}</li>
+                <li> Your Phone Number : {{r.Your_phone_number}}</li>
+                <li> Your Email : {{r.email}}</li>
+                <li> Reciever Name: {{r.reciever_name}}</li>
+                <li> Reciever Address: {{r.reciever_address}}</li>
+                <li> Reciever Number: {{r.reciever_contact}}</li>
+                <li> Date Created : {{r.date_created}}</li>
+
+                {% if r.status == 'Pending' %}
+                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
+
+                {% elif r.status == 'Out for delivery' %}
+                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
+                {% elif r.status == 'Delivered' %}
+                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
+                {% else%}
+                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+                {% endif %}
+                <li> Amount paid : N{{r.Amount_Paid}}</li>
+                <li> Reference Number : {{r.order_id}}</li>
+                <br>
+                
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if query %}
+            <ul>
+            {% for r in results3 %}
+            <h4>Shopping Request</h4>
+                <li> Item Description: {{r.Package_description}}</li>
+                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
+                <li> Pickup location : {{ r.Your_location }}</li>
+                <li> Your Phone Number : {{r.Your_phone_number}}</li>
+                <li> Your Email : {{r.email}}</li>
+                <li> Reciever Name: {{r.reciever_name}}</li>
+                <li> Reciever Address: {{r.reciever_address}}</li>
+                <li> Reciever Number: {{r.reciever_contact}}</li>
+                <li> Date Created : {{r.date_created}}</li>
+
+                {% if r.status == 'Pending' %}
+                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
+
+                {% elif r.status == 'Out for delivery' %}
+                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
+                {% elif r.status == 'Delivered' %}
+                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
+                {% else%}
+                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+                {% endif %}
+                <li> Amount paid : N{{r.Amount_Paid}}</li>
+                <li> Reference Number : {{r.order_id}}</li>
+                <br>
+               
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% if query %}
+            <ul>
+            {% for r in results4 %}
+            <h4>E-Request</h4>
+                <li> Item Description: {{r.Package_description}}</li>
+                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
+                <li> Pickup location : {{ r.Your_location }}</li>
+                <li> Your Phone Number : {{r.Your_phone_number}}</li>
+                <li> Your Email : {{r.email}}</li>
+                <li> Reciever Name: {{r.reciever_name}}</li>
+                <li> Reciever Address: {{r.reciever_address}}</li>
+                <li> Reciever Number: {{r.reciever_contact}}</li>
+                <li> Date Created : {{r.date_created}}</li>
+
+                {% if r.status == 'Pending' %}
+                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
+
+                {% elif r.status == 'Out for delivery' %}
+                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
+                {% elif r.status == 'Delivered' %}
+                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
+                {% else%}
+                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+                {% endif %}
+                <li> Amount paid : N{{r.Amount_Paid}}</li>
+                <li> Reference Number : {{r.order_id}}</li>
+                <br>
+                
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if query %}
+            <ul>
+            {% for r in results5 %}
+            <h4>Cash Request</h4>
+                <li> Item Description: {{r.Package_description}}</li>
+                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
+                <li> Pickup location : {{ r.Your_location }}</li>
+                <li> Your Phone Number : {{r.Your_phone_number}}</li>
+                <li> Your Email : {{r.email}}</li>
+                <li> Reciever Name: {{r.reciever_name}}</li>
+                <li> Reciever Address: {{r.reciever_address}}</li>
+                <li> Reciever Number: {{r.reciever_contact}}</li>
+                <li> Date Created : {{r.date_created}}</li>
+
+                {% if r.status == 'Pending' %}
+                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
+
+                {% elif r.status == 'Out for delivery' %}
+                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
+                {% elif r.status == 'Delivered' %}
+                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
+                {% else%}
+                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+                {% endif %}
+                <li> Amount paid : N{{r.Amount_Paid}}</li>
+                <li> Reference Number : {{r.order_id}}</li>
+                <br>
+                
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+
+        {% if query %}
+            <ul>
+            {% for r in results6 %}
+            <h4>Front desk Request</h4>
+                <li> Item Description: {{r.Package_description}}</li>
+                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
+                <li> Pickup location : {{ r.Your_location }}</li>
+                <li> Your Phone Number : {{r.Your_phone_number}}</li>
+                <li> Your Email : {{r.email}}</li>
+                <li> Reciever Name: {{r.reciever_name}}</li>
+                <li> Reciever Address: {{r.reciever_address}}</li>
+                <li> Reciever Number: {{r.reciever_contact}}</li>
+                <li> Date Created : {{r.date_created}}</li>
+
+                {% if r.status == 'Pending' %}
+                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
+
+                {% elif r.status == 'Out for delivery' %}
+                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
+                {% elif r.status == 'Delivered' %}
+                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
+                {% else%}
+                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+                {% endif %}
+                <li> Amount paid : N{{r.Amount_Paid}}</li>
+                <li> Reference Number : {{r.order_id}}</li>
+                <br>
+                
+                {% endfor %}
+            </ul>
+        {% endif %}
+        </div>
+
+    </div>
+    <div class="col-md-4"></div>
+
+</div>
+
+
+{% endblock content %}

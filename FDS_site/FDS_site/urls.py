@@ -83,6 +83,21 @@ urlpatterns = [
     path('Food_Errand/<hashid:user>/', user_views.food_errand, name='fooderrand'),
     path('Other_Errand/<hashid:user>/', user_views.other_errand, name='othererrand'),
 
+    path('Front_desk/<hashid:user>/', user_views.front_desk, name='frontdesk'),
+    path('Front_deskForm/<hashid:user>/', user_views.PickDrop, name='frontdeskform'),
+    path('Front_desk_Errand_Form/<hashid:user>/', user_views.FrontErrand, name='frontdeskerrand'),
+
+    path('FleetManager/<hashid:user>/', user_views.FleetManager, name='fleetManager'),
+
+    path('Cashier/<hashid:user>/', user_views.Cashier, name='cashier'),
+    path('CashierUpdateE/<hashid:pk>/', user_views.CashierUpdateE_RequestForm, name='cashierupdate_e'),
+    path('CashierUpdateCash/<hashid:pk>/', user_views.CashierUpdateCash_RequestForm, name='cashierupdate_c'),
+    path('CashierUpdateS/<hashid:pk>/', user_views.CashierUpdateShoppingForm, name='cashierupdate_s'),
+    path('CashierUpdateA/<hashid:pk>/', user_views.CashierUpdateAnonForm, name='cashierupdate_a'),
+    path('CashierUpdateErr/<hashid:pk>/', user_views.CashierUpdateErrandForm, name='cashierupdate_err'),
+    path('CashierUpdateF/<hashid:pk>/', user_views.CashierUpdateFrontForm, name='cashierupdate_f'),
+
+    path('SearchId/', user_views.Inhousesearch, name='searchid'),
 
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),

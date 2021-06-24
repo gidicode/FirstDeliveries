@@ -9,5 +9,5 @@ admin.site.register(Shopping)
 admin.site.register(Delivered) 
 admin.site.register(adminNotification) 
 admin.site.register(Anonymous) 
-admin.site.register(Errand_service) 
-
+admin.site.register(Errand_service)
+admin.site.register(Front_desk) 

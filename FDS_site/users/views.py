@@ -30,6 +30,8 @@ from django.core.paginator import Paginator
 
 import json
 
+from django.db.models import Q
+
 #Error 404 page
 def response_error_handler(request, exception = None):
     return render(request, 'users/404.html', status=404)
@@ -82,8 +84,332 @@ def customerProfileUpdatePage(request, user):
     return render(request, 'users/customer_profile.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Fleet Mnager'])
+@allowed_user(allowed_roles=['admin', 'Cashier_only'])
+def Cashier(request, user):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+    request5 = Errand_service.objects.all()
+    request6 = Front_desk.objects.all()
 
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    paginator1 = Paginator(request1, 10)
+    page_number1 = request.GET.get('page')
+    page_obj1 = paginator1.get_page(page_number1)
+
+    paginator2 = Paginator(request2, 10)
+    page_number2 = request.GET.get('page')
+    page_obj2 = paginator2.get_page(page_number2)
+
+    paginator3 = Paginator(request3, 10)
+    page_number3 = request.GET.get('page')
+    page_obj3 = paginator3.get_page(page_number3)
+    
+    paginator4 = Paginator(request4, 10)
+    page_number4 = request.GET.get('page')
+    page_obj4 = paginator4.get_page(page_number4)
+
+    paginator5 = Paginator(request5, 10)
+    page_number5 = request.GET.get('page')
+    page_obj5 = paginator5.get_page(page_number5)
+
+    paginator6 = Paginator(request6, 10)
+    page_number6 = request.GET.get('page')
+    page_obj6 = paginator6.get_page(page_number6)
+
+    #total amount through diff chanels
+    e_req = request1.aggregate(Sum('Amount_paid'))
+    e_cash = request2.aggregate(Sum('Amount_Paid'))
+    e_shop = request3.aggregate(Sum('Charge'))
+    e_anon = request4.aggregate(Sum('Amount_Paid'))
+    e_erra = request5.aggregate(Sum('profit'))
+    e_front = request6.aggregate(Sum('profit'))
+   
+    context = {
+        
+        'e_req':e_req,
+        'e_cash':e_cash,
+        'e_shop':e_shop,
+        'e_anon':e_anon,
+        'e_erra':e_erra,
+        'e_front':e_front,
+
+        'notify':notify,
+
+        'page_obj1':page_obj1,
+        'page_obj2':page_obj2,
+        'page_obj3':page_obj3,
+        'page_obj4':page_obj4,
+        'page_obj5':page_obj5,
+        'page_obj6':page_obj6,
+    }
+
+    return render(request, 'users/Cashier.html', context)
+
+#Fleet Manager page
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'fleet_manager_only'])
+def FleetManager(request, user):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+    request5 = Errand_service.objects.all()
+    request6 = Front_desk.objects.all()
+
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    chk_pen = request1.filter(status = 'Pending').count()
+    chk_pen2 = request2.filter(status = 'Pending').count()
+    chk_pen3 = request3.filter(status = 'Pending').count()
+    chk_pen4 = request4.filter(status = 'Pending').count()
+    chk_pen5 = request5.filter(status = 'Pending').count()
+    chk_pen6 = request6.filter(status = 'Pending').count()
+
+    chk_out = request1.filter(status = 'Out for delivery').count()
+    chk_out2 = request2.filter(status = 'Out for delivery').count()
+    chk_out3 = request3.filter(status = 'At the Mall').count()
+    chk_out4 = request4.filter(status = 'Out for delivery').count()
+    chk_out5 = request5.filter(status = 'On Route for Delivery').count()
+    chk_out5of5 = request5.filter(status = 'Purchase in Process').count()
+    chk_out6 = request6.filter(status = 'Out for delivery').count()
+
+      
+
+    paginator1 = Paginator(request1, 10)
+    page_number1 = request.GET.get('page')
+    page_obj1 = paginator1.get_page(page_number1)
+
+    paginator2 = Paginator(request2, 10)
+    page_number2 = request.GET.get('page')
+    page_obj2 = paginator2.get_page(page_number2)
+
+    paginator3 = Paginator(request3, 10)
+    page_number3 = request.GET.get('page')
+    page_obj3 = paginator3.get_page(page_number3)
+    
+    paginator4 = Paginator(request4, 10)
+    page_number4 = request.GET.get('page')
+    page_obj4 = paginator4.get_page(page_number4)
+
+    paginator5 = Paginator(request5, 10)
+    page_number5 = request.GET.get('page')
+    page_obj5 = paginator5.get_page(page_number5)
+
+    paginator6 = Paginator(request6, 10)
+    page_number6 = request.GET.get('page')
+    page_obj6 = paginator6.get_page(page_number6)
+
+    context = {
+        'notify':notify,
+
+        'chk_pen':chk_pen,
+        'chk_pen2':chk_pen2,
+        'chk_pen3':chk_pen3,
+        'chk_pen4':chk_pen4,
+        'chk_pen5':chk_pen5,
+        'chk_pen6':chk_pen6,
+        
+        'chk_out':chk_out,
+        'chk_out2':chk_out2,
+        'chk_out3':chk_out3,
+        'chk_out4':chk_out4,
+        'chk_out5':chk_out5,
+        'chk_out5of5':chk_out5of5,
+        'chk_out6':chk_out6,
+
+        'page_obj1':page_obj1,
+        'page_obj2':page_obj2,
+        'page_obj3':page_obj3,
+        'page_obj4':page_obj4,
+        'page_obj5':page_obj5,
+        'page_obj6':page_obj6,
+    }
+
+    return render(request, 'users/FleetManager.html', context)
+#Front desk page
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'front_desk_only'])
+def front_desk(request, user):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+    request5 = Errand_service.objects.all()
+    request6 = Front_desk.objects.all()
+
+    customer = Customer.objects.get( user= user )
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    chk_pen = request1.filter(status = 'Pending').count()
+    chk_pen2 = request2.filter(status = 'Pending').count()
+    chk_pen3 = request3.filter(status = 'Pending').count()
+    chk_pen4 = request4.filter(status = 'Pending').count()
+    chk_pen5 = request5.filter(status = 'Pending').count()
+    chk_pen6 = request6.filter(status = 'Pending').count()
+
+    chk_out = request1.filter(status = 'Out for delivery').count()
+    chk_out2 = request2.filter(status = 'Out for delivery').count()
+    chk_out3 = request3.filter(status = 'At the Mall').count()
+    chk_out4 = request4.filter(status = 'Out for delivery').count()
+    chk_out5 = request5.filter(status = 'On Route for Delivery').count()
+    chk_out5of5 = request5.filter(status = 'Purchase in Process').count()
+    chk_out6 = request6.filter(status = 'Out for delivery').count()
+
+    paginator1 = Paginator(request1, 10)
+    page_number1 = request.GET.get('page')
+    page_obj1 = paginator1.get_page(page_number1)
+
+    paginator2 = Paginator(request2, 10)
+    page_number2 = request.GET.get('page')
+    page_obj2 = paginator2.get_page(page_number2)
+
+    paginator3 = Paginator(request3, 10)
+    page_number3 = request.GET.get('page')
+    page_obj3 = paginator3.get_page(page_number3)
+    
+    paginator4 = Paginator(request4, 10)
+    page_number4 = request.GET.get('page')
+    page_obj4 = paginator4.get_page(page_number4)
+
+    paginator5 = Paginator(request5, 10)
+    page_number5 = request.GET.get('page')
+    page_obj5 = paginator5.get_page(page_number5)
+
+    paginator6 = Paginator(request6, 10)
+    page_number6 = request.GET.get('page')
+    page_obj6 = paginator6.get_page(page_number6)
+
+
+    context = {
+        'notify':notify,
+
+        'chk_pen':chk_pen,
+        'chk_pen2':chk_pen2,
+        'chk_pen3':chk_pen3,
+        'chk_pen4':chk_pen4,
+        'chk_pen5':chk_pen5,
+        'chk_pen6':chk_pen6,
+        
+        'chk_out':chk_out,
+        'chk_out2':chk_out2,
+        'chk_out3':chk_out3,
+        'chk_out4':chk_out4,
+        'chk_out5':chk_out5,
+        'chk_out5of5':chk_out5of5,
+        'chk_out6':chk_out6,
+
+        'page_obj1':page_obj1,
+        'page_obj2':page_obj2,
+        'page_obj3':page_obj3,
+        'page_obj4':page_obj4,
+        'page_obj5':page_obj5,
+        'page_obj6':page_obj6,
+    }
+
+    return render(request, 'users/FrontDesk.html', context)
+
+# Front desk pick drop form
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'front_desk_only'])
+def PickDrop(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == "POST":
+        pickdrop_Form = Front_desk_pick(request.POST)
+        if pickdrop_Form.is_valid():
+            instance = pickdrop_Form.save(commit = False)
+            instance.customer = customer
+            instance.Delivery_type = 'Pick & Drop'
+            instance.save()
+
+            messages.success(request, f'Hello {request.user.username}, action Successful')
+
+            hashids = Hashids(salt=settings.FRONT_DESK, min_length=7)
+            h = hashids.encode(instance.id)
+            Front_desk.objects.filter(pk = instance.id).update(order_id= h)
+
+            adminNotification.objects.create(
+                customer=instance.customer,
+                item_created = instance,
+                order_id = h   
+            ) 
+            return redirect('frontdesk', user=user)
+    else:
+        pickdrop_Form = Front_desk_pick(instance = customer)
+
+    context = {
+        'customer':customer,
+        'pickdrop_Form':pickdrop_Form,
+    }
+    return render(request, 'users/FrontDeskPickUp.html', context )
+
+# Front desk Errand form
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'front_desk_only'])
+def FrontErrand(request, user):
+    customer = Customer.objects.get(user = request.user)
+    if request.method == "POST":
+        errand_Form = Front_desk_errand(request.POST)
+        if errand_Form.is_valid():
+            instance = errand_Form.save(commit = False)
+            instance.customer = customer
+            instance.Delivery_type = 'Errand'
+            instance.save()
+
+            messages.success(request, f'Hello {request.user.username}, action Successful')
+
+            hashids = Hashids(salt=settings.FRONT_DESK, min_length=7)
+            h = hashids.encode(instance.id)
+            Front_desk.objects.filter(pk = instance.id).update(order_id= h)
+
+            adminNotification.objects.create(
+                customer=instance.customer,
+                item_created = instance,
+                order_id = h   
+            ) 
+            return redirect('frontdesk', user=user)
+    else:
+        errand_Form = Front_desk_errand(instance = customer)
+
+    context = {
+        'customer':customer,
+        'errand_Form':errand_Form,
+    }
+    return render(request, 'users/FrontDeskErrand.html', context )
+
+
+def Inhousesearch(request):
+    results = []
+    results2 = []
+    results3 = []
+    if request.method == "GET":
+        query = request.GET.get('order_id')
+
+        if query == '':
+            query = 'None'
+        results = Anonymous.objects.filter(Q(order_id = query))
+        results2 = Errand_service.objects.filter(Q(order_id = query))
+        results3 = Shopping.objects.filter(Q(order_id = query))
+        results4 = MakeRequest.objects.filter(Q(order_id = query))
+        results5 = MakeRequestCash.objects.filter(Q(order_id = query))
+        results6 = Front_desk.objects.filter(Q(order_id = query))
+        
+    context = {
+            'query': query, 
+            'results':results, 
+            'results2':results2,
+            'results3':results3,
+            'results4':results4,
+            'results5':results5,
+            'results6':results6,
+    }
+    
+    return render(request, 'users/Search.html', context)
 # Cash Request
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
@@ -1077,6 +1403,128 @@ def customerDashboardPage(request, user):
     }
     return render(request, 'users/customerDashboard.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Cashier'])
+def CashierUpdateE_RequestForm(request, pk):
+    r_request = MakeRequest.objects.get(id=pk)  
+    customer = Customer.objects.get(user=request.user) 
+    Ca_form = CashierFormE(request.POST,instance=r_request)
+
+    if request.method == 'POST':
+        Ca_form = CashierFormE(request.POST,instance=r_request)
+        if Ca_form.is_valid():
+            obj = Ca_form.save(commit=False)
+            obj.save()
+            messages.success(request, f'Successful')
+
+            return redirect('cashier', user = pk)
+    context = {'Ca_form': Ca_form,
+              'customer':customer 
+              }
+    return render(request, 'users/CashierUpdateE.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Cashier'])
+def CashierUpdateCash_RequestForm(request, pk):
+    r_request = MakeRequestCash.objects.get(id=pk)  
+    customer = Customer.objects.get(user=request.user) 
+    Ca_form = CashierFormE(request.POST,instance=r_request)
+
+    if request.method == 'POST':
+        Ca_form = CashierFormE(request.POST,instance=r_request)
+        if Ca_form.is_valid():
+            obj = Ca_form.save(commit=False)
+            obj.save()
+            messages.success(request, f'Successful')
+
+            return redirect('cashier', user = pk)
+    context = {'Ca_form': Ca_form,
+              'customer':customer 
+              }
+    return render(request, 'users/CashierUpdateC.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Cashier'])
+def CashierUpdateShoppingForm(request, pk):
+    r_request = Shopping.objects.get(id=pk)  
+    customer = Customer.objects.get(user=request.user) 
+    Ca_form = CashierFormShopping(request.POST,instance=r_request)
+
+    if request.method == 'POST':
+        Ca_form = CashierFormShopping(request.POST,instance=r_request)
+        if Ca_form.is_valid():
+            obj = Ca_form.save(commit=False)
+            obj.save()
+            messages.success(request, f'Successful')
+
+            return redirect('cashier', user=pk)
+    context = {'Ca_form': Ca_form,
+              'customer':customer 
+              }
+    return render(request, 'users/CashierUpdateS.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Cashier'])
+def CashierUpdateAnonForm(request, pk):
+    r_request = Anonymous.objects.get(id=pk)  
+    customer = Customer.objects.get(user=request.user) 
+    Ca_form = CashierFormErrand(request.POST,instance=r_request)
+
+    if request.method == 'POST':
+        Ca_form = CashierFormErrand(request.POST,instance=r_request)
+        if Ca_form.is_valid():
+            obj = Ca_form.save(commit=False)
+            obj.save()
+            messages.success(request, f'Successful')
+
+            return redirect('cashier', user=pk)
+    context = {'Ca_form': Ca_form,
+              'customer':customer 
+              }
+    return render(request, 'users/CashierUpdateA.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Cashier'])
+def CashierUpdateErrandForm(request, pk):
+    r_request = Errand_service.objects.get(id=pk)  
+    customer = Customer.objects.get(user=request.user) 
+    Ca_form = CashierFormErrand(request.POST,instance=r_request)
+
+    if request.method == 'POST':
+        Ca_form = CashierFormErrand(request.POST,instance=r_request)
+        if Ca_form.is_valid():
+            obj = Ca_form.save(commit=False)
+            obj.save()
+            messages.success(request, f'Successful')
+
+            return redirect('cashier', user=pk)
+    context = {'Ca_form': Ca_form,
+              'customer':customer 
+              }
+    return render(request, 'users/CashierUpdateErr.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Cashier'])
+def CashierUpdateFrontForm(request, pk):
+    r_request = Front_desk.objects.get(id=pk)  
+    customer = Customer.objects.get(user=request.user) 
+    Ca_form = CashierFormFront(request.POST,instance=r_request)
+
+    if request.method == 'POST':
+        Ca_form = CashierFormFront(request.POST,instance=r_request)
+        if Ca_form.is_valid():
+            obj = Ca_form.save(commit=False)
+            obj.save()
+            messages.success(request, f'Successful')
+
+            return redirect('cashier', user = pk)
+    context = {'Ca_form': Ca_form,
+              'customer':customer 
+              }
+    return render(request, 'users/CashierUpdatefront.html', context)
+
 #Update request Anon
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
@@ -1090,7 +1538,7 @@ def updateRequestAnon(request, pk):
         if a_form.is_valid():
             instance = a_form.save(commit=False)
             instance.save()
-            messages.success(request, f'You just updated a customer satus to delivered')
+            messages.success(request, f'Successful')
 
             return redirect('adminDashboard')
     context = {'a_form': a_form}

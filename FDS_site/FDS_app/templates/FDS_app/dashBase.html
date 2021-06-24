@@ -1,6 +1,7 @@
 {% extends "FDS_app/base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load user_tags %}
 {% block title %} Welocme {{user.username }} {% endblock title %}
 
 {% block content %}
@@ -74,6 +75,17 @@
               <p class="dropdown-item">{{customer.phone_number}}</p>
               <div class="dropdown-divider"></div>
               <a class="btn btn-danger ml-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'logout' %}" role="button">Log out</a>
+              {% if request.user|front_desk:"Front Desk" %}
+                <a class="btn btn-danger ml-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'frontdesk' user.id  %}" role="button">Front Desk</a>
+              {% endif %} 
+
+              {% if request.user|fleet:"Fleet Manager" %}
+                <a class="btn btn-success mt-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'fleetManager' user.id  %}" role="button">Fleet Manager</a>
+              {% endif %} 
+
+            {% if request.user|cashier:"Cashier" %}
+              <a class="btn btn-success mt-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'cashier' user.id  %}" role="button">Cashier Dashboard</a>
+            {% endif %} 
             </div>
           </div>   
         </div>    

@@ -1,0 +1,96 @@
+{% extends "FDS_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Front Desk Errand{% endblock title%}
+
+{% block content %}
+<div class="container-fluid">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}  
+    <div class="row p-4 ">
+        <div class="col-md-4">
+            {% if messages %}
+            <div class="messages p-3 container align-self-center">
+                {% for message in messages %}
+                <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div  id="fuel"> 
+                <div class="d-flex flex-row bd-highlight justify-content-between">
+                    <div class="bd-highlight">
+                        <h5 class="font-weight-bold">Front Desk(ERRAND)  </h5>
+                    </div>
+                    <div class="bd-highlight">
+                        <h6> Customer Details</h6>
+                    </div>   
+                </div>
+            </div>
+            <div class="bg-white shadow p-3" id="the">
+                {{ errand_Form.customer_name|as_crispy_field }}
+                {{ errand_Form.Customer_phone_number|as_crispy_field }}
+                {{ errand_Form.customer_location|as_crispy_field }}
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 p-1">
+            <div  id="fuel"> 
+                <div class="d-flex flex-row bd-highlight justify-content-between">
+                    <div class="bd-highlight">
+                        <h5 class="font-weight-bold">Front Desk(ERRAND) </h5>
+                    </div>
+                    <div class="bd-highlight">
+                        <h6> Reciever information</h6>
+                    </div>   
+                </div>
+            </div>
+            <div class="bg-white shadow p-3" id="the">
+                {{ errand_Form.item_description|as_crispy_field }}
+                {{ errand_Form.Reciever_phone_number|as_crispy_field }}
+                {{ errand_Form.delivery_destination|as_crispy_field }}
+                {{ errand_Form.Quantity|as_crispy_field }}
+            </div>
+            
+        </div>
+        <div class="col-md-4">
+            <div  id="fuel"> 
+                <div class="d-flex flex-row bd-highlight justify-content-between">
+                    <div class="bd-highlight">
+                        <h5 class="font-weight-bold">Front Desk (ERRAND) </h5>
+                    </div>
+                    <div class="bd-highlight">
+                        <h6> Other Details</h6>
+                    </div>   
+                </div>
+            </div>
+            <div class="bg-white shadow p-3" id="the">
+                {{ errand_Form.Enter_amount|as_crispy_field }}
+                {{ errand_Form.Purchase_location|as_crispy_field }}
+                {{ errand_Form.Note|as_crispy_field }}
+                <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>
+                
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+<style>
+    #fuel {
+        background-color: rgb(57, 0, 75);
+        padding: 15px;
+        color: rgb(255, 255, 255);
+        border-start-end-radius: 20px;
+        border-start-start-radius: 20px;
+    }
+
+    #the { 
+        height: 380px;
+    }
+</style>
+{% endblock %}

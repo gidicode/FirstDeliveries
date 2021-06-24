@@ -4,7 +4,7 @@ from django.contrib.auth import models
 from django.forms import ModelForm, Textarea, fields, widgets
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import  Anonymous, Customer, Errand_service, MakeRequest, MakeRequestCash, ForPayments, Shopping
+from .models import  Anonymous, Customer, Errand_service, MakeRequest, MakeRequestCash, Shopping, Front_desk
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
@@ -242,3 +242,43 @@ class Other_errand(forms.ModelForm):
     class Meta:
         model = Errand_service
         fields = [ 'description', 'Quantity', 'Enter_amount', 'payment_channel', 'your_location']
+
+class Front_desk_pick(forms.ModelForm):
+    class Meta:
+        model = Front_desk
+        fields = ['customer_name', 'Customer_phone_number', 'item_description', 'delivery_destination', 'Reciever_phone_number', 'customer_location', 'Amount_Payable', 'Choice_for_TP', 'Note' ]
+
+class Front_desk_errand(forms.ModelForm):
+    class Meta:
+        model = Front_desk
+        fields = ['customer_name', 'Customer_phone_number', 'Quantity', 'delivery_destination', 'item_description', 'Enter_amount', 'Reciever_phone_number', 'Purchase_location', 'customer_location', 'Note' ]
+
+class CashierFormE(forms.ModelForm): 
+    class Meta:
+        model = MakeRequest
+        fields = ['confirmed', 'Amount_paid']
+
+class CashierFormCash(forms.ModelForm): 
+    class Meta:
+        model = MakeRequestCash
+        fields = ['confirmed', 'Amount_Paid',]
+
+class CashierFormShopping(forms.ModelForm): 
+    class Meta:
+        model = Shopping
+        fields = ['confirmed', 'amount_paid', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded']
+
+class CashierFormAnon(forms.ModelForm): 
+    class Meta:
+        model = Anonymous
+        fields = ['confirmed', 'Amount_Paid']
+
+class CashierFormErrand(forms.ModelForm): 
+    class Meta:
+        model = Errand_service
+        fields = ['confirmed', 'profit', 'Amount_Paid']
+
+class CashierFormFront(forms.ModelForm): 
+    class Meta:
+        model = Front_desk
+        fields = ['confirmed', 'profit', 'Amount_Paid']
