@@ -1,9 +1,11 @@
-import re
-from typing import final
-from django.db.models.expressions import F
+
+from BikeControl.models import RidersDeliveries, RidersProfile
 from django.shortcuts import render, redirect
 
 from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 from django.http import HttpResponseRedirect
 
@@ -59,28 +61,57 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/signUp.html', {'form':form})
 
+#Password update Page
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
+def PasswordChange(request, user):
+    customer = Customer.objects.get(user=request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
+    if request.method == 'POST':
+        pc_form = PasswordChangeForm(request.user, request.POST)
+        if  pc_form.is_valid(): 
+            pc_form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, f'Your password has been sucessfully updated!')
+            return redirect('profileUpdate', user=user)
+        else:
+            messages.error(request, f'An error occured, please correct the error below')
+    else:
+        pc_form =  PasswordChangeForm(request.user)
+    context = {
+        'customer':customer,
+        'pc_form':pc_form,
+        'n':n
+    }
+    return render(request, 'users/changePassword.html', context)
+
 #Profile update Page
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def customerProfileUpdatePage(request, user):
     customer = Customer.objects.get(user=request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=customer)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.customer)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=customer)
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
             messages.success(request, f'Your Profile has been Updated!')
-            return redirect('dashboard', user=user)
+            return redirect('profileUpdate', user=user)
+        else:
+            messages.error(request, f'An error occured, please correcthe error below')
     else:
         u_form = UserUpdateForm(instance=customer)
         p_form = ProfileUpdateForm(instance=customer)
     context = {
         'customer':customer,
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'n':n
     }
-
     return render(request, 'users/customer_profile.html', context)
 
 @login_required(login_url='login')
@@ -160,6 +191,10 @@ def FleetManager(request, user):
     request5 = Errand_service.objects.all()
     request6 = Front_desk.objects.all()
 
+    assign = RidersDeliveries.objects.all()
+    bikers = RidersProfile.objects.all()
+    active = assign.filter(staus = 'Pending')
+
     notification_filter = adminNotification.objects.all()
     notify = notification_filter.filter(viewed = False) 
 
@@ -205,6 +240,11 @@ def FleetManager(request, user):
     page_obj6 = paginator6.get_page(page_number6)
 
     context = {
+
+        'assign':assign,
+        'bikers':bikers,
+        'active':active,
+
         'notify':notify,
 
         'chk_pen':chk_pen,
@@ -231,6 +271,7 @@ def FleetManager(request, user):
     }
 
     return render(request, 'users/FleetManager.html', context)
+
 #Front desk page
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'front_desk_only'])
@@ -415,7 +456,8 @@ def Inhousesearch(request):
 @allowed_user(allowed_roles=['admin', 'customer'])
 def requestForm_Cash(request, user):
     customer = Customer.objects.get(user=request.user)
-    
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         c_form = Request_Cash(request.POST)
         if c_form.is_valid():
@@ -552,7 +594,8 @@ def requestForm_Cash(request, user):
             
     context = {
         'c_form': c_form,
-        'customer':customer 
+        'customer':customer,
+        'n':n,
         }
     return render(request, 'users/requestForm_Cash.html', context)
 
@@ -561,6 +604,8 @@ def requestForm_Cash(request, user):
 @allowed_user(allowed_roles=['admin', 'customer'])
 def requestForm_Online(request, user):
     customer = Customer.objects.get(user=request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         o_form = OrderForm(request.POST)
         if o_form.is_valid() : 
@@ -573,9 +618,8 @@ def requestForm_Online(request, user):
             h = hashids.encode(instance.id)
             MakeRequest.objects.filter(pk = instance.id).update(order_id=h)
             
-            tp_choice_1 = customer.makerequest_set.filter(order_id = h).filter(Choice_for_TP= 'Bike' )
-            tp_choice_2 = customer.makerequest_set.filter(order_id = h).filter(Choice_for_TP= 'Tricycle' )
-            tp_choice_3 = customer.makerequest_set.filter(order_id = h).filter(Choice_for_TP= 'Van' )
+            tp_choice_1 = customer.makerequest_set.filter(order_id = h).filter(Choice_for_TP= 'Bike')
+            tp_choice_2 = customer.makerequest_set.filter(order_id = h).filter(Choice_for_TP= 'Tricycle')
 
             #checking for multiple
             chk_none = customer.makerequest_set.get(order_id = h)
@@ -698,6 +742,7 @@ def requestForm_Online(request, user):
     context = {
         'customer':customer, 
         'o_form': o_form,
+        'n':n,
          }
     return render(request, 'users/requestForm.html', context)         
 
@@ -706,6 +751,8 @@ def requestForm_Online(request, user):
 @allowed_user(allowed_roles=['admin', 'customer'])
 def ShoppingForm(request, user):
     customer = Customer.objects.get(user=user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == "POST":
         s_form = Shopping_Form(request.POST)
         if s_form.is_valid():
@@ -735,7 +782,7 @@ def ShoppingForm(request, user):
     else:
         s_form=Shopping_Form(instance=customer)
 
-    return render (request, 'users/shopping.html', {'s_form':s_form})          
+    return render (request, 'users/shopping.html', {'s_form':s_form, 'n':n})          
 
 #Initialize Payment
 @login_required(login_url='login')
@@ -870,14 +917,14 @@ def AdminDashboard(request):
     request4 = Anonymous.objects.all()
 
     #total amount through diff chanels
-    e_req = request1.aggregate(Sum('Amount'))
+    e_req = request1.aggregate(Sum('Amount_paid'))
     e_cash = request2.aggregate(Sum('Amount_Paid'))
     e_shop = request3.aggregate(Sum('Charge'))
     e_anon = request4.aggregate(Sum('Amount_Paid'))
 
     #amount breakdown
-    a_req_1 = request1.filter(Choice_for_TP = "Bike").aggregate(Sum('Amount'))
-    a_req_2 = request1.filter(Choice_for_TP = "Tricycle").aggregate(Sum('Amount'))
+    a_req_1 = request1.filter(Choice_for_TP = "Bike").aggregate(Sum('Amount_paid'))
+    a_req_2 = request1.filter(Choice_for_TP = "Tricycle").aggregate(Sum('Amount_paid'))
 
     a_cash_1 = request2.filter(Choice_for_TP = "Bike").aggregate(Sum('Amount_Paid'))
     a_cash_2 = request2.filter(Choice_for_TP = "Tricycle").aggregate(Sum('Amount_Paid'))
@@ -1378,26 +1425,17 @@ def customerDashboardPage(request, user):
     customer = Customer.objects.get( user= user )
     request_filter = customer.makerequest_set.all()
     request_filter_cash = customer.makerequestcash_set.all()
-
-    pending1 = request_filter.filter(status='Pending')
-    out_for_delivery = request_filter.filter(status='Out for delivery')
-    delivered = request_filter.filter(status='Delivered')
-
-    pending2 = request_filter_cash.filter(status='Pending')
-    out_for_delivery2 = request_filter_cash.filter(status='Out for delivery')
-    delivered2 = request_filter_cash.filter(status='Delivered')
+    request_filter_errand = customer.errand_service_set.all()
+    request_filter_shopping = customer.shopping_set.all()
 
     n_filter = customer.delivered_set.all()
     n = n_filter.filter(viewed = False)
 
     context = {
-        'pending2':pending2,
-        'out_for_delivery2': out_for_delivery2,
-        'delivered2':delivered2,
-
-        'pending1':pending1,
-        'out_for_delivery': out_for_delivery,
-        'delivered':delivered,
+        'request_filter_cash':request_filter_cash,
+        'request_filter':request_filter,
+        'request_filter_errand':request_filter_errand,
+        'request_filter_shopping':request_filter_shopping,
         'customer':customer,
         'n':n
     }
@@ -1524,6 +1562,167 @@ def CashierUpdateFrontForm(request, pk):
               'customer':customer 
               }
     return render(request, 'users/CashierUpdatefront.html', context)
+
+#Fleet Manager Update E
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin','Fleet_Manager'])
+def UpdateEForm(request, pk):
+    r_request = MakeRequest.objects.get(id=pk)
+    o_form = FleetManagerUpdateE(instance= r_request)
+    customer = Customer.objects.get(user=request.user) 
+
+    if request.method == 'POST':
+        o_form = FleetManagerUpdateE(request.POST,instance=r_request)
+        if o_form.is_valid():
+            obj = o_form.save(commit=False)
+            obj.save()
+           
+            if obj.status == 'Delivered':
+                Delivered.objects.create(
+                    customer=obj.customer,
+                    Item_delivered = obj,
+                    order_id = obj.order_id
+                )
+                messages.success(request, f'You just updated a customer satus to delivered')
+
+            return redirect('fleetManager', user = pk)
+    context = {'o_form': o_form,
+              'customer':customer 
+              }
+    return render(request, 'users/FleetManagerUpdateE.html', context)
+
+#Fleet Manager Update C
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin','Fleet_Manager'])
+def UpdateCForm(request, pk):
+    r_request = MakeRequestCash.objects.get(id=pk)
+    o_form = FleetManagerUpdateC(instance= r_request)
+    customer = Customer.objects.get(user=request.user) 
+
+    if request.method == 'POST':
+        o_form = FleetManagerUpdateC(request.POST,instance=r_request)
+        if o_form.is_valid():
+            obj = o_form.save(commit=False)
+            obj.save()
+           
+            if obj.status == 'Delivered':
+                Delivered.objects.create(
+                    customer=obj.customer,
+                    Item_delivered = obj,
+                    order_id = obj.order_id
+                )
+                messages.success(request, f'You just updated a customer satus to delivered')
+
+            return redirect('fleetManager', user = pk)
+    context = {'o_form': o_form,
+              'customer':customer 
+              }
+    return render(request, 'users/FleetManagerUpdateC.html', context)
+
+#Fleet Manager Update S
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin','Fleet_Manager'])
+def UpdateSForm(request, pk):
+    r_request = Shopping.objects.get(id=pk)
+    o_form = FleetManagerUpdateS(instance= r_request)
+    customer = Customer.objects.get(user=request.user) 
+
+    if request.method == 'POST':
+        o_form = FleetManagerUpdateS(request.POST,instance=r_request)
+        if o_form.is_valid():
+            obj = o_form.save(commit=False)
+            obj.save()
+           
+            if obj.status == 'Delivered':
+                Delivered.objects.create(
+                    customer=obj.customer,
+                    Item_delivered = obj,
+                    order_id = obj.order_id
+                )
+                messages.success(request, f'You just updated a customer satus to delivered')
+
+            return redirect('fleetManager', user = pk)
+    context = {'o_form': o_form,
+              'customer':customer 
+              }
+    return render(request, 'users/FleetManagerUpdateS.html', context)
+
+#Fleet Manager Update Errand Service
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin','Fleet_Manager'])
+def UpdateErrForm(request, pk):
+    r_request = Errand_service.objects.get(id=pk)
+    o_form = FleetManagerUpdateErr(instance= r_request)
+    customer = Customer.objects.get(user=request.user) 
+
+    if request.method == 'POST':
+        o_form = FleetManagerUpdateErr(request.POST,instance=r_request)
+        if o_form.is_valid():
+            obj = o_form.save(commit=False)
+            obj.save()
+           
+            if obj.status == 'Delivered':
+                Delivered.objects.create(
+                    customer=obj.customer,
+                    Item_delivered = obj,
+                    order_id = obj.order_id
+                )
+                messages.success(request, f'You just updated a customer satus to delivered')
+
+            return redirect('fleetManager', user = pk)
+    context = {'o_form': o_form,
+              'customer':customer 
+              }
+    return render(request, 'users/FleetManagerUpdateErr.html', context)
+
+#Fleet Manager Update Anon
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin','Fleet_Manager'])
+def UpdateAForm(request, pk):
+    r_request = Anonymous.objects.get(id=pk)
+    o_form = FleetManagerUpdateA(instance= r_request)
+    customer = Customer.objects.get(user=request.user) 
+
+    if request.method == 'POST':
+        o_form = FleetManagerUpdateA(request.POST,instance=r_request)
+        if o_form.is_valid():
+            obj = o_form.save(commit=False)
+            obj.save()
+            messages.success(request, f'You just updated a customer satus to delivered')
+
+            return redirect('fleetManager', user = pk)
+    context = {'o_form': o_form,
+              'customer':customer 
+              }
+    return render(request, 'users/FleetManagerUpdateAnon.html', context)
+
+#Fleet Manager Update F
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin','Fleet_Manager'])
+def UpdateFForm(request, pk):
+    r_request = Front_desk.objects.get(id=pk)
+    o_form = FleetManagerUpdateF(instance= r_request)
+    customer = Customer.objects.get(user=request.user) 
+
+    if request.method == 'POST':
+        o_form = FleetManagerUpdateF(request.POST,instance=r_request)
+        if o_form.is_valid():
+            obj = o_form.save(commit=False)
+            obj.save()
+           
+            if obj.status == 'Delivered':
+                Delivered.objects.create(
+                    customer=obj.customer,
+                    Item_delivered = obj,
+                    order_id = obj.order_id
+                )
+                messages.success(request, f'You just updated a customer satus to delivered')
+
+            return redirect('fleetManager', user = pk)
+    context = {'o_form': o_form,
+              'customer':customer 
+              }
+    return render(request, 'users/FleetManagerUpdateF.html', context)
 
 #Update request Anon
 @login_required(login_url='login')
@@ -1726,6 +1925,7 @@ def orderHistory(request, user):
     request1 = customer.makerequest_set.all()
     request2 = customer.makerequestcash_set.all()
     shop_request = customer.shopping_set.all()
+    errand_request = customer.errand_service_set.all()
 
     request_count = request1.count()
     request2_count = request2.count()
@@ -1733,6 +1933,12 @@ def orderHistory(request, user):
 
     myFilter = OrderFilter(request.GET, queryset=request1)
     request1 = myFilter.qs
+    myFilter3 = OrderFilter(request.GET, queryset=request2)
+    request2 = myFilter3.qs
+    myFilter4 = OrderFilter(request.GET, queryset=shop_request)
+    shop_request = myFilter4.qs
+    myFilter5 = OrderFilter(request.GET, queryset=errand_request)
+    errand_request = myFilter5.qs
 
     myFilter2 = OrderFilter(request.GET, queryset=request2)
     request2 = myFilter2.qs
@@ -1742,6 +1948,7 @@ def orderHistory(request, user):
 
     context = {
         'n':n,
+        'errand_request':errand_request,
         'shop_request_count':shop_request_count,
         'shop_request': shop_request,
         'myFilter2':myFilter2,
@@ -1791,12 +1998,21 @@ def adminNotificationDelete(request, pk):
     cust1.save()
     return redirect('adminNotificationShow')
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def ErrandMenu(request, user):
+    customer = Customer.objects.get(user=request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
 
-    return render(request, 'users/ErrandService.html')
+    return render(request, 'users/ErrandService.html', {'n':n})
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def fuel_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         fuel_form = Fuel_errand(request.POST)
         if fuel_form.is_valid():
@@ -1872,11 +2088,16 @@ def fuel_errand(request, user):
     context = {
         'fuel_form':fuel_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Fuelerrand.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def gas_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         gas_form = Gas_errand(request.POST)
         if gas_form.is_valid():
@@ -1952,11 +2173,16 @@ def gas_errand(request, user):
     context = {
         'gas_form':gas_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Gaserrand.html', context)
-            
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])            
 def drugs_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         drugs_form = Drugs_errand(request.POST, request.FILES)
         if drugs_form.is_valid():
@@ -2032,11 +2258,16 @@ def drugs_errand(request, user):
     context = {
         'drugs_form':drugs_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Drugserrand.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def bread_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         bread_form = Bread_errand(request.POST)
         if bread_form.is_valid():
@@ -2112,12 +2343,16 @@ def bread_errand(request, user):
     context = {
         'bread_form':bread_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Breaderrand.html', context)
 
-
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def shawarma_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         shawarma_form = Bread_errand(request.POST)
         if shawarma_form.is_valid():
@@ -2193,11 +2428,16 @@ def shawarma_errand(request, user):
     context = {
         'shawarma_form':shawarma_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Shawarmaerrand.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def pizza_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         pizza_form = Pizza_errand(request.POST)
         if pizza_form.is_valid():
@@ -2273,11 +2513,16 @@ def pizza_errand(request, user):
     context = {
         'pizza_form':pizza_form,
         'customer':customer,
+        'n':n,
     }
     return render(request, 'users/Pizzaerrand.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def fruits_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         fruits_form = Fruits_errand(request.POST)
         if fruits_form.is_valid():
@@ -2353,12 +2598,16 @@ def fruits_errand(request, user):
     context = {
         'fruits_form':fruits_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Fruitserrand.html', context)
 
-
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def icecream_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         icecream_form = Icecream_errand(request.POST)
         if icecream_form.is_valid():
@@ -2434,11 +2683,16 @@ def icecream_errand(request, user):
     context = {
         'icecream_form':icecream_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Icecreamerrand.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def food_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         food_form = Food_errand(request.POST)
         if food_form.is_valid():
@@ -2514,12 +2768,16 @@ def food_errand(request, user):
     context = {
         'food_form':food_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Fooderrand.html', context)
 
-
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer'])
 def other_errand(request, user):
     customer = Customer.objects.get(user = request.user)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         general_form = Other_errand(request.POST)
         if general_form.is_valid():
@@ -2595,6 +2853,7 @@ def other_errand(request, user):
     context = {
         'general_form':general_form,
         'customer':customer,
+        'n':n
     }
     return render(request, 'users/Othererrand.html', context)
 

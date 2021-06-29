@@ -55,6 +55,8 @@ def AssignedRides(request):
     cash = MakeRequestCash.objects.all()
     shop = Shopping.objects.all()
     anon = Anonymous.objects.all()
+    errand = Errand_service.objects.all()
+    front_desk = Front_desk.objects.all()
 
     if request.method == 'POST':
         as_form = ridersdeliveryForm(request.POST)
@@ -78,6 +80,11 @@ def AssignedRides(request):
                 shop.filter(order_id = instance.shopping.order_id).update(assigned= True)
             
             if instance.anonymous == None:
+                pass
+            else:
+                anon.filter(order_id = instance.anonymous.order_id).update(assigned = True)          
+
+            if instance.errand == None:
                 pass
             else:
                 anon.filter(order_id = instance.anonymous.order_id).update(assigned = True)          
