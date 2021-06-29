@@ -1,7 +1,11 @@
 {% extends "FDS_app/base.html" %}
 {% load crispy_forms_tags %}
-
-{% block title %} Fleet Manager {% endblock title %}
+  
+{% block title %} 
+    {% if notify.count > 0 %}
+    ({{notify.count}})
+    {% endif %} Fleet Manager 
+{% endblock title %}
 
 {% block content %}
  <br>
@@ -97,7 +101,7 @@
                 </div>    
               </form>
 
-              <div class="d-flex flex-row bd-highlight justify-content-center">
+                <div class="d-flex flex-row bd-highlight justify-content-center">
                     <div class="p-2 bd-highlight">
                     {% if notify.count > 0 %}
                         <a href="{% url 'adminNotificationShow' %}"> 
@@ -111,6 +115,126 @@
                         <a href="{% url 'drivers_dashboard' %}" class="btn btn-danger" role="button"> Riders Dashboard</a>
                     </div>
                 </div> 
+
+                <div class="d-flex flex-row bd-highlight justify-content-between">
+                    <div class="p-2 bd-highlight">
+                       Driver Status
+                    </div>
+                    <div class="p-2 bd-highlight">
+                        {% for i in assign %}
+                            {% if i.staus == 'Pending' %}
+                                {% if i.cash_request %}
+                                <div class="shadow-sm p-3" style="background-color: rgb(255, 241, 241);">
+                                    <small> <strong> Cash</strong></small>                     
+                                    <br>
+                                    <small class="">
+                                        <div class="spinner-grow text-warning" role="status" style="height: 20px; width: 20px;"></div>
+                                        Order ID {{i.cash_request.order_id}}
+                                    </small>
+                                    <br>                                                                        
+                                    <small class="">Rider: {{i.rider.attached_bike}}</small>
+                                    <br>
+                                    <small>Rider: {{i.rider.first_name}} {{i.rider.last_name}} </small>
+                                    <br>
+                                    <small>Phone: {{i.rider.phone_number}} </small>
+                                </div> 
+                                <br>
+                                {%endif %}                            
+
+                                {% if i.e_payment_request %}    
+                                <div class="shadow-sm p-3" style="background-color: rgb(223, 238, 252);">   
+                                    <small class=""> <strong> E-payment </strong> </small>
+                                    <br>
+                                    <small class="">
+                                        <div class="spinner-grow text-warning" role="status" style="height: 20px; width: 20px;"></div>
+                                        Order ID {{i.e_payment_request.order_id}}
+                                    </small>
+                                    <br>
+                                    <small>Rider NO: {{i.rider.attached_bike}}</small>
+                                    <br>
+                                    <small>Rider: {{i.rider.first_name}} {{i.rider.last_name}} </small>
+                                    <br>
+                                    <small>Phone: {{i.rider.phone_number}} </small>
+                                </div>
+                                <br>             
+                                {%endif %} 
+
+                                {% if i.shopping %}
+                                <div class=" shadow-sm p-3" style="background-color: rgb(255, 243, 239);"> 
+                                    <small>Shopping</small>
+                                    <br>
+                                    <small>
+                                        <div class="spinner-grow text-warning" role="status" style="height: 20px; width: 20px;"></div>
+                                        Order ID {{i.shopping.order_id}}
+                                    </small> 
+                                    <br>                                                                   
+                                    <small>Rider NO: {{i.rider.attached_bike}}</small>
+                                    <br>
+                                    <small>Rider: {{i.rider.first_name}} {{i.rider.last_name}} </small>
+                                    <br>
+                                    <small>Phone: {{i.rider.phone_number}} </small>
+                                </div>
+                                <br>
+                                {%endif %} 
+
+                                {% if i.anonymous %}
+                                <div class="bg-light p-3 rounded-lg shadow-sm">                           
+                                    <small class="font-weight-bold"> Anonymous</small>
+                                    <br>
+                                    <small class="">
+                                        <div class="spinner-grow text-warning" role="status" style="height: 20px; width: 20px;"></div>
+                                        Order ID {{i.anonymous.order_id}}
+                                    </small>
+                                    <br>
+                                    <small>Rider NO: {{i.rider.attached_bike}}</small>
+                                    <br>
+                                    <small>Rider: {{i.rider.first_name}} {{i.rider.last_name}} </small>
+                                    <br>
+                                    <small>Phone: {{i.rider.phone_number}} </small>
+                                </div> 
+                                <br>
+                                {%endif %}
+                                
+                                {% if i.errand %}
+                                <div class=" p-3 rounded-lg shadow-sm" style="background-color: rgb(240, 255, 254);"> 
+                                    <small class="font-weight-bold"> Errand</small>
+                                    <br>
+                                    <small class="">
+                                        <div class="spinner-grow text-warning" role="status" style="height: 20px; width: 20px;"></div>
+                                        Order ID {{i.errand.order_id}}
+                                    </small>
+                                    <br>
+                                    <small>Rider NO: {{i.rider.attached_bike}}</small>
+                                    <br>
+                                    <small>Rider: {{i.rider.first_name}} {{i.rider.last_name}} </small>
+                                    <br>
+                                    <small>Phone: {{i.rider.phone_number}} </small>
+                                </div> 
+                                <br>
+                                {%endif %}  
+                                
+                                {% if i.front_desk %}
+                                <div class=" p-3 rounded-lg shadow-sm" style="background-color: rgb(248, 240, 255);"> 
+                                    <small class="font-weight-bold">Front Desk</small>
+                                    <br>
+                                    <small class="">
+                                        <div class="spinner-grow text-warning" role="status" style="height: 20px; width: 20px;"></div>
+                                        Order ID {{i.front_desk.order_id}}
+                                    </small>
+                                    <br>
+                                    <small>Rider NO: {{i.rider.attached_bike}}</small>
+                                    <br>
+                                    <small>Rider: {{i.rider.first_name}} {{i.rider.last_name}} </small>
+                                    <br>
+                                    <small>Phone: {{i.rider.phone_number}} </small>
+                                </div> 
+                                <br>
+                                {%endif %}  
+                            {% endif %}
+                        {% endfor %}            
+                    </div>
+                    <div class="p-2 bd-highlight">Out for delivery <span class="badge badge-dark">{{chk_out6}}</span></div>
+                </div>   
 
         </div>
     </div>
@@ -126,54 +250,131 @@
                         <th scope="col">No</th>
                         <th scope="col">Customer</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Request Details</th>
+                        <th scope="col">Details</th>
                         <th scope="col">TP Choice</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Paid Status</th>
+                        <th scope="col">Amt Payable</th>
+                        <th scope="col">Amt Paid</th>
                         <th scope="col">Order ID</th>
                         <th scope="col">Assigned</th>
+                        <th scope="col">Confirmed</th>
+                        <th scope="col">Update</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for i in page_obj1 %}
-                    <tr>
-                        <th scope="row">{{forloop.counter}}</th>
-                        <td>{{i.customer}}</td>
-                        <td>{{i.date_created|timesince}}</td>
-                        <td>
-                            <div class="dropdown">
-                                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    r
-                                </p>
-                                <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                    <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
-                                    <br>
-                                    <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
-                                    <br>
-                                    <small class=" text-white"><strong>Address of Reciever:</strong> {{i.Address_of_reciever}} </small>
-                                    <br>
-                                    <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
-                                    <br>
-                                    <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
-                            </div>
-                        </td>
-        
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.Amount_Paid}}</td> 
-                        <td>{{i.paid}}</td> 
-                        <td>{{i.order_id}}</td> 
-                        <td class="text-center">
-                            {% if i.assigned == True%}
-                                    <i class="fas fa-check-circle text-success">
-                            {% else %}
-                                    <i class="fas fa-check-circle text-danger"></i>
-                            {% endif %}
-                        </td>
+                        <div class="">
+                        <tr class="text-white">
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{i.customer}}</td>
+                            <td>{{i.date_created|timesince}}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        r
+                                    </p>
+                                    <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                                        
+                                        <small class=" text-white"> <strong> Order ID:</strong> {{i.order_id}}  </small>
+                                        <br>
+                                        <small class=" text-white"> <strong> Customer Phone:</strong> {{i.customer.phone_number}}  </small>
+                                        <br>
+                                        <small class=" text-white"> <strong> Customer Name:</strong> {{i.customer.first_name}} {{i.customer.last_name}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                                        <br>
+                                        <small class="text-white"><strong>Loading:</strong> {{i.Loading_choice}} </small>
+                                        <hr>
+                                        <p class="text-warning "> 1st Destination</p>
+                                        <small class=" text-white"><strong>Reciever Name:</strong> {{i.reciever_name}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever:</strong> {{i.Address_of_reciever}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
+                                        <br>
+                                        
+                                        
+                                        {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                                        <p class="text-warning font-weight-bold"> 2nd Destination</p>
+                                            <small class=" text-white"> <strong> Reciever Name2:</strong> {{i.reciever_name2}}  </small>
+                                            <br>
+                                            <small class=" text-white"><strong>Reciever Number2:</strong> {{i.reciever_phone_number2}} </small>
+                                            <br>
+                                            <small class=" text-white"><strong>Address of Reciever2:</strong> {{i.Address_of_reciever2}} </small>
+                                            <br>
+                                            <small class=" text-white"><strong>Package Description2:</strong> {{i.Package_description2}} </small>
+                                            <br>
+                                        {% endif %}
+
+                                        {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                                        <p class="text-warning font-weight-bold"> 3rd Destination</p>
+                                        <small class=" text-white"> <strong> Reciever Name3:</strong> {{i.reciever_name3}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number3:</strong> {{i.reciever_phone_number3}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever3:</strong> {{i.Address_of_reciever3}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description3:</strong> {{i.Package_description3}} </small>
+                                        <br>
+                                    {% endif %}
+
+                                    {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                                        <p class="text-warning font-weight-bold"> 4th Destination</p>
+                                        <small class=" text-white"> <strong> Reciever Name4:</strong> {{i.reciever_name4}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number4:</strong> {{i.reciever_phone_number4}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever4:</strong> {{i.Address_of_reciever4}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description4:</strong> {{i.Package_description4}} </small>
+                                        <br>
+                                    {% endif %}
+
+                                    {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                                        <p class="text-warning font-weight-bold"> 5th Destination</p>
+                                        <small class=" text-white"> <strong> Reciever Name5:</strong> {{i.reciever_name5}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number5:</strong> {{i.reciever_phone_number5}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever5:</strong> {{i.Address_of_reciever5}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description5:</strong> {{i.Package_description5}} </small>
+                                        <br>
+                                    {% endif %}
+                                </div>
+                            </td>
+            
+                            <td>{{i.Choice_for_TP}}</td>
+                            <td>{{i.status}}</td> 
+                            <td>{{i.Amount_Payable}}</td> 
+                            <td>{{i.Amount_paid}}</td> 
+                            <td>{{i.order_id}}</td> 
+                            <td class="text-center">
+                                {% if i.assigned == True%}
+                                        <i class="fas fa-check-circle text-white">
+                                {% else %}
+                                        <i class="fas fa-check-circle text-danger"></i>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if i.confirmed == True %}
+                                    <i class="fas fa-check-circle text-success"></i>
+                                {% else %}
+                                <i class="fas fa-check-circle text-danger"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'fleetE' i.id %}" role="button" class="btn btn-warning btn-sm rounded-pill">
+                                    Update
+                                </a>
+                            </td>
+                        
+                        </div>
+                        </tr>
                         {% endfor %}
-                    </tr>
-                    <div class="pagination mb-3">
+                    <div class="pagination">
                         <span class="step-links">
                             {% if page_obj1.has_previous %}
                                 <a class="btn rounded-pill btn-warning" href="?page=1">&laquo; first</a>
@@ -191,64 +392,136 @@
             </div>
         </div>
     </div>
-   
+
+
+   <!--CASH REQUEST-->
     <div id="list-item-2">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xl-12">
                 <h5 class=" p-3 shadow-sm text-center text-dark"> All Cash-payment Request</h5>
                 <table class="table table-striped table-dark">
                     <thead>
-                    <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Customer</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Request Details</th>
-                        <th scope="col">TP Choice</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Paid Status</th>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Assigned</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for i in page_obj2 %}
-                    <tr>
-                        <th scope="row">{{forloop.counter}}</th>
-                        <td>{{i.customer}}</td>
-                        <td>{{i.date_created|timesince}}</td>
-                        <td>
-                            <div class="dropdown">
-                                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    r
-                                </p>
-                            <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
-                                <br>
-                                <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
-                                <br>
-                                <small class=" text-white"><strong>Address of Reciever:</strong> {{i.Address_of_reciever}} </small>
-                                <br>
-                                <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
-                                <br>
-                                <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
-                            </div>
-                        </td>
-        
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.Amount_Paid}}</td> 
-                        <td>{{i.paid}}</td> 
-                        <td>{{i.order_id}}</td> 
-                        <td class="text-center">
-                            {% if i.assigned == True%}
-                                    <i class="fas fa-check-circle text-success">
-                            {% else %}
-                                    <i class="fas fa-check-circle text-danger"></i>
-                            {% endif %}
-                        </td>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Details</th>
+                            <th scope="col">TP Choice</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Amt Payable</th>
+                            <th scope="col">Amt Paid</th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Assigned</th>
+                            <th scope="col">Confirmed</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in page_obj2 %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{i.customer}}</td>
+                                <td>{{i.date_created|timesince}}</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            r
+                                        </p>
+                                    <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                                        <small class=" text-white"> <strong> Order ID:</strong> {{i.order_id}}  </small>
+                                        <br>
+                                        <small class=" text-white"> <strong> Customer Phone:</strong> {{i.customer.phone_number}}  </small>
+                                        <br>
+                                        <small class=" text-white"> <strong> Customer Name:</strong> {{i.customer.first_name}} {{i.customer.last_name}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                                        <hr>
+                                        <p>Ist Destination</p>
+                                        <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever:</strong> {{i.Address_of_reciever}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Loading:</strong> {{i.Loading_choice}} </small>
+
+                                    {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                                        <p class="text-warning font-weight-bold"> 2nd Destination</p>
+                                        <small class=" text-white"> <strong> Reciever Name2:</strong> {{i.reciever_name2}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number2:</strong> {{i.reciever_phone_number2}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever2:</strong> {{i.Address_of_reciever2}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description2:</strong> {{i.Package_description2}} </small>
+                                    {% endif %}
+
+                                    {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                                        <p class="text-warning font-weight-bold"> 3rd Destination</p>
+                                        <small class=" text-white"> <strong> Reciever Name3:</strong> {{i.reciever_name3}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number3:</strong> {{i.reciever_phone_number3}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever3:</strong> {{i.Address_of_reciever3}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description3:</strong> {{i.Package_description3}} </small>
+                                    {% endif %}
+
+                                    {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                                        <p class="text-warning font-weight-bold"> 4th Destination</p>
+                                        <small class=" text-white"> <strong> Reciever Name4:</strong> {{i.reciever_name4}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number4:</strong> {{i.reciever_phone_number4}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever4:</strong> {{i.Address_of_reciever4}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description4:</strong> {{i.Package_description4}} </small>
+                                        <br>
+                                    {% endif %}
+
+                                    {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                                        <p class="text-warning font-weight-bold"> 5th Destination</p>
+                                        <small class=" text-white"> <strong> Reciever Name5:</strong> {{i.reciever_name5}}  </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number5:</strong> {{i.reciever_phone_number5}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Address of Reciever5:</strong> {{i.Address_of_reciever5}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Package Description5:</strong> {{i.Package_description5}} </small>
+                                    {% endif %}
+                                    </div>
+                                    
+                                </td>
+                                <td>{{i.Choice_for_TP}}</td>
+                                <td>{{i.status}}</td> 
+                                <td>{{i.Amount_Payable}}</td> 
+                                <td>{{i.Amount_Paid}}</td> 
+                                <td>{{i.order_id}}</td> 
+                                <td class="text-center">
+                                    {% if i.assigned == True%}
+                                            <i class="fas fa-check-circle text-white">
+                                    {% else %}
+                                            <i class="fas fa-check-circle text-danger"></i>
+                                    {% endif %}
+                                </td>
+                                <td >
+                                    <div class="text-center"> 
+                                        {% if i.confirmed == True %}
+                                        <i class="fas fa-check-circle text-success"></i>
+                                        {% else %}
+                                        <i class="fas fa-check-circle text-danger"></i>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="{% url 'fleetC' i.id %}" role="button" class="btn btn-warning btn-sm  rounded-pill">
+                                        Update
+                                    </a>
+                                </td>
+                                
+                            </tr>
                         {% endfor %}
-                    </tr>
                     <div class="pagination mb-3">
                         <span class="step-links">
                             {% if page_obj1.has_previous %}
@@ -285,6 +558,10 @@
                         <th scope="col">Item Cost</th>
                         <th scope="col">Total Amt Spent</th>
                         <th scope="col">Amount Refunded</th>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Assigned</th>
+                        <th scope="col">Confirmed</th>
+                        <th scope="col">Update</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -296,29 +573,49 @@
                         <td>
                             <div class="dropdown">
                                 <p class=" dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  i
+                                  items
                                 </p>
                                 <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                  <p class=" text-white"> {{i.List_Items}} </p>
+                                    <small class=" text-white"> <strong> Order ID:</strong> {{i.order_id}}  </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Customer Phone:</strong> {{i.customer.phone_number}}  </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Customer Name:</strong> {{i.customer.first_name}} {{i.customer.last_name}}  </small>
+                                    <br>
+                                    <small class=" text-white"><strong>Sender Location:</strong> {{i.Address}} </small>
+                                    <hr>
+                                  <small class="text-white"> {{i.List_Items}} </small>
                                 </div>
                             </div>
                         </td>
                         <td>{{i.status}}</td> 
                         <td>{{i.amount_paid}}</td> 
-                        <td>{{i.Charged}}</td> 
+                        <td>{{i.Charge}}</td> 
                         <td>{{i.Item_Cost}}</td> 
                         <td>{{i.Total}}</td>
                         <td>{{i.Amount_Refunded}}</td>
                         <td>{{i.order_id}}</td>
                         <td class="text-center">
                             {% if i.assigned == True%}
-                                    <i class="fas fa-check-circle text-success">
+                                    <i class="fas fa-check-circle text-white">
                             {% else %}
                                     <i class="fas fa-check-circle text-danger"></i>
                             {% endif %}
                         </td>
-                        {% endfor %}
+                        <td>
+                            {% if i.confirmed == True %}
+                                <i class="fas fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fas fa-check-circle text-danger"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'fleetS' i.id %}" role="button" class="btn btn-warning btn-sm rounded-pill">
+                                Update
+                            </a>
+                        </td>
                     </tr>
+                    {% endfor %}
                     
                 <div class="pagination">
                     <span class="step-links">
@@ -344,66 +641,81 @@
     <div id="list-item-4">
         <div class="row">
             <div class="col-md-12 col-sm- 12, col-xl-12">
-                <h6 class="p-3 position-static shadow-sm text-center text-dark">ANONYMOUS REQUEST</h6>
+                <h6 class="p-3 position-static shadow-sm text-center text-dark">
+                    ANONYMOUS REQUEST
+                </h6>
                 <table class="table table-striped table-dark">
                     <thead>
                     <tr>
                         <th scope="col">No</th>
+                        <th scope="col">Phone Number</th>
                         <th scope="col">Date</th>
+                        <th scope="col">Details</th>
                         <th scope="col">TP Choice</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Request Details</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">Email</th>
+                        <th scope="col">Amount Payable</th>
+                        <th scope="col">Amount Paid</th>
+                        <th scope="col">Order ID</th>
                         <th scope="col">Assigned</th>
+                        <th scope="col">Confirmed</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for i in page_obj4 %}
                     <tr>
                         <th scope="row">{{forloop.counter}}</th>
+                        <td>{{i.Your_phone_number}}</td>
                         <td>{{i.date_created|timesince}}</td>
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.Amount_Paid}}</td>
                         <td>
                             <div class="dropdown">
                                 <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                   r
                                 </p>
                                 <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                  <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
+
+                                    <small class=" text-white"> <strong> Order ID:</strong> {{i.order_id}}  </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Customer Phone:</strong> {{i.Your_phone_number}} </small>
+                                    <br>
+                                    <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                                    <hr>
+                                  <small class=" text-white"> <strong> Reciever Name:</strong> {{i.receiver_name}}  </small>
                                   <br>
-                                  <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_contact}} </small>
+                                  <small class=" text-white"><strong>Reciever Number:</strong> {{i.receiver_contact}} </small>
                                   <br>
-                                  <small class=" text-white"><strong>Address of Reciever:</strong> {{i.reciever_address}} </small>
+                                  <small class=" text-white"><strong>Address of Reciever:</strong> {{i.receiver_address}} </small>
                                   <br>
                                   <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
-                                  <br>
-                                  <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                                
+                                </div>
                             </div>
                         </td>
-                        <td>{{i.Your_phone_number}}</td>
-                        <td>
-                            <div class="dropdown">
-                                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  e
-                                </p>
-                                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                  <p class=" text-white"> {{i.email}} </p>
-                            </div>
-                            </td>
-                        <td>{{i.order_id}}</td> 
+                        <td>{{i.Choice_for_TP}}</td> 
+                        <td>{{i.status}}</td> 
+                        <td>{{i.Amount_Payable}}</td>
+                        <td>{{i.Amount_Paid}}</td>
+                        <td>{{i.order_id}}</td>
                         <td class="text-center">
                             {% if i.assigned == True%}
-                                    <i class="fas fa-check-circle text-success">
+                                    <i class="fas fa-check-circle text-white">
                             {% else %}
                                     <i class="fas fa-check-circle text-danger"></i>
                             {% endif %}
                         </td>
-                        {% endfor %}
+                        <td class="text-center">
+                            {% if i.confirmed == True %}
+                                <i class="fas fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fas fa-check-circle text-danger"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'fleetA' i.id%}" role="button" class="btn btn-warning rounded-pill btn-sm">
+                                Update
+                            </a>
+                        </td>
                     </tr>
+                    {% endfor %}
                     
                     <div class="pagination mb-3">
                         <span class="step-links">
@@ -434,13 +746,17 @@
                     <tr>
                         <th scope="col">No</th>
                         <th scope="col">Date</th>
-                        <th scope="col">TP Choice</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Amount</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Pay Method</th>
                         <th scope="col">Request Details</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Amt Payable</th>
+                        <th scope="col">Amt Paid</th>
+                        <th scope="col">Order ID</th>
                         <th scope="col">Assigned</th>
+                        <th scope="col">Confirmed</th>
+                        <th scope="col">Update</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -448,47 +764,159 @@
                     <tr>
                         <th scope="row">{{forloop.counter}}</th>
                         <td>{{i.date_created|timesince}}</td>
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.Amount_Paid}}</td>
+                        <td>{{i.customer}}</td> 
+                        <td>{{i.category}}</td> 
+                        <td>{{i.payment_channel}}</td> 
                         <td>
                             <div class="dropdown">
                                 <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                   r
                                 </p>
                                 <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                  <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
+                                    <small class=" text-white"> <strong> Order ID:</strong> {{i.order_id}}  </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Customer Phone:</strong> {{i.customer.phone_number}}  </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Customer Name:</strong> {{i.customer.first_name}} {{i.customer.last_name}}  </small>
+                                    <br>
+                                    <small class=" text-white"><strong>Sender Location:</strong> {{i.your_location}} </small>
+                                    <hr>
+                                    {% if i.category == 'Fuel' %}
+                                        <small class=" text-white"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
+                                        <br>
+                                        <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                    {% endif %}
                                   <br>
-                                  <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_contact}} </small>
+                                  {% if i.category == 'Bread' %}
+                                    <small class=" text-white"> <strong> Bread Brand:</strong> {{i.Bread_brand_name}} </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                                    {% if description %}
+                                        <small class=" text-white"> <strong> Description:</strong> {{i.description}}</small>
+                                    {% else %}
+                                    <small class=" text-white"> <strong>Amt Entered:</strong> {{i.Enter_amount}}</small>
+                                    <br>
+                                    {% endif %}
+                                  {% endif %}
+
+                                  {% if i.category == 'Drugs' %}
+                                    <small class=" text-white"> <strong> Drug Store:</strong> {{i.Drug_store}} </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Drug Name:</strong> {{i.Drug_name}} </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Prescription:</strong> {{i.medical_description}} </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                                  {% endif %}
+
+                                  {% if i.category == 'Gas' %}
+                                  <small class=" text-white"> <strong> Gas Quantity:</strong> {{i.Gas_Quantity}} </small>
                                   <br>
-                                  <small class=" text-white"><strong>Address of Reciever:</strong> {{i.reciever_address}} </small>
+                                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>                        
+                                  {% endif %}
+
+                                  {% if i.category == 'Shawarma' %}
+                                  <small class=" text-white"><strong>Shawarma Store:</strong> {{i.Shawarma_store}} </small>
                                   <br>
-                                  <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
+                                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
                                   <br>
-                                  <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                                  <small class=" text-white"><strong>Shawarma description:</strong> {{i.Shawarma_desc}} </small>
+                                  <br>
+                                  <small class=" text-white"><strong>Further description:</strong> {{i.description}} </small>
+                                  <br>
+                                  <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>                                  
+                                  {% endif %}
+                                  
+                                  {% if i.category == 'Pizza'%}
+                                  <small class=" text-white"> <strong> Pizza Store:</strong> {{i.pizza_store}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Pizza Desc:</strong> {{i.Pizza_desc}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                                  <br>
+                                  <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>                                
+                                  {% endif %}
+
+                                  {% if i.category  == 'Ice Cream' %}
+                                  <small class=" text-white"> <strong> Store Name:</strong> {{i.ice_Cream_store}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Description:</strong> {{i.ice_Cream_desc}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                                  {% endif %}
+
+                                  {% if i.category == 'Fruits' %}
+                                  <small class=" text-white"> <strong> Purchase From:</strong> {{i.fruits_purchase_store}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Fruits Description:</strong> {{i.fruits_description}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>                        
+                                  {% endif %}
+
+                                  {% if i.category == 'Food' %}
+                                  <small class=" text-white"> <strong> Food Vendor:</strong> {{i.Food_vendor}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Food Description:</strong> {{i.Food_description}}</small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>                                                                    
+                                  {% endif %}
+
+                                  {% if i.category == 'Others' %}
+                                  <small class=" text-white"> <strong> Description:</strong> {{i.description}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                  <br>
+                                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount} } </small>                                                              
+                                  {% endif %}
                             </div>
                         </td>
-                        <td>{{i.Your_phone_number}}</td>
-                        <td>
-                            <div class="dropdown">
-                                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  e
-                                </p>
-                                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                  <p class=" text-white"> {{i.email}} </p>
-                            </div>
-                            </td>
+                        <td>{{i.status}}</td> 
+                        <td>{{i.Amount_Payable}}</td> 
+                        <td>{{i.Amount_Paid}}</td> 
                         <td>{{i.order_id}}</td> 
                         <td class="text-center">
                             {% if i.assigned == True%}
-                                    <i class="fas fa-check-circle text-success">
+                                    <i class="fas fa-check-circle text-white">
                             {% else %}
                                     <i class="fas fa-check-circle text-danger"></i>
                             {% endif %}
                         </td>
-                        {% endfor %}
+                        <td class="text-center">
+                            {% if i.confirmed == True %}
+                                <i class="fas fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fas fa-check-circle text-danger"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'fleetErr' i.id %}" role="button" class="btn btn-warning rounded-pill btn-sm"> 
+                                Update
+                            </a>
+                        </td>
                     </tr>
-                    
+                     
+                    {% endfor %}
+                
                     <div class="pagination mb-3">
                         <span class="step-links">
                             {% if page_obj4.has_previous %}
@@ -513,19 +941,25 @@
     <div id="list-item-6">
         <div class="row">
             <div class="col-md-12 col-sm- 12, col-xl-12">
-                <h6 class="p-3 position-static shadow-sm text-center text-dark">ERRAND REQUEST</h6>
+                <h6 class="p-3 position-static shadow-sm text-center text-dark">
+                    Front Desk REQUEST
+                </h6>
                 <table class="table table-striped table-dark">
                     <thead>
                     <tr>
                         <th scope="col">No</th>
                         <th scope="col">Date</th>
+                        <th scope="col">Personnel</th>
+                        <th scope="col">Delivery Type</th>
+                        <th scope="col">Request Details</th>
                         <th scope="col">TP Choice</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Request Details</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">Email</th>
+                        <th scope="col">Amount Paid</th>
+                        <th scope="col">Amount Payable</th>                    
+                        <th scope="col">Order ID</th>
                         <th scope="col">Assigned</th>
+                        <th scope="col">Confirmed</th>
+                        <th scope="col">Update</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -533,46 +967,85 @@
                     <tr>
                         <th scope="row">{{forloop.counter}}</th>
                         <td>{{i.date_created|timesince}}</td>
-                        <td>{{i.Choice_for_TP}}</td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.Amount_Paid}}</td>
+                        <td>{{i.customer}}</td>
+                        <td>{{i.Delivery_type}}</td>
                         <td>
                             <div class="dropdown">
                                 <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                   r
                                 </p>
                                 <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                  <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
-                                  <br>
-                                  <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_contact}} </small>
-                                  <br>
-                                  <small class=" text-white"><strong>Address of Reciever:</strong> {{i.reciever_address}} </small>
-                                  <br>
-                                  <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
-                                  <br>
-                                  <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                                    <small class=" text-white"> <strong>Order ID:</strong> {{i.order_id}}  </small>
+                                        <br>
+                                {% if i.Delivery_type == 'Pick & Drop'%}
+                                    {% if i.customer_name %}
+                                        <small class=" text-white"> <strong> Customer Name:</strong> {{i.customer_name}}  </small>
+                                        <br>
+                                    {% endif %}
+                                        <small class=" text-white"><strong>Customer Number:</strong> {{i.Customer_phone_number}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Customer Location:</strong> {{i.customer_location}} </small>                                        
+                                        <hr>
+                                        <small class=" text-white"><strong>Item Description:</strong> {{i.item_description}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Delivery Destination:</strong> {{i.delivery_destination}} </small>
+                                        <br>
+                                        <small class=" text-white"><strong>Reciever Number:</strong> {{i.Reciever_phone_number}} </small>
+                                        <br>                                        
+                                  {% if i.Note %}
+                                  <small class=" text-white"><strong>Note</strong> {{i.Note}} </small>
+                                  {% else %}
+                                  {% endif %}
+                                
+                                {% elif i.Delivery_type == 'Errand' %}
+                                <small class=" text-white"><strong>Customer Name:</strong> {{i.customer_name}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Customer Number:</strong> {{i.Customer_phone_number}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Customer Location:</strong> {{i.customer_location}} </small>
+                                <hr> 
+                                <small class=" text-white"><strong>Item Description:</strong> {{i.item_description}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Reciever Address:</strong> {{i.delivery_destination}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                                <br>                            
+                                <small class=" text-white"><strong>Reciever Number:</strong> {{i.Reciever_phone_number}} </small>
+                                <br> 
+                                <small class=" text-white"><strong>Purchase Location:</strong> {{i.Purchase_location}} </small>
+                                <br>
+                                {% if Note %}
+                                <small class="text-warning"><strong>Note:</strong> {{i.Note}} </small>
+                                {% endif %}
+                            {% endif %}
                             </div>
                         </td>
-                        <td>{{i.Your_phone_number}}</td>
-                        <td>
-                            <div class="dropdown">
-                                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  e
-                                </p>
-                                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                                  <p class=" text-white"> {{i.email}} </p>
-                            </div>
-                            </td>
+                        <td>{{i.Choice_for_TP}}</td>
+                        <td>{{i.status}}</td> 
+                        <td>{{i.Amount_Paid}}</td>
+                        <td>{{i.Amount_Payable}}</td>
                         <td>{{i.order_id}}</td> 
                         <td class="text-center">
                             {% if i.assigned == True%}
-                                    <i class="fas fa-check-circle text-success">
+                                    <i class="fas fa-check-circle text-white">
                             {% else %}
                                     <i class="fas fa-check-circle text-danger"></i>
                             {% endif %}
                         </td>
-                        {% endfor %}
+                        <td class="text-center">
+                            {% if i.confirmed == True %}
+                                <i class="fas fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fas fa-check-circle text-danger"></i>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'fleetF' i.id %}" role="button" class="btn btn-warning btn-sm rounded-pill">
+                                Update
+                            </a>
+                        </td>
                     </tr>
+                    {% endfor %}
                     
                     <div class="pagination mb-3">
                         <span class="step-links">
@@ -589,12 +1062,26 @@
                                 <a class="btn btn-warning" href="?page={{ page_obj6.next_page_number }}">next</a>
                                 <a class="btn btn-danger" href="?page={{ page_obj6.paginator6.num_pages }}">last &raquo;</a>
                             {% endif %}
+                        </span>
+                    </div>
                 </table>
             </div>
         </div>
     </div>
   </div>
 </div>
+
+<style>
+    .zoom {
+        background-color: rgb(238, 238, 238);
+        padding: 5px;
+    }
+    
+    .zoom:hover {
+        transform: scale(1.0111);
+        border: 2px solid rgb(216, 216, 216);
+    }
+</style>
     
 
  {% endblock content %}

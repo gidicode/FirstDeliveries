@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from PIL import Image
 from django.core.validators import RegexValidator
 from datetime import date
-from django.dispatch.dispatcher import receiver
 from django.utils import timezone
 from django.conf import settings
 
@@ -18,12 +17,11 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=15, null=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
     phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True)
-    Alt_phone_num = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Phone Number (2nd)")
+    Alt_phone_num = models.CharField(validators=[phone_regex], max_length=17, null=True, blank=True, verbose_name="Phone Number (2nd)")
     image = models.ImageField(default='default.jpg', upload_to='profile_pics', null=True)
     email = models.EmailField(max_length=100, null=True)
     signup_confirmation = models.BooleanField(default=False)
     
-
     def __str__(self):
         return f'{self.user.username}'
 
@@ -223,13 +221,7 @@ class Anonymous(models.Model):
 
 
     def __str__(self):
-        return f"""
-        Package Description -- {self.Package_description },\n 
-        Pickup Location -- {self.Your_location},\n
-        Your Contact -- {self.Your_phone_number},\n
-        Mode of Transport -- {self.Choice_for_TP},\n
-        Delivery Fee -- {self.Amount_Paid}
-        """
+        return f"{self.order_id }"
 
     class Meta:
         ordering = ('-date_created',)
@@ -332,7 +324,7 @@ class Errand_service(models.Model):
     status = models.CharField(max_length=100, choices=STATUS, default='Pending', null=True)
 
     def __str__(self):
-        return f' Customer:{self.customer}, Order ID:{self.order_id}, Category:{self.category}'
+        return f'{self.customer}, {self.order_id}, {self.category}'
 
     class Meta:
         ordering = ('-date_created',)
@@ -398,6 +390,9 @@ class Front_desk(models.Model):
     profit = models.IntegerField(null= True, default=0)
     Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     Amount_Payable = models.IntegerField(null= True, default=0)
+
+    def __str__(self):
+        return f"{self.customer}, {self.order_id}"
 
 class ForPayments(models.Model):
     OPTION2 = {

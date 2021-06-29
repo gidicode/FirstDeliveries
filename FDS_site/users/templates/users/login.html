@@ -10,15 +10,15 @@
         <div class="col-md-4"></div>
         <div class="col-md-4 p-4">
             {% if messages %}
-            <div class="messages p-3 container align-self-center">
-                {% for message in messages %}
-                <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}</div>
-                {% endfor %}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-            </div>
-        {% endif %}
+                <div class="messages p-3 container align-self-center">
+                    {% for message in messages %}
+                    <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> 
+                    </div>
+                    {% endfor %}
+            {% endif %}
             <div class="shadow-sm shadow bg-light mb-3 rounded-lg">
                 <div class="p-4">
                     <form method="POST" enctype="multipart/form-data"> 

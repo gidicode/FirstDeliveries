@@ -1,111 +1,453 @@
 {% extends "FDS_app/dashBase.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} History -FDLS {% endblock title %}
+{% block title %} Request History {% endblock title %}
 
 
 {% block content2 %}
-<br>
 <div class="container-fluid">
-<div class="container">
     <div class="row">
-        <div class="col-md-2 p-4"></div>
-            <div class="col-md-8"> 
-                <div class="shadow pr-4 p-3">
-                    <form class="form-inline my-3 mx-4 my-lg-1 bd-highlight font-weight-bold text-dark">   
-                        {{myFilter.form|crispy }}
-                        <button class="btn btn-outline-secondary my-sm-2" type="submit">Search</button>
+        <div class="col-md-4 p-4"></div>
+            <div class="col-md-4 col-sm-4 col-lg-4"> 
+                <div class=" p-2">
+                    <form class="text-dark text-center justify-content-center form-inline">  
+                        {{myFilter.form.order_id|as_crispy_field}}
+                        <button class="btn btn-outline-secondary rounded-pill ml-2 " type="submit">Search</button>
                     </form>
                 </div>
             </div>
-        <div class="col-md-2"></div>
+        <div class="col-md-4"></div>
     </div>
 </div>
 
 
-<div class="container">
+<div class="container-fluid">
     <div class="row"> 
-        <div class="col-md-4 p-3"> 
+        <div class="col-md-3 p-3"> 
             <div class=" shadow-sm rounded-top" style="background-color: rgb(35, 124, 160);">
                 <div> 
-                    <h5 class="text-white p-4" style="font-family: 'Archivo Black', sans-serif;" >E-payment Request</h5> 
+                    <h5 class="text-white text-center p-2">E-payment Request</h5> 
                 </div>
                 {% for i in request1 %}
                 <div class="bg bg-white shadow p-3">
-                <ul class="list-inline">
-                    <li class="list-inline-item"><strong>Name:</strong> {{i.reciever_name}}</li>
-                    <li class="list-inline-item"> <strong>Address:</strong> {{i.Address_of_reciever}}</li>
-                    <li class="list-inline-item"><strong>Contact:</strong> {{i.reciever_phone_number}}</li>
-                    <li class="list-inline-item"><strong>Package Description:</strong> {{i.Package_description}}</li>
-                    <li class="list-inline-item" class="text-info"><strong>DATE CREATED:</strong> {{i.date_created}}</li>
-                    <li class="list-inline-item"><strong>Mode: </strong> {{i.Choice_for_TP}}</li>
-                    <li class="list-inline-item"><strong>Location:</strong> {{i.Your_location}}</li>
-                    <li class="list-inline-item"><strong>Status: </strong> {{i.status}}</li> 
-                    <li class="list-inline-item"><strong>Paid:</strong> {{i.paid}}</li>
-                    <li class="list-inline-item"><strong>Delivery Amount:</strong> {{i.Amount}}</li>
-                    <li class="list-inline-item"><strong> Reference ID:</strong> {{i.order_id}}</li>
-                </ul>
+                    <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                    <br>
+                    <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                    <br>
+                    <small class="text-dark"> <strong>Reciever Name: </strong>{{i.reciever_name}} </small>
+                    <br>
+                    <small class="text-dark"> <strong>Reciever Address: </strong>{{i.Address_of_reciever}}</small>
+                    <br>
+                    <small class="text-dark"> <strong>RecieverContact: </strong>{{i.reciever_phone_number}}</small>
+                    <br>
+                    <small class="text-dark"> <strong>Package_description: </strong>{{i.Package_description}}</small>
+                    <br>
+                    <small class="text-dark"> <strong>Mode of Delivery: </strong> {{i.Choice_for_TP}}</small>
+                    <br>
+                    <small class="text-dark"> <strong>Your Location: </strong> {{i.Your_location}}</small>
+                    <br>
+                    <small class="text-dark"> <strong>Amount Payable: </strong> {{i.Amount_Payable}}</small>
+                    {% if i.Loading_choice != '[]'%}
+                        <small class="text-dark"> <strong>Loading Choice: </strong>{{i.Loading_choice}}</small>
+                        <br> 
+                        {% endif %}
+                    <br>
+                    <small class="text-dark"> <strong>Order ID: </strong> {{i.order_id}} </small>
+                    <br>
+
+                    {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                        <br>
+                        <p class="font-weight-bold"> 2nd Destination
+                            <br>
+                            <small class=" "> <strong> Reciever Name2:</strong> {{i.reciever_name2}}  </small>
+                            <br>
+                            <small class=" "><strong>Reciever Number2:</strong> {{i.reciever_phone_number2}} </small>
+                            <br>
+                            <small class=" "><strong>Address of Reciever2:</strong> {{i.Address_of_reciever2}} </small>
+                            <br>
+                            <small class=" "><strong>Package Description2:</strong> {{i.Package_description2}} </small>
+                        </p>
+                        <br>
+                    {% endif %}
+
+                    {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                        <p class="font-weight-bold"> 3rd Destination
+                            <small class=" "> <strong> Reciever Name3:</strong> {{i.reciever_name3}}  </small>
+                            <br>
+                            <small class=" "><strong>Reciever Number3:</strong> {{i.reciever_phone_number3}} </small>
+                            <br>
+                            <small class=" "><strong>Address of Reciever3:</strong> {{i.Address_of_reciever3}} </small>
+                            <br>
+                            <small class=" "><strong>Package Description3:</strong> {{i.Package_description3}} </small>
+                        </p>
+                        <br>
+                    {% endif %}
+
+                    {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                        <p class="font-weight-bold"> 4th Destination
+                            <small class=""> <strong> Reciever Name4:</strong> {{i.reciever_name4}}  </small>
+                            <br>
+                            <small class=" "><strong>Reciever Number4:</strong> {{i.reciever_phone_number4}} </small>
+                            <br>
+                            <small class=" "><strong>Address of Reciever4:</strong> {{i.Address_of_reciever4}} </small>
+                            <br>
+                            <small class=" "><strong>Package Description4:</strong> {{i.Package_description4}} </small>
+                            <br>
+                        </p>
+                    {% endif %}
+
+                    {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                        <p class="font-weight-bold"> 5th Destination
+                        <small class=" "> <strong> Reciever Name5:</strong> {{i.reciever_name5}}  </small>
+                        <br>
+                        <small class=" "><strong>Reciever Number5:</strong> {{i.reciever_phone_number5}} </small>
+                        <br>
+                        <small class=" "><strong>Address of Reciever5:</strong> {{i.Address_of_reciever5}} </small>
+                        <br>
+                        <small class=" "><strong>Package Description5:</strong> {{i.Package_description5}} </small>
+                        <br>
+                    {% endif %}
                 </div>
                 <br>
                 {% endfor %}   
             </div>
         </div>
 
-        <div class="col-md-4 p-3">
-            <div class="" style="background-color: rgb(53, 198, 255);">
-                <h5 class="text-white text-center p-4" style="font-family: 'Archivo Black', sans-serif;">Shopping History </h5>
-                <p class="text-white "></p> 
-                
+        <div class="col-md-3 p-3">
+            <div class="" style="background-color: rgb(43, 87, 104);">
+                <h5 class="text-white text-center p-2">Shopping History </h5>
                 {% for i in shop_request %}
-                    <div class=" bg bg-light bg-gradient shadow p-3">
-                        <ul class="list-inline">
-                        <li class="list-inline-item"><strong> Items:</strong> {{i.List_Items}}</li>
-                        <li class="list-inline-item"> <strong>Purchase Location:</strong> {{i.Place_of_purchase}}</li>
-                        <li class="list-inline-item"><strong>Note:</strong> {{i.Note}}</li>
-                        <li class="list-inline-item" class="text-info"><strong>Address For Delivery:</strong> {{i.Address}}</li>
-                        <li class="list-inline-item"><strong>Amount Intended </strong> {{i.Amount}}</li>
-                        <li class="list-inline-item"><strong>Terms Agreement</strong> {{i.Accept_Terms}}</li>
-                        <li class="list-inline-item"><strong>Date Created</strong> {{i.date_created}}</li>
-                        <li class="list-inline-item"><strong>Delivery Status: </strong> {{i.status}}</li> 
-                        <li class="list-inline-item"><strong>Amount Paid:</strong> {{i.amount_paid}}</li>
-                        <li class="list-inline-item"><strong>FDS Charge</strong> {{i.Charge}}</li>
-                        <li class="list-inline-item"><strong>Cost of Purchase:</strong> {{i.Item_Cost}}</li>
-                        <li class="list-inline-item"><strong>Amount Total:</strong> {{i.Total}}</li>
-                        <li class="list-inline-item"><strong> Order ID:</strong> {{i.order_id}}</li>
-                        <li class="list-inline-item"><strong>Amount Refunded:</strong> {{i.Amount_Refunded}}</li>
-                    </div>
-                </ul>
+                <div class=" bg bg-light shadow p-3">
+                    <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
                     <br>
+                    <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                    <br>
+                    <small class="text-dark"> <strong> Items Created: </strong>{{i.List_Items}}</small>
+                    <br>
+                    <small class="text-dark"> <strong> Purchase Location: </strong>{{i.Place_of_purchase}}</small>
+                    <br>
+                    {% if i.Note %}
+                    <small class="text-dark"> <strong> Note: </strong>{{i.Note}}</small>
+                    <br>
+                    {% endif %}
+                    <small class="text-dark"> <strong> Amount paid: </strong>{{i.Address}}</small>
+                    <br>
+                    <small class="text-dark"> <strong> Amount Entered: </strong>{{i.Amount}}</small>
+                    <br>
+                    <small class="text-dark"> <strong> Amount Paid: </strong>{{i.amount_paid}}</small>
+                    <br>
+                    <small class="text-dark"> <strong> Cost of items: </strong>{{i.Item_Cost}}</small>
+                    <br>
+                    <small class="text-dark"> <strong> Service Fee: </strong>{{i.Charge}}</small>
+                    <br>
+                    <small class="text-dark"> <strong> Amount Refunded: </strong>{{i.Amount_Refunded}}</small>
+                    <br>
+                    <small class="text-dark"> <strong>Order Id: </strong>{{i.order_id}}</small>
+                    <br> 
+                </div>
+                <br>
                 {% endfor %}
+                
             </div>
         </div>
 
-            <div class="col-md-4 p-3">
-                
-                    
-                    <div class="" style="background-color: rgb(39, 161, 170);">
-                        <h5 class="text-white p-4 font-weight-bolder" style="font-family: 'Archivo Black', sans-serif;"> Cash Payment Request</h5>
-                        {% for i in request2 %}
-                            <div class=" bg bg-light bg-gradient shadow p-3">
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><strong> Name:</strong> {{i.reciever_name}}</li>
-                                <li class="list-inline-item"> <strong> Adress:</strong> {{i.Address_of_reciever}}</li>
-                                <li class="list-inline-item"><strong>Contact:</strong> {{i.reciever_phone_number}}</li>
-                                <li class=" list-inline-item text-info"><strong>Date :</strong> {{i.time_submited}}</li>
-                                <li class="list-inline-item"><strong>Mode: </strong> {{i.Choice_for_TP}}</li>
-                                <li class="list-inline-item"><strong>Location:</strong> {{i.Your_location}}</li>
-                                <li class="list-inline-item"><strong>Description:</strong> {{i.Package_description}}</li>
-                                <li class="list-inline-item"><strong>Status: </strong> {{i.status}}</li> 
-                                <li class="list-inline-item"><strong>Delivery Amount:</strong> {{i.amount}}</li>
-                                <li class="list-inline-item"><strong> Order ID:</strong> {{i.order_id}}</li>
-                            </ul>
-                            </div>
+            <div class="col-md-3 p-3">
+                <div class="" style="background-color: rgb(14, 120, 128);">
+                    <h5 class=" text-center text-white p-2"> Cash Payment Request</h5>
+                    {% for i in request2 %}
+                        <div class=" bg bg-light bg-gradient shadow p-3">
+                        <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                        <br>
+                        <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                        <br>
+                        <small class="text-dark"> <strong> Reciever Name: </strong>{{i.reciever_name}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Address of reciever: </strong>{{i.Address_of_reciever}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Reciever number: </strong>{{i.reciever_phone_number}} </small>
+                        <br>
+                        <small class="text-dark"> <strong>Your location: </strong>{{i.Your_location}}</small>
+                        <br>
+                        <small class="text-dark"> <strong>Package description: </strong>{{i.Your_location}}</small>
+                        <br>
+                        <small class="text-dark"> <strong>Amount payable: </strong>{{i.Amount_Payable}}</small>
+                        <br>
+                        <small class="text-dark"> <strong>Amount paid: </strong>{{i.Amount_Paid}}</small>
+                        <br>
+                        {% if i.Loading_choice != '[]'%}
+                        <small class="text-dark"> <strong>Loading Choice: </strong>{{i.Loading_choice}}</small>
+                        <br> 
+                        {% endif %}
+                        <small class="text-dark"> <strong>Order Id: </strong>{{i.order_id}}</small>
+                        <br> 
+                        {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                        <br>
+                        <p class="font-weight-bold"> 2nd Destination
                             <br>
+                            <small class=" "> <strong> Reciever Name2:</strong> {{i.reciever_name2}}  </small>
+                            <br>
+                            <small class=" "><strong>Reciever Number2:</strong> {{i.reciever_phone_number2}} </small>
+                            <br>
+                            <small class=" "><strong>Address of Reciever2:</strong> {{i.Address_of_reciever2}} </small>
+                            <br>
+                            <small class=" "><strong>Package Description2:</strong> {{i.Package_description2}} </small>
+                        </p>
+                        <br>
+                    {% endif %}
+
+                    {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                        <p class="font-weight-bold"> 3rd Destination
+                            <small class=" "> <strong> Reciever Name3:</strong> {{i.reciever_name3}}  </small>
+                            <br>
+                            <small class=" "><strong>Reciever Number3:</strong> {{i.reciever_phone_number3}} </small>
+                            <br>
+                            <small class=" "><strong>Address of Reciever3:</strong> {{i.Address_of_reciever3}} </small>
+                            <br>
+                            <small class=" "><strong>Package Description3:</strong> {{i.Package_description3}} </small>
+                        </p>
+                        <br>
+                    {% endif %}
+
+                    {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                        <p class="font-weight-bold"> 4th Destination
+                            <small class=""> <strong> Reciever Name4:</strong> {{i.reciever_name4}}  </small>
+                            <br>
+                            <small class=" "><strong>Reciever Number4:</strong> {{i.reciever_phone_number4}} </small>
+                            <br>
+                            <small class=" "><strong>Address of Reciever4:</strong> {{i.Address_of_reciever4}} </small>
+                            <br>
+                            <small class=" "><strong>Package Description4:</strong> {{i.Package_description4}} </small>
+                            <br>
+                        </p>
+                    {% endif %}
+
+                    {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                        <p class="font-weight-bold"> 5th Destination
+                        <small class=" "> <strong> Reciever Name5:</strong> {{i.reciever_name5}}  </small>
+                        <br>
+                        <small class=" "><strong>Reciever Number5:</strong> {{i.reciever_phone_number5}} </small>
+                        <br>
+                        <small class=" "><strong>Address of Reciever5:</strong> {{i.Address_of_reciever5}} </small>
+                        <br>
+                        <small class=" "><strong>Package Description5:</strong> {{i.Package_description5}} </small>
+                        <br>
+                    {% endif %}
+  
+                    </div>
+                        <br>
                     {% endfor %}
                 </div>
-           
-                
             </div>
+
+            <div class="col-md-3 p-3">
+                <div class="" style="background-color: rgb(0, 90, 126);">
+                    <h5 class=" text-center text-white p-2" >Errand History </h5>
+                    {% for i in errand_request %}
+                    <div class="bg bg-light shadow p-3">
+                        {% if i.category == 'Fuel' %}
+                            <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                            <br>
+                            <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                            <br>
+                            <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                            <br>
+                        {% endif %}
+                        
+                        {% if i.category == 'Bread' %}
+                            <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                            <br>
+                            <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                            <br>
+                            <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Bread Brand:</strong> {{i.Bread_brand_name}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                        {% if description %}
+                            <small class="text-dark"> <strong> Description:</strong> {{i.description}}</small>
+                        {% else %}
+                        <small class="text-dark"> <strong>Amt Entered:</strong> {{i.Enter_amount}}</small>
+                        <br>
+                        <small class="text-dark"> <strong>Amt Entered:</strong> {{i.your_location}}</small>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if i.category == 'Drugs' %}
+                        <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                        <br>
+                        <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                        <br>
+                        <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                            <br>
+                        <small class="text-dark"> <strong> Drug Store:</strong> {{i.Drug_store}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Drug Name:</strong> {{i.Drug_name}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Prescription:</strong> {{i.medical_description}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Cus Location:</strong> {{i.your_location}} </small>
+                        {% endif %}
+
+                        {% if i.category == 'Gas' %}
+                            <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                            <br>
+                            <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                            <br>
+                            <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                                <br>
+                            <small class="text-dark"> <strong> Gas Quantity:</strong> {{i.Gas_Quantity}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Cus Location:</strong> {{i.your_location}} </small>
+                        {% endif %}
+
+                        {% if i.category == 'Shawarma' %}
+                            <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                            <br>
+                            <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                            <br>
+                            <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                                <br>
+                            <small class="text-dark"><strong>Shawarma Store:</strong> {{i.Shawarma_store}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                            <br>
+                            <small class="text-dark"><strong>Shawarma description:</strong> {{i.Shawarma_desc}} </small>
+                            <br>
+                            <small class="text-dark"><strong>Further description:</strong> {{i.description}} </small>
+                            <br>
+                            <small class="text-dark"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                            <br>
+                            <small class="text-dark"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                        {% endif %}
+                        
+                        {% if i.category == 'Pizza'%}
+                        <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                        <br>
+                        <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                        <br>
+                        <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                            <br>
+                        <small class="text-dark"> <strong> Pizza Store:</strong> {{i.pizza_store}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Pizza Desc:</strong> {{i.Pizza_desc}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Further Description:</strong> {{i.description}} </small>
+                        <br>
+                        <small class="text-dark"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                        {% endif %}
+
+                        {% if i.category  == 'Ice Cream' %}
+                        <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                        <br>
+                        <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                        <br>
+                        <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                            <br>
+                        <small class="text-dark"> <strong> Store Name:</strong> {{i.ice_Cream_store}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Description:</strong> {{i.ice_Cream_desc}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                        {% endif %}
+
+                        {% if i.category == 'Fruits' %}
+                        <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                        <br>
+                        <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                        <br>
+                        <small class="text-dark"> <strong> Purchase From:</strong> {{i.fruits_purchase_store}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Fruits Description:</strong> {{i.fruits_description}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                        {% endif %}
+
+                        {% if i.category == 'Food' %}
+                        <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                        <br>
+                        <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                        <br>
+                        <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                            <br>
+                        <small class="text-dark"> <strong> Food Vendor:</strong> {{i.Food_vendor}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Food Description:</strong> {{i.Food_description}}</small>
+                        <br>
+                        <small class="text-dark"> <strong> Further Description:</strong> {{i.description}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                        {% endif %}
+
+                        {% if i.category == 'Others' %}
+                        <small class="text-dark"> <strong> Date Created: </strong>{{i.date_created}} </small>
+                        <br>
+                        <small class="text-dark"> <strong>Status: </strong>{{i.status}}</small>
+                        <br>
+                        <small class="text-dark"> <strong> Category:</strong> {{i.category}} </small>
+                            <br>
+                        <small class="text-dark"> <strong> Description:</strong> {{i.description}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Amt Entered:</strong> {{i.Enter_amount} } </small>
+                        <br>
+                        <small class="text-dark"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                        {% endif %}
+
+                        <small class="text-dark"> <strong> Status:</strong> {{i.status}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Amount Payable:</strong> {{i.Amount_Payable}} </small>
+                        <br>
+                        <small class="text-dark"> <strong> Amount Paid:</strong> {{i.Amount_Paid}} </small>
+                        <br>
+                        {% if i.Ps_reference%}
+                        <small class="text-dark"> <strong> Paystack Reference:</strong> {{i.Ps_reference}} </small>
+                        <br>
+                        {% endif %}
+                        <small class="text-dark"> <strong> Order ID:</strong> {{i.order_id}} </small>
+                        <br>
+                    </div>
+                    <br>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

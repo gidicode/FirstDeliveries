@@ -34,14 +34,22 @@
           </li>
         </ul>
       </div>
+      {% if notify.count > 0 %}
+            
+              <a href="{% url 'adminNotificationShow' %}" class="mr-5" data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications"> 
+                  <span><i class="fas fa-bell text-danger"></i> </span> 
+                  <span class="badge">{{notify.count}}</span>
+              </a>
+        
+          {% endif %}
       <!--Notification and profile-->
-      <div class="d-flex flex-row bd-highlight">
+      <div class="d-flex flex-row bd-highlight notification">
         <div class="bd-highlight">
           {% if n.count > 0 %}
             <small class="justify-content-center">
               <a href="{% url 'show_Notification' user.id %}">
                 <p class="text-danger " data-toggle="tooltip" data-placement="top" title="You have {{n.count}} Notifications">
-                  <i class="fas fa-bell btn btn-md "></i> <span class="badge badge-light"></span>{{n.count}}</span>
+                  <i class="fas fa-bell btn btn-md text-danger pt-2 "><span class="badge">{{n.count}}</span></i> 
                 </p>
               </a>
             </small>
@@ -51,21 +59,12 @@
             </div>
           {% endif %}
 
-          {% if notify.count > 0 %}
-            <small >
-              <a href="{% url 'adminNotificationShow' %}"> 
-                <button type = "button" class="btn btn-danger  " data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications">
-                  <i class="fas fa-bell btn btn-md"></i><span class="badge badge-light">{{notify.count}}</span>
-                </button>
-              </a>
-            </small>
-          {% endif %}
         </div>
 
         <div class="bd-highlight">
           <div class="btn-group dropleft">
             <button type="button" class="btn btn-md  dropdown-toggle text-danger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="text-danger far fa-user-circle"></i>
+              <i class="text-dark far fa-user-circle"></i>
             </button>
             <div class="dropdown-menu rounded-lg bg-light shadow ">
               <div class="dropdown-item"><img src="{{user.customer.image.url}}" alt=" Profile Picture" class="  rounded-circle" style="width: 40px; height: 43px;">  </div>
@@ -136,6 +135,26 @@
     to {
         opacity: 1;
     }
+}
+
+.notification .badge {
+  position:absolute;
+  top: 2px;
+  right: 70px;
+  padding: 4px 8px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+.badge {
+  position:absolute;
+  top: 2px;
+  right: 120px;
+  padding: 5px 8px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
 }
 </style>
 

@@ -19,43 +19,95 @@
         {% endif %}
     </div>
   </div>
+
   <div class="row">
-      <div class="col-md-3 pt-4">
-        
-        <div class="d-flex p-3 flex-column bg-light rounded-lg justify-content-center bd-highlight mb-3">
-            
-            <div class="p-2  bd-highlight">
-              <p class="font-italic text-center"> Hello {{user.first_name}} please choose an option that suits you.</p>
-            </div>
-
-            <div class="p-2  bd-highlight">
-              <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a>
-            </div>
-            <div class="p-2 bd-highlight">
-              <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'requestForm_Cash' user.id %}" role="button">Request Dispatch</a>
-            </div>
-            <div class="p-2 bd-highlight">
-              <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'requestForm_Online' user.id %}" role="button">Request Dispatch(pay with card)</a>
-            </div>
-            <div class="p-2 bd-highlight">
-              <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'shopping' user.id %}" role="button">Shopping Request</a>
-            </div>
+      <div class="col-md-4 pt-4"></div>
+      <div class="col-md-4 pt-4">
+        <!--Strt-->
+        <div class="d-flex p-3 flex-column bg-light rounded-lg justify-content-center bd-highlight mb-3">  
+          <div class="p-2  bd-highlight">
+            <p class="font-italic text-center"> Hello {{user.first_name}} please choose an option that suits you.</p>
           </div>
-      </div>
 
-      <div class="col-md-4 pt-4"> 
-        
-        <div class="d-flex p-3 flex-column shadow-sm rounded-lg justify-content-center bd-highlight mb-3">
+          <div class="p-2  bd-highlight">
+            <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a>
+          </div>
+
           <div class="p-2 bd-highlight">
+            <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'requestForm_Cash' user.id %}" role="button">Request Dispatch</a>
+          </div>
+          <div class="p-2 bd-highlight">
+            <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'requestForm_Online' user.id %}" role="button">Request Dispatch(pay with card)</a>
+          </div>
+          <div class="p-2 bd-highlight">
+            <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'shopping' user.id %}" role="button">Shopping Request</a>
+          </div>
+        </div>
 
-    
-        <!--For online pending payment-->
-            {% for i in pending1 %}
+        <div class="d-flex p-3 flex-column text-center bg-light rounded-lg justify-content-center bd-highlight mb-3">  
+          <div class="p-2 bd-highlight"> 
+            {% for i in request_filter_cash %}
+              {% if i.status == 'Pending' %}
+              <div class="dropdown">
+                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span >View {{i.order_id}}</span>
+                </span>
+                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
+                  <div class="dropdown-divider"></div>
+                  <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
+                  <div class="dropdown-divider"></div>
+                  <small class=" text-white"><strong>Address of Reciever:</strong> {{i.Address_of_reciever}} </small>
+                  <div class="dropdown-divider"></div>
+                  <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
+                  <div class="dropdown-divider"></div>
+                  <small class=" text-white"><strong>Your Location:</strong> {{i.Your_location}} </small>
+
+                {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 2nd Destination
+                    <small class="text-white"><strong> {{i.Address_of_reciever2}} </strong> </small>
+                  </p>
+                </div>
+                {% endif %}
+               
+                {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 3rd Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever3}} </strong> </small>
+                  </p>
+                </div>
+                {% endif %}
+
+                {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 4th Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever4}} </strong> </small>
+                  </p> 
+                </div>
+                {% endif %}
+
+                {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 5th Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever5}} </strong> </small>
+                  </p> 
+                </div>
+                {% endif %}
+              </div>
+              <br>
+            <div class="progress">
+              <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                Pending
+              </div>
+            </div>
+          
+            {% elif i.status == 'Out for delivery' %}
             <div class="dropdown">
-              <p class="rounded-lg btn btn-block bg-light font-weight-bold text-center shadow-sm p-2 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Status <span class="text-danger">Pending {{i.order_id}}</span>
-              </p>
-              <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span >View {{i.order_id}}</span>
+              </span>
+              <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
                 <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
                 <div class="dropdown-divider"></div>
                 <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
@@ -64,18 +116,112 @@
                 <div class="dropdown-divider"></div>
                 <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
                 <div class="dropdown-divider"></div>
-                <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                <small class=" text-white"><strong>Your Location:</strong> {{i.Your_location}} </small>
+
+                {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 2nd Destination
+                    <small class="text-white"><strong> {{i.Address_of_reciever2}} </strong> </small>
+                  </p>
+                </div>
+                {% endif %}
+              
+                {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 3rd Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever3}} </strong> </small>
+                  </p>
+                </div>
+                {% endif %}
+
+                {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 4th Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever4}} </strong> </small>
+                  </p> 
+                </div>
+                {% endif %}
+
+                {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 5th Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever5}} </strong> </small>
+                  </p> 
+                </div>
+                {% endif %}
+              </div>
+              <br>
+              <div class="progress">
+                <div class="progress-bar bg-danger " role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Out for delivery</div>
+                <br>
               </div>
             </div>
-            {% endfor%}
-      
-            <!--Cash Deliveries-->
-            {% for i in pending2 %}
+            {% endif %}
+          {% endfor %}
+          </div>
+        <!--end-->
+          {% for i in request_filter %}
+              {% if i.status == 'Pending' %}
+              <div class="dropdown">
+                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span >View {{i.order_id}}</span>
+                </span>
+                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
+                  <div class="dropdown-divider"></div>
+                  <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
+                  <div class="dropdown-divider"></div>
+                  <small class=" text-white"><strong>Address of Reciever:</strong> {{i.Address_of_reciever}} </small>
+                  <div class="dropdown-divider"></div>
+                  <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
+                  <div class="dropdown-divider"></div>
+                  <small class=" text-white"><strong>Your Location:</strong> {{i.Your_location}} </small>
+
+                {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 2nd Destination
+                    <small class="text-white"><strong> {{i.Address_of_reciever2}} </strong> </small>
+                  </p>
+                </div>
+                {% endif %}
+                
+                {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 3rd Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever3}} </strong> </small>
+                  </p>
+                </div>
+                {% endif %}
+
+                {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 4th Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever4}} </strong> </small>
+                  </p> 
+                </div>
+                {% endif %}
+
+                {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 5th Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever5}} </strong> </small>
+                  </p> 
+                </div>
+                {% endif %}
+              </div>
+              <br>
+            <div class="progress">
+              <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                Pending
+              </div>
+            </div>
+          
+            {% elif i.status == 'Out for delivery' %}
             <div class="dropdown">
-              <p class="rounded-lg btn btn-block btn-light font-weight-bold text-center shadow-sm p-2 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Status <span class="text-danger">Pending {{i.order_id}}</span>
-              </p>
-              <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span >View {{i.order_id}}</span>
+              </span>
+              <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
                 <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
                 <div class="dropdown-divider"></div>
                 <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
@@ -84,69 +230,513 @@
                 <div class="dropdown-divider"></div>
                 <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
                 <div class="dropdown-divider"></div>
-                <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                <small class=" text-white"><strong>Your Location:</strong> {{i.Your_location}} </small>
+
+                {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 2nd Destination
+                    <small class="text-white"><strong> {{i.Address_of_reciever2}} </strong> </small>
+                  </p>
+                </div>
+                {% endif %}
+              
+                {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 3rd Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever3}} </strong> </small>
+                  </p>
+                </div>
+                {% endif %}
+
+                {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 4th Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever4}} </strong> </small>
+                  </p> 
+                </div>
+                {% endif %}
+
+                {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                <div>
+                  <p class="text-warning font-weight-bold"> 5th Destination
+                    <small class=" text-white"><strong> {{i.Address_of_reciever5}} </strong> </small>
+                  </p> 
+                </div>
+                {% endif %}
+              </div>
+              <br>
+              <div class="progress">
+                <div class="progress-bar bg-danger " role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Out for delivery</div>
+                <br>
               </div>
             </div>
-            {% endfor%}
-
-            {% if pending1 and pending2 %}
-            {% else%}
-            <h6>You have no Pending Deliveries </h6>
-            {%endif%}
+            {% endif %}
+          {% endfor %}
           </div>
-        </div>
-      </div>
-    
 
-    <div class="col-md-5 pt-4">
-      <div class="d-flex p-3 btn flex-column shadow-sm rounded-lg justify-content-center bd-highlight mb-3">
-        <div class="p-2  bd-highlight">
-      <!--out for Deliveries1-->
-          {% for i in out_for_delivery %}
-          <div class="dropdown">
-            <p class="rounded-lg btn btn-block btn-light font-weight-bold text-center shadow-sm p-2 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Status <span class="text-info">Out for delivery ({{i.order_id}})</span>
-            </p>
-            <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-              <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
-              <div class="dropdown-divider"></div>
-              <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
-              <div class="dropdown-divider"></div>
-              <small class=" text-white"><strong>Address of Reciever:</strong> {{i.Address_of_reciever}} </small>
-              <div class="dropdown-divider"></div>
-              <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
-              <div class="dropdown-divider"></div>
-              <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
-          </div>
-          {% endfor%}
+          <!--Errand-->
+          {% for i in request_filter_errand %}
+              {% if i.status == 'Pending' %}
+              <div class="dropdown">
+                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span >View {{i.order_id}}</span>
+                </span>
+                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  {% if i.category == 'Fuel' %}
+                    <small class=" text-white"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
 
-          <!--out for Deliveries2-->
-          {% for i in out_for_delivery2 %}
-          <div class="dropdown">
-            <p class="rounded-lg btn-light btn btn-block font-weight-bold text-center shadow-sm p-2 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Status <span class="text-info">Out for delivery ({{i.order_id}})</span>
-            </p>
-            <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-              <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
-              <div class="dropdown-divider"></div>
-              <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
-              <div class="dropdown-divider"></div>
-              <small class=" text-white"><strong>Address of Reciever:</strong> {{i.Address_of_reciever}} </small>
-              <div class="dropdown-divider"></div>
-              <small class=" text-white"><strong>Package Description:</strong> {{i.Package_description}} </small>
-              <div class="dropdown-divider"></div>
-              <small class=" text-white"><strong>Sender Location:</strong> {{i.Your_location}} </small>
+                  {% if i.category == 'Bread' %}
+                    <small class=" text-white"> <strong> Bread Brand:</strong> {{i.Bread_brand_name}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                    {% if description %}
+                        <small class=" text-white"> <strong> Description:</strong> {{i.description}}</small>
+                    {% else %}
+                    <small class=" text-white"> <strong>Amt Entered:</strong> {{i.Enter_amount}}</small>
+                    <br>
+                    <small class=" text-white"> <strong>Amt Entered:</strong> {{i.your_location}}</small>
+                    {% endif %}
+                  {% endif %}
+
+                  {% if i.category == 'Drugs' %}
+                    <small class=" text-white"> <strong> Drug Store:</strong> {{i.Drug_store}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Drug Name:</strong> {{i.Drug_name}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Prescription:</strong> {{i.medical_description}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Cus Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
+
+                  {% if i.category == 'Gas' %}
+                    <small class=" text-white"> <strong> Gas Quantity:</strong> {{i.Gas_Quantity}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Cus Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
+
+                  {% if i.category == 'Shawarma' %}
+                    <small class=" text-white"><strong>Shawarma Store:</strong> {{i.Shawarma_store}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"><strong>Shawarma description:</strong> {{i.Shawarma_desc}} </small>
+                    <br>
+                    <small class=" text-white"><strong>Further description:</strong> {{i.description}} </small>
+                    <br>
+                    <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
+                    
+                  {% if i.category == 'Pizza'%}
+                    <small class=" text-white"> <strong> Pizza Store:</strong> {{i.pizza_store}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pizza Desc:</strong> {{i.Pizza_desc}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                    <br>
+                    <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
+
+                  {% if i.category  == 'Ice Cream' %}
+                    <small class=" text-white"> <strong> Store Name:</strong> {{i.ice_Cream_store}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Description:</strong> {{i.ice_Cream_desc}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
+
+                  {% if i.category == 'Fruits' %}
+                    <small class=" text-white"> <strong> Purchase From:</strong> {{i.fruits_purchase_store}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Fruits Description:</strong> {{i.fruits_description}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
+
+                  {% if i.category == 'Food' %}
+                    <small class=" text-white"> <strong> Food Vendor:</strong> {{i.Food_vendor}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Food Description:</strong> {{i.Food_description}}</small>
+                    <br>
+                    <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
+
+                  {% if i.category == 'Others' %}
+                    <small class=" text-white"> <strong> Description:</strong> {{i.description}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                    <br>
+                    <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount} } </small>
+                    <br>
+                    <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                  {% endif %}
+                  <!--end option-->
+              </div>
+              <br>
+            <div class="progress">
+              <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                Pending
+              </div>
             </div>
-          </div>
-          {% endfor%}
+          
+            {% elif i.status == 'Purchase in Process' %}
+            <div class="dropdown">
+              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span >View {{i.order_id}}</span>
+              </span>
+              <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                {% if i.category == 'Fuel' %}
+                  <small class=" text-white"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
 
-          {% if out_for_delivery and out_for_delivery2 %}
-          {% else%}
-          <h6 class="text-warning">You have no Item out for Delivery or your item have been delivered </h6>
-          {%endif%}
+                {% if i.category == 'Bread' %}
+                  <small class=" text-white"> <strong> Bread Brand:</strong> {{i.Bread_brand_name}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                  {% if description %}
+                      <small class=" text-white"> <strong> Description:</strong> {{i.description}}</small>
+                  {% else %}
+                  <small class=" text-white"> <strong>Amt Entered:</strong> {{i.Enter_amount}}</small>
+                  <br>
+                  <small class=" text-white"> <strong>Amt Entered:</strong> {{i.your_location}}</small>
+                  {% endif %}
+                {% endif %}
+
+                {% if i.category == 'Drugs' %}
+                  <small class=" text-white"> <strong> Drug Store:</strong> {{i.Drug_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Drug Name:</strong> {{i.Drug_name}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Prescription:</strong> {{i.medical_description}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Cus Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Gas' %}
+                  <small class=" text-white"> <strong> Gas Quantity:</strong> {{i.Gas_Quantity}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Cus Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Shawarma' %}
+                  <small class=" text-white"><strong>Shawarma Store:</strong> {{i.Shawarma_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"><strong>Shawarma description:</strong> {{i.Shawarma_desc}} </small>
+                  <br>
+                  <small class=" text-white"><strong>Further description:</strong> {{i.description}} </small>
+                  <br>
+                  <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+                  
+                {% if i.category == 'Pizza'%}
+                  <small class=" text-white"> <strong> Pizza Store:</strong> {{i.pizza_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pizza Desc:</strong> {{i.Pizza_desc}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                  <br>
+                  <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category  == 'Ice Cream' %}
+                  <small class=" text-white"> <strong> Store Name:</strong> {{i.ice_Cream_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Description:</strong> {{i.ice_Cream_desc}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Fruits' %}
+                  <small class=" text-white"> <strong> Purchase From:</strong> {{i.fruits_purchase_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Fruits Description:</strong> {{i.fruits_description}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Food' %}
+                  <small class=" text-white"> <strong> Food Vendor:</strong> {{i.Food_vendor}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Food Description:</strong> {{i.Food_description}}</small>
+                  <br>
+                  <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Others' %}
+                  <small class=" text-white"> <strong> Description:</strong> {{i.description}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount} } </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+                <!--end option-->
+              <br>
+              <div class="progress">
+                <div class="progress-bar bg-danger " role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Purchase in process</div>
+                <br>
+              </div>
+            </div>
+
+            {% elif i.status == 'On Route for Delivery' %}
+            <div class="dropdown">
+              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span >View {{i.order_id}}</span>
+              </span>
+              <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                {% if i.category == 'Fuel' %}
+                  <small class=" text-white"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Bread' %}
+                  <small class=" text-white"> <strong> Bread Brand:</strong> {{i.Bread_brand_name}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                  {% if description %}
+                      <small class=" text-white"> <strong> Description:</strong> {{i.description}}</small>
+                  {% else %}
+                  <small class=" text-white"> <strong>Amt Entered:</strong> {{i.Enter_amount}}</small>
+                  <br>
+                  <small class=" text-white"> <strong>Amt Entered:</strong> {{i.your_location}}</small>
+                  {% endif %}
+                {% endif %}
+
+                {% if i.category == 'Drugs' %}
+                  <small class=" text-white"> <strong> Drug Store:</strong> {{i.Drug_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Drug Name:</strong> {{i.Drug_name}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Prescription:</strong> {{i.medical_description}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Cus Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Gas' %}
+                  <small class=" text-white"> <strong> Gas Quantity:</strong> {{i.Gas_Quantity}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Cus Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Shawarma' %}
+                  <small class=" text-white"><strong>Shawarma Store:</strong> {{i.Shawarma_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"><strong>Shawarma description:</strong> {{i.Shawarma_desc}} </small>
+                  <br>
+                  <small class=" text-white"><strong>Further description:</strong> {{i.description}} </small>
+                  <br>
+                  <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+                  
+                {% if i.category == 'Pizza'%}
+                  <small class=" text-white"> <strong> Pizza Store:</strong> {{i.pizza_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pizza Desc:</strong> {{i.Pizza_desc}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                  <br>
+                  <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category  == 'Ice Cream' %}
+                  <small class=" text-white"> <strong> Store Name:</strong> {{i.ice_Cream_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Description:</strong> {{i.ice_Cream_desc}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Fruits' %}
+                  <small class=" text-white"> <strong> Purchase From:</strong> {{i.fruits_purchase_store}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Fruits Description:</strong> {{i.fruits_description}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Food' %}
+                  <small class=" text-white"> <strong> Food Vendor:</strong> {{i.Food_vendor}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Food Description:</strong> {{i.Food_description}}</small>
+                  <br>
+                  <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+
+                {% if i.category == 'Others' %}
+                  <small class=" text-white"> <strong> Description:</strong> {{i.description}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                  <br>
+                  <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount} } </small>
+                  <br>
+                  <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
+                {% endif %}
+                <!--end option-->
+              <br>
+              <div class="progress">
+                <div class="progress-bar bg-danger " role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">On Route</div>
+                <br>
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+          </div>
+          <!--/errand-->
+
+          {% for i in request_filter_shopping %}
+              {% if i.status == 'Pending' %}
+              <div class="dropdown">
+                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span >View {{i.order_id}}</span>
+                </span>
+                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  <small class=" text-white"> {{i.List_Items}} </small>
+                  <!--end option-->
+              </div>
+              <br>
+              <div class="progress">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                  Pending
+                </div>
+              </div>
+            {% elif i.status == 'At the Mall' %}
+            <div class="dropdown">
+              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span >View {{i.order_id}}</span>
+              </span>
+              <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                <small class=" text-white"> {{i.List_Items}} </small>
+                <!--end option-->
+              <br>
+              <div class="progress">
+                <div class="progress-bar bg-danger " role="progressbar" style="width: 60%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Ath the Mall</div>
+                <br>
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+          </div>
         </div>
       </div>
-    </div>
+      <div class="col-md-4 pt-4"></div>
   </div>
 </div>
 {% endblock content2 %}

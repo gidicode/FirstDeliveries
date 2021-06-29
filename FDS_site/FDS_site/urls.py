@@ -29,6 +29,8 @@ urlpatterns = [
 
     path('profileUpdate/<hashid:user>/', user_views.customerProfileUpdatePage, name='profileUpdate'),
 
+    path('passwordChange/<hashid:user>/', user_views.PasswordChange, name='passwordchange'),
+
     path('success/<str:user>/', user_views.successPage, name='success'),
 
     path('requestForm_Online/<hashid:user>/',  user_views.requestForm_Online, name='requestForm_Online'),
@@ -96,6 +98,14 @@ urlpatterns = [
     path('CashierUpdateA/<hashid:pk>/', user_views.CashierUpdateAnonForm, name='cashierupdate_a'),
     path('CashierUpdateErr/<hashid:pk>/', user_views.CashierUpdateErrandForm, name='cashierupdate_err'),
     path('CashierUpdateF/<hashid:pk>/', user_views.CashierUpdateFrontForm, name='cashierupdate_f'),
+
+
+    path('FleetManagerE/<hashid:pk>/', user_views.UpdateEForm, name='fleetE'),
+    path('FleetManagerC/<hashid:pk>/', user_views.UpdateCForm, name='fleetC'),
+    path('FleetManagerS/<hashid:pk>/', user_views.UpdateSForm, name='fleetS'),
+    path('FleetManagerErr/<hashid:pk>/', user_views.UpdateErrForm, name='fleetErr'),
+    path('FleetManagerA/<hashid:pk>/', user_views.UpdateAForm, name='fleetA'),
+    path('FleetManagerF/<hashid:pk>/', user_views.UpdateFForm, name='fleetF'),
 
     path('SearchId/', user_views.Inhousesearch, name='searchid'),
 

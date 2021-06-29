@@ -44,7 +44,7 @@ class UserRegisterForm(UserCreationForm):
 
 class UserUpdateForm(forms.ModelForm):    
 
-    class Meta: #gives us a nested name space for configuration keeping it one place
+    class Meta:
         model = Customer
         fields = ['email', 'Alt_phone_num']
 
@@ -279,6 +279,37 @@ class CashierFormErrand(forms.ModelForm):
         fields = ['confirmed', 'profit', 'Amount_Paid']
 
 class CashierFormFront(forms.ModelForm): 
+
     class Meta:
         model = Front_desk
         fields = ['confirmed', 'profit', 'Amount_Paid']
+
+class FleetManagerUpdateE(forms.ModelForm):
+    class Meta:
+        model = MakeRequest
+        fields= ['status']
+
+class FleetManagerUpdateC(forms.ModelForm):
+    class Meta:
+        model = MakeRequestCash
+        fields= ['status']
+
+class FleetManagerUpdateS(forms.ModelForm):
+    class Meta:
+        model = Shopping
+        fields= ['status']
+
+class FleetManagerUpdateErr(forms.ModelForm):
+    class Meta:
+        model = Errand_service
+        fields= ['status']
+
+class FleetManagerUpdateA(forms.ModelForm):
+    class Meta:
+        model = Anonymous
+        fields= ['status']
+
+class FleetManagerUpdateF(forms.ModelForm):
+    class Meta:
+        model = Front_desk
+        fields= ['status']

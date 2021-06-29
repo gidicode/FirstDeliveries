@@ -14,8 +14,8 @@ import requests
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        Customer.objects.create(user=instance) # we want to run everytime a user is created
-        add_items = Anonymous.objects.filter(email = instance.email)
+        Customer.objects.create(user=instance) 
+        
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
@@ -29,8 +29,7 @@ def Delivered_signals(sender, instance, created, **kwargs):
 
         customer.delivered_set.filter(order_id = instance.order_id).update(
                                 title = 'Delivered!',
-                                Message= f"Hello {instance.customer} Your parcel with the following refrence Number '{instance.order_id}' has been Delivered, Thanks for using our service.")
-        print(instance.order_id)
+                                Message= f"Hello {instance.customer}, your parcel with the following Order ID '{instance.order_id}' has been delivered Thanks for using our service.")
 
 
 @receiver(post_save, sender=MakeRequest)

@@ -1,4 +1,4 @@
-from users.models import MakeRequest, MakeRequestCash, Shopping, Anonymous
+from users.models import MakeRequest, MakeRequestCash, Shopping, Anonymous, Front_desk, Errand_service
 from django.db import models
 from django.core.validators import RegexValidator
 from datetime import date
@@ -51,6 +51,8 @@ class RidersDeliveries(models.Model):
     e_payment_request = models.ForeignKey(MakeRequest, on_delete=models.SET_NULL,  null=True, blank=True)
     shopping = models.ForeignKey(Shopping, on_delete=models.SET_NULL,  null=True, blank=True)
     anonymous = models.ForeignKey(Anonymous, on_delete = models.SET_NULL, null=True, blank=True)
+    errand = models.ForeignKey(Errand_service, on_delete = models.SET_NULL, null=True, blank=True)
+    front_desk = models.ForeignKey(Front_desk, on_delete = models.SET_NULL, null=True, blank=True)
     staus = models.CharField(max_length=100, choices=OPTIONS1, default="Pending", null=True)
     dispute=models.CharField(max_length=100, blank=True)
     date_created = models.DateTimeField(default=timezone.now, null=True)

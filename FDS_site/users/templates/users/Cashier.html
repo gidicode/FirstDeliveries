@@ -104,8 +104,9 @@
                         <th scope="col">Details</th>
                         <th scope="col">TP Choice</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Amount Payable</th>
-                        <th scope="col">Amount Paid</th>
+                        <th scope="col">Paid</th>
+                        <th scope="col">Amt Payable</th>
+                        <th scope="col">Amt Paid</th>
                         <th scope="col">PS ID</th>
                         <th scope="col">Order ID</th>
                         <th scope="col">Assigned</th>
@@ -189,6 +190,13 @@
             
                             <td>{{i.Choice_for_TP}}</td>
                             <td>{{i.status}}</td> 
+                            <td>
+                                {% if i.paid == True%}
+                                <i class="fas fa-check-circle text-white">
+                                    {% else %}
+                                <i class="fas fa-check-circle text-danger"></i>
+                                    {% endif %}
+                            </td> 
                             <td>{{i.Amount_Payable}}</td> 
                             <td>{{i.Amount_paid}}</td> 
                             <td>{{i.charge_id}}</td>
@@ -277,7 +285,14 @@
                             </td>
             
                             <td>{{i.Choice_for_TP}}</td>
-                            <td>{{i.status}}</td> 
+                            <td>{{i.status}}</td>
+                            <td>
+                                {% if i.paid == True%}
+                                <i class="fas fa-check-circle text-white">
+                                    {% else %}
+                                <i class="fas fa-check-circle text-danger"></i>
+                                {% endif %}
+                            </td> 
                             <td>{{i.Amount_Payable}}</td> 
                             <td>{{i.Amount_paid}}</td> 
                             <td>{{i.charge_id}}</td>
@@ -1196,6 +1211,28 @@
                                   <small class=" text-white"><strong>Note</strong> {{i.Note}} </small>
                                   {% else %}
                                   {% endif %}
+                                {% endif %}
+
+                                {% if i.Delivery_type == 'Errand' %}
+                                <small class=" text-white"><strong>Customer Name:</strong> {{i.customer_name}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Customer Number:</strong> {{i.Customer_phone_number}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Customer Location:</strong> {{i.customer_location}} </small>
+                                <br> 
+                                <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Delivery Destination:</strong> {{i.delivery_destination}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Item Description:</strong> {{i.item_description}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Amount Entered:</strong> {{i.Enter_amount}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Reciever Number:</strong> {{i.Reciever_phone_number}} </small>
+                                <br> 
+                                <small class=" text-white"><strong>Purchase Location:</strong> {{i.Purchase_location}} </small>
+                                <br>
+                                <small class=" text-white"><strong>Note</strong> {{i.Note}} </small>
                                 {% endif %}
                             </div>
                         </td>

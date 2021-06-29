@@ -1,7 +1,7 @@
 {% extends "FDS_app/base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Search Result - FDLS {% endblock title %}
+{% block title %} Search Result {% endblock title %}
 
 {% block content %}
 <br>
@@ -36,7 +36,6 @@
                 {% endif %}
                 <li> Amount paid : N{{r.Amount_Paid}}</li>
                 <li> Reference Number : {{r.order_id}}</li>
-                <br>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -46,19 +45,137 @@
             <ul>
             {% for r in results2 %}
             <h4>Errand Service Request</h4>
-                <li> Item Description: {{r.Package_description}}</li>
-                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
-                <li> Pickup location : {{ r.Your_location }}</li>
-                <li> Your Phone Number : {{r.Your_phone_number}}</li>
-                <li> Your Email : {{r.email}}</li>
-                <li> Reciever Name: {{r.reciever_name}}</li>
-                <li> Reciever Address: {{r.reciever_address}}</li>
-                <li> Reciever Number: {{r.reciever_contact}}</li>
-                <li> Date Created : {{r.date_created}}</li>
+            <!--start-->
+            <li>Date: {{r.date_created}}</li>
+                <li>Customer: {{r.customer}}</li> 
+                <li>Category: {{r.category}}</li> 
+                <li>Payment Channel: {{r.payment_channel}}</li> 
+                <li>
+                    <div class="dropdown">
+                        <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        View Items
+                        </p>
+                        <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                            <small class=" text-white"> <strong> Order ID:</strong> {{r.order_id}}  </small>
+                            <br>
+                            <small class=" text-white"> <strong> Customer Phone:</strong> {{r.customer.phone_number}}  </small>
+                            <br>
+                            <small class=" text-white"> <strong> Customer Name:</strong> {{r.customer.first_name}} {{r.customer.last_name}}  </small>
+                            <br>
+                            <small class=" text-white"><strong>Sender Location:</strong> {{r.your_location}} </small>
+                            <hr>
+                            {% if r.category == 'Fuel' %}
+                                <small class=" text-white"> <strong> Fuel Amount:</strong> {{r.fuel_per_amount}} </small>
+                                <br>
+                                <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            {% endif %}
+                            <br>
+                            {% if r.category == 'Bread' %}
+                            <small class=" text-white"> <strong> Bread Brand:</strong> {{r.Bread_brand_name}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Quantity:</strong> {{r.Quantity}} </small>
+                            {% if description %}
+                                <small class=" text-white"> <strong> Description:</strong> {{r.description}}</small>
+                            {% else %}
+                            <small class=" text-white"> <strong>Amt Entered:</strong> {{r.Enter_amount}}</small>
+                            <br>
+                            {% endif %}
+                            {% endif %}
 
+                            {% if r.category == 'Drugs' %}
+                            <small class=" text-white"> <strong> Drug Store:</strong> {{r.Drug_store}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Drug Name:</strong> {{r.Drug_name}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Prescription:</strong> {{r.medical_description}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Amt Entered:</strong> {{r.Enter_amount}} </small>
+                            {% endif %}
+
+                            {% if r.category == 'Gas' %}
+                            <small class=" text-white"> <strong> Gas Quantity:</strong> {{r.Gas_Quantity}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>                        
+                            {% endif %}
+
+                            {% if r.category == 'Shawarma' %}
+                            <small class=" text-white"><strong>Shawarma Store:</strong> {{r.Shawarma_store}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            <br>
+                            <small class=" text-white"><strong>Shawarma description:</strong> {{r.Shawarma_desc}} </small>
+                            <br>
+                            <small class=" text-white"><strong>Further description:</strong> {{r.description}} </small>
+                            <br>
+                            <small class=" text-white"><strong>Quantity:</strong> {{r.Quantity}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Amt Entered:</strong> {{r.Enter_amount}} </small>                                  
+                            {% endif %}
+                            
+                            {% if r.category == 'Pizza'%}
+                            <small class=" text-white"> <strong> Pizza Store:</strong> {{r.pizza_store}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pizza Desc:</strong> {{r.Pizza_desc}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Further Description:</strong> {{r.description}} </small>
+                            <br>
+                            <small class=" text-white"><strong>Quantity:</strong> {{r.Quantity}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Amt Entered:</strong> {{r.Enter_amount}} </small>                                
+                            {% endif %}
+
+                            {% if r.category  == 'Ice Cream' %}
+                            <small class=" text-white"> <strong> Store Name:</strong> {{r.ice_Cream_store}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Description:</strong> {{r.ice_Cream_desc}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Amt Entered:</strong> {{r.Enter_amount}} </small>
+                            {% endif %}
+
+                            {% if r.category == 'Fruits' %}
+                            <small class=" text-white"> <strong> Purchase From:</strong> {{r.fruits_purchase_store}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Fruits Description:</strong> {{r.fruits_description}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Amt Entered:</strong> {{r.Enter_amount}} </small>                        
+                            {% endif %}
+
+                            {% if r.category == 'Food' %}
+                            <small class=" text-white"> <strong> Food Vendor:</strong> {{r.Food_vendor}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Food Description:</strong> {{r.Food_description}}</small>
+                            <br>
+                            <small class=" text-white"> <strong> Further Description:</strong> {{r.description}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Amt Entered:</strong> {{r.Enter_amount}} </small>                                                                    
+                            {% endif %}
+
+                            {% if r.category == 'Others' %}
+                            <small class=" text-white"> <strong> Description:</strong> {{r.description}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Quantity:</strong> {{r.Quantity}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Pay Channel:</strong> {{r.payment_channel}} </small>
+                            <br>
+                            <small class=" text-white"> <strong> Amt Entered:</strong> {{r.Enter_amount} } </small>                                                              
+                            {% endif %}
+                    </div>
+                </li>
+                
                 {% if r.status == 'Pending' %}
-                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
-
+                <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
                 {% elif r.status == 'Out for delivery' %}
                     <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
                 {% elif r.status == 'Delivered' %}
@@ -66,10 +183,30 @@
                 {% else%}
                     <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
                 {% endif %}
-                <li> Amount paid : N{{r.Amount_Paid}}</li>
-                <li> Reference Number : {{r.order_id}}</li>
-                <br>
-                
+                <li> Amount Payable: {{r.Amount_Payable}}</li> 
+                <li>Amount Paid{{r.Amount_Paid}}</li> 
+                {% if profit %}
+                    <li>Profit{{r.profit }}</li> 
+                {% endif %}
+                {% if r.Ps_reference %}
+                    <li>Paystack Reference: {{r.Ps_reference }}</li> 
+                {% endif %}
+                <li>Order ID: {{r.order_id}}</li> 
+                <li>
+                    {% if r.assigned == True%}
+                        Assigned to rider: <i class="fas fa-check-circle text-white">
+                    {% else %}
+                        Assigned to rider: <i class="fas fa-check-circle text-danger"></i>
+                    {% endif %}
+                </li>
+                <li>
+                    {% if r.confirmed == True %}
+                        Payment Confirmed: <i class="fas fa-check-circle text-success"></i>
+                    {% else %}
+                        Payment Confirmed: <i class="fas fa-check-circle text-danger"></i>
+                    {% endif %}
+                </li>
+            <!--end-->
                 {% endfor %}
             </ul>
         {% endif %}
@@ -78,16 +215,27 @@
             <ul>
             {% for r in results3 %}
             <h4>Shopping Request</h4>
-                <li> Item Description: {{r.Package_description}}</li>
-                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
-                <li> Pickup location : {{ r.Your_location }}</li>
-                <li> Your Phone Number : {{r.Your_phone_number}}</li>
-                <li> Your Email : {{r.email}}</li>
-                <li> Reciever Name: {{r.reciever_name}}</li>
-                <li> Reciever Address: {{r.reciever_address}}</li>
-                <li> Reciever Number: {{r.reciever_contact}}</li>
-                <li> Date Created : {{r.date_created}}</li>
-
+                <!--Start-->
+                <li>Customer: {{r.customer}}</li>
+                <li>Date: {{r.date_created}}</li>
+                <li>
+                    <div class="dropdown">
+                        <p class=" dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            items
+                        </p>
+                        <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                            <small class=" text-white"> <strong> Order ID:</strong> {{r.order_id}}  </small>
+                            <br>
+                            <small class=" text-white"> <strong> Customer Phone:</strong> {{r.customer.phone_number}}  </small>
+                            <br>
+                            <small class=" text-white"> <strong> Customer Name:</strong> {{r.customer.first_name}} {{r.customer.last_name}}  </small>
+                            <br>
+                            <small class=" text-white"><strong>Sender Location:</strong> {{r.Address}} </small>
+                            <hr>
+                            <small class="text-white"> {{r.List_Items}} </small>
+                        </div>
+                    </div>
+                </li>
                 {% if r.status == 'Pending' %}
                     <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
 
@@ -98,11 +246,27 @@
                 {% else%}
                     <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
                 {% endif %}
-                <li> Amount paid : N{{r.Amount_Paid}}</li>
-                <li> Reference Number : {{r.order_id}}</li>
-                <br>
-               
-                {% endfor %}
+                <li>Amount Paid: {{r.amount_paid}}</li> 
+                <li>Charge: {{r.Charge}}</li> 
+                <li>Item Cost: {{r.Item_Cost}}</li> 
+                <li>Total: {{r.Total}}</li>
+                <li>Amount Refunded: {{r.Amount_Refunded}}</li>
+                <li>Order ID: {{r.order_id}}</li>
+                <li>
+                    {% if r.assigned == True%}
+                            Assigned: <i class="fas fa-check-circle text-success">
+                    {% else %}
+                            Assigned: <i class="fas fa-check-circle text-danger"></i>
+                    {% endif %}
+                </li>
+                <li>
+                    {% if r.confirmed == True %}
+                        Confirmed: <i class="fas fa-check-circle text-success"></i>
+                    {% else %}
+                        Confirmed: <i class="fas fa-check-circle text-danger"></i>
+                    {% endif %}
+                </li>
+            {% endfor %}
             </ul>
         {% endif %}
         
@@ -110,17 +274,82 @@
             <ul>
             {% for r in results4 %}
             <h4>E-Request</h4>
-                <li> Item Description: {{r.Package_description}}</li>
-                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
-                <li> Pickup location : {{ r.Your_location }}</li>
-                <li> Your Phone Number : {{r.Your_phone_number}}</li>
-                <li> Your Email : {{r.email}}</li>
-                <li> Reciever Name: {{r.reciever_name}}</li>
-                <li> Reciever Address: {{r.reciever_address}}</li>
-                <li> Reciever Number: {{r.reciever_contact}}</li>
-                <li> Date Created : {{r.date_created}}</li>
 
-                {% if r.status == 'Pending' %}
+            <li>Customer: {{r.customer}}</li>
+            <li>Date: {{r.date_created}}</li>
+            <li>
+                Details:
+                <small class=""> <strong> Order ID:</strong> {{r.order_id}}  </small>
+                <br><small class=""> <strong> Customer Phone:</strong> {{r.customer.phone_number}} </small>
+                <br>
+                <small class=""> <strong> Customer Name:</strong> {{r.customer.first_name}} {{r.customer.last_name}} </small>
+                <br>
+                <small class=""><strong>Sender Location:</strong> {{r.Your_location}} </small>
+                <br>
+                <small class=""><strong>Loading:</strong> {{r.Loading_choice}} </small>
+                <hr>
+                <p class="text-warning "> 1st Destination</p>
+                <small class=""><strong>Reciever Name:</strong> {{r.reciever_name}} </small>
+                <br>
+                <small class=""><strong>Reciever Number:</strong> {{r.reciever_phone_number}} </small>
+                <br>
+                <small class=" "><strong>Address of Reciever:</strong> {{r.Address_of_reciever}} </small>
+                <br>
+                <small class=""><strong>Package Description:</strong> {{r.Package_description}} </small>
+                <br>
+                
+                
+                {% if r.reciever_name2 and r.reciever_phone_number2 and r.Address_of_reciever2 != None %}
+                <p class="text-warning font-weight-bold"> 2nd Destination</p>
+                    <small class=""> <strong> Reciever Name2:</strong> {{r.reciever_name2}}  </small>
+                    <br>
+                    <small class=""><strong>Reciever Number2:</strong> {{r.reciever_phone_number2}} </small>
+                    <br>
+                    <small class=""><strong>Address of Reciever2:</strong> {{r.Address_of_reciever2}} </small>
+                    <br>
+                    <small class=""><strong>Package Description2:</strong> {{r.Package_description2}} </small>
+                    <br>
+                {% endif %}
+
+                {% if r.reciever_name3 and r.reciever_phone_number3 and r.Address_of_reciever3 != None %}
+                <p class="text-warning font-weight-bold"> 3rd Destination</p>
+                <small class=""> <strong> Reciever Name3:</strong> {{r.reciever_name3}}  </small>
+                <br>
+                <small class=""><strong>Reciever Number3:</strong> {{r.reciever_phone_number3}} </small>
+                <br>
+                <small class=""><strong>Address of Reciever3:</strong> {{r.Address_of_reciever3}} </small>
+                <br>
+                <small class=""><strong>Package Description3:</strong> {{r.Package_description3}} </small>
+                <br>
+            {% endif %}
+
+            {% if r.reciever_name4 and r.reciever_phone_number4 and r.Address_of_reciever4 != None %}
+                <p class="text-warning font-weight-bold"> 4th Destination</p>
+                <small class=""> <strong> Reciever Name4:</strong> {{r.reciever_name4}}  </small>
+                <br>
+                <small class=""><strong>Reciever Number4:</strong> {{r.reciever_phone_number4}} </small>
+                <br>
+                <small class=""><strong>Address of Reciever4:</strong> {{r.Address_of_reciever4}} </small>
+                <br>
+                <small class=""><strong>Package Description4:</strong> {{r.Package_description4}} </small>
+                <br>
+            {% endif %}
+
+            {% if r.reciever_name5 and r.reciever_phone_number5 and r.Address_of_reciever5 != None %}
+                <p class="text-warning font-weight-bold"> 5th Destination</p>
+                <small class=" "> <strong> Reciever Name5:</strong> {{r.reciever_name5}}  </small>
+                <br>
+                <small class=" "><strong>Reciever Number5:</strong> {{r.reciever_phone_number5}} </small>
+                <br>
+                <small class=""><strong>Address of Reciever5:</strong> {{r.Address_of_reciever5}} </small>
+                <br>
+                <small class=""><strong>Package Description5:</strong> {{r.Package_description5}} </small>
+                <br>
+            {% endif %}
+            </li>
+
+            <li>Choice for Tp:{{r.Choice_for_TP}}</li>
+            {% if r.status == 'Pending' %}
                     <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
 
                 {% elif r.status == 'Out for delivery' %}
@@ -130,10 +359,24 @@
                 {% else%}
                     <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
                 {% endif %}
-                <li> Amount paid : N{{r.Amount_Paid}}</li>
-                <li> Reference Number : {{r.order_id}}</li>
-                <br>
-                
+            <li>Amount Payable: {{r.Amount_Payable}}</li> 
+            <li>Amount Paid: {{r.Amount_paid}}</li> 
+            <li>Order ID: {{r.order_id}}</li> 
+            <li>Paystack ID: {{r.charge_id}}</li> 
+            <li>
+                {% if r.assigned == True%}
+                        Assigned: <i class="fas fa-check-circle text-white"></i>
+                {% else %}
+                        Assigned: <i class="fas fa-check-circle text-danger"></i>
+                {% endif %}
+            </li>
+            <li>
+                {% if r.confirmed == True %}
+                    Confirmed: <i class="fas fa-check-circle text-success"></i>
+                {% else %}
+                    Confirmed: <i class="fas fa-check-circle text-danger"></i>
+                {% endif %}
+            <!--End-->
                 {% endfor %}
             </ul>
         {% endif %}
@@ -142,17 +385,81 @@
             <ul>
             {% for r in results5 %}
             <h4>Cash Request</h4>
-                <li> Item Description: {{r.Package_description}}</li>
-                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
-                <li> Pickup location : {{ r.Your_location }}</li>
-                <li> Your Phone Number : {{r.Your_phone_number}}</li>
-                <li> Your Email : {{r.email}}</li>
-                <li> Reciever Name: {{r.reciever_name}}</li>
-                <li> Reciever Address: {{r.reciever_address}}</li>
-                <li> Reciever Number: {{r.reciever_contact}}</li>
-                <li> Date Created : {{r.date_created}}</li>
+            <li>Customer: {{r.customer}}</li>
+            <li>Date: {{r.date_created}}</li>
+            <li>
+                Details:
+                <small class=""> <strong> Order ID:</strong> {{r.order_id}}  </small>
+                <br><small class=""> <strong> Customer Phone:</strong> {{r.customer.phone_number}} </small>
+                <br>
+                <small class=""> <strong> Customer Name:</strong> {{r.customer.first_name}} {{r.customer.last_name}} </small>
+                <br>
+                <small class=""><strong>Sender Location:</strong> {{r.Your_location}} </small>
+                <br>
+                <small class=""><strong>Loading:</strong> {{r.Loading_choice}} </small>
+                <hr>
+                <p class="text-warning "> 1st Destination</p>
+                <small class=""><strong>Reciever Name:</strong> {{r.reciever_name}} </small>
+                <br>
+                <small class=""><strong>Reciever Number:</strong> {{r.reciever_phone_number}} </small>
+                <br>
+                <small class=" "><strong>Address of Reciever:</strong> {{r.Address_of_reciever}} </small>
+                <br>
+                <small class=""><strong>Package Description:</strong> {{r.Package_description}} </small>
+                <br>
+                
+                
+                {% if r.reciever_name2 and r.reciever_phone_number2 and r.Address_of_reciever2 != None %}
+                <p class="text-warning font-weight-bold"> 2nd Destination</p>
+                    <small class=""> <strong> Reciever Name2:</strong> {{r.reciever_name2}}  </small>
+                    <br>
+                    <small class=""><strong>Reciever Number2:</strong> {{r.reciever_phone_number2}} </small>
+                    <br>
+                    <small class=""><strong>Address of Reciever2:</strong> {{r.Address_of_reciever2}} </small>
+                    <br>
+                    <small class=""><strong>Package Description2:</strong> {{r.Package_description2}} </small>
+                    <br>
+                {% endif %}
 
-                {% if r.status == 'Pending' %}
+                {% if r.reciever_name3 and r.reciever_phone_number3 and r.Address_of_reciever3 != None %}
+                <p class="text-warning font-weight-bold"> 3rd Destination</p>
+                <small class=""> <strong> Reciever Name3:</strong> {{r.reciever_name3}}  </small>
+                <br>
+                <small class=""><strong>Reciever Number3:</strong> {{r.reciever_phone_number3}} </small>
+                <br>
+                <small class=""><strong>Address of Reciever3:</strong> {{r.Address_of_reciever3}} </small>
+                <br>
+                <small class=""><strong>Package Description3:</strong> {{r.Package_description3}} </small>
+                <br>
+            {% endif %}
+
+            {% if r.reciever_name4 and r.reciever_phone_number4 and r.Address_of_reciever4 != None %}
+                <p class="text-warning font-weight-bold"> 4th Destination</p>
+                <small class=""> <strong> Reciever Name4:</strong> {{r.reciever_name4}}  </small>
+                <br>
+                <small class=""><strong>Reciever Number4:</strong> {{r.reciever_phone_number4}} </small>
+                <br>
+                <small class=""><strong>Address of Reciever4:</strong> {{r.Address_of_reciever4}} </small>
+                <br>
+                <small class=""><strong>Package Description4:</strong> {{r.Package_description4}} </small>
+                <br>
+            {% endif %}
+
+            {% if r.reciever_name5 and r.reciever_phone_number5 and r.Address_of_reciever5 != None %}
+                <p class="text-warning font-weight-bold"> 5th Destination</p>
+                <small class=" "> <strong> Reciever Name5:</strong> {{r.reciever_name5}}  </small>
+                <br>
+                <small class=" "><strong>Reciever Number5:</strong> {{r.reciever_phone_number5}} </small>
+                <br>
+                <small class=""><strong>Address of Reciever5:</strong> {{r.Address_of_reciever5}} </small>
+                <br>
+                <small class=""><strong>Package Description5:</strong> {{r.Package_description5}} </small>
+                <br>
+            {% endif %}
+            </li>
+
+            <li>Choice for Tp:{{r.Choice_for_TP}}</li>
+            {% if r.status == 'Pending' %}
                     <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
 
                 {% elif r.status == 'Out for delivery' %}
@@ -162,10 +469,23 @@
                 {% else%}
                     <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
                 {% endif %}
-                <li> Amount paid : N{{r.Amount_Paid}}</li>
-                <li> Reference Number : {{r.order_id}}</li>
-                <br>
-                
+            <li>Amount Payable: {{r.Amount_Payable}}</li> 
+            <li>Amount Paid: {{r.Amount_paid}}</li> 
+            <li>Order ID: {{r.order_id}}</li> 
+            <li>
+                {% if r.assigned == True%}
+                        Assigned: <i class="fas fa-check-circle text-success"></i>
+                {% else %}
+                        Assigned: <i class="fas fa-check-circle text-danger"></i>
+                {% endif %}
+            </li>
+            <li>
+                {% if r.confirmed == True %}
+                    Confirmed: <i class="fas fa-check-circle text-success"></i>
+                {% else %}
+                    Confirmed: <i class="fas fa-check-circle text-danger"></i>
+                {% endif %}
+            <!--End-->
                 {% endfor %}
             </ul>
         {% endif %}
@@ -175,31 +495,86 @@
             <ul>
             {% for r in results6 %}
             <h4>Front desk Request</h4>
-                <li> Item Description: {{r.Package_description}}</li>
-                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
-                <li> Pickup location : {{ r.Your_location }}</li>
-                <li> Your Phone Number : {{r.Your_phone_number}}</li>
-                <li> Your Email : {{r.email}}</li>
-                <li> Reciever Name: {{r.reciever_name}}</li>
-                <li> Reciever Address: {{r.reciever_address}}</li>
-                <li> Reciever Number: {{r.reciever_contact}}</li>
-                <li> Date Created : {{r.date_created}}</li>
-
-                {% if r.status == 'Pending' %}
-                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
-
-                {% elif r.status == 'Out for delivery' %}
-                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
-                {% elif r.status == 'Delivered' %}
-                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
-                {% else%}
-                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+            <li>Date: {{r.date_created}}</li>
+            <li>Customer: {{r.customer}}</li>
+            <li>Delivery Type: {{r.Delivery_type}}</li>
+            <li>
+                <div class="dropdown">
+                    <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Details
+                    </p>
+                    <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                    {% if r.Delivery_type == 'Pick & Drop'%}
+                        {% if r.customer_name %}
+                            <small class=" text-white"> <strong> Customer Name:</strong> {{r.customer_name}}  </small>
+                            <br>
+                        {% endif %}
+                            <small class=" text-white"><strong>Customer Number:</strong> {{r.Customer_phone_number}} </small>
+                            <br>
+                            <small class=" text-white"><strong>Customer Location:</strong> {{r.customer_location}} </small>                                        
+                            <hr>
+                            <small class=" text-white"><strong>Item Description:</strong> {{r.item_description}} </small>
+                            <br>
+                            <small class=" text-white"><strong>Delivery Destination:</strong> {{r.delivery_destination}} </small>
+                            <br>
+                            <small class=" text-white"><strong>Reciever Number:</strong> {{r.Reciever_phone_number}} </small>
+                            <br>                                        
+                        {% if r.Note %}
+                        <small class=" text-white"><strong>Note</strong> {{r.Note}} </small>
+                        {% else %}
+                        {% endif %}
+                    
+                    {% elif r.Delivery_type == 'Errand' %}
+                    <small class=" text-white"><strong>Customer Name:</strong> {{r.customer_name}} </small>
+                    <br>
+                    <small class=" text-white"><strong>Customer Number:</strong> {{r.Customer_phone_number}} </small>
+                    <br>
+                    <small class=" text-white"><strong>Customer Location:</strong> {{r.customer_location}} </small>
+                    <hr> 
+                    <small class=" text-white"><strong>Item Description:</strong> {{r.item_description}} </small>
+                    <br>
+                    <small class=" text-white"><strong>Reciever Address:</strong> {{r.delivery_destination}} </small>
+                    <br>
+                    <small class=" text-white"><strong>Quantity:</strong> {{r.Quantity}} </small>
+                    <br>                            
+                    <small class=" text-white"><strong>Reciever Number:</strong> {{r.Reciever_phone_number}} </small>
+                    <br> 
+                    <small class=" text-white"><strong>Purchase Location:</strong> {{r.Purchase_location}} </small>
+                    <br>
+                    {% if Note %}
+                    <small class="text-warning"><strong>Note:</strong> {{r.Note}} </small>
+                    {% endif %}
                 {% endif %}
-                <li> Amount paid : N{{r.Amount_Paid}}</li>
-                <li> Reference Number : {{r.order_id}}</li>
-                <br>
-                
-                {% endfor %}
+                </div>
+            </li>
+            <li>Choice for TP: {{r.Choice_for_TP}}</li>
+            {% if r.status == 'Pending' %}
+                <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
+            {% elif r.status == 'Out for delivery' %}
+                <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
+            {% elif r.status == 'Delivered' %}
+                <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
+            {% else%}
+                <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
+            {% endif %}
+            <li>Amount Paid: {{r.Amount_Paid}}</li>
+            <li> Amount Payable: {{r.Amount_Payable}}</li>
+            <li> Order ID: {{r.order_id}}</li> 
+            <li>
+                {% if r.assigned == True%}
+                       Assigned:  <i class="fas fa-check-circle text-white">
+                {% else %}
+                      Assigned:  <i class="fas fa-check-circle text-danger"></i>
+                {% endif %}
+            </li>
+            <li >
+                {% if r.confirmed == True %}
+                    Confirmed: <i class="fas fa-check-circle text-success"></i>
+                {% else %}
+                   Confiremd: <i class="fas fa-check-circle text-danger"></i>
+                {% endif %}
+            </li>
+            {% endfor %}
             </ul>
         {% endif %}
         </div>

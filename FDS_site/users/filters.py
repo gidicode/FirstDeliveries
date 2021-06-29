@@ -9,7 +9,10 @@ from BikeControl.models import RidersDeliveries
 class OrderFilter(django_filters.FilterSet):
     class Meta:
         model = MakeRequest
-        fields =['reciever_name', 'status',]
+        model = MakeRequestCash
+        model = Errand_service
+        model = Shopping
+        fields =['order_id',]
 
 class AdminFilter(django_filters.FilterSet):
     class Meta:

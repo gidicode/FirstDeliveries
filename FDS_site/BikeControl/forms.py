@@ -31,12 +31,23 @@ def chk_shopping(value):
 def chk_anonymous(value):
     if RidersDeliveries.objects.filter(anonymous = value).exists():
         raise ValidationError((f'{value} already exist.'), params= {'value':value})
+    
+def chk_errand(value):
+    if RidersDeliveries.objects.filter(errand= value).exists():
+        raise ValidationError((f'{value} already exist.'), params= {'value':value})
+
+def chk_frontDesk(value):
+    if RidersDeliveries.objects.filter(front_desk = value).exists():
+        raise ValidationError((f'{value} already exist.'), params= {'value':value})
+
 
 class ridersdeliveryForm(forms.ModelForm):
     cash_request = forms.ModelChoiceField( queryset=MakeRequestCash.objects.all(), validators= [chk_cash], required=False )
     e_payment_request = forms.ModelChoiceField(queryset = MakeRequest.objects.all(), validators= [chk_ePayment], required=False )
     shopping = forms.ModelChoiceField( queryset=Shopping.objects.all(), validators= [chk_shopping],  required=False)
-    anonymous = forms.ModelChoiceField( queryset=Anonymous.objects.all(), validators= [chk_anonymous],  required=False )
+    anonymous = forms.ModelChoiceField( queryset=Anonymous.objects.all(), validators= [chk_anonymous],  required=False)
+    errand = forms.ModelChoiceField( queryset=Errand_service.objects.all(), validators= [chk_errand],  required=False )
+    front_desk = forms.ModelChoiceField(queryset =Front_desk.objects.all(),validators=[chk_frontDesk],required=False)
 
     class Meta:
         model = RidersDeliveries
