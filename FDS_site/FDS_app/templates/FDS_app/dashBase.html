@@ -22,26 +22,16 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle p-2 btn btn-light text-left " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Terms
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Terms & Condition</a>
-              <a class="dropdown-item" href="#">Contact details</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Chat us up</a>
-            </div>
+            <a class="nav-link p-2 btn btn-light text-left " href="{% url 'Terms' %}" role="button" >Terms</a>
           </li>
         </ul>
       </div>
-      {% if notify.count > 0 %}
-            
-              <a href="{% url 'adminNotificationShow' %}" class="mr-5" data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications"> 
-                  <span><i class="fas fa-bell text-danger"></i> </span> 
-                  <span class="badge">{{notify.count}}</span>
-              </a>
-        
-          {% endif %}
+      {% if notify.count > 0 %}            
+        <a href="{% url 'adminNotificationShow' %}" class="mr-5" data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications"> 
+            <span><i class="fas fa-bell text-danger"></i> </span> 
+            <span class="badge">{{notify.count}}</span>
+        </a>        
+      {% endif %}
       <!--Notification and profile-->
       <div class="d-flex flex-row bd-highlight notification">
         <div class="bd-highlight">
@@ -91,52 +81,15 @@
       </div>
   </nav>
 </main>
-<main role="main" style="padding-bottom: 4rem;" id="fade">
-  {% block content2 %} 
+<body role="main" style="padding-bottom: 4rem;" onload="myFunction()" >  
+    
+    {% block content2 %} 
 
-  {% endblock content2 %} 
-</main>
+    {% endblock content2 %} 
+    
+  </body>
 
-<style>
-      #fade div{
-    animation: fadein 1s;
-    -moz-animation: fadein 1s; /* Firefox */
-    -webkit-animation: fadein 1s; /* Safari and Chrome */
-    -o-animation: fadein 1s; /* Opera */
-}
-@keyframes fadein {
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-moz-keyframes fadein { /* Firefox */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-webkit-keyframes fadein { /* Safari and Chrome */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-o-keyframes fadein { /* Opera */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
+<style>    
 .notification .badge {
   position:absolute;
   top: 2px;

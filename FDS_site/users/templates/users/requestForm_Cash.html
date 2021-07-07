@@ -9,7 +9,14 @@
         <div class="col-md-4"></div>
         <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
             <div class="shadow rounded-lg ">
-                <p class="text-white font-weight-bold rounded-top text-center p-2" style="background-color: rgb(255, 185, 185);">Fill the form to complete your request</p>
+                <div class="d-flex flex-row bd-highlight rounded-top text-white text-center justify-content-between" style="background-color: rgb(7, 7, 109);">
+                    <div class="p-2 bd-highlight">
+                        <p>Create Your request. </p>
+                    </div>
+                    <div class="p-2 bd-highlight"> 
+                        <a href="{% url  'fds-pricing' %}" class="text-white"> View Pricing</a>
+                    </div>                    
+                </div>
                 <div class=" p-3">
                     <form method="POST" enctype="multipart/form-data"> 
                         {% csrf_token %}                    

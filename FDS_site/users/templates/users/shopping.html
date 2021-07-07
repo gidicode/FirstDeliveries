@@ -7,16 +7,45 @@
 <div class="pb-5">
     <div class="row p-3" >
         <div class="col-md-4"></div>
-        <div class="col-sm-4">
-            <div class="shadow mb-3 rounded">
+        <div class="col-md-4">
+            <div class="shadow mb-3 rounded-lg">
+                <div class="d-flex flex-row bd-highlight rounded-top text-white justify-content-between" style="background-color: rgb(86, 86, 160);">
+                    <div class="p-2 bd-highlight">
+                        <p>List down your items </p>
+                    </div>
+                    <div class="p-2 bd-highlight"> 
+                        <a href="" data-toggle="modal" data-target="#staticBackdrop" class="text-white"> More Info</a>
+                    </div>                    
+                </div>
                 <form method="POST" enctype="multipart/form-data"> 
-                    {% csrf_token %}                    
-                        <ul class="list-group">
-                            <li class="list-group-item active" aria-current="true"><strong>Input the items for purchase below</strong></li>
-                            <li class="list-group-item list-group-item-light">  {{ s_form|crispy }}</li>
-                            <li class="list-group-item"><button class="btn btn-danger btn-block rounded-pill" type="submit">Request</button></li>
-                        </ul>
-                    
+                    {% csrf_token %}
+                    <div class="form-row p-3">
+                        <div class="col">
+                            {{ s_form.List_Items|as_crispy_field }}
+                        </div>                        
+                    </div>
+                    <div class="form-row p-3">
+                        <div class="col">
+                            {{ s_form.Place_of_purchase|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ s_form.Address|as_crispy_field }}
+                        </div>                        
+                    </div>
+                    <div class="form-row p-3">                        
+                        <div class="col">
+                            {{ s_form.payment_channel|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ s_form.Amount|as_crispy_field }}
+                        </div>                        
+                    </div>
+                    <div class="form-row p-3">                       
+                        <div class="col">
+                            {{ s_form.Note|as_crispy_field }}
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-block rounded-pill" type="submit">Proceed</button>                                      
                 </form>
             </div>
 
@@ -24,4 +53,40 @@
         <div class="col-md-4"></div>
     </div>
 </div>
+
+
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">SHOPPING REQUEST INFORMATION</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <p> With our Shopping Service we save you the time and stress needed to carter for some of your shopping needs, be it in the market or store.</p>
+            <h6>To place a Shopping Request, You have to create an account, log into your dashboard and create a Shopping request</h6>
+            <br>
+            <h6>Make payments with your card or through bank transfer</h6>          
+            <br>          
+            <h6>We access the shopping list submitted and go for purchase to deliver to address given</h6>
+            <br>          
+            <h6> We will first deduct a delivery fee of N500 or N1000  and a purchase service fee off <strong> N500 or N700</strong>, before going to purchase your items.</h6>
+            <br>
+            <h5> Note: <span> <h6> If the cost of the items at the market is more than the estimated amount paid, you will be contacted to for further decision taking. If you have a balance left from the purchase, it will be returned to you on delivering your items.</h6></span></h5>        
+          </div>
+        </div>
+        <div class="modal-footer justify-content-start">
+          <div class="d-flex flex-row bd-highlight  mb-3">
+            <div class="bd-highlight justify-content-right">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>             
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 {% endblock content2 %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
 from django.contrib import messages
-from users.decorators import admin_only
+from users.decorators import allowed_user
 from users.filters import BikeFilter
 from django.contrib.auth.decorators import login_required
 
@@ -10,16 +10,17 @@ from django.contrib.auth.decorators import login_required
 
 #Dashboard
 @login_required(login_url='login')
-@admin_only
-def Riders_Dashboard(request):
-    
+@allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
+def Riders_Dashboard(request):    
     return render(request, 'BikeControl/dashboard.html')
 
-def assigned_Del(request):
-   
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
+def assigned_Del(request):   
     return render(request, 'BikeControl/assignedRides.html')
 
-
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
 def update_assigned_Del(request, pk):
     assigned_deliveries =RidersDeliveries.objects.get(id=pk)
     as_form = updateRidersDelivery(instance=assigned_deliveries)
@@ -40,7 +41,8 @@ def update_assigned_Del(request, pk):
             return redirect('assignedRides')
     return render(request, 'BikeControl/updateAssign.html', {'as_form': as_form})
 
-
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
 def AssignedRides(request):    
     assigned_deliveries = RidersDeliveries.objects.all()
 
@@ -97,6 +99,8 @@ def AssignedRides(request):
 
 
     context = {
+        'errand':errand,
+        'front_desk':front_desk,
         'all_pending':all_pending,
         "all_deliveries":all_deliveries,
         'filter':f,
@@ -105,6 +109,8 @@ def AssignedRides(request):
     }
     return render(request, 'BikeControl/assignedRides.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
 def all_Fleet(request):
     available_fleet = Fleets.fleet_plate_number
     bike_fleet = Fleets.objects.filter(category = "Bike").count()
@@ -129,6 +135,8 @@ def all_Fleet(request):
 
     return render(request, 'BikeControl/Fleet.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
 def Riders_identity(request):
     profile = RidersProfile.objects.all()
     
@@ -147,6 +155,8 @@ def Riders_identity(request):
 
     return render(request, 'BikeControl/RidersProfile.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
 def All_riders_deliveries(request, rider):
     
     all_deliveries = RidersDeliveries.objects.filter(rider=rider)

@@ -7,52 +7,72 @@
 
 {% block content2 %}
 <div class="container-fluid">
-  <div class="row pt-2">
-    <div class="col">
+  <div class="row pt-2 float">
+    <div class="col-md-6"></div>
+    <div class="col-md-6"> 
         {% if messages %}
         <div class="messages text-center">
           {% for message in messages %}
-          <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}</div>
-          {% endfor %}
-          </div> 
+          <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button> 
+          </div>         
+          {% endfor %}          
         </div>
         {% endif %}
     </div>
+
   </div>
 
   <div class="row">
       <div class="col-md-4 pt-4"></div>
       <div class="col-md-4 pt-4">
-        <!--Strt-->
-        <div class="d-flex p-3 flex-column bg-light rounded-lg justify-content-center bd-highlight mb-3">  
-          <div class="p-2  bd-highlight">
-            <p class="font-italic text-center"> Hello {{user.first_name}} please choose an option that suits you.</p>
+        <!--Strt-->        
+          <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
+              <div id="errand" class="mr-2 zoom eps">
+                  <div class="p-2 bd-highlight">                        
+                    <h1><i class="fas fa-boxes"></i></h1>
+                    <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a></h6>
+                  </div>
+              </div>
+              
+              <div id="request" class="zoom" data-toggle="modal" data-target="#Gaserrand">
+                  <div class="p-2 bd-highlight">       
+                      <h1><i class="fas fa-shipping-fast"></i></h1>               
+                      <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'requestForm_Cash' user.id %}" >Request Dispatch</a></h6>
+                  </div>
+              </div>              
           </div>
-
-          <div class="p-2  bd-highlight">
-            <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a>
+        
+        <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
+          <div id="Erequest" class="mr-2 zoom">
+            <div class="p-2 bd-highlight">
+              <h1><i class="fas fa-truck"></i></h1>
+              <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'requestForm_Online' user.id %}">Request Dispatch (E-payment)</a></h6>
+            </div>
           </div>
-
-          <div class="p-2 bd-highlight">
-            <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'requestForm_Cash' user.id %}" role="button">Request Dispatch</a>
-          </div>
-          <div class="p-2 bd-highlight">
-            <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'requestForm_Online' user.id %}" role="button">Request Dispatch(pay with card)</a>
-          </div>
-          <div class="p-2 bd-highlight">
-            <a class="btn btn-outline-info btn-block rounded-pill justify-content-right" href="{% url 'shopping' user.id %}" role="button">Shopping Request</a>
+        
+          <div id="shopping" class="zoom" data-toggle="modal" data-target="#Gaserrand">
+            <div class="p-2 bd-highlight">
+              <h1><i class="fas fa-dolly"></i></h1>
+              <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'shopping' user.id %}">Shopping Request</h6>
+              </a>              
+            </div>
           </div>
         </div>
-
+        <!--new-->
         <div class="d-flex p-3 flex-column text-center bg-light rounded-lg justify-content-center bd-highlight mb-3">  
           <div class="p-2 bd-highlight"> 
             {% for i in request_filter_cash %}
               {% if i.status == 'Pending' %}
               <div class="dropdown">
-                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="dropdown-toggle btn" id="dropdownMenuButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span >View {{i.order_id}}</span>
                 </span>
                 <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  <small class=" text-white"> <strong> Order ID</strong> {{i.order_id}}  </small>
+                  <div class="dropdown-divider"></div>
                   <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
                   <div class="dropdown-divider"></div>
                   <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
@@ -104,10 +124,12 @@
           
             {% elif i.status == 'Out for delivery' %}
             <div class="dropdown">
-              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="dropdown-toggle btn" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span >View {{i.order_id}}</span>
               </span>
               <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                <small class=" text-white"> <strong>Order ID:</strong> {{i.order_id}}  </small>
+                <div class="dropdown-divider"></div>
                 <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
                 <div class="dropdown-divider"></div>
                 <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
@@ -163,10 +185,12 @@
           {% for i in request_filter %}
               {% if i.status == 'Pending' %}
               <div class="dropdown">
-                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="dropdown-toggle btn" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span >View {{i.order_id}}</span>
                 </span>
                 <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  <small class=" text-white"> <strong> Order ID</strong> {{i.order_id}}</small>
+                  <div class="dropdown-divider"></div>
                   <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
                   <div class="dropdown-divider"></div>
                   <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
@@ -218,10 +242,12 @@
           
             {% elif i.status == 'Out for delivery' %}
             <div class="dropdown">
-              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="dropdown-toggle btn" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span >View {{i.order_id}}</span>
               </span>
               <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                <small class=" text-white"> <strong> Order ID:</strong> {{i.order_id}}  </small>
+                <div class="dropdown-divider"></div>
                 <small class=" text-white"> <strong> Reciever Name:</strong> {{i.reciever_name}}  </small>
                 <div class="dropdown-divider"></div>
                 <small class=" text-white"><strong>Reciever Number:</strong> {{i.reciever_phone_number}} </small>
@@ -278,10 +304,12 @@
           {% for i in request_filter_errand %}
               {% if i.status == 'Pending' %}
               <div class="dropdown">
-                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="dropdown-toggle btn" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span >View {{i.order_id}}</span>
                 </span>
                 <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  <small class=" text-white"> <strong> Order ID</strong> {{i.order_id}}  </small>
+                  <div class="dropdown-divider"></div>
                   {% if i.category == 'Fuel' %}
                     <small class=" text-white"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
                     <br>
@@ -423,6 +451,8 @@
                 <span >View {{i.order_id}}</span>
               </span>
               <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                <small class=" text-white"> <strong> Order ID</strong> {{i.order_id}}  </small>
+                <div class="dropdown-divider"></div>
                 {% if i.category == 'Fuel' %}
                   <small class=" text-white"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
                   <br>
@@ -559,10 +589,12 @@
 
             {% elif i.status == 'On Route for Delivery' %}
             <div class="dropdown">
-              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="dropdown-toggle btn" role="button"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span >View {{i.order_id}}</span>
               </span>
               <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                <small class=" text-white"> <strong>Order ID</strong> {{i.order_id}}  </small>
+                <div class="dropdown-divider"></div>
                 {% if i.category == 'Fuel' %}
                   <small class=" text-white"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
                   <br>
@@ -704,10 +736,12 @@
           {% for i in request_filter_shopping %}
               {% if i.status == 'Pending' %}
               <div class="dropdown">
-                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="dropdown-toggle btn" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span >View {{i.order_id}}</span>
                 </span>
                 <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  <small class=" text-white"> <strong> Order ID</strong> {{i.order_id}}  </small>
+                  <div class="dropdown-divider"></div>
                   <small class=" text-white"> {{i.List_Items}} </small>
                   <!--end option-->
               </div>
@@ -739,4 +773,50 @@
       <div class="col-md-4 pt-4"></div>
   </div>
 </div>
+
+<style>
+  #errand {
+      height: 120px; 
+      background-color: rgb(233, 161, 94);
+      width: 160px;
+      border-radius: 12px;   
+  }
+
+  #request {
+      height: 120px;
+      width: 160px;
+      background-color: rgb(128, 52, 67);
+      border-radius: 12px;   
+  }
+
+  #Erequest {
+      height: 120px;
+      width: 160px;
+      background-color: crimson;
+      border-radius: 12px;   
+  }
+
+  #shopping {
+      height: 120px;
+      width: 160px;
+      background-color: rgb(83, 168, 202);
+      border-radius: 12px;   
+  }
+    
+  .zoom:hover {      
+      border: 2px solid rgb(255, 136, 165);
+  }
+  .eps:hover {      
+
+      border-radius: 2px solid rgb(255, 191, 207);
+  }
+
+  .float{
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    z-index: 5;
+    float: right;
+  }
+</style>
 {% endblock content2 %}

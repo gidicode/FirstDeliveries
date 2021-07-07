@@ -32,10 +32,10 @@ class UserRegisterForm(UserCreationForm):
                            (attrs={'placeholder':'070xxxxxxx'}))
     Alt_phone_num = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
                     validators= [chk_number], widget= forms.TextInput
-                           (attrs={'placeholder':'Alternative Phone Number'}))
+                           (attrs={'placeholder':'2nd Phone Number'}))
     username = forms.CharField(label="", max_length=10, required=True, widget= forms.TextInput
                            (attrs={'placeholder':'Username'}) )
-
+    TermsAgreement = forms.BooleanField(label='Terms & Agreement', required = True)
     
     class Meta:
         model = User
@@ -65,8 +65,8 @@ class OrderForm(forms.ModelForm):
             ("loading", "Loading"),
             ( "off Loading", "Off Loading"),
     ]
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500), Tricycle(N1000), Van(negotiable) ")
-    reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number', required = False,
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="Price Per Drop: Bike(N500), Tricycle(N1000), Van(negotiable) ")
+    reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number', required = True,
                     min_length=11, widget= forms.TextInput)
     reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
                     min_length=11, widget= forms.TextInput)
@@ -80,23 +80,38 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = MakeRequest
         fields = '__all__'
-        exclude = ['customer', 'date_created', 'status', 'Amount', 'charge_id', 'paid', 'order_id', 'assigned', 'type', 'Amount_Payable']
+        exclude = ['customer', 'date_created', 'status', 'Amount_paid', 'charge_id', 'paid', 'order_id', 'assigned', 'type', 'Amount_Payable']
 
 class adminform(forms.ModelForm): 
     class Meta:
         model = MakeRequest
-        fields = ['status']
+        fields = ['status', 'paid', 'confirmed', 'Amount_paid', ]
 
 class adminformCash(forms.ModelForm): 
     class Meta:
         model = MakeRequestCash
-        fields = ['status', 'Amount_Paid', 'paid']
+        fields = ['status', 'Amount_Paid', 'confirmed',]
 
 class adminformShopping(forms.ModelForm): 
     class Meta:
         model = Shopping
-        fields = ['amount_paid', 'status', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded']
-        
+        fields = ['amount_paid', 'status', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded', 'confirmed']
+
+class AdminAnonForm(forms.ModelForm):    
+    class Meta:
+        model = Anonymous
+        fields = ['status', 'confirmed', 'Amount_Paid', ]
+
+class AdminErrandForm(forms.ModelForm):    
+    class Meta:
+        model = Errand_service
+        fields = ['status', 'confirmed', 'Amount_Paid', 'profit' ]
+
+class AdminFrontForm(forms.ModelForm):    
+    class Meta:
+        model = Front_desk
+        fields = ['status', 'confirmed', 'Amount_Paid', 'profit' ]
+
 class Request_Cash(forms.ModelForm):
     OPTIONS2 = [
             ( "Van", "Van"),
@@ -108,8 +123,8 @@ class Request_Cash(forms.ModelForm):
             ( "off Loading", "Off Loading"),
     ]
 
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="PRICE RANGE: Bike(N500), Tricycle(N1000), Van(negotiable) ")
-    reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number', required = False,
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="PRICE per drop: Bike(N500), Tricycle(N1000), Van(negotiable) ")
+    reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number',
                     min_length=11, widget= forms.TextInput)
     reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
                     min_length=11, widget= forms.TextInput)
@@ -127,21 +142,11 @@ class Request_Cash(forms.ModelForm):
 
 
 class Shopping_Form(forms.ModelForm):
-    OPTIONS2 = [
-            ( "Van", "Van"),
-            ("Bike", "Bike"),
-            ( "Tricycle", "Tricycle (Keke)"),
-            
-    ]
-
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500 - N1500), Tricycle(N1000 - N2500), Van(negotiable) ") 
     class Meta:
         model = Shopping
-        fields ='__all__'
-        exclude = ['customer', 'status', 'charge_id', 'date_created', 'amount_paid', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded', 'order_id', 'assigned']
+        fields =['List_Items', 'Place_of_purchase', 'Note', 'Address','payment_channel', 'Amount',]    
         widgets = {
-            'List_Items':Textarea(attrs={'cols': 80, 'row':20})
-            
+            'List_Items':Textarea(attrs={'cols': 20, 'row':10})            
             }
 
 class AnonForm(forms.ModelForm):
@@ -155,15 +160,7 @@ class AnonForm(forms.ModelForm):
     Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="RANGE: Bike(N500), Tricycle(N1000), Van(negotiable) ")
     class Meta:
         model = Anonymous 
-        fields = [ 'Package_description', 'Your_phone_number', 'Your_location', 'email', 'Choice_for_TP',  ]
-
-class AdminAnonForm(forms.ModelForm):
-    
-    class Meta:
-        model = Anonymous
-        fields = '__all__'
-        exclude =['assigned']
-
+        fields = [ 'Package_description', 'Your_phone_number', 'Your_location', 'Choice_for_TP',]
 #
 #
 #Errand Service forms.
@@ -172,7 +169,6 @@ class Fuel_errand(forms.ModelForm):
     class Meta:
         model = Errand_service
         fields = ['fuel_per_amount', 'payment_channel', 'your_location']
-
 
 class Gas_errand(forms.ModelForm):
 
@@ -184,13 +180,14 @@ class Gas_errand(forms.ModelForm):
 
 def chk_drug(value):
     illegal_drugs = [
-                    'Codeine', 'Rohypnol', 'GHB', 
-                    'ghb', 'Ghb', 'Ketamine', 'ketamine', 
-                    'methamphetamine', ' heroin', 'diazepam', 
-                    'cough syrup', 'tramadol', 'MDMA', 
+                    'Codeine', 'codeine', 'CODEINE', 'Codine', 
+                    'codine', 'Codin', 'codin', 'Rohypnol', 'rohypnol', 
+                    'refnol', 'Rohynol', 'rohynol', 'GHB', 'ghb', 'Ghb', 
+                    'Ketamine', 'ketamine', 'methamphetamine', ' heroin', 'diazepam', 
+                    'cough syrup', 'tramadol', 'Tramadol', 'TRAMADOL', 'MDMA', 
                     'ectasy', 'Ectasy' 'Lysergic acid diethylamide'
-                    'LSD', 'Valium', 'morphine', 'Fentanyl', 'Ritalin',
-                    'Oxymorphon', 'oxymorphon', 'Adderal'
+                    'LSD', 'Valium', 'morphine', 'Fentanyl', 'Ritalin', 
+                    'ritalin', 'RITALIN', 'Oxymorphon', 'oxymorphon', 'Adderal'
                     ]
     if value in illegal_drugs:
         raise ValidationError((f'{value} falls under the drug abuse category and we cant purchase it.'), params= {'value':value})
@@ -200,7 +197,7 @@ class Drugs_errand(forms.ModelForm):
     class Meta:
 
         model = Errand_service
-        fields = ['Drug_store', 'Drug_name', 'medical_prescription', 'Enter_amount', 'payment_channel', 'your_location']
+        fields = ['Drug_store', 'Drug_store_location', 'Drug_name', 'medical_prescription', 'Enter_amount', 'payment_channel', 'your_location']
 
 class Bread_errand(forms.ModelForm):
     class Meta:

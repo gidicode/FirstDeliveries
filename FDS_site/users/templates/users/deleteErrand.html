@@ -1,0 +1,24 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Delete Errand Order{% endblock title %}
+
+{% block content2 %}
+
+<div class="card card-body contianer">
+  <div class="row">
+
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <p>Are you sure you want to Delete Order to "{{item3}}"</p>
+        <form action = "{% url 'cancelRequestErrand' item3.id %}" method="POST">
+          {% csrf_token %}
+        <a href="{% url 'allerrand-request' %}"> Cancel </a>
+        <input class="btn btn-dark" type="submit" name="Confirm">
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+ 
+</div>
+
+{% endblock content2 %} 

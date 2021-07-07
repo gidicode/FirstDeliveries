@@ -5,8 +5,7 @@ from users.forms import  AnonForm
 from django.contrib import messages
 from hashids import Hashids
 from django.db.models import Q
-
-# Create your views here.
+import requests
 
 def index(request):
     if request.method == 'POST':
@@ -20,17 +19,65 @@ def index(request):
             Anonymous.objects.filter(pk = instance.id).update(order_id= h)
             adminNotification.objects.create(
                 item_created = instance,
-                order_id = h,
-                email = instance.email
-            ) 
+                order_id = h,                
+            )
+            if instance.Choice_for_TP == 'Bike':
+                def SendSms():
+                    url = 'http://login.betasms.com/api/?'
+                    link = f'http://aea79bb23073.ngrok.io/search/?order_id={h}'
+                    sms_message = f"Created succesfully, to check status visit {link}, Fee is N500 "
+                    number = '+234' + instance.Your_phone_number
+                    tokenid = settings.TOKENID
+                    print(tokenid)
+                    print(number)
+                    payload = {
+                        'username': 'usuugwo@gmail.com',
+                        'password':tokenid,
+                        'message': sms_message,
+                        'mobiles': number,
+                        'sender': 'From Flls',                
+                        }                            
+                        
+                    headers = {                
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                    response = requests.request('POST', url, headers=headers, data=payload)                            
+                    result = response.json()                       
+                    print(response)             
+                    return result
+                SendSms()                
+
+            elif instance.Choice_for_TP == 'Tricycle':
+                def SendSms():
+                    url = 'http://login.betasms.com/api/?'
+                    link = f'http://aea79bb23073.ngrok.io/search/?order_id={h}'
+                    sms_message = f"Created succesfully, to check status visit {link}, Fee is N1000 "
+                    number = '+234' + instance.Your_phone_number
+                    tokenid=  settings.TOKENID          
+                    payload = {
+                        'username': 'usuugwo@gmail.com',
+                        'password':tokenid,
+                        'message': sms_message,
+                        'mobiles': number,
+                        'sender': 'From Flls',             
+                        }                            
+                        
+                    headers = {                
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                    response = requests.request('POST', url, headers=headers, data=payload)                            
+                    result = response.json()                
+                    return result
+                SendSms()
+
             messages.success(request, f'Your Request for pickup is Successful, you will recieve a call from us shortly')
             tp_choice_1 = Anonymous.objects.filter(order_id = h).filter(Choice_for_TP= 'Bike' )
             if tp_choice_1:
                 messages.success(request, f'Your mode of transportation is Bike Your delivery Fee is N500. Your Request Refrence ID is "{h}" ')
-                messages.warning(request, f' An email containing this transaction details has been sent to you, Please Create an account to access more services')
+                messages.warning(request, f' An SMS containing this transaction details has been sent to you, Please Create an account to access more services')
             else:
                 messages.success(request, f'Your mode of transportation is Tricycle(Keke) Your delivery Fee is N1000. Your Request Refrence ID is "{h}" ')
-                messages.warning(request, f' An email containing this transaction details has been sent to you, Please Create an account to access more services')
+                messages.warning(request, f' An SMS containing this transaction details has been sent to you, Please Create an account to access more services.')
 
             
 
@@ -49,8 +96,8 @@ def about(request):
 def userRegPage(request):
     return render(request, 'FDS_app/userRegPage.html')
 
-def billing(request):
-    return render(request, 'FDS_app/billing.html')
+def Terms(request):
+    return render(request, 'FDS_app/Terms&Condition.html')
 
 def error(request):
     return render(request, 'FDS_app/error.html')
@@ -64,8 +111,7 @@ def search(request):
         if query == '':
             query = 'None'
         results = Anonymous.objects.filter(Q(order_id = query))
-        
-    
+            
     return render(request, 'FDS_app/Search.html', {'query': query, 'results':results})
 
 def notification(request):

@@ -1,7 +1,7 @@
 {% extends "FDS_app/dashBase.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Request Dispatch(Pay Card) - FDLS {% endblock title %}
+{% block title %} Request Dispatch(Pay Card) {% endblock title %}
 
 {% block content2 %}
 <div class="pb-5">
@@ -9,8 +9,16 @@
         <div class="col-md-4"></div>
         <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
             <div class="shadow rounded-lg ">
-                <p class="text-dark rounded-top text-center p-2" style="background-color: rgb(232, 255, 251);">Fill the form to complete your request</p>
-                <div class=" p-3">
+                <div class="d-flex flex-row bd-highlight rounded-top text-white text-center bg-danger justify-content-between">
+                    <div class="p-2 bd-highlight">
+                        <p>Create Your request. </p>
+                    </div>
+                    <div class="p-2 bd-highlight"> 
+                        <a href="{% url  'fds-pricing' %}" class="text-white"> View Pricing</a>
+                    </div>                    
+                </div>   
+               
+                <div class="p-3">
                     <form method="POST" enctype="multipart/form-data"> 
                         {% csrf_token %}                    
                         

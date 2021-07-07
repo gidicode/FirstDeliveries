@@ -63,7 +63,7 @@ def register(request):
 
 #Password update Page
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def PasswordChange(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
@@ -88,7 +88,7 @@ def PasswordChange(request, user):
 
 #Profile update Page
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def customerProfileUpdatePage(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
@@ -115,7 +115,7 @@ def customerProfileUpdatePage(request, user):
     return render(request, 'users/customer_profile.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Cashier_only'])
+@allowed_user(allowed_roles=['admin', 'Cashier',])
 def Cashier(request, user):
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
@@ -182,18 +182,16 @@ def Cashier(request, user):
 
 #Fleet Manager page
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'fleet_manager_only'])
-def FleetManager(request, user):
+@allowed_user(allowed_roles=['admin', 'Fleet Manager'])
+def FleetManager(request, user):    
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
     request4 = Anonymous.objects.all()
     request5 = Errand_service.objects.all()
     request6 = Front_desk.objects.all()
-
-    assign = RidersDeliveries.objects.all()
-    bikers = RidersProfile.objects.all()
-    active = assign.filter(staus = 'Pending')
+    
+    assign = RidersDeliveries.objects.all()    
 
     notification_filter = adminNotification.objects.all()
     notify = notification_filter.filter(viewed = False) 
@@ -211,9 +209,7 @@ def FleetManager(request, user):
     chk_out4 = request4.filter(status = 'Out for delivery').count()
     chk_out5 = request5.filter(status = 'On Route for Delivery').count()
     chk_out5of5 = request5.filter(status = 'Purchase in Process').count()
-    chk_out6 = request6.filter(status = 'Out for delivery').count()
-
-      
+    chk_out6 = request6.filter(status = 'Out for delivery').count()      
 
     paginator1 = Paginator(request1, 10)
     page_number1 = request.GET.get('page')
@@ -239,11 +235,10 @@ def FleetManager(request, user):
     page_number6 = request.GET.get('page')
     page_obj6 = paginator6.get_page(page_number6)
 
+   
+    
     context = {
-
         'assign':assign,
-        'bikers':bikers,
-        'active':active,
 
         'notify':notify,
 
@@ -274,7 +269,7 @@ def FleetManager(request, user):
 
 #Front desk page
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'front_desk_only'])
+@allowed_user(allowed_roles=['admin', 'Front Desk'])
 def front_desk(request, user):
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
@@ -357,7 +352,7 @@ def front_desk(request, user):
 
 # Front desk pick drop form
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'front_desk_only'])
+@allowed_user(allowed_roles=['admin', 'Front Desk'])
 def PickDrop(request, user):
     customer = Customer.objects.get(user = request.user)
     if request.method == "POST":
@@ -391,7 +386,7 @@ def PickDrop(request, user):
 
 # Front desk Errand form
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'front_desk_only'])
+@allowed_user(allowed_roles=['admin', 'Front Desk'])
 def FrontErrand(request, user):
     customer = Customer.objects.get(user = request.user)
     if request.method == "POST":
@@ -453,7 +448,7 @@ def Inhousesearch(request):
     return render(request, 'users/Search.html', context)
 # Cash Request
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def requestForm_Cash(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
@@ -471,8 +466,7 @@ def requestForm_Cash(request, user):
             MakeRequestCash.objects.filter(pk = instance.id).update(order_id= h)
             
             tp_choice_1 = customer.makerequestcash_set.filter(order_id = h).filter(Choice_for_TP= 'Bike' )
-            tp_choice_2 = customer.makerequestcash_set.filter(order_id = h).filter(Choice_for_TP= 'Tricycle' )
-            tp_choice_3 = customer.makerequestcash_set.filter(order_id = h).filter(Choice_for_TP= 'Van' )
+            tp_choice_2 = customer.makerequestcash_set.filter(order_id = h).filter(Choice_for_TP= 'Tricycle' )            
 
             #checking for multiple
             chk_none = customer.makerequestcash_set.get(order_id = h)
@@ -601,7 +595,7 @@ def requestForm_Cash(request, user):
 
 #Online payment request
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def requestForm_Online(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
@@ -722,21 +716,48 @@ def requestForm_Online(request, user):
                 elif charge_amount == 5000:
                     messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
                 else:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')            
+            
+            def initialize_card_payent(request, user):                
+                url = "https://api.paystack.co/transaction/initialize"
+                the_amt = customer.makerequest_set.get(order_id = h)
+                amt =the_amt.Amount_Payable                
+                if amt >= 2500:
+                    get_amount = 1.5001/100 * amt + 100
+                    get_amt = amt + get_amount
+                    final_amt = int(get_amt * 100)
+                    payload = json.dumps({                        
+                        'email': request.user.email,
+                        'amount': final_amt,                        
+                    })
+                else:
+                    get_amount2 = 1.5001/100 * amt
+                    get_amt2 = amt + get_amount2
+                    final_amt2 = int(get_amt2) * 100
+                    payload = json.dumps({                        
+                        'email': request.user.email,
+                        'amount': final_amt2,                        
+                    })
+                headers = {
+                    "Authorization": settings.PAYSTACK_SECRETKEY,
+                    'Content-Type': 'application/json'
+                }
 
-            ForPayments.objects.create(
-                customer = customer,
-                For_online_payment = instance,
-                order_id = h,
-                Mode_of_Transport =instance.Choice_for_TP,
-            ) 
+                r = requests.request('POST', url, headers=headers, data=payload)
 
+                if r.status_code != 200:
+                    return str(r.status_code)
+                result = r.json()                
+                return result
+            initialized = initialize_card_payent(request, user)            
+            customer.makerequest_set.filter(pk = instance.id).update(charge_id = initialized['data']['reference'])
+            link = initialized['data']['authorization_url']
             adminNotification.objects.create(
                 customer=instance.customer,
                 item_created = instance,
                 order_id = h  
             ) 
-            return redirect('Initialize_requestForm', user=user)       
+            return HttpResponseRedirect(link)
     else:
         o_form = OrderForm(instance=customer)
     context = {
@@ -748,7 +769,7 @@ def requestForm_Online(request, user):
 
 #Shopping Request
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def ShoppingForm(request, user):
     customer = Customer.objects.get(user=user)
     n_filter = customer.delivered_set.all()
@@ -762,149 +783,137 @@ def ShoppingForm(request, user):
 
             hashids = Hashids(salt=settings.HASHID_FIELD_SALT, min_length=7)
             h = hashids.encode(instance.id)
+            Shopping.objects.filter(pk = instance.id).update(order_id=h)            
 
-            Shopping.objects.filter(pk = instance.id).update(order_id=h)
-            ForPayments.objects.create(
-                customer = customer,
-                For_shopping_payment = instance,
-                order_id = h
-            )
-
+            if instance.payment_channel == 'Card/Transfer':
+                def initialize_payment(request, user):
+                    url = "https://api.paystack.co/transaction/initialize"
+                    the_amt = customer.shopping_set.get(order_id = h)  
+                    amt = the_amt.Amount  
+                    if amt >= 2500:
+                        get_amount = 1.5001/100 * amt + 100
+                        get_amt = amt + get_amount
+                        final_amt = int(get_amt) * 100
+                        payload = json.dumps({
+                            'email':request.user.email,
+                            'amount': final_amt,
+                        })
+                    else:
+                        get_amount2 = 1.5001/100 * amt
+                        get_amt2 = amt + get_amount2
+                        final_amt = int(get_amt2) * 100
+                        payload = json.dumps({
+                            'email':request.user.email,
+                            'ammount':final_amt,
+                        })
+                    headers = {
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
+                        'Content-Type': 'application/json'
+                        }
+                    r = requests.request('POST', url, headers=headers, data=payload)
+                    if r.status_code != 200:
+                        return str(r.status_code) 
+                    result = r.json()
+                    return result
+            initialized = initialize_payment(request, user)
+            print(initialized)            
+            customer.shopping_set.filter(pk = instance.id).update(Ps_reference = initialized['data']['reference'])
+            link = initialized['data']['authorization_url']
+            
             adminNotification.objects.create(
-                customer=instance.customer,
-                item_created = instance,
-                order_id = h   
+            customer=instance.customer,
+            item_created = instance,
+            order_id = h   
             ) 
 
-            messages.success(request, f'Your Request is Successful, Make Your Transfer to the following account  235334666 ')
-            messages.warning(request, f'Please Include your username for easy identification')
-            return redirect('dashboard', user=user) 
+            messages.success(request, f'Your Request has been recieved')            
+            return HttpResponseRedirect(link)        
     else:
         s_form=Shopping_Form(instance=customer)
 
     return render (request, 'users/shopping.html', {'s_form':s_form, 'n':n})          
 
-#Initialize Payment
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
-def Initialize_requestForm(request, user):
-    pass       
-    
-    def pay(request, user):
-        customer = Customer.objects.get( user=user )
-        request1= customer.forpayments_set.all()
-        
-        req= customer.makerequest_set.latest('date_created')
-        req2 = req.Amount_Payable
-        
-        if req.Choice_for_TP == 'Bike':
-            url = "https://api.paystack.co/transaction/initialize"
-            if req2 >= 2500:
-                get_amount = 1.5001/100 * req2 + 100
-                amt = req2 + get_amount
-                final_amt = int(amt * 100)
-                payload =json.dumps ({
-                    'email': request.user.email,
-                    'amount': final_amt 
-                })
-            else:
-                get_amount2 = 1.5001/100 * req2
-                amt_2 = req2 + get_amount2
-                final_amt2 = int(amt_2 * 100)
-                payload =json.dumps ({
-                    'email': request.user.email,
-                    'amount': final_amt2 
-                })
-
-            headers = { 
-            "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
-            'Content-Type': 'application/json'
-            }
-
-            r = requests.request("POST", url, headers=headers, data=payload)
-      
-            if r.status_code != 200:
-                return str(r.status_code)
-            result = r.json()
-            return result
-
-        else:
-            url = "https://api.paystack.co/transaction/initialize"
-            if req2 >= 2500:
-                get_amount = 1.50/100 * req2 + 100
-                amt = req2 + get_amount
-                final_amt = int(amt * 100)
-                payload =json.dumps ({
-                    'email': request.user.email,
-                    'amount': final_amt 
-                })
-            else:
-                get_amount2 = 1.50/100 * req2
-                amt_2 = req2 + get_amount2
-                final_amt2 = int(amt_2 * 100)
-                payload =json.dumps ({
-                    'email': request.user.email,
-                    'amount': final_amt2 
-                })
-
-            headers = { 
-            "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
-            'Content-Type': 'application/json'
-            }
-
-            r = requests.request("POST", url, headers=headers, data=payload)
-            print(r.text)
-            if r.status_code != 200:
-                return str(r.status_code)
-            result = r.json()
-            return result
-   
-    initialized = pay(request, user)
-    print(initialized['data']['authorization_url'])
-    customer = Customer.objects.get( user=user )
-    request1= customer.makerequest_set.all()
-    ForPayments.objects.filter(For_online_payment__in=request1).update(
-        paystack_access_code = initialized['data']["access_code"],
-        charge_id = initialized['data']['reference'],
-        )
-    link = initialized['data']['authorization_url']
-    return HttpResponseRedirect(link)
-    
 #Success Page
 @login_required(login_url='login')
 def successPage(request, user):
+    customer = Customer.objects.get(user=request.user)
     reference = request.GET.get('reference')
-    check_pay = ForPayments.objects.filter(charge_id=reference).exists()
-    if check_pay == False:
-        print('Error')
-    else:
-        payment = ForPayments.objects.filter(charge_id=reference).first()
-
+    check_pay = customer.makerequest_set.filter(charge_id=reference).exists()
+    check_errand_pay = customer.errand_service_set.filter(Ps_reference =reference).exists()
+    check_shopping_pay = customer.shopping_set.filter(Ps_reference =reference).exists()
+    if check_pay == True: 
+        payment = customer.makerequest_set.get(charge_id=reference)
         def verify_payment(request):
             url = "https://api.paystack.co/transaction/verify/"+reference
 
             headers = { 
-            "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+            "Authorization": settings.PAYSTACK_SECRETKEY,
+            'Content-Type': 'appliation/json'
+            }
+            payload =json.dumps ({
+                "reference": payment.charge_id
+            })
+            r = requests.get( url, headers=headers, data=payload)
+            if r.status_code != 200:
+                return str(r.status_code)
+            result = r.json()            
+            return result
+        initialized = verify_payment(request)        
+        if initialized['data']['status'] == 'success':                                             
+            req2 = initialized['data']['reference']            
+            request_p = customer.makerequest_set.filter(charge_id = req2).exists()     
+            print('is a', request_p)                        
+            customer.makerequest_set.filter(charge_id = req2).update(paid=True, Amount_paid=initialized['data']['amount']/100)
+
+    if  check_errand_pay == True:
+        payment = customer.errand_service_set.get(Ps_reference =reference)
+        def verify_payment(request):
+            url = "https://api.paystack.co/transaction/verify/"+reference
+
+            headers = { 
+            "Authorization": settings.PAYSTACK_SECRETKEY,
             'Content-Type': 'appliation/json'
             }
 
             payload =json.dumps ({
-                "reference": payment.charge_id
+                "reference": payment.Ps_reference
             })
 
             r = requests.get( url, headers=headers, data=payload)
             if r.status_code != 200:
                 return str(r.status_code)
-            result = r.json()
-            return result
+            result = r.json()            
+            return result        
+        initialized = verify_payment(request)        
+        if initialized['data']['status'] == 'success':                                             
+            req2 = initialized['data']['reference']
+            errand = customer.errand_service_set.filter(Ps_reference = req2).exists()            
+            print('is', errand)            
+            customer.errand_service_set.filter(Ps_reference = req2).update(paid=True, Amount_Paid=initialized['data']['amount']/100)
     
-    initialized = verify_payment(request)
-    if initialized['data']['status'] == 'success':
-        ForPayments.objects.filter(charge_id=initialized['data']['reference']).update(paid=True, money_paid=initialized['data']['amount']/100)
-        customer = Customer.objects.get(user=request.user )
-        req= customer.makerequest_set.first()
-        req2 = req.order_id 
-        MakeRequest.objects.filter(order_id=req2).update(paid=True, charge_id = initialized['data']['reference'], Amount=initialized['data']['amount']/100)
+    if  check_shopping_pay == True:
+        payment = customer.shopping_set.get(Ps_reference =reference)
+        def verify_payment(request):
+            url = "https://api.paystack.co/transaction/verify/"+reference
+
+            headers = { 
+            "Authorization": settings.PAYSTACK_SECRETKEY,
+            'Content-Type': 'appliation/json'
+            }
+
+            payload =json.dumps ({
+                "reference": payment.Ps_reference
+            })
+
+            r = requests.get( url, headers=headers, data=payload)
+            if r.status_code != 200:
+                return str(r.status_code)
+            result = r.json()            
+            return result        
+        initialized = verify_payment(request)        
+        if initialized['data']['status'] == 'success':                                             
+            req2 = initialized['data']['reference']            
+            customer.shopping_set.filter(Ps_reference = req2).update(paid=True, amount_paid=initialized['data']['amount']/100)           
     return render(request, 'users/success.html')
 
 #Admin Dashboard
@@ -915,12 +924,16 @@ def AdminDashboard(request):
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
     request4 = Anonymous.objects.all()
+    request5 = Front_desk.objects.all()
+    request6 = Errand_service.objects.all()
 
     #total amount through diff chanels
     e_req = request1.aggregate(Sum('Amount_paid'))
     e_cash = request2.aggregate(Sum('Amount_Paid'))
     e_shop = request3.aggregate(Sum('Charge'))
     e_anon = request4.aggregate(Sum('Amount_Paid'))
+    e_front = request5.aggregate(Sum('profit'))
+    e_erra = request6.aggregate(Sum('profit'))
 
     #amount breakdown
     a_req_1 = request1.filter(Choice_for_TP = "Bike").aggregate(Sum('Amount_paid'))
@@ -936,6 +949,12 @@ def AdminDashboard(request):
     a_shop_charge = request3.aggregate(Sum('Charge'))
     a_shop_cost = request3.aggregate(Sum('Item_Cost'))
     a_shop_refund = request3.aggregate(Sum('Amount_Refunded'))
+
+    a_errand_AmtPaid = request6.aggregate(Sum('Amount_Paid'))
+    a_errand_profit = request6.aggregate(Sum('profit'))
+
+    a_front_AmtPaid = request5.aggregate(Sum('Amount_Paid'))
+    a_front_profit = request5.aggregate(Sum('profit'))
    
     notify = adminNotification.objects.all()
     
@@ -949,6 +968,8 @@ def AdminDashboard(request):
     total_request_cash = request2.count()
     total_request_shopping = request3.count()
     total_request_anonymous = Anonymous.objects.count()
+    total_request_front = Front_desk.objects.count()
+    total_request_errand = Errand_service.objects.count()
 
     delivered = request1.filter(status='Delivered').count()
     pending = request1.filter(status='Pending').count()
@@ -970,10 +991,32 @@ def AdminDashboard(request):
     canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
     out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
 
+    delivered4 = request5.filter(status='Delivered').count()
+    pending4 = request5.filter(status = 'Pending').count()
+    cancled4 = request5.filter(status = 'Canceled').count()
+    out_for_delivery4 = request5.filter(status = 'Out for delivery').count()
+
+    delivered5 = request6.filter(status = "Delivered").count()
+    pending5 = request6.filter(status = "Pending").count()
+    on_route5 = request6.filter(status = "On Route for Delivery").count()
+    pur_in_process = request6.filter(status = 'Purchase in Process').count()
+
     notification_filter = adminNotification.objects.all()
     notify = notification_filter.filter(viewed = False) 
     
     context = {
+        'total_request_front':total_request_front,
+        'total_request_errand':total_request_errand,
+        'delivered4':delivered4,
+        'pending4':pending4,
+        'cancled4':cancled4,
+        'out_for_delivery4':out_for_delivery4,
+
+        'delivered5':delivered5,
+        'pending5':pending5,
+        'on_route5':on_route5,
+        'pur_in_process':pur_in_process,
+
         'a_shop_paid':a_shop_paid,
         'a_shop_charge':a_shop_charge,
         'a_shop_cost':a_shop_cost,
@@ -986,10 +1029,18 @@ def AdminDashboard(request):
         'a_anon_1':a_anon_1,
         'a_anon_2':a_anon_2,
 
+        'a_errand_AmtPaid':a_errand_AmtPaid,
+        'a_errand_profit':a_errand_profit,
+
+        'a_front_AmtPaid':a_front_AmtPaid,
+        'a_front_profit':a_front_profit,
+
         'e_req':e_req,
         'e_cash': e_cash,
         'e_shop':e_shop,
         'e_anon':e_anon,
+        'e_erra':e_erra,
+        'e_front':e_front,
 
         'myFilter5':myFilter5,
         'notify':notify, 
@@ -1006,7 +1057,6 @@ def AdminDashboard(request):
         'total_request_cash':total_request_cash,
         'total_request_shopping':total_request_shopping,
         'total_request_anonymous':total_request_anonymous ,
-
         
         'out_for_delivery':out_for_delivery,
         'out_for_delivery1':out_for_delivery1,
@@ -1028,19 +1078,21 @@ def AdminDashboard(request):
         'delivered3':delivered3,
 
         'at_the_mall': at_the_mall,
-
         }
 
     return render(request, 'users/profile.html', context)
 
-
-def allE_request(request):
+@login_required(login_url='login')
+@admin_only
+def allE_errand(request):
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
     request4 = Anonymous.objects.all()
+    request5 = Errand_service.objects.all()
+    request6= Front_desk.objects.all()
 
-    paginator = Paginator(request1, 10)
+    paginator = Paginator(request5, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -1056,6 +1108,18 @@ def allE_request(request):
     total_request_cash = request2.count()
     total_request_shopping = request3.count()
     total_request_anonymous = Anonymous.objects.count()
+    total_request_front = Front_desk.objects.count()
+    total_request_errand = Errand_service.objects.count()
+
+    delivered4 = request5.filter(status='Delivered').count()
+    pending4 = request5.filter(status = 'Pending').count()
+    cancled4 = request5.filter(status = 'Canceled').count()
+    out_for_delivery4 = request5.filter(status = 'Out for delivery').count()
+
+    delivered5 = request6.filter(status = "Delivered").count()
+    pending5 = request6.filter(status = "Pending").count()
+    on_route5 = request6.filter(status = "On Route for Delivery").count()
+    pur_in_process = request6.filter(status = 'Purchase in Process').count()
 
     delivered = request1.filter(status='Delivered').count()
     pending = request1.filter(status='Pending').count()
@@ -1081,6 +1145,19 @@ def allE_request(request):
     notify = notification_filter.filter(viewed = False) 
 
     context = {
+        'total_request_front':total_request_front,
+        'total_request_errand':total_request_errand,
+
+        'delivered4':delivered4,
+        'pending4':pending4,
+        'cancled4':cancled4,
+        'out_for_delivery4':out_for_delivery4,
+
+        'delivered5':delivered5,
+        'pending5':pending5,
+        'on_route5':on_route5,
+        'pur_in_process':pur_in_process,
+
         'myFilter5':myFilter5, 'notify':notify, 'page_obj':page_obj, 'request1':request1,
         'request2':request2,
         'request3':request3,
@@ -1116,17 +1193,21 @@ def allE_request(request):
 
         'at_the_mall': at_the_mall,
     }
-    return render(request, 'users/allEpaymentsRequest.html', context )
+    return render(request, 'users/AdminErrand.html', context)
 
-def allCash_Request(request):
+@login_required(login_url='login')
+@admin_only
+def allFront_Desk(request):
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
     request4 = Anonymous.objects.all()
+    request5 = Errand_service.objects.all()
+    request6= Front_desk.objects.all()
 
-    paginator2 = Paginator(request2, 10)
-    page_number2 = request.GET.get('page')
-    page_obj2 = paginator2.get_page(page_number2)
+    paginator = Paginator(request6, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     notify = adminNotification.objects.all()
     
@@ -1140,6 +1221,18 @@ def allCash_Request(request):
     total_request_cash = request2.count()
     total_request_shopping = request3.count()
     total_request_anonymous = Anonymous.objects.count()
+    total_request_front = Front_desk.objects.count()
+    total_request_errand = Errand_service.objects.count()
+
+    delivered4 = request5.filter(status='Delivered').count()
+    pending4 = request5.filter(status = 'Pending').count()
+    cancled4 = request5.filter(status = 'Canceled').count()
+    out_for_delivery4 = request5.filter(status = 'Out for delivery').count()
+
+    delivered5 = request6.filter(status = "Delivered").count()
+    pending5 = request6.filter(status = "Pending").count()
+    on_route5 = request6.filter(status = "On Route for Delivery").count()
+    pur_in_process = request6.filter(status = 'Purchase in Process').count()
 
     delivered = request1.filter(status='Delivered').count()
     pending = request1.filter(status='Pending').count()
@@ -1165,6 +1258,357 @@ def allCash_Request(request):
     notify = notification_filter.filter(viewed = False) 
 
     context = {
+        'total_request_front':total_request_front,
+        'total_request_errand':total_request_errand,
+        'delivered4':delivered4,
+        'pending4':pending4,
+        'cancled4':cancled4,
+        'out_for_delivery4':out_for_delivery4,
+
+        'delivered5':delivered5,
+        'pending5':pending5,
+        'on_route5':on_route5,
+        'pur_in_process':pur_in_process,
+
+        'myFilter5':myFilter5, 'notify':notify, 'page_obj':page_obj, 'request1':request1,
+        'request2':request2,
+        'request3':request3,
+        'request4':request4,
+        'request5':request5,
+        'request6':request6,
+
+        'customer':customer,
+        'customers' : customers,
+
+        'total_request_online': total_request_online,
+        'total_request_cash':total_request_cash,
+        'total_request_shopping':total_request_shopping,
+        'total_request_anonymous':total_request_anonymous ,
+
+        
+        'out_for_delivery':out_for_delivery,
+        'out_for_delivery1':out_for_delivery1,
+        'out_for_delivery2':out_for_delivery2,
+
+        'pending': pending,
+        'pending1': pending1,
+        'pending2': pending2,
+        'pending3': pending3,
+
+        'canceled': canceled,
+        'canceled1': canceled1,
+        'canceled2': canceled2, 
+        'canceled3': canceled3,        
+
+        'delivered': delivered,
+        'delivered1': delivered1,
+        'delivered2': delivered2,
+        'delivered3':delivered3,
+
+        'at_the_mall': at_the_mall,
+    }
+    return render(request, 'users/adminFront.html', context)
+
+@login_required(login_url='login')
+@admin_only
+def  allAnonymous_Request(request):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+    request5 = Errand_service.objects.all()
+    request6= Front_desk.objects.all()
+
+    paginator = Paginator(request4, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    notify = adminNotification.objects.all()
+    
+    customer = Customer.objects.get( user= request.user )
+    customers = Customer.objects.all()
+
+    myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
+    customers = myFilter5.qs
+
+    total_request_online = request1.count()
+    total_request_cash = request2.count()
+    total_request_shopping = request3.count()
+    total_request_anonymous = Anonymous.objects.count()
+    total_request_front = Front_desk.objects.count()
+    total_request_errand = Errand_service.objects.count()
+
+    delivered4 = request5.filter(status='Delivered').count()
+    pending4 = request5.filter(status = 'Pending').count()
+    cancled4 = request5.filter(status = 'Canceled').count()
+    out_for_delivery4 = request5.filter(status = 'Out for delivery').count()
+
+    delivered5 = request6.filter(status = "Delivered").count()
+    pending5 = request6.filter(status = "Pending").count()
+    on_route5 = request6.filter(status = "On Route for Delivery").count()
+    pur_in_process = request6.filter(status = 'Purchase in Process').count()
+
+    delivered = request1.filter(status='Delivered').count()
+    pending = request1.filter(status='Pending').count()
+    canceled = request1.filter(status='Canceled').count()
+    out_for_delivery = request1.filter(status='Out for delivery').count()
+
+    delivered1 = request2.filter(status='Delivered').count()
+    pending1 = request2.filter(status='Pending').count()
+    canceled1 = request2.filter(status='Canceled').count()
+    out_for_delivery1 = request2.filter(status='Out for delivery').count()
+
+    delivered2 = request3.filter(status='Delivered').count()
+    pending2 = request3.filter(status='Pending').count()
+    canceled2 = request3.filter(status='Canceled').count()
+    at_the_mall = request3.filter(status='At the Mall').count()
+
+    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
+    pending3 = Anonymous.objects.filter(status = 'Pending').count()
+    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
+    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
+
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    context = {
+        'total_request_front':total_request_front,
+        'total_request_errand':total_request_errand,
+        'delivered4':delivered4,
+        'pending4':pending4,
+        'cancled4':cancled4,
+        'out_for_delivery4':out_for_delivery4,
+
+        'delivered5':delivered5,
+        'pending5':pending5,
+        'on_route5':on_route5,
+        'pur_in_process':pur_in_process,
+
+        'myFilter5':myFilter5, 'notify':notify, 'page_obj':page_obj, 'request1':request1,
+        'request2':request2,
+        'request3':request3,
+        'request4':request4,
+        'request5':request5,
+        'request6':request6,
+
+        'customer':customer,
+        'customers' : customers,
+
+        'total_request_online': total_request_online,
+        'total_request_cash':total_request_cash,
+        'total_request_shopping':total_request_shopping,
+        'total_request_anonymous':total_request_anonymous ,
+
+        
+        'out_for_delivery':out_for_delivery,
+        'out_for_delivery1':out_for_delivery1,
+        'out_for_delivery2':out_for_delivery2,
+
+        'pending': pending,
+        'pending1': pending1,
+        'pending2': pending2,
+        'pending3': pending3,
+
+        'canceled': canceled,
+        'canceled1': canceled1,
+        'canceled2': canceled2, 
+        'canceled3': canceled3,        
+
+        'delivered': delivered,
+        'delivered1': delivered1,
+        'delivered2': delivered2,
+        'delivered3':delivered3,
+
+        'at_the_mall': at_the_mall,
+    }
+    return render(request, 'users/allAnonymousRequest.html', context)
+
+@login_required(login_url='login')
+@admin_only
+def allE_request(request):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+    request5 = Front_desk.objects.all()
+    request6 = Errand_service.objects.all()
+
+    paginator = Paginator(request1, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    notify = adminNotification.objects.all()
+    
+    customer = Customer.objects.get( user= request.user )
+    customers = Customer.objects.all()
+
+    myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
+    customers = myFilter5.qs
+
+    total_request_online = request1.count()
+    total_request_cash = request2.count()
+    total_request_shopping = request3.count()
+    total_request_anonymous = Anonymous.objects.count()
+    total_request_front = Front_desk.objects.count()
+    total_request_errand = Errand_service.objects.count()
+
+    delivered = request1.filter(status='Delivered').count()
+    pending = request1.filter(status='Pending').count()
+    canceled = request1.filter(status='Canceled').count()
+    out_for_delivery = request1.filter(status='Out for delivery').count()
+
+    delivered1 = request2.filter(status='Delivered').count()
+    pending1 = request2.filter(status='Pending').count()
+    canceled1 = request2.filter(status='Canceled').count()
+    out_for_delivery1 = request2.filter(status='Out for delivery').count()
+
+    delivered2 = request3.filter(status='Delivered').count()
+    pending2 = request3.filter(status='Pending').count()
+    canceled2 = request3.filter(status='Canceled').count()
+    at_the_mall = request3.filter(status='At the Mall').count()
+
+    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
+    pending3 = Anonymous.objects.filter(status = 'Pending').count()
+    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
+    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
+
+    delivered4 = request5.filter(status='Delivered').count()
+    pending4 = request5.filter(status = 'Pending').count()
+    cancled4 = request5.filter(status = 'Canceled').count()
+    out_for_delivery4 = request5.filter(status = 'Out for delivery').count()
+
+    delivered5 = request6.filter(status = "Delivered").count()
+    pending5 = request6.filter(status = "Pending").count()
+    on_route5 = request6.filter(status = "On Route for Delivery").count()
+    pur_in_process = request6.filter(status = 'Purchase in Process').count()
+
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    context = {
+        'myFilter5':myFilter5, 'notify':notify, 'page_obj':page_obj, 'request1':request1,
+        'request2':request2,
+        'request3':request3,
+        'request4':request4,
+
+        'delivered4':delivered4,
+        'pending4':pending4,
+        'cancled4':cancled4,
+        'out_for_delivery4':out_for_delivery4,
+
+        'delivered5':delivered5,
+        'pending5':pending5,
+        'on_route5':on_route5,
+        'pur_in_process':pur_in_process,
+
+        'customer':customer,
+        'customers' : customers,
+
+        'total_request_online': total_request_online,
+        'total_request_cash':total_request_cash,
+        'total_request_shopping':total_request_shopping,
+        'total_request_anonymous':total_request_anonymous,
+        'total_request_front':total_request_front,
+        'total_request_errand':total_request_errand,
+        
+        'out_for_delivery':out_for_delivery,
+        'out_for_delivery1':out_for_delivery1,
+        'out_for_delivery2':out_for_delivery2,
+
+        'pending': pending,
+        'pending1': pending1,
+        'pending2': pending2,
+        'pending3': pending3,
+
+        'canceled': canceled,
+        'canceled1': canceled1,
+        'canceled2': canceled2, 
+        'canceled3': canceled3,        
+
+        'delivered': delivered,
+        'delivered1': delivered1,
+        'delivered2': delivered2,
+        'delivered3':delivered3,
+
+        'at_the_mall': at_the_mall,
+    }
+    return render(request, 'users/allEpaymentsRequest.html', context )
+
+@login_required(login_url='login')
+@admin_only
+def allCash_Request(request):
+    request1 = MakeRequest.objects.all()
+    request2 = MakeRequestCash.objects.all()
+    request3 = Shopping.objects.all()
+    request4 = Anonymous.objects.all()
+    request5 = Front_desk.objects.all()
+    request6 = Errand_service.objects.all()
+
+    paginator2 = Paginator(request2, 10)
+    page_number2 = request.GET.get('page')
+    page_obj2 = paginator2.get_page(page_number2)
+
+    notify = adminNotification.objects.all()
+    
+    customer = Customer.objects.get( user= request.user )
+    customers = Customer.objects.all()
+
+    myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
+    customers = myFilter5.qs
+
+    total_request_online = request1.count()
+    total_request_cash = request2.count()
+    total_request_shopping = request3.count()
+    total_request_anonymous = Anonymous.objects.count()
+    total_request_front = Front_desk.objects.count()
+    total_request_errand = Errand_service.objects.count()
+
+    delivered = request1.filter(status='Delivered').count()
+    pending = request1.filter(status='Pending').count()
+    canceled = request1.filter(status='Canceled').count()
+    out_for_delivery = request1.filter(status='Out for delivery').count()
+
+    delivered1 = request2.filter(status='Delivered').count()
+    pending1 = request2.filter(status='Pending').count()
+    canceled1 = request2.filter(status='Canceled').count()
+    out_for_delivery1 = request2.filter(status='Out for delivery').count()
+
+    delivered2 = request3.filter(status='Delivered').count()
+    pending2 = request3.filter(status='Pending').count()
+    canceled2 = request3.filter(status='Canceled').count()
+    at_the_mall = request3.filter(status='At the Mall').count()
+
+    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
+    pending3 = Anonymous.objects.filter(status = 'Pending').count()
+    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
+    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
+
+    delivered4 = request5.filter(status='Delivered').count()
+    pending4 = request5.filter(status = 'Pending').count()
+    cancled4 = request5.filter(status = 'Canceled').count()
+    out_for_delivery4 = request5.filter(status = 'Out for delivery').count()
+
+    delivered5 = request6.filter(status = "Delivered").count()
+    pending5 = request6.filter(status = "Pending").count()
+    on_route5 = request6.filter(status = "On Route for Delivery").count()
+    pur_in_process = request6.filter(status = 'Purchase in Process').count()
+
+    notification_filter = adminNotification.objects.all()
+    notify = notification_filter.filter(viewed = False) 
+
+    context = {
+        'total_request_front':total_request_front,
+        'total_request_errand':total_request_errand,
+        'delivered4':delivered4,
+        'pending4':pending4,
+        'cancled4':cancled4,
+        'out_for_delivery4':out_for_delivery4,
+
+        'delivered5':delivered5,
+        'pending5':pending5,
+        'on_route5':on_route5,
+        'pur_in_process':pur_in_process,
+
         'myFilter5':myFilter5, 
 
         'notify':notify, 
@@ -1213,6 +1657,8 @@ def allShopping_Request(request):
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
     request4 = Anonymous.objects.all()
+    request5 = Front_desk.objects.all()
+    request6 = Errand_service.objects.all()
 
     paginator3 = Paginator(request3, 10)
     page_number3 = request.GET.get('page')
@@ -1230,6 +1676,8 @@ def allShopping_Request(request):
     total_request_cash = request2.count()
     total_request_shopping = request3.count()
     total_request_anonymous = Anonymous.objects.count()
+    total_request_front = Front_desk.objects.count()
+    total_request_errand = Errand_service.objects.count()
 
     delivered = request1.filter(status='Delivered').count()
     pending = request1.filter(status='Pending').count()
@@ -1251,10 +1699,32 @@ def allShopping_Request(request):
     canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
     out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
 
+    delivered4 = request5.filter(status='Delivered').count()
+    pending4 = request5.filter(status = 'Pending').count()
+    cancled4 = request5.filter(status = 'Canceled').count()
+    out_for_delivery4 = request5.filter(status = 'Out for delivery').count()
+
+    delivered5 = request6.filter(status = "Delivered").count()
+    pending5 = request6.filter(status = "Pending").count()
+    on_route5 = request6.filter(status = "On Route for Delivery").count()
+    pur_in_process = request6.filter(status = 'Purchase in Process').count()
+
     notification_filter = adminNotification.objects.all()
     notify = notification_filter.filter(viewed = False) 
 
     context = {
+        'total_request_front':total_request_front,
+        'total_request_errand':total_request_errand,
+        'delivered4':delivered4,
+        'pending4':pending4,
+        'cancled4':cancled4,
+        'out_for_delivery4':out_for_delivery4,
+
+        'delivered5':delivered5,
+        'pending5':pending5,
+        'on_route5':on_route5,
+        'pur_in_process':pur_in_process,
+
         'myFilter5':myFilter5, 
         
         'notify':notify, 
@@ -1298,96 +1768,6 @@ def allShopping_Request(request):
     }
     return render(request, 'users/allShoppingRequest.html', context )
 
-def allAnonymous_Request(request):
-    request1 = MakeRequest.objects.all()
-    request2 = MakeRequestCash.objects.all()
-    request3 = Shopping.objects.all()
-    request4 = Anonymous.objects.all()
-
-    paginator4 = Paginator(request4, 10)
-    page_number4 = request.GET.get('page')
-    page_obj4 = paginator4.get_page(page_number4)
-
-    notify = adminNotification.objects.all()
-    
-    customer = Customer.objects.get( user= request.user )
-    customers = Customer.objects.all()
-
-    myFilter5 = AdminFilterUsers(request.GET, queryset = customers)
-    customers = myFilter5.qs
-
-    total_request_online = request1.count()
-    total_request_cash = request2.count()
-    total_request_shopping = request3.count()
-    total_request_anonymous = Anonymous.objects.count()
-
-    delivered = request1.filter(status='Delivered').count()
-    pending = request1.filter(status='Pending').count()
-    canceled = request1.filter(status='Canceled').count()
-    out_for_delivery = request1.filter(status='Out for delivery').count()
-
-    delivered1 = request2.filter(status='Delivered').count()
-    pending1 = request2.filter(status='Pending').count()
-    canceled1 = request2.filter(status='Canceled').count()
-    out_for_delivery1 = request2.filter(status='Out for delivery').count()
-
-    delivered2 = request3.filter(status='Delivered').count()
-    pending2 = request3.filter(status='Pending').count()
-    canceled2 = request3.filter(status='Canceled').count()
-    at_the_mall = request3.filter(status='At the Mall').count()
-
-    delivered3 = Anonymous.objects.filter(status = 'Delivered').count()
-    pending3 = Anonymous.objects.filter(status = 'Pending').count()
-    canceled3 = Anonymous.objects.filter(status = 'Canceled').count()
-    out_for_delivery2 = Anonymous.objects.filter(status = 'Out for delivery').count()
-
-    notification_filter = adminNotification.objects.all()
-    notify = notification_filter.filter(viewed = False) 
-
-    context = {
-        'myFilter5':myFilter5, 
-        'notify':notify, 
-
-        'page_obj4':page_obj4, 
-        
-        'request1':request1,
-        'request2':request2,
-        'request3':request3,
-        'request4':request4,
-
-        'customer':customer,
-        'customers' : customers,
-
-        'total_request_online': total_request_online,
-        'total_request_cash':total_request_cash,
-        'total_request_shopping':total_request_shopping,
-        'total_request_anonymous':total_request_anonymous ,
-
-        
-        'out_for_delivery':out_for_delivery,
-        'out_for_delivery1':out_for_delivery1,
-        'out_for_delivery2':out_for_delivery2,
-
-        'pending': pending,
-        'pending1': pending1,
-        'pending2': pending2,
-        'pending3': pending3,
-
-        'canceled': canceled,
-        'canceled1': canceled1,
-        'canceled2': canceled2, 
-        'canceled3': canceled3,        
-
-        'delivered': delivered,
-        'delivered1': delivered1,
-        'delivered2': delivered2,
-        'delivered3':delivered3,
-
-        'at_the_mall': at_the_mall,
-    }
-    return render(request, 'users/allAnonymousRequest.html', context )
-
-
 #General Order
 @login_required(login_url='login')
 @admin_only
@@ -1417,10 +1797,9 @@ def customers_list(request):
     }
     return render(request, 'users/customer_list.html', context)
 
-
 #Customer Dashboard
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def customerDashboardPage(request, user):
     customer = Customer.objects.get( user= user )
     request_filter = customer.makerequest_set.all()
@@ -1577,13 +1956,16 @@ def UpdateEForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()
            
-            if obj.status == 'Delivered':
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
                 Delivered.objects.create(
-                    customer=obj.customer,
-                    Item_delivered = obj,
-                    order_id = obj.order_id
-                )
-                messages.success(request, f'You just updated a customer satus to delivered')
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('fleetManager', user = pk)
     context = {'o_form': o_form,
@@ -1605,13 +1987,16 @@ def UpdateCForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()
            
-            if obj.status == 'Delivered':
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
                 Delivered.objects.create(
-                    customer=obj.customer,
-                    Item_delivered = obj,
-                    order_id = obj.order_id
-                )
-                messages.success(request, f'You just updated a customer satus to delivered')
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('fleetManager', user = pk)
     context = {'o_form': o_form,
@@ -1633,13 +2018,16 @@ def UpdateSForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()
            
-            if obj.status == 'Delivered':
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
                 Delivered.objects.create(
-                    customer=obj.customer,
-                    Item_delivered = obj,
-                    order_id = obj.order_id
-                )
-                messages.success(request, f'You just updated a customer satus to delivered')
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('fleetManager', user = pk)
     context = {'o_form': o_form,
@@ -1661,13 +2049,16 @@ def UpdateErrForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()
            
-            if obj.status == 'Delivered':
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
                 Delivered.objects.create(
-                    customer=obj.customer,
-                    Item_delivered = obj,
-                    order_id = obj.order_id
-                )
-                messages.success(request, f'You just updated a customer satus to delivered')
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('fleetManager', user = pk)
     context = {'o_form': o_form,
@@ -1710,23 +2101,85 @@ def UpdateFForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()
            
-            if obj.status == 'Delivered':
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
                 Delivered.objects.create(
-                    customer=obj.customer,
-                    Item_delivered = obj,
-                    order_id = obj.order_id
-                )
-                messages.success(request, f'You just updated a customer satus to delivered')
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('fleetManager', user = pk)
     context = {'o_form': o_form,
               'customer':customer 
               }
     return render(request, 'users/FleetManagerUpdateF.html', context)
+#adminUpdateErrand
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin','Fleet_Manager'])
+def Update_Errand_Form(request, pk):
+    r_request =Errand_service.objects.get(id=pk)
+    o_form = AdminErrandForm(instance= r_request)
+    customer = Customer.objects.get(user=request.user)    
 
+    if request.method == 'POST':
+        o_form = AdminErrandForm(request.POST,instance=r_request)
+        if o_form.is_valid():
+            obj = o_form.save(commit=False)
+            obj.save()            
+
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
+                Delivered.objects.create(
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
+            return redirect('allerrand-request')
+    context = {'o_form': o_form,
+              'customer':customer 
+              }
+    return render(request, 'users/AdminUpdateErrand.html', context)
+
+#adminUpdateFront
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin','Fleet_Manager'])
+def Update_Front_Fesk_Form(request, pk):
+    r_request = Front_desk.objects.get(id=pk)
+    o_form = AdminFrontForm(instance= r_request)
+    customer = Customer.objects.get(user = request.user) 
+
+    if request.method == 'POST':
+        o_form = AdminFrontForm(request.POST, instance=r_request)
+        if o_form.is_valid():
+            obj = o_form.save(commit=False)
+            obj.save()
+           
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
+                Delivered.objects.create(
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
+
+            return redirect('allfront-request')
+    context = {'o_form': o_form,
+              'customer':customer 
+              }
+    return render(request, 'users/AdminUpdateFront.html', context)
 #Update request Anon
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
+@admin_only
 def updateRequestAnon(request, pk):
 
     r_request = Anonymous.objects.get(id=pk)
@@ -1737,11 +2190,43 @@ def updateRequestAnon(request, pk):
         if a_form.is_valid():
             instance = a_form.save(commit=False)
             instance.save()
-            messages.success(request, f'Successful')
+            messages.success(request, f'Successful:{instance.order_id}')
 
-            return redirect('adminDashboard')
+            return redirect('anonymous-request')
     context = {'a_form': a_form}
     return render(request, 'users/anonform.html', context)
+
+#Delete Request Anon
+@login_required(login_url='login')
+@admin_only
+def cancelRequestErrand(request, pk):
+    r_request2 =Errand_service.objects.get(id=pk)
+    customer = Customer.objects.get(user = request.user) 
+    if request.method == "POST":
+        r_request2.delete()  
+        messages.success(request, f'You just deleted an order: {r_request2.order_id}')
+        return redirect('allerrand-request')
+    context = {
+        'item3':r_request2,
+        'customer':customer,
+    }
+    return render(request, 'users/deleteErrand.html', context)
+
+#cancelRequestFront
+@login_required(login_url='login')
+@admin_only
+def cancelRequestFront(request, pk):
+    r_request2 =Front_desk.objects.get(id=pk)
+    customer = Customer.objects.get(user = request.user) 
+    if request.method == "POST":
+        r_request2.delete()  
+        messages.success(request, f'You just deleted an order: {r_request2.order_id}')
+        return redirect('allfront-request')
+    context = {
+        'item3':r_request2,
+        'customer':customer,
+    }
+    return render(request, 'users/deleteFront.html', context)
 
 #Delete Request Anon
 @login_required(login_url='login')
@@ -1750,8 +2235,8 @@ def cancelRequestAnon(request, pk):
     r_request2 =Anonymous.objects.get(id=pk)
     if request.method == "POST":
         r_request2.delete()  
-        messages.success(request, f'You just deleted an order')
-        return redirect('adminDashboard')
+        messages.success(request, f'You just deleted an order: {r_request2.order_id}')
+        return redirect('anonymous-request')
     context = {
         'item3':r_request2
     }
@@ -1771,18 +2256,18 @@ def updateRequestForm(request, pk):
     if request.method == 'POST':
         o_form = adminform(request.POST,instance=r_request)
         if o_form.is_valid():
-            obj = o_form.save(commit=False)
-            by_user = request.user
-            obj.save()
-            get_user = obj.order_id
-            tp_choice_2 = MakeRequest.objects.filter(order_id = get_user ).filter(status= 'Delivered').exists()   
-            if tp_choice_2 == True:
+            obj = o_form.save(commit=False)        
+            obj.save()            
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
                 Delivered.objects.create(
-                    customer=obj.customer,
-                    Item_delivered = obj,
-                    order_id = get_user
-                )
-                messages.success(request, f'You just updated a customer satus to delivered')
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('e-request')
     context = {'o_form': o_form,
@@ -1803,20 +2288,18 @@ def updateRequestFormCash(request, pk):
     if request.method == 'POST':
         c_form = adminformCash(request.POST,instance = r_request1)
         if c_form.is_valid():
-            obj = c_form.save(commit=False)
-            by_user = request.user
-            obj.save()
-            get_user = obj.order_id
-            tp_choice_2 = MakeRequestCash.objects.filter(order_id = get_user ).filter(status= 'Delivered').exists()   
-            
-            if tp_choice_2 == True:
+            obj = c_form.save(commit=False)            
+            obj.save()            
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
                 Delivered.objects.create(
-                    customer=obj.customer,
-                    Item_delivered = obj,
-                    order_id = get_user
-
-                )
-                messages.success(request, f'You just updated a customer satus to delivered')
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('cash-request')
     context = {'c_form': c_form,
@@ -1838,19 +2321,18 @@ def updateRequestFormShopping(request, pk):
     if request.method == 'POST':
         s_form = adminformShopping(request.POST,instance = r_request2)
         if s_form.is_valid():
-            obj = s_form.save(commit=False)
-            by_user = request.user
+            obj = s_form.save(commit=False)            
             obj.save()
-            get_user = obj.order_id
-            tp_choice_2 = Shopping.objects.filter(order_id = get_user ).filter(status= 'Delivered').exists()   
-            if tp_choice_2 == True:
+            chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
+            if obj.status == 'Delivered' and chk_delivered == True:                
+                messages.success(request, f'You just updated a customer satus: {obj.order_id}')
+            elif obj.status == 'Delivered' and chk_delivered == False: 
                 Delivered.objects.create(
-                    customer=obj.customer,
-                    Item_delivered = obj,
-                    order_id = get_user
-
-                )
-                messages.success(request, f'You just updated a customer satus to delivered')
+                                customer=obj.customer,
+                                Item_delivered = obj,
+                                order_id = obj.order_id
+                                )
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('shopping-request')
     context = {'s_form': s_form,
@@ -1918,7 +2400,7 @@ def cancelRequestShopping(request, pk):
 
 #Delete Request Order History
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def orderHistory(request, user):
     customer = Customer.objects.get( user=user )
 
@@ -1963,7 +2445,7 @@ def orderHistory(request, user):
 
 #Customer Notification
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def Notifications_show(request, user): 
     customer = Customer.objects.get(user= user)
     n_filter = customer.delivered_set.all()
@@ -1972,7 +2454,7 @@ def Notifications_show(request, user):
 
 #Mark As Read
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def Notifications_delete(request, pk):    
     cust = Delivered.objects.get(id = pk)
     cust.viewed = True
@@ -1981,7 +2463,7 @@ def Notifications_delete(request, pk):
 
 #Admin Notification
 @login_required(login_url='login')
-@admin_only 
+@allowed_user(allowed_roles=['admin', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def adminNotificationShow(request):
     customer = Customer.objects.get(user=request.user)
     notification_filter = adminNotification.objects.all()
@@ -1991,7 +2473,7 @@ def adminNotificationShow(request):
 
 #Admin Notification Delete
 @login_required(login_url='login')
-@admin_only
+@allowed_user(allowed_roles=['admin', 'Fleet Manager'])
 def adminNotificationDelete(request, pk): 
     cust1 = adminNotification.objects.get(id=pk)
     cust1.viewed = True
@@ -1999,7 +2481,7 @@ def adminNotificationDelete(request, pk):
     return redirect('adminNotificationShow')
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def ErrandMenu(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
@@ -2008,7 +2490,7 @@ def ErrandMenu(request, user):
     return render(request, 'users/ErrandService.html', {'n':n})
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def fuel_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2040,7 +2522,7 @@ def fuel_errand(request, user):
             chk_card = chk_payment_type.payment_channel
             print(chk_card)
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2064,7 +2546,7 @@ def fuel_errand(request, user):
                         amount_for_update2 = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update2}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2093,7 +2575,7 @@ def fuel_errand(request, user):
     return render(request, 'users/Fuelerrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def gas_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2125,7 +2607,7 @@ def gas_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2149,7 +2631,7 @@ def gas_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2178,7 +2660,7 @@ def gas_errand(request, user):
     return render(request, 'users/Gaserrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])            
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])            
 def drugs_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2210,7 +2692,7 @@ def drugs_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2234,7 +2716,7 @@ def drugs_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2263,7 +2745,7 @@ def drugs_errand(request, user):
     return render(request, 'users/Drugserrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def bread_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2295,7 +2777,7 @@ def bread_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2319,7 +2801,7 @@ def bread_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2348,13 +2830,13 @@ def bread_errand(request, user):
     return render(request, 'users/Breaderrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def shawarma_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
     n = n_filter.filter(viewed = False)
     if request.method == 'POST':
-        shawarma_form = Bread_errand(request.POST)
+        shawarma_form = Shawarma_errand(request.POST)
         if shawarma_form.is_valid():
             instance = shawarma_form.save(commit=False)
             instance.customer = customer
@@ -2380,7 +2862,7 @@ def shawarma_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2404,7 +2886,7 @@ def shawarma_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2433,7 +2915,7 @@ def shawarma_errand(request, user):
     return render(request, 'users/Shawarmaerrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def pizza_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2465,7 +2947,7 @@ def pizza_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2489,7 +2971,7 @@ def pizza_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2518,7 +3000,7 @@ def pizza_errand(request, user):
     return render(request, 'users/Pizzaerrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def fruits_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2550,7 +3032,7 @@ def fruits_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2574,7 +3056,7 @@ def fruits_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2603,7 +3085,7 @@ def fruits_errand(request, user):
     return render(request, 'users/Fruitserrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def icecream_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2635,7 +3117,7 @@ def icecream_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2659,7 +3141,7 @@ def icecream_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2688,7 +3170,7 @@ def icecream_errand(request, user):
     return render(request, 'users/Icecreamerrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def food_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2720,7 +3202,7 @@ def food_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2744,7 +3226,7 @@ def food_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 
@@ -2773,7 +3255,7 @@ def food_errand(request, user):
     return render(request, 'users/Fooderrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def other_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -2805,7 +3287,7 @@ def other_errand(request, user):
             chk_card = chk_payment_type.payment_channel
          
             req = chk_payment_type.Amount_Payable 
-            if chk_card == 'Card':
+            if chk_card == 'Card/Transfer':
                 def initialize_fuel_payment(request, user):
                     url = "https://api.paystack.co/transaction/initialize"
                     if req >= 2500:
@@ -2829,7 +3311,7 @@ def other_errand(request, user):
                         amount_for_update = int(amt)
                         messages.success(request, f'Your Total Fee (item cost + delivery fee) is {amount_for_update}') 
                     headers = {
-                        "Authorization": "Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec",
+                        "Authorization": settings.PAYSTACK_SECRETKEY,
                         'Content-Type': 'application/json'
                     }
 

@@ -38,8 +38,13 @@
                             <div class="col">
                                 {{ s_form.Amount_Refunded|as_crispy_field }}
                             </div>                            
-                        </div>            
-                        <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                {{ s_form.confirmed|as_crispy_field }}
+                            </div>                                                            
+                        </div>                  
+                        <button class="btn btn-success btn-block rounded-lg" type="submit">Save</button>
                     </form>
                 </div> 
             </div> 

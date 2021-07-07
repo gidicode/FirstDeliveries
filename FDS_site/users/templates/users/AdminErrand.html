@@ -1,0 +1,211 @@
+{% extends "users/profile.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Admin Errand {% endblock title %}
+
+{% block contentadmin %}
+ <!--Anonymous-->
+ <div class="row">
+    <div class="col-md-12 col-sm- 12, col-xl-12">
+        <h6 class="p-3 position-static shadow-sm text-center text-dark">All Errand Request </h6>
+        <table class="table table-striped table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Pay Method</th>
+                    <th scope="col">Request Details</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Amt Payable</th>
+                    <th scope="col">Amt Paid</th>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Assigned</th>
+                    <th scope="col">Confirmed</th>
+                    <th scope="col">Update</th>
+                    <th scope="col">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in page_obj %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{i.date_created|timesince}}</td>
+                    <td>{{i.customer}}</td> 
+                    <td>{{i.category}}</td> 
+                    <td>{{i.payment_channel}}</td> 
+                    <td>
+                        <div class="dropdown">
+                            <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              r
+                            </p>
+                            <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                                <small class=" text-white"> <strong> Order ID:</strong> {{i.order_id}}  </small>
+                                <br>
+                                <small class=" text-white"> <strong> Customer Phone:</strong> {{i.customer.phone_number}}  </small>
+                                <br>
+                                <small class=" text-white"> <strong> Customer Name:</strong> {{i.customer.first_name}} {{i.customer.last_name}}  </small>
+                                <br>
+                                <small class=" text-white"><strong>Sender Location:</strong> {{i.your_location}} </small>
+                                <hr>
+                                {% if i.category == 'Fuel' %}
+                                    <small class=" text-white"> <strong> Fuel Amount:</strong> {{i.fuel_per_amount}} </small>
+                                    <br>
+                                    <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                {% endif %}
+                              <br>
+                              {% if i.category == 'Bread' %}
+                                <small class=" text-white"> <strong> Bread Brand:</strong> {{i.Bread_brand_name}} </small>
+                                <br>
+                                <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                <br>
+                                <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                                {% if description %}
+                                    <small class=" text-white"> <strong> Description:</strong> {{i.description}}</small>
+                                {% else %}
+                                <small class=" text-white"> <strong>Amt Entered:</strong> {{i.Enter_amount}}</small>
+                                <br>
+                                {% endif %}
+                              {% endif %}
+
+                              {% if i.category == 'Drugs' %}
+                                <small class=" text-white"> <strong> Drug Store:</strong> {{i.Drug_store}} </small>
+                                <br>
+                                <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                                <br>
+                                <small class=" text-white"> <strong> Drug Name:</strong> {{i.Drug_name}} </small>
+                                <br>
+                                <small class=" text-white"> <strong> Prescription:</strong> {{i.medical_description}} </small>
+                                <br>
+                                <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                              {% endif %}
+
+                              {% if i.category == 'Gas' %}
+                              <small class=" text-white"> <strong> Gas Quantity:</strong> {{i.Gas_Quantity}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>                        
+                              {% endif %}
+
+                              {% if i.category == 'Shawarma' %}
+                              <small class=" text-white"><strong>Shawarma Store:</strong> {{i.Shawarma_store}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                              <br>
+                              <small class=" text-white"><strong>Shawarma description:</strong> {{i.Shawarma_desc}} </small>
+                              <br>
+                              <small class=" text-white"><strong>Further description:</strong> {{i.description}} </small>
+                              <br>
+                              <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>                                  
+                              {% endif %}
+                              
+                              {% if i.category == 'Pizza'%}
+                              <small class=" text-white"> <strong> Pizza Store:</strong> {{i.pizza_store}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Pizza Desc:</strong> {{i.Pizza_desc}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                              <br>
+                              <small class=" text-white"><strong>Quantity:</strong> {{i.Quantity}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>                                
+                              {% endif %}
+
+                              {% if i.category  == 'Ice Cream' %}
+                              <small class=" text-white"> <strong> Store Name:</strong> {{i.ice_Cream_store}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Description:</strong> {{i.ice_Cream_desc}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>
+                              {% endif %}
+
+                              {% if i.category == 'Fruits' %}
+                              <small class=" text-white"> <strong> Purchase From:</strong> {{i.fruits_purchase_store}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Fruits Description:</strong> {{i.fruits_description}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>                        
+                              {% endif %}
+
+                              {% if i.category == 'Food' %}
+                              <small class=" text-white"> <strong> Food Vendor:</strong> {{i.Food_vendor}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Food Description:</strong> {{i.Food_description}}</small>
+                              <br>
+                              <small class=" text-white"> <strong> Further Description:</strong> {{i.description}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount}} </small>                                                                    
+                              {% endif %}
+
+                              {% if i.category == 'Others' %}
+                              <small class=" text-white"> <strong> Description:</strong> {{i.description}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Quantity:</strong> {{i.Quantity}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Pay Channel:</strong> {{i.payment_channel}} </small>
+                              <br>
+                              <small class=" text-white"> <strong> Amt Entered:</strong> {{i.Enter_amount} } </small>                                                              
+                              {% endif %}
+                        </div>
+                    </td>
+                    <td>{{i.status}}</td> 
+                    <td>{{i.Amount_Payable}}</td> 
+                    <td>{{i.Amount_Paid}}</td> 
+                    <td>{{i.order_id}}</td> 
+                    <td class="text-center">
+                        {% if i.assigned == True%}
+                                <i class="fas fa-check-circle text-white">
+                        {% else %}
+                                <i class="fas fa-check-circle text-danger"></i>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if i.confirmed == True %}
+                            <i class="fas fa-check-circle text-success"></i>
+                        {% else %}
+                            <i class="fas fa-check-circle text-danger"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'updateRequestErrand' i.id %}" role="button" class="btn btn-primary rounded-pill btn-sm"> 
+                            Update
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'cancelRequestErrand' i.id %}" role="button" class="btn btn-danger rounded-pill btn-sm"> 
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                 
+                {% endfor %}
+            
+                <div class="pagination mb-3">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a class="btn btn-warning" href="?page=1">&laquo; first</a>
+                            <a class="btn btn-danger" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator5.num_pages }}.
+                        </span>
+                
+                        {% if page_obj.has_next %}
+                            <a class="btn btn-warning" href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a class="btn btn-danger" href="?page={{ page_obj.paginator5.num_pages }}">last &raquo;</a>
+                        {% endif %}
+            </table>
+    </div>
+</div>
+{% endblock contentadmin %}

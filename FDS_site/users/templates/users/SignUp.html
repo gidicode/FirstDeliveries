@@ -2,25 +2,30 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %} Sign Up - FDLS{% endblock title%}
+{% block title %} Sign Up {% endblock title%}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid" style="background-color: rgb(7, 4, 34);">
     <div class="row p-4 ">
         <div class="col-md-4">
             {% if messages %}
             <div class="messages p-3 container align-self-center">
                 {% for message in messages %}
-                <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}</div>
+                <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                </div>
+                
                 {% endfor %}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
+                
             </div>
             {% endif %}
         </div>
-        <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 p-1">
-            <div class="bg-white shadow p-3">
+        <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 p-1">             
+            <div class="bg-white shadow rounded p-3">
+                <p class="text-center mb-3"> CREATE YOUR ACCOUNT.</p>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}  
                     <div class="form-row ">
@@ -61,15 +66,39 @@
                             {{form.password2|as_crispy_field }}
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <small> By signing up you agree with our Terms and Condition. <span  data-toggle="modal" data-target="#Terms" role="button"> Click to view </span> {{form.TermsAgreement|as_crispy_field }}</small>
+                        </div>
+                    </div>
                     <button class="btn btn-danger btn-block rounded-lg" type="submit">Sign Up</button>
                 </form>
                 <small class="text-muted"> 
-                    Already have and Account <a calss="ml-2" href="{% url 'login' %}"> Sign In</a>
+                    Already have an account? <a calss="ml-2" href="{% url 'login' %}"> Sign In</a>
                 </small>
             </div>
             
         </div>
         <div class="col-md-4"></div>
     </div>
+
+    <div class="modal fade" id="Terms" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <strong>Request For Dispatch Rider</strong>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Terms and  Condition </p>
+            </div>
+            <div class="modal-footer justify-content-right">             
+            </div>
+          </div>
+        </div>
+    <!--/-->
 </div>
 {% endblock %}

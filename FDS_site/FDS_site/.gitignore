@@ -1,0 +1,12 @@
+.env
+.vscode
+.pyc
+pip-log.txt 
+pip-delete-this-directory.txt 
+
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media

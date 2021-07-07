@@ -560,7 +560,10 @@
                         <th scope="col">Date</th>
                         <th scope="col">View Items</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Paid</th>
+                        <th scope="col">PS Reference </th>
                         <th scope="col">Amount Paid</th>
+                        <th scope="col">Payment Channel</th>
                         <th scope="col">Service Charge</th>
                         <th scope="col">Item Cost</th>
                         <th scope="col">Total Amt Spent</th>
@@ -588,7 +591,16 @@
                             </div>
                         </td>
                         <td>{{i.status}}</td> 
-                        <td>{{i.amount_paid}}</td> 
+                        <td>
+                            {% if i.paid == True%}
+                                    <i class="fas fa-check-circle text-white">
+                            {% else %}
+                                    <i class="fas fa-check-circle text-danger"></i>
+                            {% endif %}
+                        </td> 
+                        <td>{{i.Ps_reference}}</td> 
+                        <td>{{i.amount_paid}}</td>
+                        <td>{{i.payment_channel}}</td>
                         <td>{{i.Charged}}</td> 
                         <td>{{i.Item_Cost}}</td> 
                         <td>{{i.Total}}</td>
@@ -622,8 +634,17 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{i.status}}</td> 
-                        <td>{{i.amount_paid}}</td> 
+                        <td>{{i.status}}</td>
+                        <td>
+                            {% if i.paid == True%}
+                                    <i class="fas fa-check-circle text-white">
+                            {% else %}
+                                    <i class="fas fa-check-circle text-danger"></i>
+                            {% endif %}
+                        </td> 
+                        <td>{{i.Ps_reference}}</td> 
+                        <td>{{i.amount_paid}}</td>
+                        <td>{{i.payment_channel}}</td> 
                         <td>{{i.Charge}}</td> 
                         <td>{{i.Item_Cost}}</td> 
                         <td>{{i.Total}}</td>

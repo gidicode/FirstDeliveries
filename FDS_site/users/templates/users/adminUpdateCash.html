@@ -16,22 +16,10 @@
                         
                         <div class="form-row">
                             <div class="col">
-                                {{ c_form.status|as_crispy_field }}
-                            </div>
-                            <div class="col">
-                                {{ c_form.Amount_Paid|as_crispy_field }}
-                                
-                            </div>
+                                {{ c_form|crispy}}
+                            </div>                           
                         </div>
-
-                        <div class="form-row">
-                            <div class="col">
-                                {{ c_form.paid|as_crispy_field }}
-                            </div> 
-                        </div> 
-
-                        
-                        <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>
+                        <button class="btn btn-success btn-block rounded-lg" type="submit">Save</button>
                     </form>
                 </div> 
             </div> 

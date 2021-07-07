@@ -2,13 +2,13 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %} Log In - FDLS{% endblock title%}
+{% block title %} Log In - Flls{% endblock title%}
 
 {% block content %}
 <div class="container-fluid">
     <div class="row ">
         <div class="col-md-4"></div>
-        <div class="col-md-4 p-4">
+        <div class="col-md-4 p-2 bg-light mt-3">
             {% if messages %}
                 <div class="messages p-3 container align-self-center">
                     {% for message in messages %}
@@ -19,8 +19,8 @@
                     </div>
                     {% endfor %}
             {% endif %}
-            <div class="shadow-sm shadow bg-light mb-3 rounded-lg">
-                <div class="p-4">
+            <div class="mb-3 rounded-lg">
+                <div class="p-2">
                     <form method="POST" enctype="multipart/form-data"> 
                         {% csrf_token %}
                         <fieldset class="form-group">
@@ -34,7 +34,7 @@
                     <small class="text-muted "> 
                         Dont have an account sign up
                     </small>
-                    <a role="button" href="{% url 'register' %}" class="btn btn-success btn-block">Sign Up</a>
+                    <a role="button" href="{% url 'register' %}" class="btn btn-success btn-block rounded-pill">Sign Up</a>
                     <br>
                     <small>
                         Forgot password?<a calss="ml-2" href="{% url 'password_reset' %}"> Reset Password</a>

@@ -10,7 +10,6 @@ from django.conf.urls.static import static
 from . import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-#from django.views.static import serve 
 
 from users.utils import HashIdConverter
 register_converter(HashIdConverter, "hashid")
@@ -19,9 +18,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('FDS_app.urls')),
 
-    path('', include('BikeControl.urls')),
-
-    #path(r'static/(?P<path>.*)', serve,{'document_root': settings.STATIC_ROOT}), 
+    path('', include('BikeControl.urls')),    
 
     path('404/', user_views.response_error_handler),
 
@@ -37,9 +34,7 @@ urlpatterns = [
 
     path('requestForm_Cash/<hashid:user>/', user_views.requestForm_Cash, name='requestForm_Cash'),
 
-    path('shopping/<hashid:user>/', user_views.ShoppingForm, name='shopping'),
-
-    path('Initialize_requestForm/<hashid:user>/', user_views.Initialize_requestForm, name='Initialize_requestForm'),
+    path('shopping/<hashid:user>/', user_views.ShoppingForm, name='shopping'),    
 
     path('orderHistory/<hashid:user>/', user_views.orderHistory, name='orderHistory'),
 
@@ -53,6 +48,10 @@ urlpatterns = [
 
     path('shopping-request/', user_views.allShopping_Request, name='shopping-request'),
 
+    path('allErrand-request/', user_views.allE_errand, name='allerrand-request'),
+
+    path('allFront-request/', user_views.allFront_Desk, name='allfront-request'),
+
     path('anonymous-request/', user_views.allAnonymous_Request, name='anonymous-request'),
 
     path('dashboard/<hashid:user>/', user_views.customerDashboardPage, name='dashboard'),
@@ -61,7 +60,11 @@ urlpatterns = [
     path('updateRequestCash/<hashid:pk>/', user_views.updateRequestFormCash, name='updateRequestCash'),
     path('updateRequestShopping/<hashid:pk>/', user_views.updateRequestFormShopping, name='updateRequestShopping'),
     path('updateRequestAnon/<hashid:pk>/', user_views.updateRequestAnon, name='updateRequestAnon'),
+    path('updateRequestErand/<hashid:pk>/', user_views.Update_Errand_Form, name='updateRequestErrand'),
+    path('updateRequestFrontDesk/<hashid:pk>/', user_views.Update_Front_Fesk_Form, name='updateRequestFront'),
 
+    path('cancelRequestErrand/<hashid:pk>/', user_views.cancelRequestErrand, name='cancelRequestErrand'),
+    path('cancelRequestFront/<hashid:pk>/', user_views.cancelRequestFront, name='cancelRequestFront'),
     path('cancelRequest/<hashid:pk>/', user_views.cancelRequest, name='cancelRequest'),
     path('cancelRequestCash/<hashid:pk>/', user_views.cancelRequestCash, name='cancelRequestCash'),
     path('cancelRequestShopping/<hashid:pk>/', user_views.cancelRequestShopping, name='cancelRequestShopping'),
@@ -98,7 +101,6 @@ urlpatterns = [
     path('CashierUpdateA/<hashid:pk>/', user_views.CashierUpdateAnonForm, name='cashierupdate_a'),
     path('CashierUpdateErr/<hashid:pk>/', user_views.CashierUpdateErrandForm, name='cashierupdate_err'),
     path('CashierUpdateF/<hashid:pk>/', user_views.CashierUpdateFrontForm, name='cashierupdate_f'),
-
 
     path('FleetManagerE/<hashid:pk>/', user_views.UpdateEForm, name='fleetE'),
     path('FleetManagerC/<hashid:pk>/', user_views.UpdateCForm, name='fleetC'),

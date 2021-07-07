@@ -11,27 +11,30 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
+import environ
 from pathlib import Path
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+
+environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2u0mu_b=7%76tif8&_sx#mu+m@g!j5o3kvm2qeo+3$2^!1g7i-'
+SECRET_KEY =env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', '60701b06edb8.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', '90728b4016c0.ngrok.io']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django_filters',
 
@@ -99,18 +102,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-#    {
-#        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-#    },
-#    {
-#        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#    },
-#    {
-#        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#    },
-#    {
-#        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
 
@@ -151,30 +154,32 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'usuugwo@gmail.com'
-EMAIL_HOST_PASSWORD = 'ujlelybirixcrlpc'
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-HASHIDS_SALT = "HdfF342RkL89uUoNsS6Yy8Pc"
-HASHID_FIELD_SALT = "ac743a4f4877dcd2b205c78bb8c28295efghi6b01d3"
+HASHIDS_SALT = env('HASHIDS_SALT')
+HASHID_FIELD_SALT = env('HASHID_FIELD_SALT')
 
-PAYSTACK_PUBLIC_KEY = 'pk_test_3d14df0e542eeff499eca1f35dd563d3885e9a2d'
-PAYSTACK_SCRET_KEY = 'sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec'
+PAYSTACK_PUBLIC_KEY = env('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_SCRET_KEY = env('PAYSTACK_SCRET_KEY')
+
+PAYSTACK_SECRETKEY=env('PAYSTACK_SECRETKEY')
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
-API_KEY = '65afd942ebf219293a4f4877dcd2b205c78bb8c2'
-TOKENID= '9944ED5D44E64014B84A22A6FA5BEA10-02-5'
-TOKENSECRET= 'sMjrbYJPPRbNpfvrccW1#EydjigFv'
+API_KEY = env('API_KEY')
+TOKENID= env('TOKENID')
+TOKENSECRET= env('TOKENSECRET')
 
-HASH = HASHID_FIELD_SALT[0:10] + API_KEY[10:]
+HASH =env('TOKENSECRET')
 
-HASHANON = HASHID_FIELD_SALT[10] + API_KEY[:20]
+HASHANON =env('HASHANON')
 
-ERRAND = PAYSTACK_PUBLIC_KEY[:6]
+ERRAND = env('ERRAND')
 
-FRONT_DESK = PAYSTACK_PUBLIC_KEY[6:15] + PAYSTACK_SCRET_KEY[6:15]
+FRONT_DESK = env('FRONT_DESK')
