@@ -5,51 +5,94 @@
 
 {% block content %}
 <br>
-<div class="row order-3 p-3 bd-highlight">
+<div class="row">
     <div class="col-md-4"></div>
-    <div class="col-lg-4">
-        <div class=" card card-body text-dark shadow rounded-lg " style="background-color: rgb(235, 240, 241);">
+    <div class="col-lg-4 col-xl-4">
+        <div class="p-3 text-dark shadow rounded-lg " style="background-color: rgb(253, 253, 253);">
         {% if query %}
             {%with results.count as total_results %}
-            Found {{ total_results }} result{{ total_results|pluralize }}
+            <div class="p-1 bg-light rounded-pill shadow-sm text-center">Found {{ total_results }} result{{ total_results|pluralize }}</div>
             {% endwith %}
-            <br>
-            <ul>
+            <br>            
             {% for r in results %}
-                <li> Item Description: {{r.Package_description}}</li>
-                <li> Choice for TP: {{ r.Choice_for_TP}} </li>
-                <li> Pickup location : {{ r.Your_location }}</li>
-                <li> Your Phone Number : {{r.Your_phone_number}}</li>
-                <li> Your Email : {{r.email}}</li>
-                <li> Reciever Name: {{r.reciever_name}}</li>
-                <li> Reciever Address: {{r.reciever_address}}</li>
-                <li> Reciever Number: {{r.reciever_contact}}</li>
-                <li> Date Created : {{r.date_created}}</li>
-
-                {% if r.status == 'Pending' %}
-                    <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
-
-                {% elif r.status == 'Out for delivery' %}
-                    <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
-                {% elif r.status == 'Delivered' %}
-                    <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
-                {% else%}
-                    <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
-                {% endif %}
-                <li> Amount paid : N{{r.Amount_Paid}}</li>
-                <li> Reference Number : {{r.order_id}}</li>
+            <table class="table text-left justify-content-center">
+                <thead>
+                  <tr>                                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>                    
+                    <td class="font-weight-bold">Item Description</td>
+                    <td>{{r.Package_description}}</td>                    
+                  </tr>
+                  <tr>                    
+                    <td  class="font-weight-bold">Choice for TP</td>
+                    <td>{{ r.Choice_for_TP}}</td>                    
+                  </tr>
+                  <tr>                    
+                    <td  class="font-weight-bold">Pickup location</td>
+                    <td>{{ r.Your_location }}</td>                    
+                  </tr> 
+                  <tr>                    
+                    <td>Your Number</td>
+                    <td>{{r.Your_phone_number}}</td>                    
+                  </tr>
+                  {% if r.receiver_name %}   
+                  <tr>                    
+                    <td>Receiver Name</td>
+                    <td>{{r.receiver_name}}</td>                    
+                  </tr> 
+                  {% endif %}
+                  {% if r.receiver_address %}
+                  <tr>                    
+                    <td>Receiver Address</td>
+                    <td>{{r.receiver_address}}</td>                    
+                  </tr>  
+                  {% endif%} 
+                  {% if r.receiver_contact %}
+                  <tr>                    
+                    <td> Receiver Number</td>
+                    <td>{{r.receiver_contact}}</td>                    
+                  </tr>
+                  {% endif %}
+                  <tr>                    
+                    <td> Date Created</td>
+                    <td>{{r.date_created}}</td>                    
+                  </tr> 
+                  <tr>                    
+                    {% if r.status == 'Pending' %}
+                    <td> Delivery Satus</td>
+                    <td><span class="bg bg-warning rounded-lg font-weight-bold text-white p-1">{{r.status}}</span></td>  
+                    {% elif r.status == 'Out for delivery' %}    
+                    <td> Delivery Satus</td>
+                    <td><span class="bg bg-info text-white p-1">{{r.status}}</span></td>        
+                    {% elif r.status == 'Delivered' %}          
+                    <td> Delivery Satus</td>
+                    <td><span class="bg bg-success  text-white p-1">{{r.status}}</span></td> 
+                    {% else%} 
+                    <td> Delivery Satus</td>
+                    <td><span class="bg bg-danger p-1">{{r.status}}</span></td> 
+                    {% endif %}
+                  </tr> 
+                  <tr>                    
+                    <td> Amount Paid</td>
+                    <td>N{{r.Amount_Paid}}</td>                    
+                  </tr>     
+                  <tr>                    
+                    <td>Reference Number</td>
+                    <td> {{r.order_id}}</td>                    
+                  </tr>                      
+                </tbody>
+              </table>                                                                                                                      
                 <br>
                 {% empty %}
                 <small>No results Found: Request for dispatch and fill in your Reference ID to view your request status.</small>
-                {% endfor %}
-            </ul>
+                <small> Or fill in the correct Reference ID to view your details.</small>
+                {% endfor %}            
         {% endif %}
-
         </div>
-
     </div>
     <div class="col-md-4"></div>
-
 </div>
 
 

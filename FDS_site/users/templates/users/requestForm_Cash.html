@@ -66,16 +66,21 @@
                                     <button type="button" class="btn btn-sm btn-outline-light text-success add-sewer-form5 "><small>Loading/Off Loading?</small></button> 
                                 </div>      
                                 <div id="loading"></div>
-                            </div>
-                        </div>
-                        <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>
+                            </div>                                                                              
+                        </div>                    
+                        <div class="form-row text-center mb-3">
+                            <div class="col">
+                                <small class="text-muted  ">PRICE: per drop: Bike(N500), Tricycle(N1000), Van(negotiable)</small>                            
+                            </div>                               
+                        </div>      
+                        <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>                        
                     </form>
                 </div>
 
                 <div id="add-form" style="display: none;"> 
                     <div class="sew-form">
                         <hr>
-                        <div class="form-row ">
+                        <div class="form-row">
                             <div class="col">
                                 {{ c_form.reciever_name2|as_crispy_field }}
                             </div>
@@ -85,7 +90,7 @@
                             </div>
                         </div>
 
-                        <div class="form-row ">
+                        <div class="form-row">
                             <div class="col">
                                 {{ c_form.Package_description2|as_crispy_field }}
                             </div>

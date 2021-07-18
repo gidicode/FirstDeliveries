@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %} {{user.username }}:Dashboard - FDLS {% endblock title %}
+{% block title %} {{user.username }}:Dashboard {% endblock title %}
 
 
 {% block content2 %}
@@ -117,7 +117,7 @@
               </div>
               <br>
             <div class="progress">
-              <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" id="flow2" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                 Pending
               </div>
             </div>
@@ -174,7 +174,7 @@
               </div>
               <br>
               <div class="progress">
-                <div class="progress-bar bg-danger " role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Out for delivery</div>
+                <div class="progress-bar" id="flow2" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Out for delivery</div>
                 <br>
               </div>
             </div>
@@ -440,7 +440,7 @@
               </div>
               <br>
             <div class="progress">
-              <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" id="flow" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                 Pending
               </div>
             </div>
@@ -580,13 +580,12 @@
                   <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
                 {% endif %}
                 <!--end option-->
-              <br>
-              <div class="progress">
-                <div class="progress-bar bg-danger " role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Purchase in process</div>
-                <br>
-              </div>
+              <br>              
             </div>
-
+            <div class="progress">
+              <div class="progress-bar" id="flow" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Purchase in process</div>
+              <br>
+            </div>
             {% elif i.status == 'On Route for Delivery' %}
             <div class="dropdown">
               <span class="dropdown-toggle btn" role="button"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -722,11 +721,11 @@
                   <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
                 {% endif %}
                 <!--end option-->
+              <br>              
+            </div>
+            <div class="progress">
+              <div class="progress-bar" id="flow" role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">On Route</div>
               <br>
-              <div class="progress">
-                <div class="progress-bar bg-danger " role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">On Route</div>
-                <br>
-              </div>
             </div>
             {% endif %}
           {% endfor %}
@@ -747,7 +746,7 @@
               </div>
               <br>
               <div class="progress">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                   Pending
                 </div>
               </div>
@@ -759,11 +758,11 @@
               <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
                 <small class=" text-white"> {{i.List_Items}} </small>
                 <!--end option-->
+              <br>              
+            </div>
+            <div class="progress">
+              <div class="progress-bar bg-primary " role="progressbar" style="width: 60%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Ath the Mall</div>
               <br>
-              <div class="progress">
-                <div class="progress-bar bg-danger " role="progressbar" style="width: 60%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Ath the Mall</div>
-                <br>
-              </div>
             </div>
             {% endif %}
           {% endfor %}
@@ -780,6 +779,14 @@
       background-color: rgb(233, 161, 94);
       width: 160px;
       border-radius: 12px;   
+  }
+
+  #flow{
+    background-color: rgb(233, 161, 94);
+  }
+
+  #flow2 {
+    background-color: rgb(128, 52, 67);
   }
 
   #request {

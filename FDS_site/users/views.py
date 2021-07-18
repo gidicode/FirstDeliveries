@@ -13,7 +13,7 @@ from django.contrib.auth.models import Group
 from hashids import Hashids
 from .models import *
 
-from decimal import Decimal
+from django.http import Http404
 
 from django.conf import settings
 
@@ -191,8 +191,8 @@ def FleetManager(request, user):
     request5 = Errand_service.objects.all()
     request6 = Front_desk.objects.all()
     
-    assign = RidersDeliveries.objects.all()    
-
+    assign = RidersDeliveries.objects.all()
+                
     notification_filter = adminNotification.objects.all()
     notify = notification_filter.filter(viewed = False) 
 
@@ -739,7 +739,7 @@ def requestForm_Online(request, user):
                         'amount': final_amt2,                        
                     })
                 headers = {
-                    "Authorization": settings.PAYSTACK_SECRETKEY,
+                    "Authorization": 'Bearer sk_test_1d32c71fd73944bd712f5b94853de7fe325387ec',
                     'Content-Type': 'application/json'
                 }
 
@@ -1949,12 +1949,27 @@ def UpdateEForm(request, pk):
     r_request = MakeRequest.objects.get(id=pk)
     o_form = FleetManagerUpdateE(instance= r_request)
     customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateE(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
+
+            if obj.status == 'Delivered':
+                rider.filter(e_payment_request = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(e_payment_request = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
            
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -1979,13 +1994,28 @@ def UpdateEForm(request, pk):
 def UpdateCForm(request, pk):
     r_request = MakeRequestCash.objects.get(id=pk)
     o_form = FleetManagerUpdateC(instance= r_request)
-    customer = Customer.objects.get(user=request.user) 
+    customer = Customer.objects.get(user=request.user)
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateC(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
+
+            if obj.status == 'Delivered':
+                rider.filter(cash_request = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(cash_request = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
            
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2010,7 +2040,9 @@ def UpdateCForm(request, pk):
 def UpdateSForm(request, pk):
     r_request = Shopping.objects.get(id=pk)
     o_form = FleetManagerUpdateS(instance= r_request)
-    customer = Customer.objects.get(user=request.user) 
+    customer = Customer.objects.get(user=request.user)
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateS(request.POST,instance=r_request)
@@ -2018,6 +2050,19 @@ def UpdateSForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()
            
+            if obj.status == 'Delivered':
+                rider.filter(shopping = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(shopping = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
                 messages.success(request, f'You just updated a customer satus: {obj.order_id}')
@@ -2042,6 +2087,8 @@ def UpdateErrForm(request, pk):
     r_request = Errand_service.objects.get(id=pk)
     o_form = FleetManagerUpdateErr(instance= r_request)
     customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateErr(request.POST,instance=r_request)
@@ -2049,6 +2096,19 @@ def UpdateErrForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()
            
+            if obj.status == 'Delivered':
+                rider.filter(errand = obj).update(staus = 'Delivered')                
+                try:
+                    all4 = rider.filter(errand = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+                        
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
                 messages.success(request, f'You just updated a customer satus: {obj.order_id}')
@@ -2073,13 +2133,28 @@ def UpdateAForm(request, pk):
     r_request = Anonymous.objects.get(id=pk)
     o_form = FleetManagerUpdateA(instance= r_request)
     customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateA(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
-            messages.success(request, f'You just updated a customer satus to delivered')
+            
+            if obj.status == 'Delivered':
+                rider.filter(anonymous = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(anonymous = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            messages.success(request, f'You just updated a customer satus to delivered {obj.order_id}')
 
             return redirect('fleetManager', user = pk)
     context = {'o_form': o_form,
@@ -2087,19 +2162,34 @@ def UpdateAForm(request, pk):
               }
     return render(request, 'users/FleetManagerUpdateAnon.html', context)
 
-#Fleet Manager Update F
+#Fleet Manager Update Front Desk form
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin','Fleet_Manager'])
 def UpdateFForm(request, pk):
     r_request = Front_desk.objects.get(id=pk)
     o_form = FleetManagerUpdateF(instance= r_request)
     customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateF(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
+            
+            if obj.status == 'Delivered':
+                rider.filter(front_desk = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(front_desk = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
            
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2123,13 +2213,28 @@ def UpdateFForm(request, pk):
 def Update_Errand_Form(request, pk):
     r_request =Errand_service.objects.get(id=pk)
     o_form = AdminErrandForm(instance= r_request)
-    customer = Customer.objects.get(user=request.user)    
+    customer = Customer.objects.get(user=request.user)  
+    rider = RidersDeliveries.objects.all()  
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = AdminErrandForm(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()            
+
+            if obj.status == 'Delivered':
+                rider.filter(errand = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(errand = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
 
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2154,13 +2259,28 @@ def Update_Front_Fesk_Form(request, pk):
     r_request = Front_desk.objects.get(id=pk)
     o_form = AdminFrontForm(instance= r_request)
     customer = Customer.objects.get(user = request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = AdminFrontForm(request.POST, instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
-           
+
+            if obj.status == 'Delivered':
+                rider.filter(front_desk = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(front_desk = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
                 messages.success(request, f'You just updated a customer satus: {obj.order_id}')
@@ -2181,15 +2301,30 @@ def Update_Front_Fesk_Form(request, pk):
 @login_required(login_url='login')
 @admin_only
 def updateRequestAnon(request, pk):
-
     r_request = Anonymous.objects.get(id=pk)
     a_form = AdminAnonForm(instance= r_request)
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         a_form = AdminAnonForm(request.POST,instance=r_request)
         if a_form.is_valid():
             instance = a_form.save(commit=False)
             instance.save()
+
+            if instance.status == 'Delivered':
+                rider.filter(anonymous = instance).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(anonymous = instance).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+
             messages.success(request, f'Successful:{instance.order_id}')
 
             return redirect('anonymous-request')
@@ -2247,17 +2382,31 @@ def cancelRequestAnon(request, pk):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def updateRequestForm(request, pk):
-
     r_request = MakeRequest.objects.get(id=pk)
-    o_form = adminform(instance= r_request)
-    
+    o_form = adminform(instance= r_request)    
     customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = adminform(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)        
-            obj.save()            
+            obj.save()     
+
+            if obj.status == 'Delivered':
+                rider.filter(e_payemnt_request = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(e_payment_request = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
                 messages.success(request, f'You just updated a customer satus: {obj.order_id}')
@@ -2279,17 +2428,31 @@ def updateRequestForm(request, pk):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def updateRequestFormCash(request, pk):
-
     r_request1 = MakeRequestCash.objects.get(id=pk)
     c_form = adminformCash(instance= r_request1)
-    
     customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         c_form = adminformCash(request.POST,instance = r_request1)
         if c_form.is_valid():
             obj = c_form.save(commit=False)            
-            obj.save()            
+            obj.save()
+
+            if obj.status == 'Delivered':
+                rider.filter(cash_request = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(cash_request = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
                 messages.success(request, f'You just updated a customer satus: {obj.order_id}')
@@ -2312,17 +2475,31 @@ def updateRequestFormCash(request, pk):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def updateRequestFormShopping(request, pk):
-
     r_request2 = Shopping.objects.get(id=pk)
     s_form = adminformShopping(instance= r_request2)
-    
     customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         s_form = adminformShopping(request.POST,instance = r_request2)
         if s_form.is_valid():
             obj = s_form.save(commit=False)            
             obj.save()
+
+            if obj.status == 'Delivered':
+                rider.filter(shoppng = obj).update(staus = 'Delivered')
+                try:
+                    all4 = rider.filter(shopping = obj).get(rider__in = riders_profile)
+                    at = all4.rider     
+                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
+                    if all3 == True:
+                        pass                
+                    elif all3 == False:
+                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
+                except RidersDeliveries.DoesNotExist:
+                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
                 messages.success(request, f'You just updated a customer satus: {obj.order_id}')
@@ -2351,11 +2528,11 @@ def deleteRequestForm(request, pk):
     if request.method == 'POST':
         o_form = OrderForm(request.POST,instance=r_request)
         if o_form.is_valid():
-            obj = o_form.save(commit=False)
-            by_user = request.user
+            obj = o_form.save(commit=False)            
             obj.save()
-            return redirect('e-request')
             messages.success(f'You just deleted {obj.customer} order')
+            return redirect('e-request')
+            
     context = {'o_form': o_form}
     return render(request, 'users/requestForm.html', context)
 

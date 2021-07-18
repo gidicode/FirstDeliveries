@@ -85,9 +85,9 @@
       </li>      
     </ul>
     <div class="sticky-top">
-      <nav class="navbar navbar navbar-expand-sm text-truncate navbar-dark  shadow-sm" style="background-image: linear-gradient(to right, rgb(0, 55, 107),rgb(0, 91, 209));" >        
+      <nav class="navbar navbar navbar-expand-md text-truncate navbar-dark  shadow-sm" style="background-image: linear-gradient(to right, rgb(0, 55, 107),rgb(0, 91, 209));" >        
         <a class="navbar-brand font-weight-bold" href="{% url 'fds-home' %}"> 
-          <img src="/static/FDS_app/Flls Logo.png" class="img-fluid" style="width: 150x; height: 45px" alt="Flls Logo">
+          <img src="/static/FDS_app/Flls_Logo.png" class="img-fluid" style="width: 150x; height: 45px" alt="Flls Logo">
         </a>      
         <div class=" collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav mr-auto">
@@ -161,15 +161,15 @@
       /* Center the loader */
       #loader {
         position: absolute;
-        left: 50%;
+        left: 60%;
         top: 50%;
         z-index: 1;
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
         margin: -76px 0 0 -76px;
-        border: 3px solid #f3f3f3;
+        border: 3px solid #d9d7ff;
         border-radius: 50%;
-        border-top: 3px solid #3498db;
+        border-top: 3px solid #db4734;
         -webkit-animation: spin 2s linear infinite;
         animation: spin 1s linear infinite;
       }
@@ -212,7 +212,7 @@
       var myVar;
       
       function spin() {
-        myVar = setTimeout(showPage, 0.999);
+        myVar = setTimeout(showPage, 1000);
       }
       
       function showPage() {

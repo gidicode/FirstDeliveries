@@ -23,6 +23,7 @@ def assigned_Del(request):
 @allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
 def update_assigned_Del(request, pk):
     assigned_deliveries =RidersDeliveries.objects.get(id=pk)
+    riders_profile = RidersProfile.objects.all()
     as_form = updateRidersDelivery(instance=assigned_deliveries)
 
     if request.method == 'POST':
@@ -38,6 +39,14 @@ def update_assigned_Del(request, pk):
             else: 
                 messages.info(request, "Delivery is still Pending ")
 
+            check_busy = RidersDeliveries.objects.all()            
+            all2 = check_busy.filter(rider = instance.rider).filter(staus = 'Pending').exists()            
+            if all2 == True:
+                pass                
+
+            elif all2 == False:
+                riders_profile.filter(pk = instance.rider.pk).update(busy = False)
+                                         
             return redirect('assignedRides')
     return render(request, 'BikeControl/updateAssign.html', {'as_form': as_form})
 
@@ -45,6 +54,7 @@ def update_assigned_Del(request, pk):
 @allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
 def AssignedRides(request):    
     assigned_deliveries = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     f = BikeFilter(request.GET, queryset=assigned_deliveries)
     assigned_deliveries=f.qs
@@ -64,34 +74,49 @@ def AssignedRides(request):
         as_form = ridersdeliveryForm(request.POST)
         if as_form.is_valid():
             instance = as_form.save()
+                                
+            all = riders_profile.get(pk = instance.rider.pk)
 
+            if all.busy == False:
+                riders_profile.filter(pk = instance.rider.pk).update(busy = True)
+            
             if instance.e_payment_request == None :
                 pass
             else:
                 #all = RidersDeliveries.objects.all()
                 e_payments.filter(order_id = instance.e_payment_request.order_id).update(assigned = True)
+                messages.success(request, f"successfuly assigned delivery to a dispatch Rider {instance.e_payment_request.order_id}")
 
             if instance.cash_request == None:
                 pass
             else:
                 cash.filter(order_id = instance.cash_request.order_id).update(assigned = True)
+                messages.success(request, f"successfuly assigned delivery to a dispatch Rider {instance.cash_request.order_id}")
 
             if instance.shopping == None:
                 pass
             else:
                 shop.filter(order_id = instance.shopping.order_id).update(assigned= True)
-            
+                messages.success(request, f"successfuly assigned delivery to a dispatch Rider {instance.shopping.order_id}")
+
             if instance.anonymous == None:
                 pass
             else:
                 anon.filter(order_id = instance.anonymous.order_id).update(assigned = True)          
+                messages.success(request, f"successfuly assigned delivery to a dispatch Rider {instance.anonymous.order_id}")
 
             if instance.errand == None:
                 pass
             else:
-                anon.filter(order_id = instance.anonymous.order_id).update(assigned = True)          
+                errand.filter(order_id = instance.errand.order_id).update(assigned = True)          
+                messages.success(request, f"successfuly assigned delivery to a dispatch Rider {instance.errand.order_id}")
 
-            messages.success(request, "successfuly assigned delivery to a dispatch Rider")
+            if instance.front_desk == None:
+                pass
+            else:
+                front_desk.filter(order_id = instance.front_desk.order_id).update(assigned = True)          
+                messages.success(request, f"successfuly assigned delivery to a dispatch Rider {instance.front_desk.order_id}")
+            
             return redirect('assignedRides')
 
     else:
@@ -138,8 +163,7 @@ def all_Fleet(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'Fleet Manager' ])
 def Riders_identity(request):
-    profile = RidersProfile.objects.all()
-    
+    profile = RidersProfile.objects.all()    
 
     driver_count = RidersProfile.objects.all().count()
 
@@ -182,10 +206,12 @@ def All_riders_deliveries(request, rider):
         "success_show":success_show,
         "cancled_show":cancled_show,
         "transfered_show":transfered_show,
-        "pending_show":pending_show,
-        
+        "pending_show":pending_show,        
 
     }
 
     return render(request, "BikeControl/allRiderDeliveries.html", context)
 
+def AllActive(request):    
+    profile = RidersProfile.objects.all()
+    return render(request, 'BikeControl/active.html', {'profile':profile})

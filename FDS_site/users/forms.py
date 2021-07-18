@@ -59,23 +59,51 @@ class OrderForm(forms.ModelForm):
     OPTIONS2 = [
             ( "Van", "Van"),
             ("Bike", "Bike"),
-            ( "Tricycle", "Tricycle (Keke)"),       
+            ( "Tricycle", "Tricycle (Keke)"),
     ]
     LOADING_CHOICE = [
             ("loading", "Loading"),
             ( "off Loading", "Off Loading"),
     ]
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="Price Per Drop: Bike(N500), Tricycle(N1000), Van(negotiable) ")
-    reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number', required = True,
+
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect)
+    reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number',
                     min_length=11, widget= forms.TextInput)
+    reciever_name2 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Reciever Name (2)'}))
+    reciever_name3 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Reciever Name (3)'}))
+    reciever_name4 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Reciever Name (4)'}))
+    reciever_name5 = forms.CharField(label='', max_length=15, widget= forms.TextInput
+                           (attrs={'placeholder':'Reciever Name (5)'}))
+    Address_of_reciever2 = forms.CharField(label='', max_length=15, widget= forms.TextInput
+                           (attrs={'placeholder':'Address of reciever (2)'}))
+    Address_of_reciever3 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Address of reciever (3)'}))
+    Address_of_reciever4 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Addressof reciever (4)'}))
+    Address_of_reciever5 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Address of reciever (5)'}))                                                      
+    Package_description2 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Package description (2)'}))
+    Package_description3 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                        (attrs={'placeholder':'Package description (3)'}))   
+    Package_description4 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                        (attrs={'placeholder':'Package description (4)'}))   
+    Package_description5 = forms.CharField(label='', max_length=15, widget= forms.TextInput
+                        (attrs={'placeholder':'Packagen description (5)'}))    
+
     reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
-                    min_length=11, widget= forms.TextInput)
-    reciever_phone_number3 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
-                    min_length=11, widget= forms.TextInput)
-    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
-                    min_length=11, widget= forms.TextInput)
-    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
-                    min_length=11, widget= forms.TextInput)
+                    min_length=11, widget= forms.TextInput(attrs={'placeholder':'070xxxxxxxx'}))                                                
+    reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    min_length=11, widget= forms.TextInput(attrs={'placeholder':'Reciever Phone Number'}))
+    reciever_phone_number3 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    min_length=11, widget= forms.TextInput(attrs={'placeholder':'Reciever Phone Number'}))
+    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    min_length=11,  widget= forms.TextInput(attrs={'placeholder':'Reciever Phone Number'}))
+    reciever_phone_number5 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    min_length=11, widget= forms.TextInput(attrs={'placeholder':'Reciever Phone Number'}))
     Loading_choice = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple, choices = LOADING_CHOICE)
     class Meta:
         model = MakeRequest
@@ -100,7 +128,7 @@ class adminformShopping(forms.ModelForm):
 class AdminAnonForm(forms.ModelForm):    
     class Meta:
         model = Anonymous
-        fields = ['status', 'confirmed', 'Amount_Paid', ]
+        fields = ['status', 'confirmed', 'Amount_Paid', 'receiver_name', 'receiver_address', 'receiver_contact' ]
 
 class AdminErrandForm(forms.ModelForm):    
     class Meta:
@@ -123,17 +151,44 @@ class Request_Cash(forms.ModelForm):
             ( "off Loading", "Off Loading"),
     ]
 
-    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect, help_text="PRICE per drop: Bike(N500), Tricycle(N1000), Van(negotiable) ")
+    Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect)
     reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='Reciever Number',
                     min_length=11, widget= forms.TextInput)
+    reciever_name2 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Reciever Name (2)'}))
+    reciever_name3 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Reciever Name (3)'}))
+    reciever_name4 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Reciever Name (4)'}))
+    reciever_name5 = forms.CharField(label='', max_length=15, widget= forms.TextInput
+                           (attrs={'placeholder':'Reciever Name (5)'}))
+    Address_of_reciever2 = forms.CharField(label='', max_length=15, widget= forms.TextInput
+                           (attrs={'placeholder':'Address of reciever (2)'}))
+    Address_of_reciever3 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Address of reciever (3)'}))
+    Address_of_reciever4 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Addressof reciever (4)'}))
+    Address_of_reciever5 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Address of reciever (5)'}))                                                      
+    Package_description2 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                           (attrs={'placeholder':'Package description (2)'}))
+    Package_description3 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                        (attrs={'placeholder':'Package description (3)'}))   
+    Package_description4 = forms.CharField(label='', max_length=50, widget= forms.TextInput
+                        (attrs={'placeholder':'Package description (4)'}))   
+    Package_description5 = forms.CharField(label='', max_length=15, widget= forms.TextInput
+                        (attrs={'placeholder':'Packagen description (5)'}))    
+
     reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
-                    min_length=11, widget= forms.TextInput)
-    reciever_phone_number3 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
-                    min_length=11, widget= forms.TextInput)
-    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
-                    min_length=11, widget= forms.TextInput)
-    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required = False,
-                    min_length=11, widget= forms.TextInput)
+                    min_length=11, widget= forms.TextInput(attrs={'placeholder':'070xxxxxxxx'}))                                                
+    reciever_phone_number2 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    min_length=11, widget= forms.TextInput(attrs={'placeholder':'Reciever Phone Number'}))
+    reciever_phone_number3 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    min_length=11, widget= forms.TextInput(attrs={'placeholder':'Reciever Phone Number'}))
+    reciever_phone_number4 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    min_length=11,  widget= forms.TextInput(attrs={'placeholder':'Reciever Phone Number'}))
+    reciever_phone_number5 = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
+                    min_length=11, widget= forms.TextInput(attrs={'placeholder':'Reciever Phone Number'}))
     Loading_choice = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple, choices = LOADING_CHOICE)
     class Meta:
         model = MakeRequestCash

@@ -6,6 +6,8 @@ from django.contrib import messages
 from hashids import Hashids
 from django.db.models import Q
 import requests
+from  users.decorators import allowed_user
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     if request.method == 'POST':
@@ -135,6 +137,8 @@ def userSettings(request):
 def signup(request):
     return render(request, 'FDS_app/signup.html')
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def dashBase(request, user):
     customer = Customer.objects.get(user= user)
     n_filter = customer.delivered_set.all()

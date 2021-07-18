@@ -1,13 +1,13 @@
 {% extends "FDS_app/dashBase.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Shopping List - FDLS {% endblock title %}
+{% block title %} Shopping Request{% endblock title %}
 
 {% block content2 %}
 <div class="pb-5">
     <div class="row p-3" >
         <div class="col-md-4"></div>
-        <div class="col-md-4">
+        <div class="col-lg-4">
             <div class="shadow mb-3 rounded-lg">
                 <div class="d-flex flex-row bd-highlight rounded-top text-white justify-content-between" style="background-color: rgb(86, 86, 160);">
                     <div class="p-2 bd-highlight">
@@ -17,36 +17,38 @@
                         <a href="" data-toggle="modal" data-target="#staticBackdrop" class="text-white"> More Info</a>
                     </div>                    
                 </div>
-                <form method="POST" enctype="multipart/form-data"> 
-                    {% csrf_token %}
-                    <div class="form-row p-3">
+                <div class="p-3">
+                  <form method="POST" enctype="multipart/form-data"> 
+                      {% csrf_token %}
+                      <div class="form-row ">
+                          <div class="col">
+                              {{ s_form.List_Items|as_crispy_field }}
+                          </div>                        
+                      </div>
+                      <div class="form-row">
+                          <div class="col">
+                              {{ s_form.Place_of_purchase|as_crispy_field }}
+                          </div>
+                          <div class="col">
+                              {{ s_form.Address|as_crispy_field }}
+                          </div>                        
+                      </div>
+                      <div class="form-row">     
                         <div class="col">
-                            {{ s_form.List_Items|as_crispy_field }}
-                        </div>                        
-                    </div>
-                    <div class="form-row p-3">
+                          {{ s_form.Amount|as_crispy_field }}
+                        </div>     
                         <div class="col">
-                            {{ s_form.Place_of_purchase|as_crispy_field }}
-                        </div>
-                        <div class="col">
-                            {{ s_form.Address|as_crispy_field }}
-                        </div>                        
-                    </div>
-                    <div class="form-row p-3">                        
-                        <div class="col">
-                            {{ s_form.payment_channel|as_crispy_field }}
-                        </div>
-                        <div class="col">
-                            {{ s_form.Amount|as_crispy_field }}
-                        </div>                        
-                    </div>
-                    <div class="form-row p-3">                       
-                        <div class="col">
-                            {{ s_form.Note|as_crispy_field }}
-                        </div>
-                    </div>
-                    <button class="btn btn-danger btn-block rounded-pill" type="submit">Proceed</button>                                      
-                </form>
+                          {{ s_form.payment_channel|as_crispy_field }}
+                        </div>                                                                                          
+                      </div>
+                      <div class="form-row">                       
+                          <div class="col">
+                              {{ s_form.Note|as_crispy_field }}
+                          </div>
+                      </div>
+                      <button class="btn btn-danger btn-block rounded-pill" type="submit">Proceed</button>                                      
+                  </form>
+                </div>
             </div>
 
         </div>

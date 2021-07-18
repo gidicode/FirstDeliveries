@@ -14,8 +14,10 @@ class Fleets(models.Model):
     ]
 
     fleet_plate_number = models.CharField(max_length=100, null=True)
+    Tracker_id = models.IntegerField(max_length=100, null=True)
+    Tracker_phone_num = models.IntegerField(max_length=100, null=True)
     category = models.CharField(max_length=100, choices=OPTIONS1, null=True)
-    vechile_name = models.CharField(max_length=100, null=True)
+    vechile_name = models.CharField(max_length=100, null=True)    
     date_created = models.DateTimeField(default=timezone.now, null=True)
 
 
@@ -32,6 +34,8 @@ class RidersProfile(models.Model):
     verified_gurantor = models.BooleanField(default=False) 
     gurantor_name = models.CharField(max_length=100, null=True)
     gurantor_address = models.CharField(max_length=100, null=True)
+    Riders_profile = models.CharField(max_length=100, null=True)
+    busy = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.first_name}, {self.attached_bike}"

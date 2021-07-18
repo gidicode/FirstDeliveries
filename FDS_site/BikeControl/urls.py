@@ -10,5 +10,6 @@ urlpatterns = [
     path('all_Fleet/', user_views.all_Fleet, name='all_Fleet'),
     path('Riders_Profile/', user_views.Riders_identity, name='Riders_Profile'),
     path('assignedRides/', user_views.AssignedRides, name='assignedRides'),
-    path('allRiderDeliveries/<str:rider>/', user_views.All_riders_deliveries, name="allRiderDeliveries")   
-]
+    path('allRiderDeliveries/<str:rider>/', user_views.All_riders_deliveries, name="allRiderDeliveries"),
+    path('active/', user_views.AllActive, name="active_riders"),
+    ]

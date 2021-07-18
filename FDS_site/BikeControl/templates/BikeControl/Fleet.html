@@ -35,26 +35,78 @@
             </div>
         </div>
             <div class="col-md-5  p-3">
-                <h4 class="text-info">Bike Fleet</h4>
+                <h4 class="text-dark">Bike Fleet</h4>
                 {% for i in bike_fleet_all%}
-                    <div class=" p-3 mb-3 shadow-sm bg-primary text-white">
-                        <p><strong> PLATE NUMBER: </strong>{{i.fleet_plate_number}}</p>
-                        <p><strong> CATEGORY: </strong>{{i.category}}</p>
-                        <p><strong> VECHILE NAME: </strong>{{i.vechile_name}}</p>
-                        <p><strong> DATE CREATED: </strong>{{i.date_created}}</p>
-                    </div>
+                <table class="table text-left table-light rounded-lg shadow-sm justify-content-center">
+                    <thead>
+                      <tr>                                    
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>                    
+                        <td class="font-weight-bold">PLATE NUMBER</td>
+                        <td>{{i.fleet_plate_number}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> TRACKER ID</td>
+                        <td>{{i.Tracker_id}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> TRACKER PHONE</td>
+                        <td>{{i.Tracker_phone_num}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> CATEGORY</td>
+                        <td>{{i.category}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> VECHICLE NAME</td>
+                        <td>{{i.vechile_name}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> DATE CREATED</td>
+                        <td>{{i.date_created}}</td>                    
+                      </tr>                    
+                    </tbody>
+                </table>
                 {% endfor %}  
             </div>
 
             <div class="col-md-5  p-3 ">
-                <h4 class="text-info">Tricycle Fleet</h4>
+                <h4 class="text-warning">Tricycle Fleet</h4>
                 {% for i in tricycle_fleet_all%}
-                    <div class=" p-3 mb-3 bg-info text-white shadow-sm">
-                        <p><strong> PLATE NUMBER: </strong>{{i.fleet_plate_number}}</p>
-                        <p><strong> CATEGORY: </strong>{{i.category}}</p>
-                        <p><strong> VECHILE NAME: </strong>{{i.vechile_name}}</p>
-                        <p> <strong> DATE CREATED: </strong>{{i.date_created}}</p>
-                    </div>
+                <table class="table text-left table-warning rounded-lg shadow-sm justify-content-center">
+                    <thead>
+                      <tr>                                    
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>                    
+                        <td class="font-weight-bold">PLATE NUMBER</td>
+                        <td>{{i.fleet_plate_number}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> TRACKER ID</td>
+                        <td>{{i.Tracker_id}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> TRACKER PHONE</td>
+                        <td>{{i.Tracker_phone_num}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> CATEGORY</td>
+                        <td>{{i.category}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> VECHICLE NAME</td>
+                        <td>{{i.vechile_name}}</td>                    
+                      </tr>  
+                      <tr>                    
+                        <td class="font-weight-bold"> DATE CREATED</td>
+                        <td>{{i.date_created}}</td>                    
+                      </tr>                    
+                    </tbody>
+                </table>
                 {% endfor %}    
             </div>
     </div>
