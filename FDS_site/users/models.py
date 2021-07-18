@@ -106,7 +106,7 @@ class MakeRequest(models.Model):
     charge_id = models.CharField(max_length=100, null=True, validators=[alphanumeric])
     paid = models.BooleanField(default=False)
     confirmed = models.BooleanField(default=False)
-    order_id= models.CharField(max_length=10, null=True, default=0)
+    order_id = models.CharField(max_length=10, null=True, default=0)
     assigned = models.BooleanField(default=False)
 
     def __str__(self):
@@ -243,7 +243,7 @@ class Shopping(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
     List_Items= models.TextField(max_length=500, null=True, help_text='Fill in your list of items you want us to purchase and pick for you')
     Place_of_purchase = models.CharField(max_length=100, null=True, help_text='Specify a place of for purchase if any.')
-    Note = models.CharField(max_length=200, null=True, help_text='Any further description')
+    Note = models.CharField(max_length=200, null=True, blank=True, help_text='Any further description')
     Address = models.CharField(max_length=200, null=True, verbose_name='Delivery Address')
     Amount = models.IntegerField(null= True, help_text= 'Enter an estimated amount, our charges Inclusive.' )
     Accept_Terms = models.BooleanField(default=False, help_text='Accept our Terms and Condition as regards this method')
