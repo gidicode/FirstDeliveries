@@ -215,3 +215,4 @@ def All_riders_deliveries(request, rider):
 def AllActive(request):    
     profile = RidersProfile.objects.all()
     return render(request, 'BikeControl/active.html', {'profile':profile})
+

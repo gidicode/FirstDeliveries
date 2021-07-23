@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth import models
 from django.forms import ModelForm, Textarea, fields, widgets
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import  Anonymous, Customer, Errand_service, MakeRequest, MakeRequestCash, Shopping, Front_desk
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
@@ -20,27 +20,37 @@ def chk_number(value):
 
 
 class UserRegisterForm(UserCreationForm):
+    locations = [
+        ('--', '--'),
+        ('Calabar', 'Calabar'),
+        ('Port Harcourt', 'Port Harcourt')
+    ]
+
     first_name = forms.CharField(label='', max_length=15, widget= forms.TextInput
                            (attrs={'placeholder':'First Name'}), required=True)
     last_name = forms.CharField(label='', max_length= 15, widget= forms.TextInput
                            (attrs={'placeholder':'Last Name'}), required=True)
     email = forms.EmailField(label='', max_length=30, validators= [chk_email], widget= forms.EmailInput
                            (attrs={'placeholder':'Email'}),)
-    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required=True,
-                    help_text='In this format 070xxxxxxxx',
-                    validators= [chk_number], widget= forms.TextInput
-                           (attrs={'placeholder':'070xxxxxxx'}))
+    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required=True,                   
+                    validators= [chk_number], widget= forms.TextInput(attrs={'placeholder':'070xxxxxxx'}))
     Alt_phone_num = forms.RegexField(regex=r'^\+?1?\d{9,15}$', label='', required = False,
                     validators= [chk_number], widget= forms.TextInput
                            (attrs={'placeholder':'2nd Phone Number'}))
     username = forms.CharField(label="", max_length=10, required=True, widget= forms.TextInput
                            (attrs={'placeholder':'Username'}) )
-    TermsAgreement = forms.BooleanField(label='Terms & Agreement', required = True)
+    TermsAgreement = forms.BooleanField(label='Terms & Agreement', required = True)    
+    Location = forms.ChoiceField(label="Location", choices=locations, widget=forms.Select)
+    password1 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder':'Create Password'}))
+    password2 = forms.CharField(label='', widget=forms.PasswordInput (attrs={'placeholder':'Confirm Password'}))
     
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email',  'phone_number', 'Alt_phone_num', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email',  'phone_number', 'Alt_phone_num', 'Location','password1', 'password2']
 
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label='Email / Username')
 
 class UserUpdateForm(forms.ModelForm):    
 

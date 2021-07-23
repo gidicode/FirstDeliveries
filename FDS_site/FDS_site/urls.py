@@ -8,9 +8,8 @@ from django.contrib.auth import views as auth_views #2nd
 from django.conf import settings
 from django.conf.urls.static import static
 from . import settings
-from django.contrib.staticfiles.urls import static
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
+from users.views import LoginView
 from users.utils import HashIdConverter
 register_converter(HashIdConverter, "hashid")
 
@@ -111,7 +110,7 @@ urlpatterns = [
 
     path('SearchId/', user_views.Inhousesearch, name='searchid'),
 
-    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('login/', LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('password-reset/', 
         auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'), name='password_reset'),

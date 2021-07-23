@@ -1,0 +1,175 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %} First Laurel Logistics Services {% endblock title %}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/@popperjs/core@2">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nunito:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@1,700&family=Red+Hat+Display:wght@900&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" 
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/png" href="{% static 'FDS_app/favicon.ico' %}"/>
+    <link href='{% static "/FDS_app/main.css" %}' rel='stylesheet' type='text/css'>
+    <script>
+      $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
+
+    <style>
+      .zoom {
+    width: 300px;
+    }
+
+    .zoom img {
+        transition: 1s all ease-in-out;
+    }
+
+    .zoom:hover img {
+      transform: scale(1.1);
+    }
+
+    .dot {
+    height: 15px;
+    width: 15px;
+    background-color: rgb(235, 0, 0);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+
+    div:nth-child(1) {
+      font-family: 'Nunito', sans-serif;
+    }
+
+    h1:nth-child(1) {
+      font-family: 'Red Hat Display', cursive;
+    }
+
+    h2,h3,h4,dt:nth-child(2) {
+      font-family: "Red Hat Display", sans-serif;
+    }
+    </style>
+  <script>
+    $('#myModal').on('shown.bs.modal', function () {
+  $('#myInput').trigger('focus')
+  })
+
+  
+</script> 
+</head>
+  <body onload="spin()">
+    <div id="loader"></div>        
+    <div style="display:none;" id="myDiv" class="animate-bottom">
+    <main role="main" style="padding-top: -2rem;">
+      <div>
+      {% block content %}
+
+
+      {% endblock content %}
+    </div>
+
+    <div class="chatservice mr-4">
+      <div class="row">
+        <div class=" col-md-auto"></div>
+        <div class=" col-md-auto"></div>
+        <div class=" col-md-auto d-flex justify-content-center">
+          <button type="button" class="btn btn-outline-danger shadow" data-toggle="tooltip" data-placement="top" title="You Need Support? Chat Us!">
+            <a class=" text-decoration-none" href="https://api.whatsapp.com/send?phone=+2349134439919">
+            <i class="fab fa-whatsapp text-muted"> </i></a> 
+          </button>
+        </div>
+    </div>
+
+    <br>
+    </div>
+    <!--Footer-->
+    {% block contentf %}
+
+    {% endblock contentf %}
+    </main>
+
+
+    <style>
+      /* Center the loader */
+      #loader {
+        position: absolute;
+        left: 60%;
+        top: 50%;
+        z-index: 1;
+        width: 60px;
+        height: 60px;
+        margin: -76px 0 0 -76px;
+        border: 3px solid #d9d7ff;
+        border-radius: 50%;
+        border-top: 3px solid #db4734;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 1s linear infinite;
+      }
+      
+      @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Add animation to "page content" */
+      .animate-bottom {
+        position: relative;
+        -webkit-animation-name: animatebottom;
+        -webkit-animation-duration: 1s;
+        animation-name: animatebottom;
+        animation-duration: 1s
+      }
+      
+      @-webkit-keyframes animatebottom {
+        from { bottom:-100px; opacity:0 } 
+        to { bottom:0px; opacity:1 }
+      }
+      
+      @keyframes animatebottom { 
+        from{ bottom:-100px; opacity:0 } 
+        to{ bottom:0; opacity:1 }
+      }
+      
+      #myDiv {
+        display: none;
+      }
+      </style>
+
+    <script>
+      var myVar;
+      
+      function spin() {
+        myVar = setTimeout(showPage, 1000);
+      }
+      
+      function showPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("myDiv").style.display = "block";
+      }
+    </script>
+   </div>
+  </body>
+</html> 

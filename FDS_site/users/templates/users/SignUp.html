@@ -1,4 +1,4 @@
-{% extends "FDS_app/base.html" %}
+{% extends "FDS_app/notification.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
 
@@ -23,9 +23,10 @@
             </div>
             {% endif %}
         </div>
-        <div class="col-lg-4 col-xl-4 p-1">             
+        <div class="col-lg-4 col-xl-4 p-1">     
+            <img src="/static/FDS_app/Flls_Logo.png" class="img-fluid mb-3 center" alt="Flls Logo">        
             <div class="bg-white shadow rounded p-3">
-                <p class="text-center mb-3"> CREATE YOUR ACCOUNT.</p>
+                <h5 class="text-center font-weight-bold mb-3"> Create Your Account.</h5>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}  
                     <div class="form-row ">
@@ -54,18 +55,24 @@
                         <div class="col">
                             {{form.Alt_phone_num|as_crispy_field }}
                         </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col">
+                            {{form.Location|as_crispy_field }}
+                        </div>
+
+                        
                     </div> 
                     
                     <div class="form-row">
                         <div class="col">
                             {{form.password1|as_crispy_field }}
                         </div>
-                    </div> 
-                    <div class="row">
                         <div class="col">
                             {{form.password2|as_crispy_field }}
                         </div>
-                    </div>
+                    </div>                    
 
                     <div class="row">
                         <div class="col">
@@ -101,4 +108,14 @@
         </div>
     <!--/-->
 </div>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  height: 10%;
+}
+</style>
 {% endblock %}

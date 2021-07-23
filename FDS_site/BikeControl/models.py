@@ -14,12 +14,11 @@ class Fleets(models.Model):
     ]
 
     fleet_plate_number = models.CharField(max_length=100, null=True)
-    Tracker_id = models.IntegerField(max_length=100, null=True)
-    Tracker_phone_num = models.IntegerField(max_length=100, null=True)
+    Tracker_id = models.IntegerField(null=True)
+    Tracker_phone_num = models.IntegerField(null=True)
     category = models.CharField(max_length=100, choices=OPTIONS1, null=True)
     vechile_name = models.CharField(max_length=100, null=True)    
     date_created = models.DateTimeField(default=timezone.now, null=True)
-
 
     def __str__(self):
         return f"{self.fleet_plate_number}, {self.category}, {self.vechile_name}"

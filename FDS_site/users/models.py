@@ -12,11 +12,17 @@ User = settings.AUTH_USER_MODEL
 
 
 class Customer(models.Model):
+    locations = [
+        ('Calabar', 'Calabar'),
+        ('Port Harcourt', 'Port Harcourt')
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     first_name = models.CharField(max_length=15, null=True)
     last_name = models.CharField(max_length=15, null=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
     phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True)
+    Location = models.CharField(choices=locations, max_length= 50, null=True)
     Alt_phone_num = models.CharField(validators=[phone_regex], max_length=17, null=True, blank=True, verbose_name="Phone Number (2nd)")
     image = models.ImageField(default='default.jpg', upload_to='profile_pics', null=True)
     email = models.EmailField(max_length=100, null=True)
@@ -241,8 +247,8 @@ class Shopping(models.Model):
     }
 
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
-    List_Items= models.TextField(max_length=500, null=True, help_text='Fill in your list of items you want us to purchase and pick for you')
-    Place_of_purchase = models.CharField(max_length=100, null=True, help_text='Specify a place of for purchase if any.')
+    List_Items= models.TextField(max_length=500, null=True)
+    Place_of_purchase = models.CharField(max_length=100, null=True, help_text='Specify a place for purchase if any.')
     Note = models.CharField(max_length=200, null=True, blank=True, help_text='Any further description')
     Address = models.CharField(max_length=200, null=True, verbose_name='Delivery Address')
     Amount = models.IntegerField(null= True, help_text= 'Enter an estimated amount, our charges Inclusive.' )

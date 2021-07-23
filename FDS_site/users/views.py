@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import views as auth_views
 
 from django.http import HttpResponseRedirect
 
@@ -49,17 +50,23 @@ def register(request):
             user.customer.first_name = form.cleaned_data.get('first_name')
             user.customer.last_name = form.cleaned_data.get('last_name')
             user.customer.phone_number = form.cleaned_data.get('phone_number')
+            user.customer.Alt_phone_num = form.cleaned_data.get('Alt_phone_num')
             user.customer.email = form.cleaned_data.get('email')
+            user.customer.Location = form.cleaned_data.get('Location')
             username = form.cleaned_data.get( 'username')
             group = Group.objects.get(name='customer')
             user.groups.add(group)
-            user.save()
-            
-            messages.success(request, f' Hello {username} Your account has been created! You are now able to log in !')
+            user.save()            
+            messages.success(request, f' Hello {username} Your account has been created! You are now able to log in!')
             return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'users/signUp.html', {'form':form})
+
+class LoginView(auth_views.LoginView):
+    form_class = LoginForm
+    template_name = 'users/login.html'
+
 
 #Password update Page
 @login_required(login_url='login')
