@@ -1,7 +1,7 @@
 {% extends "FDS_app/base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Search Result - FDLS {% endblock title %}
+{% block title %} Search Result {% endblock title %}
 
 {% block content %}
 <br>
@@ -10,7 +10,7 @@
     <div class="col-lg-4 col-xl-4">
         <div class="p-3 text-dark shadow rounded-lg " style="background-color: rgb(253, 253, 253);">
         {% if query %}
-            {%with results.count as total_results %}
+            {% with results.count as total_results %}
             <div class="p-1 bg-light rounded-pill shadow-sm text-center">Found {{ total_results }} result{{ total_results|pluralize }}</div>
             {% endwith %}
             <br>            
@@ -29,57 +29,61 @@
                     <td  class="font-weight-bold">Choice for TP</td>
                     <td>{{ r.Choice_for_TP}}</td>                    
                   </tr>
-                  <tr>                    
+                  <tr>
                     <td  class="font-weight-bold">Pickup location</td>
                     <td>{{ r.Your_location }}</td>                    
                   </tr> 
                   <tr>                    
-                    <td>Your Number</td>
+                    <td class="font-weight-bold">Your Number</td>
                     <td>{{r.Your_phone_number}}</td>                    
                   </tr>
                   {% if r.receiver_name %}   
                   <tr>                    
-                    <td>Receiver Name</td>
+                    <td class="font-weight-bold">Receiver Name</td>
                     <td>{{r.receiver_name}}</td>                    
                   </tr> 
                   {% endif %}
                   {% if r.receiver_address %}
                   <tr>                    
-                    <td>Receiver Address</td>
-                    <td>{{r.receiver_address}}</td>                    
+                    <td class="font-weight-bold">Receiver Address</td>
+                    <td>{{r.reciever_address}}</td>                    
                   </tr>  
                   {% endif%} 
-                  {% if r.receiver_contact %}
+                  {% if r.reciever_contact %}
                   <tr>                    
-                    <td> Receiver Number</td>
-                    <td>{{r.receiver_contact}}</td>                    
+                    <td class="font-weight-bold">Receiver Number</td>
+                    <td>{{r.reciever_contact}}</td>                    
                   </tr>
                   {% endif %}
                   <tr>                    
-                    <td> Date Created</td>
+                    <td class="font-weight-bold"> Date Created</td>
                     <td>{{r.date_created}}</td>                    
+                  </tr> 
+                  <tr>
+                    <td class="font-weight-bold">Location</td>
+                    <td>{{r.Location}}</td>                    
                   </tr> 
                   <tr>                    
                     {% if r.status == 'Pending' %}
-                    <td> Delivery Satus</td>
+                    <td class="font-weight-bold"> Delivery Satus</td>
                     <td><span class="bg bg-warning rounded-lg font-weight-bold text-white p-1">{{r.status}}</span></td>  
                     {% elif r.status == 'Out for delivery' %}    
-                    <td> Delivery Satus</td>
+                    <td class="font-weight-bold"> Delivery Satus</td>
                     <td><span class="bg bg-info text-white p-1">{{r.status}}</span></td>        
                     {% elif r.status == 'Delivered' %}          
-                    <td> Delivery Satus</td>
+                    <td class="font-weight-bold"> Delivery Satus</td>
                     <td><span class="bg bg-success  text-white p-1">{{r.status}}</span></td> 
                     {% else%} 
-                    <td> Delivery Satus</td>
+                    <td class="font-weight-bold"> Delivery Satus</td>
                     <td><span class="bg bg-danger p-1">{{r.status}}</span></td> 
                     {% endif %}
                   </tr> 
-                  <tr>                    
-                    <td> Amount Paid</td>
+                  <tr>
+                    <td class="font-weight-bold"> Amount Paid</td>
                     <td>N{{r.Amount_Paid}}</td>                    
                   </tr>     
                   <tr>                    
-                    <td>Reference Number</td>
+                    <td class="font-weight-bold">Reference Number</td>
                     <td> {{r.order_id}}</td>                    
                   </tr>                      
                 </tbody>
@@ -94,6 +98,4 @@
     </div>
     <div class="col-md-4"></div>
 </div>
-
-
 {% endblock content %}
