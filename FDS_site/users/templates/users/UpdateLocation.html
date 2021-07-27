@@ -1,0 +1,39 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Update Location {% endblock title%}
+
+{% block content2 %}
+<div class="container-fluid">
+    <div class="row p-4 ">
+        <div class="col-md-4">
+            {% if messages %}
+            <div class="messages p-3 container align-self-center">
+                {% for message in messages %}
+                <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                </div>                
+                {% endfor %}                
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-4 col-xl-4 p-1">                         
+            <div class="bg-white shadow rounded p-3">
+                <h5 class="text-center font-weight-bold mb-3">Update Your Location</h5>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}  
+                    {{form|crispy }}             
+                    <button class="btn btn-danger btn-block rounded-lg" type="submit">Update</button>
+                </form>                               
+            </div>
+            
+        </div>
+        <div class="col-md-4"></div>
+    </div>    
+    <!--/-->
+</div>
+{% endblock %}

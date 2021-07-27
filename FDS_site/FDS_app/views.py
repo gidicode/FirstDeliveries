@@ -116,8 +116,8 @@ def search(request):
             
     return render(request, 'FDS_app/Search.html', {'query': query, 'results':results})
 
-def notification(request):
-    return render(request, 'FDS_app/notification.html')
+def SignUpBase(request):
+    return render(request, 'FDS_app/signupBase.html')
 
 def order(request):
     return render(request, 'FDS_app/order.html')
@@ -145,8 +145,7 @@ def dashBase(request, user):
     n = n_filter.filter(viewed = False)
 
     notification_filter = customer.adminNotification_set.all()
-    
-    notify = notification_filter.filter(viewed = False)
+    notify = notification_filter.filter(viewed = False)    
     return render(request, 'FDS_app/dashBase.html', {'customer':customer, 'n':n, 'notify':notify})
 
 def password_reset(request):

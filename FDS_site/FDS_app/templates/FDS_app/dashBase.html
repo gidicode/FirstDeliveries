@@ -9,8 +9,7 @@
   <nav class="navbar navbar-expand-lg navbar navbar-expand-sm navbar-expand-md container-fluid navbar-light shadow-sm bg-light"  >
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="fas fa-angle-double-down"></span>
-      </button>
-      
+      </button>      
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
@@ -24,9 +23,11 @@
           <li class="nav-item dropdown">
             <a class="nav-link p-2 btn btn-light text-left " href="{% url 'Terms' %}" role="button" >Terms</a>
           </li>
-        </ul>
+        </ul>        
       </div>
-      {% if notify.count > 0 %}            
+
+      <div>      
+      {% if notify.count > 0 %}
         <a href="{% url 'adminNotificationShow' %}" class="mr-5" data-toggle="tooltip" data-placement="top" title="You have {{notify.count}} Notifications"> 
             <span><i class="fas fa-bell text-danger"></i> </span> 
             <span class="badge">{{notify.count}}</span>
@@ -34,7 +35,10 @@
       {% endif %}
       <!--Notification and profile-->
       <div class="d-flex flex-row bd-highlight notification">
-        <div class="bd-highlight">
+        <div data-toggle="tooltip" data-placement="top" title="Your current location">
+          <small class="mt-2  font-weight-bold text-primary" data-toggle="modal" data-target="#Location">Location: {{customer.Location}} </small>
+        </div>
+        <div class="bd-highlight">          
           {% if n.count > 0 %}
             <small class="justify-content-center">
               <a href="{% url 'show_Notification' user.id %}">
@@ -48,8 +52,7 @@
             <i class="fas fa-bell btn btn-md"></i>
             </div>
           {% endif %}
-
-        </div>
+        </div>        
 
         <div class="bd-highlight">
           <div class="btn-group dropleft">
@@ -81,7 +84,7 @@
       </div>
   </nav>
 </main>
-<body role="main" style="padding-bottom: 4rem;" onload="myFunction()" >  
+<body role="main" style="padding-bottom: 4rem;" >  
     
     {% block content2 %} 
 
@@ -117,4 +120,23 @@
 })
 </script>
 
+<div class="modal fade" id="Location" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6>Changing Location</h6>
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>It is necessary to change your city location when you move out your previous city to a loacation our services are available for us to serve you better.</p>
+        <a role="button" class="btn btn-danger rounded-pill" href="{% url 'update_location' user.id%}"> Proceed</a>
+      </div>
+      <div class="modal-footer justify-content-right">            
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}

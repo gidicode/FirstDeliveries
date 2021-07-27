@@ -11,18 +11,13 @@ from django.conf import settings
 User = settings.AUTH_USER_MODEL
 
 
-class Customer(models.Model):
-    locations = [
-        ('Calabar', 'Calabar'),
-        ('Port Harcourt', 'Port Harcourt')
-    ]
-
+class Customer(models.Model):   
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     first_name = models.CharField(max_length=15, null=True)
     last_name = models.CharField(max_length=15, null=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
     phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True)
-    Location = models.CharField(choices=locations, max_length= 50, null=True)
+    Location = models.CharField( max_length= 50, null=True)
     Alt_phone_num = models.CharField(validators=[phone_regex], max_length=17, null=True, blank=True, verbose_name="Phone Number (2nd)")
     image = models.ImageField(default='default.jpg', upload_to='profile_pics', null=True)
     email = models.EmailField(max_length=100, null=True)
@@ -218,6 +213,7 @@ class Anonymous(models.Model):
     paid = models.BooleanField(default=False)
     confirmed = models.BooleanField(default=False)
     email = models.EmailField(max_length=100, null=True)
+    Location = models.CharField( max_length= 50, null=True)
     Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     Amount_Payable = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     order_id= models.CharField(max_length=10, null=True, default=0)

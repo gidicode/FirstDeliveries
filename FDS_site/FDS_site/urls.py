@@ -110,6 +110,10 @@ urlpatterns = [
 
     path('SearchId/', user_views.Inhousesearch, name='searchid'),
 
+    path('redirecting_user/', user_views.redirectView, name='redirecting_user'),
+
+    path('UpdateLocation/<hashid:user>/', user_views.locationChange, name='update_location'),
+
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('password-reset/', 

@@ -142,7 +142,7 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "redirecting_user"
 LOGIN_URL = 'login'
 
 SITE_ID = 1

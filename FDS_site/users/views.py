@@ -67,6 +67,23 @@ class LoginView(auth_views.LoginView):
     form_class = LoginForm
     template_name = 'users/login.html'
 
+def redirectView(request):
+    return redirect('dashboard', user = request.user.pk)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+def locationChange(request, user):
+    customer = Customer.objects.get(user=user)
+    form = UpdateLocation(instance=customer)
+    n_filter = customer.delivered_set.all()
+    n = n_filter.filter(viewed = False)
+    if request.method == 'POST':
+        form = UpdateLocation(request.POST, instance=customer)
+        if form.is_valid(): 
+            instance = form.save()
+            messages.success(request, f'Location changed successfully to {instance.Location}')
+            return redirect('dashboard', user = user)
+    return render(request, 'users/UpdateLocation.html', {'form':form, 'customer':customer, 'n':n})
 
 #Password update Page
 @login_required(login_url='login')
@@ -109,7 +126,7 @@ def customerProfileUpdatePage(request, user):
             messages.success(request, f'Your Profile has been Updated!')
             return redirect('profileUpdate', user=user)
         else:
-            messages.error(request, f'An error occured, please correcthe error below')
+            messages.error(request, f'An error occured, please correct the error below')
     else:
         u_form = UserUpdateForm(instance=customer)
         p_form = ProfileUpdateForm(instance=customer)
@@ -124,6 +141,7 @@ def customerProfileUpdatePage(request, user):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'Cashier',])
 def Cashier(request, user):
+    customer = Customer.objects.get(user = user)
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
@@ -183,6 +201,7 @@ def Cashier(request, user):
         'page_obj4':page_obj4,
         'page_obj5':page_obj5,
         'page_obj6':page_obj6,
+        'customer':customer,
     }
 
     return render(request, 'users/Cashier.html', context)
@@ -190,7 +209,8 @@ def Cashier(request, user):
 #Fleet Manager page
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'Fleet Manager'])
-def FleetManager(request, user):    
+def FleetManager(request, user):
+    customer = Customer.objects.get(user = user) 
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
@@ -270,6 +290,7 @@ def FleetManager(request, user):
         'page_obj4':page_obj4,
         'page_obj5':page_obj5,
         'page_obj6':page_obj6,
+        'customer':customer,
     }
 
     return render(request, 'users/FleetManager.html', context)
@@ -353,6 +374,7 @@ def front_desk(request, user):
         'page_obj4':page_obj4,
         'page_obj5':page_obj5,
         'page_obj6':page_obj6,
+        'customer':customer,
     }
 
     return render(request, 'users/FrontDesk.html', context)
@@ -493,13 +515,14 @@ def requestForm_Cash(request, user):
             item_5 = [
                     chk_none.Address_of_reciever5, chk_none.Package_description5,
                     chk_none.reciever_phone_number5, chk_none.reciever_name5
-                    ]
+                    ]           
             if tp_choice_1:
                 charge_amount = 500
-                count_item2 = item_2.count(None)
-                count_item3 = item_3.count(None)
-                count_item4 = item_4.count(None)
-                count_item5 = item_5.count(None)
+                count_item2 = item_2.count('')
+                count_item3 = item_3.count('')
+                count_item4 = item_4.count('')
+                count_item5 = item_5.count('')
+                
                 customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
                 if count_item2 >= 3:
                     pass
@@ -537,10 +560,10 @@ def requestForm_Cash(request, user):
                     messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
             
             if tp_choice_2:
-                count_item2 = item_2.count(None)
-                count_item3 = item_3.count(None)
-                count_item4 = item_4.count(None)
-                count_item5 = item_5.count(None)
+                count_item2 = item_2.count('')
+                count_item3 = item_3.count('')
+                count_item4 = item_4.count('')
+                count_item5 = item_5.count('')
                 charge_amount = 1000
                 customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
                 if count_item2 >= 3:
@@ -643,10 +666,10 @@ def requestForm_Online(request, user):
                     ]
             if tp_choice_1:
                 charge_amount = 500
-                count_item2 = item_2.count(None)
-                count_item3 = item_3.count(None)
-                count_item4 = item_4.count(None)
-                count_item5 = item_5.count(None)
+                count_item2 = item_2.count('')
+                count_item3 = item_3.count('')
+                count_item4 = item_4.count('')
+                count_item5 = item_5.count('')
                 customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
                 if count_item2 >= 3:
                     pass
@@ -684,10 +707,10 @@ def requestForm_Online(request, user):
                     messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
             
             if tp_choice_2:
-                count_item2 = item_2.count(None)
-                count_item3 = item_3.count(None)
-                count_item4 = item_4.count(None)
-                count_item5 = item_5.count(None)
+                count_item2 = item_2.count('')
+                count_item3 = item_3.count('')
+                count_item4 = item_4.count('')
+                count_item5 = item_5.count('')
                 charge_amount = 1000
                 customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
                 if count_item2 >= 3:
@@ -838,7 +861,7 @@ def ShoppingForm(request, user):
     else:
         s_form=Shopping_Form(instance=customer)
 
-    return render (request, 'users/shopping.html', {'s_form':s_form, 'n':n})          
+    return render (request, 'users/shopping.html', {'s_form':s_form, 'n':n, 'customer':customer})          
 
 #Success Page
 @login_required(login_url='login')
@@ -1812,10 +1835,9 @@ def customerDashboardPage(request, user):
     request_filter = customer.makerequest_set.all()
     request_filter_cash = customer.makerequestcash_set.all()
     request_filter_errand = customer.errand_service_set.all()
-    request_filter_shopping = customer.shopping_set.all()
-
+    request_filter_shopping = customer.shopping_set.all()    
     n_filter = customer.delivered_set.all()
-    n = n_filter.filter(viewed = False)
+    n = n_filter.filter(viewed = False)    
 
     context = {
         'request_filter_cash':request_filter_cash,
@@ -1823,7 +1845,7 @@ def customerDashboardPage(request, user):
         'request_filter_errand':request_filter_errand,
         'request_filter_shopping':request_filter_shopping,
         'customer':customer,
-        'n':n
+        'n':n,        
     }
     return render(request, 'users/customerDashboard.html', context)
 
@@ -2671,7 +2693,7 @@ def ErrandMenu(request, user):
     n_filter = customer.delivered_set.all()
     n = n_filter.filter(viewed = False)
 
-    return render(request, 'users/ErrandService.html', {'n':n})
+    return render(request, 'users/ErrandService.html', {'n':n, 'customer':customer})
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])

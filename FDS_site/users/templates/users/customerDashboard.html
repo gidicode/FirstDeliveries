@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %} {{user.username }}:Dashboard {% endblock title %}
+{% block title %} {{user.username }}: Dashboard {% endblock title %}
 
 
 {% block content2 %}
@@ -27,23 +27,23 @@
 
   <div class="row">
       <div class="col-md-4 pt-4"></div>
-      <div class="col-md-4 pt-4">
-        <!--Strt-->        
-          <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
-              <div id="errand" class="mr-2 zoom eps">
-                  <div class="p-2 bd-highlight">                        
-                    <h1><i class="fas fa-boxes"></i></h1>
-                    <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a></h6>
-                  </div>
-              </div>
-              
-              <div id="request" class="zoom" data-toggle="modal" data-target="#Gaserrand">
-                  <div class="p-2 bd-highlight">       
-                      <h1><i class="fas fa-shipping-fast"></i></h1>               
-                      <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'requestForm_Cash' user.id %}" >Request Dispatch</a></h6>
-                  </div>
-              </div>              
-          </div>
+      <div class="col-md-4 pt-5">
+        <!--Strt-->
+        <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">            
+            <div id="errand" class="mr-2 zoom eps">
+                <div class="p-2 bd-highlight">                        
+                  <h1><i class="fas fa-boxes"></i></h1>
+                  <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a></h6>
+                </div>
+            </div>
+            
+            <div id="request" class="zoom" data-toggle="modal" data-target="#Gaserrand">
+                <div class="p-2 bd-highlight">       
+                    <h1><i class="fas fa-shipping-fast"></i></h1>               
+                    <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'requestForm_Cash' user.id %}" >Request Dispatch</a></h6>
+                </div>
+            </div>              
+        </div>
         
         <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
           <div id="Erequest" class="mr-2 zoom">
@@ -117,9 +117,7 @@
               </div>
               <br>
             <div class="progress">
-              <div class="progress-bar" id="flow2" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                Pending
-              </div>
+              <div class="progress-bar" id="flow2" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Pending </div>
             </div>
           
             {% elif i.status == 'Out for delivery' %}
@@ -172,6 +170,7 @@
                 </div>
                 {% endif %}
               </div>
+            </div>
               <br>
               <div class="progress">
                 <div class="progress-bar" id="flow2" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Out for delivery</div>
@@ -181,7 +180,7 @@
             {% endif %}
           {% endfor %}
           </div>
-        <!--end-->
+          <!--end-->
           {% for i in request_filter %}
               {% if i.status == 'Pending' %}
               <div class="dropdown">
@@ -201,37 +200,38 @@
                   <div class="dropdown-divider"></div>
                   <small class=" text-white"><strong>Your Location:</strong> {{i.Your_location}} </small>
 
-                {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
-                <div>
-                  <p class="text-warning font-weight-bold"> 2nd Destination
-                    <small class="text-white"><strong> {{i.Address_of_reciever2}} </strong> </small>
-                  </p>
-                </div>
-                {% endif %}
-                
-                {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
-                <div>
-                  <p class="text-warning font-weight-bold"> 3rd Destination
-                    <small class=" text-white"><strong> {{i.Address_of_reciever3}} </strong> </small>
-                  </p>
-                </div>
-                {% endif %}
+                  {% if i.reciever_name2 and i.reciever_phone_number2 and i.Address_of_reciever2 != None %}
+                  <div>
+                    <p class="text-warning font-weight-bold"> 2nd Destination
+                      <small class="text-white"><strong> {{i.Address_of_reciever2}} </strong> </small>
+                    </p>
+                  </div>
+                  {% endif %}
+                  
+                  {% if i.reciever_name3 and i.reciever_phone_number3 and i.Address_of_reciever3 != None %}
+                  <div>
+                    <p class="text-warning font-weight-bold"> 3rd Destination
+                      <small class=" text-white"><strong> {{i.Address_of_reciever3}} </strong> </small>
+                    </p>
+                  </div>
+                  {% endif %}
 
-                {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
-                <div>
-                  <p class="text-warning font-weight-bold"> 4th Destination
-                    <small class=" text-white"><strong> {{i.Address_of_reciever4}} </strong> </small>
-                  </p> 
-                </div>
-                {% endif %}
+                  {% if i.reciever_name4 and i.reciever_phone_number4 and i.Address_of_reciever4 != None %}
+                  <div>
+                    <p class="text-warning font-weight-bold"> 4th Destination
+                      <small class=" text-white"><strong> {{i.Address_of_reciever4}} </strong> </small>
+                    </p> 
+                  </div>
+                  {% endif %}
 
-                {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
-                <div>
-                  <p class="text-warning font-weight-bold"> 5th Destination
-                    <small class=" text-white"><strong> {{i.Address_of_reciever5}} </strong> </small>
-                  </p> 
+                  {% if i.reciever_name5 and i.reciever_phone_number5 and i.Address_of_reciever5 != None %}
+                  <div>
+                    <p class="text-warning font-weight-bold"> 5th Destination
+                      <small class=" text-white"><strong> {{i.Address_of_reciever5}} </strong> </small>
+                    </p> 
+                  </div>
+                  {% endif %}
                 </div>
-                {% endif %}
               </div>
               <br>
             <div class="progress">
@@ -299,6 +299,42 @@
             {% endif %}
           {% endfor %}
           </div>
+
+          {% for i in request_filter_shopping %}
+            {% if i.status == 'Pending' %}
+            <div class="dropdown">
+              <span class="dropdown-toggle btn" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span >View {{i.order_id}}</span>
+              </span>
+              <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                <small class=" text-white"> <strong> Order ID</strong> {{i.order_id}}  </small>
+                <div class="dropdown-divider"></div>
+                <small class=" text-white"> {{i.List_Items}} </small>
+                <!--end option-->
+              </div>
+              <br>
+              <div class="progress">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                  Pending
+                </div>
+              </div>
+              {% elif i.status == 'At the Mall' %}
+              <div class="dropdown">
+                <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span >View {{i.order_id}}</span>
+                </span>
+                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
+                  <small class=" text-white"> {{i.List_Items}} </small>                  
+                <br>
+                </div>       
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-primary " role="progressbar" style="width: 60%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Ath the Mall</div>
+                <br>
+                </div>
+            </div>  
+            {% endif %}
+            {% endfor %} 
 
           <!--Errand-->
           {% for i in request_filter_errand %}
@@ -437,13 +473,14 @@
                     <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
                   {% endif %}
                   <!--end option-->
+                </div>
               </div>
               <br>
-            <div class="progress">
-              <div class="progress-bar" id="flow" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                Pending
+              <div class="progress">
+                <div class="progress-bar" id="flow" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                  Pending
+                </div>
               </div>
-            </div>
           
             {% elif i.status == 'Purchase in Process' %}
             <div class="dropdown">
@@ -580,7 +617,8 @@
                   <small class=" text-white"> <strong> Customer Location:</strong> {{i.your_location}} </small>
                 {% endif %}
                 <!--end option-->
-              <br>              
+                <br>
+              </div>           
             </div>
             <div class="progress">
               <div class="progress-bar" id="flow" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Purchase in process</div>
@@ -722,51 +760,14 @@
                 {% endif %}
                 <!--end option-->
               <br>              
-            </div>
-            <div class="progress">
-              <div class="progress-bar" id="flow" role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">On Route</div>
-              <br>
-            </div>
-            {% endif %}
-          {% endfor %}
-          </div>
-          <!--/errand-->
-
-          {% for i in request_filter_shopping %}
-              {% if i.status == 'Pending' %}
-              <div class="dropdown">
-                <span class="dropdown-toggle btn" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span >View {{i.order_id}}</span>
-                </span>
-                <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                  <small class=" text-white"> <strong> Order ID</strong> {{i.order_id}}  </small>
-                  <div class="dropdown-divider"></div>
-                  <small class=" text-white"> {{i.List_Items}} </small>
-                  <!--end option-->
               </div>
-              <br>
               <div class="progress">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                  Pending
-                </div>
+                <div class="progress-bar" id="flow" role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">On Route</div>
+                <br>
               </div>
-            {% elif i.status == 'At the Mall' %}
-            <div class="dropdown">
-              <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span >View {{i.order_id}}</span>
-              </span>
-              <div class="dropdown-menu p-2" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                <small class=" text-white"> {{i.List_Items}} </small>
-                <!--end option-->
-              <br>              
-            </div>
-            <div class="progress">
-              <div class="progress-bar bg-primary " role="progressbar" style="width: 60%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Ath the Mall</div>
-              <br>
             </div>
             {% endif %}
-          {% endfor %}
-          </div>
+          {% endfor %}                                   
         </div>
       </div>
       <div class="col-md-4 pt-4"></div>
@@ -821,9 +822,10 @@
   .float{
     position: absolute;
     right: 20px;
-    top: 5px;
-    z-index: 5;
+    top: 50px;
+    z-index: 10;
     float: right;
-  }
+    width: fit-content;    
+  }  
 </style>
 {% endblock content2 %}
