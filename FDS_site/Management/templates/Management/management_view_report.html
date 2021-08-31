@@ -1,0 +1,189 @@
+{% extends "FDS_app/signupBase.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %} View Reports {{user.username }} {% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mt-3 justify-content-center">
+        <div class="col-lg-3"> 
+            <div class="">
+                {% if messages %}
+                    <div class="messages p-3 container align-self-center">
+                        {% for message in messages %}
+                        <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button> 
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+        <div class="col-lg-6 col-md-6">  
+            <nav class="navbar navbar-expand-md text-truncate navbar-light shadow">                         
+                <div class=" collapse navbar-collapse" id="collapsibleNavbar">
+                  <ul class="navbar-nav ml-4">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'fds-home' %}">Riders</a>
+                    </li>        
+                    <li class="nav-item active"> 
+                      <a class="nav-link " href="{% url 'fds-about' %}">Report</a>
+                    </li>        
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'fds-pricing' %}"> Port Harcourt </a>
+                    </li>
+
+                    <li class="nav-item active align-self-right">
+                        <a class="nav-link" href="{% url 'fds-pricing' %}"> CALABAR </a>
+                    </li>                  
+                  </ul>
+                </div>                            
+            </nav>
+
+            <div class="reports">
+                <h4 class="text-white pt-2 text-center">Report Summary</h4>
+            </div>
+            {% for i in all_report %} 
+            <div class="item mb-3 p-4">                                 
+                <div class="d-flex flex-row bd-highlight justify-content-left">
+                    <div class="bd-highlight mr-1">                                       
+                        <h6 class="text-dark"><strong>DATE: <br></strong> {{i.date_created}}</h6>  
+                        <h6 class="text-dark"><strong>WORK SCHEDULE FOR THE DAY:</strong><br> {{i.work_schedule}}</h6>  
+                        <h6 class="text-dark"><strong>WORK DESCRIPTION: <br></strong> {{i.Work_description}}</h6>  
+                        <h6 class="text-dark"><strong>EXTENT OF COMPLETION: <br></strong> {{i.extent_of_completion}}</h6>  
+                        <h6 class="text-dark"><strong>TIME TAKEN: <br></strong> {{i.time_taken}}</h6> 
+                        <h6 class="text-dark"><strong>WORK LEFT: <br></strong> {{i.work_left}}</h6>  
+                        <h6 class="text-dark"><strong>CHALLENGES: <br></strong> {{i.challenges}}</h6>  
+                        <h6 class="text-dark"><strong>SOLUTIONS: <br></strong> {{i.solutions}}</h6>  
+                    </div>  
+                    
+                    <div class="bd-highlight p-2"> 
+
+                        <div class="ticket">
+                            <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num}}</small>
+                        </div>  
+
+                        <div class="ticket2 mt-4">
+                            <a href="{% url 'chairman_response' i.pk %}" role="button" class=" text-white text-center btn">Respond</a>
+                        </div>  
+
+                        <div class="ticket2 mt-4">
+                            <a href="{% url 'operations_response' i.pk %}" role="button" class=" text-white text-center btn">O-Respond</a>
+                        </div>  
+                        <div class="back">
+                            
+
+                            <small class="text-primary1 font-weight-bold up">STAFF: {{i.customer.first_name}} {{i.customer.last_name}}</small>
+                            <br>
+                            <small class="text-primary1 font-weight-bold up">DESIGNATION: {{i.customer.Designation}}</small>
+                            <br>
+                            <small class="text-primary1 font-weight-bold up">DEPARTMENT: {{i.customer.Department}}</small>
+                            <br>
+                            {% if i.feedback_chairman %}
+                            <i class="fas fa-check-circle big text-primary1"></i> <small class="text-primary2 font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <br>
+                            {% endif  %}
+
+                            {% if i.feedback_operations %}
+                            <i class="fas fa-check-circle big text-primary1"></i><small class="text-primary2 font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.feedback_manager %}
+                            <i class="fas fa-check-circle big text-primary1"></i><small class="text-primary2 font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.feedback_admin %}
+                            <i class="fas fa-check-circle big text-primary1"></i><small class="text-primary2 font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <br>
+                            {% endif %}
+                            <br>
+
+                            <h6 class="font-weight-bold feed">FEED BACK</h6>
+                            {% if i.feedback_chairman %}
+                            <small class="feedback font-weight-bold"><span class="text-primary1">CHARIMAN:</span> {{i.feedback_chairman}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_operations %}
+                            <small class="feedback font-weight-bold"><span class="text-primary1">OPERATIONS:</span> {{i.feedback_operations}}</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.feedback_admin %}
+                            <small class="feedback font-weight-bold"><span class="text-primary1">ADMIN:</span> {{i.feedback_admin}}</small>
+                            {% endif %}
+                        </div>  
+                    </div>      
+                </div>                                               
+            </div>   
+            {% endfor %}                    
+        </div>
+        <div class="col-lg-3"> </div>
+    </div>
+</div>
+<style>
+    .reports{
+        background-color: #538a6c;
+        height: 3rem;
+        width: 100%;
+        border-radius: 10px;        
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    .item{
+        background-color: #e8fff2;
+        margin-top: 1mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: auto;
+        border-left: 10px solid #0bb457;
+    }
+
+    .back{
+        margin-top: 40px;
+        background-color: #005e2a;
+        border-radius: 15px;
+        width: 7cm;
+        height: auto;
+        padding: 25px;
+    }
+
+    .ticket{
+        background-color: #005e2a;
+        border-radius: 5px;
+        height: 8mm;     
+    }
+
+    .ticket2{
+        background-color: #10f878;
+        border-radius: 5px;
+        height: auto;  
+        margin: auto;      
+        width: 35%;
+
+    }    
+
+    .ticket2:hover{
+        background-color: #0bb457;
+        border-radius: 10px;             
+    }
+
+    .text-primary1{
+        color: #ffffff;
+
+    }
+
+   
+</style>
+
+{% endblock content %}
+
+{% block whatsapp%}
+
+{% endblock whatsapp %}
