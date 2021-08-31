@@ -75,9 +75,8 @@
   
 </script> 
 </head>
-  <body onload="spin()">
-    <div id="loader"></div>        
-    <div style="display:none;" id="myDiv" class="animate-bottom">
+  <body>      
+    <div >
     <main role="main" style="padding-top: -2rem;">
       <div>
       {% block content %}
@@ -86,6 +85,7 @@
       {% endblock content %}
     </div>
 
+    {% block whatsapp %}
     <div class="chatservice mr-4">
       <div class="row">
         <div class=" col-md-auto"></div>
@@ -97,7 +97,7 @@
           </button>
         </div>
     </div>
-
+    {% endblock whatsapp %}
     <br>
     </div>
     <!--Footer-->
@@ -105,71 +105,7 @@
 
     {% endblock contentf %}
     </main>
-
-
-    <style>
-      /* Center the loader */
-      #loader {
-        position: absolute;
-        left: 60%;
-        top: 50%;
-        z-index: 1;
-        width: 60px;
-        height: 60px;
-        margin: -76px 0 0 -76px;
-        border: 3px solid #d9d7ff;
-        border-radius: 50%;
-        border-top: 3px solid #db4734;
-        -webkit-animation: spin 2s linear infinite;
-        animation: spin 1s linear infinite;
-      }
-      
-      @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
-      }
-      
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      /* Add animation to "page content" */
-      .animate-bottom {
-        position: relative;
-        -webkit-animation-name: animatebottom;
-        -webkit-animation-duration: 1s;
-        animation-name: animatebottom;
-        animation-duration: 1s
-      }
-      
-      @-webkit-keyframes animatebottom {
-        from { bottom:-100px; opacity:0 } 
-        to { bottom:0px; opacity:1 }
-      }
-      
-      @keyframes animatebottom { 
-        from{ bottom:-100px; opacity:0 } 
-        to{ bottom:0; opacity:1 }
-      }
-      
-      #myDiv {
-        display: none;
-      }
-      </style>
-
-    <script>
-      var myVar;
-      
-      function spin() {
-        myVar = setTimeout(showPage, 1000);
-      }
-      
-      function showPage() {
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("myDiv").style.display = "block";
-      }
-    </script>
+  
    </div>
   </body>
 </html> 

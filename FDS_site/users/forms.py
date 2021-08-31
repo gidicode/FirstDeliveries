@@ -1,14 +1,9 @@
-from re import template
 from django import forms
-from django.contrib.auth import models
-from django.forms import ModelForm, Textarea, fields, widgets
+from django.forms import Textarea
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import  Anonymous, Customer, Errand_service, MakeRequest, MakeRequestCash, Shopping, Front_desk
-from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-
-
 
 def chk_email(value):
     if User.objects.filter(email = value).exists():
@@ -49,7 +44,7 @@ class UserRegisterForm(UserCreationForm):
         fields = ['first_name', 'last_name', 'username', 'email',  'phone_number', 'Alt_phone_num', 'Location','password1', 'password2']
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(label='Email / Username')
+    username = forms.CharField(label='Email/Username')
 
 class UserUpdateForm(forms.ModelForm):    
     locations = [        
@@ -132,37 +127,37 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = MakeRequest
         fields = '__all__'
-        exclude = ['customer', 'date_created', 'status', 'Amount_paid', 'charge_id', 'paid', 'order_id', 'assigned', 'type', 'Amount_Payable']
+        exclude = ['customer', 'date_created', 'status', 'Amount_paid', 'charge_id', 'paid', 'order_id', 'assigned', 'type', 'Amount_Payable', 'riders', 'Cancelation_Reason']
 
 class adminform(forms.ModelForm): 
     class Meta:
         model = MakeRequest
-        fields = ['status', 'paid', 'confirmed', 'Amount_paid', ]
+        fields = ['status', 'paid', 'confirmed', 'Amount_paid', 'riders', 'Cancelation_Reason']
 
 class adminformCash(forms.ModelForm): 
     class Meta:
         model = MakeRequestCash
-        fields = ['status', 'Amount_Paid', 'confirmed',]
+        fields = ['status', 'Amount_Paid', 'confirmed', 'Cancelation_Reason', 'riders']
 
 class adminformShopping(forms.ModelForm): 
     class Meta:
         model = Shopping
-        fields = ['amount_paid', 'status', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded', 'confirmed']
+        fields = ['amount_paid', 'status', 'Charge', 'Item_Cost', 'Total', 'Amount_Refunded', 'confirmed', 'riders',]
 
 class AdminAnonForm(forms.ModelForm):    
     class Meta:
         model = Anonymous
-        fields = ['status', 'confirmed', 'Amount_Paid', 'receiver_name', 'receiver_address', 'receiver_contact' ]
+        fields = ['status', 'confirmed', 'Amount_Paid', 'receiver_name', 'receiver_address', 'Cancelation_Reason', 'customer_payment_method', 'receiver_contact', 'riders', ]
 
 class AdminErrandForm(forms.ModelForm):    
     class Meta:
         model = Errand_service
-        fields = ['status', 'confirmed', 'Amount_Paid', 'profit' ]
+        fields = ['status', 'confirmed', 'Amount_Paid', 'riders', 'profit' ]
 
 class AdminFrontForm(forms.ModelForm):    
     class Meta:
         model = Front_desk
-        fields = ['status', 'confirmed', 'Amount_Paid', 'profit' ]
+        fields = ['status', 'confirmed', 'Cancelation_Reason', 'customer_payment_method', 'riders', 'Amount_Paid', 'profit']
 
 class Request_Cash(forms.ModelForm):
     OPTIONS2 = [
@@ -215,8 +210,7 @@ class Request_Cash(forms.ModelForm):
     class Meta:
         model = MakeRequestCash
         fields = '__all__'
-        exclude = ['type', 'Amount_Paid', 'customer', 'date_created', 'status', 'paid',  'order_id', 'assigned', 'Amount_Payable' ]
-
+        exclude = ['type', 'Amount_Paid', 'customer', 'date_created', 'status', 'paid',  'order_id', 'assigned', 'Amount_Payable', 'riders', 'Cancelation_Reason']
 
 class Shopping_Form(forms.ModelForm):
     class Meta:
@@ -335,7 +329,7 @@ class Front_desk_pick(forms.ModelForm):
 class Front_desk_errand(forms.ModelForm):
     class Meta:
         model = Front_desk
-        fields = ['customer_name', 'Customer_phone_number', 'Quantity', 'delivery_destination', 'item_description', 'Enter_amount', 'Reciever_phone_number', 'Purchase_location', 'customer_location', 'Note' ]
+        fields = ['customer_name', 'Customer_phone_number', 'Quantity', 'delivery_destination', 'item_description', 'Enter_amount', 'Delivery_Fee', 'Reciever_phone_number', 'Purchase_location', 'Receiver_name', 'Choice_for_TP', 'customer_location', 'Note']
 
 class CashierFormE(forms.ModelForm): 
     class Meta:
@@ -363,7 +357,6 @@ class CashierFormErrand(forms.ModelForm):
         fields = ['confirmed', 'profit', 'Amount_Paid']
 
 class CashierFormFront(forms.ModelForm): 
-
     class Meta:
         model = Front_desk
         fields = ['confirmed', 'profit', 'Amount_Paid']
@@ -371,29 +364,29 @@ class CashierFormFront(forms.ModelForm):
 class FleetManagerUpdateE(forms.ModelForm):
     class Meta:
         model = MakeRequest
-        fields= ['status']
+        fields= ['status', 'Cancelation_Reason', 'riders']
 
 class FleetManagerUpdateC(forms.ModelForm):
     class Meta:
         model = MakeRequestCash
-        fields= ['status']
+        fields= ['status', 'Cancelation_Reason', 'riders']
 
 class FleetManagerUpdateS(forms.ModelForm):
     class Meta:
         model = Shopping
-        fields= ['status']
+        fields= ['status', 'Cancelation_Reason', 'riders']
 
 class FleetManagerUpdateErr(forms.ModelForm):
     class Meta:
         model = Errand_service
-        fields= ['status']
+        fields= ['status', 'Cancelation_Reason', 'riders']
 
 class FleetManagerUpdateA(forms.ModelForm):
     class Meta:
         model = Anonymous
-        fields= ['status']
+        fields= ['status', 'Cancelation_Reason', 'riders']
 
 class FleetManagerUpdateF(forms.ModelForm):
     class Meta:
         model = Front_desk
-        fields= ['status']
+        fields= ['status', 'Cancelation_Reason', 'riders']

@@ -1,0 +1,223 @@
+{% extends "FDS_app/signupBase.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+{% load user_tags %}
+{% block title %} Report History {{user.username }} {% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-3 justify-content-center">
+        <div class="col-lg-3"> 
+            <a href="{% url 'management_dashboard' user.id %}"><i class="fas fa-arrow-circle-left text-secondary"></i></a> 
+        </div>
+        <div class="col-lg-6 col-md-6">  
+            <div class="report text-center">
+                <h3 class="pt-3 the-report">REPORT STATUS/HISTORY</h3>
+
+                {% if request.user|fleet:"Fleet Manager" %}
+                <p class="text-dark ">Total Report <span class="badge badge-primary">{{ all_submitted_report.count}}</span></p>
+                {% endif%}
+
+                {% if request.user|operations:"OPERATIONS" %}
+                <p class="text-dark ">Total Report <span class="badge badge-primary">{{all_operations_report.count}}</span></p>
+                {% endif %}
+
+                {% if request.user|front_desk:"Front Desk" %}
+                <p class="text-dark ">Total Report <span class="badge badge-primary">{{all_front_desk_report.count}}</span></p>
+                {% endif %}
+
+                {% if request.user|Marketing:"Marketing" %}
+                <p class="text-dark ">Total Report <span class="badge badge-primary">{{all_marketing_report.count}}</span></p>
+                {% endif %}
+
+                {% if request.user|ICT:"ICT" %}
+                <p class="text-dark ">Total Report <span class="badge badge-primary">{{all_ict_report.count}}</span></p>
+                {% endif %}
+            </div>
+
+            {% if request.user|fleet:"Fleet Manager" %}
+                {% for i in all_submitted_report %}           
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Fleet_report_title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>                                           
+                {% empty %}
+                <p class="empty">You have no report yet</p>
+                {% endfor %}
+            {% endif %}
+
+            {% if request.user|operations:"OPERATIONS" %}
+                {% for i in all_operations_report %}
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between ">
+                            <div class="bd-highlight mr-1">          
+                                <a class="dtext text-truncate" href="{% url  'history_detail' i.pk %}">{{i.Work_description}}</a>
+                            </div>  
+                            <div class="bd-highlight">          
+                                <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                            </div>  
+                            <div class="bd-highlight">   
+                                <div class="ticket">
+                                    <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">ID: {{i.ticket_num}}</small>
+                                </div>       
+                            </div>      
+                        </div>                     
+                    </div>                        
+                {% empty%}
+                <p class="empty">You have no report yet</p>
+                {% endfor %}
+            {% endif %}
+
+            {% if request.user|front_desk:"Front Desk" %}
+                {% for i in all_front_desk_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.FrontDesk_report_Title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>                        
+            {% empty%}
+            <p class="empty">You have no report yet</p>
+            {% endfor %}
+            {% endif %}
+
+            {% if request.user|Marketing:"Marketing" %}
+                {% for i in all_marketing_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Marketing_report_title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
+
+            {% if request.user|ICT:"ICT" %}
+                {% for i in all_ict_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Ict_report_Title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">sssYou have no report yet</p>
+                {% endfor%}
+            {% endif %}
+        
+        </div>
+        <div class="col-lg-3"> </div>
+    </div>
+</div>
+<style>
+    .report{
+        border-radius: 10px;
+        background-color: #9494FF;
+        color: #E5E5FF;
+        height: 15mm;
+    }
+
+    .item{
+        background-color: #E5E5FF;
+        margin-top: 10mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: 50px;
+        border-left: 10px solid #9494FF;
+    }
+
+    .ticket{
+        background-color: #9191FF;
+        border-radius: 5px;
+        height: 8mm;        
+    }
+
+    .dtext{
+        color: #0000FF;
+    }
+
+    @media only screen and (max-width: 400px){
+    .the-report{
+        font-size: 25px;
+    }
+
+    .dtext{
+        font-size: 12px;
+    }
+
+    .dfont-1{
+        font-size: 11px;
+    }
+
+    .item{
+        background-color: #E5E5FF;
+        margin-top: 10mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: 50px;
+        animation: mymove 5s infinite;
+        border-left: 10px solid #9494FF;
+    }    
+
+    .empty{
+        font-size: 13px;
+        position: relative;
+        width: auto;
+        height: auto;
+        top: 6vw;
+        color: rgb(199, 9, 9);    
+    }
+  }
+
+  @media only screen and (max-width: 625px){
+    .dtext{
+        font-size: 12px;
+    }
+  }
+</style>
+
+{% endblock content %}
+
+{% block whatsapp%}
+
+{% endblock whatsapp %}

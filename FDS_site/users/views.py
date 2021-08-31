@@ -1,4 +1,5 @@
 
+from re import search
 from BikeControl.models import RidersDeliveries, RidersProfile
 from django.shortcuts import render, redirect
 
@@ -141,7 +142,7 @@ def customerProfileUpdatePage(request, user):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'Cashier',])
 def Cashier(request, user):
-    customer = Customer.objects.get(user = user)
+    customer = Customer.objects.get(user = request.user)
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
@@ -210,7 +211,7 @@ def Cashier(request, user):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'Fleet Manager'])
 def FleetManager(request, user):
-    customer = Customer.objects.get(user = user) 
+    customer = Customer.objects.get(user = request.user) 
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
@@ -400,9 +401,9 @@ def PickDrop(request, user):
 
             adminNotification.objects.create(
                 customer=instance.customer,
-                item_created = instance,
+                item_created = "Front Desk",
                 order_id = h   
-            ) 
+            )             
             return redirect('frontdesk', user=user)
     else:
         pickdrop_Form = Front_desk_pick(instance = customer)
@@ -424,19 +425,27 @@ def FrontErrand(request, user):
             instance = errand_Form.save(commit = False)
             instance.customer = customer
             instance.Delivery_type = 'Errand'
-            instance.save()
-
-            messages.success(request, f'Hello {request.user.username}, action Successful')
+            instance.save()            
 
             hashids = Hashids(salt=settings.FRONT_DESK, min_length=7)
             h = hashids.encode(instance.id)
             Front_desk.objects.filter(pk = instance.id).update(order_id= h)
 
+            messages.success(request, f'Hello {request.user.username}, action Successful {h}')            
+            chk_none = instance.Enter_amount
+
+            if chk_none == None:
+                Front_desk.objects.filter(pk = instance.id).update(Total= instance.Delivery_Fee)
+            elif chk_none!= None:
+                get_total = instance.Enter_amount + instance.Delivery_Fee
+                Front_desk.objects.filter(pk = instance.id).update(Total= get_total)                                                
+        
             adminNotification.objects.create(
                 customer=instance.customer,
-                item_created = instance,
+                item_created = "Front Desk",
                 order_id = h   
-            ) 
+            )                 
+            
             return redirect('frontdesk', user=user)
     else:
         errand_Form = Front_desk_errand(instance = customer)
@@ -454,6 +463,7 @@ def Inhousesearch(request):
     results3 = []
     if request.method == "GET":
         query = request.GET.get('order_id')
+        query2 = request.GET.get('Customer_phone_number')
 
         if query == '':
             query = 'None'
@@ -462,7 +472,7 @@ def Inhousesearch(request):
         results3 = Shopping.objects.filter(Q(order_id = query))
         results4 = MakeRequest.objects.filter(Q(order_id = query))
         results5 = MakeRequestCash.objects.filter(Q(order_id = query))
-        results6 = Front_desk.objects.filter(Q(order_id = query))
+        results6 = Front_desk.objects.filter(Q(order_id = query) | Q(Customer_phone_number__iexact = query2))
         
     context = {
             'query': query, 
@@ -591,15 +601,15 @@ def requestForm_Cash(request, user):
                     customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
 
                 if charge_amount == 2000:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
                 elif charge_amount == 3000:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
                 elif charge_amount == 4000:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
                 elif charge_amount == 5000:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
                 else:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Single Delivery.')
             ForPayments.objects.create(
                 customer = customer,
                 For_cash_payment = instance,
@@ -608,7 +618,7 @@ def requestForm_Cash(request, user):
 
             adminNotification.objects.create(
                 customer=instance.customer,
-                item_created = instance,
+                item_created = "Cash Request",
                 order_id = h   
             ) 
 
@@ -621,7 +631,7 @@ def requestForm_Cash(request, user):
         'customer':customer,
         'n':n,
         }
-    return render(request, 'users/requestForm_Cash.html', context)
+    return render(request, 'users/requestForm_Cash.html', context) 
 
 #Online payment request
 @login_required(login_url='login')
@@ -738,15 +748,15 @@ def requestForm_Online(request, user):
                     customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
 
                 if charge_amount == 2000:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
                 elif charge_amount == 3000:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
                 elif charge_amount == 4000:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
                 elif charge_amount == 5000:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
                 else:
-                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')            
+                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Single Delivery.')            
             
             def initialize_card_payent(request, user):                
                 url = "https://api.paystack.co/transaction/initialize"
@@ -783,8 +793,8 @@ def requestForm_Online(request, user):
             customer.makerequest_set.filter(pk = instance.id).update(charge_id = initialized['data']['reference'])
             link = initialized['data']['authorization_url']
             adminNotification.objects.create(
-                customer=instance.customer,
-                item_created = instance,
+                customer = instance.customer,
+                item_created = "Card Request",
                 order_id = h  
             ) 
             return HttpResponseRedirect(link)
@@ -852,7 +862,7 @@ def ShoppingForm(request, user):
             
             adminNotification.objects.create(
             customer=instance.customer,
-            item_created = instance,
+            item_created = "Shopping Request",
             order_id = h   
             ) 
 
@@ -1977,28 +1987,56 @@ def CashierUpdateFrontForm(request, pk):
 def UpdateEForm(request, pk):
     r_request = MakeRequest.objects.get(id=pk)
     o_form = FleetManagerUpdateE(instance= r_request)
-    customer = Customer.objects.get(user=request.user) 
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)         
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateE(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
+            get_rider = obj.riders
 
-            if obj.status == 'Delivered':
-                rider.filter(e_payment_request = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(e_payment_request = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                MakeRequest.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
            
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2023,28 +2061,56 @@ def UpdateEForm(request, pk):
 def UpdateCForm(request, pk):
     r_request = MakeRequestCash.objects.get(id=pk)
     o_form = FleetManagerUpdateC(instance= r_request)
-    customer = Customer.objects.get(user=request.user)
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)    
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateC(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
+            get_rider = obj.riders
 
-            if obj.status == 'Delivered':
-                rider.filter(cash_request = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(cash_request = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                MakeRequestCash.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13 :
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
            
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2069,9 +2135,7 @@ def UpdateCForm(request, pk):
 def UpdateSForm(request, pk):
     r_request = Shopping.objects.get(id=pk)
     o_form = FleetManagerUpdateS(instance= r_request)
-    customer = Customer.objects.get(user=request.user)
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)        
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateS(request.POST,instance=r_request)
@@ -2079,18 +2143,49 @@ def UpdateSForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()
            
-            if obj.status == 'Delivered':
-                rider.filter(shopping = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(shopping = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            get_rider = obj.riders
+
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                Shopping.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
 
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2115,28 +2210,56 @@ def UpdateSForm(request, pk):
 def UpdateErrForm(request, pk):
     r_request = Errand_service.objects.get(id=pk)
     o_form = FleetManagerUpdateErr(instance= r_request)
-    customer = Customer.objects.get(user=request.user) 
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)         
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateErr(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
-            obj.save()
-           
-            if obj.status == 'Delivered':
-                rider.filter(errand = obj).update(staus = 'Delivered')                
-                try:
-                    all4 = rider.filter(errand = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            obj.save()           
+            get_rider = obj.riders
+
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                Errand_service.objects.filter(pk = obj.pk).update(assigned = True)            
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
                         
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2161,29 +2284,57 @@ def UpdateErrForm(request, pk):
 def UpdateAForm(request, pk):
     r_request = Anonymous.objects.get(id=pk)
     o_form = FleetManagerUpdateA(instance= r_request)
-    customer = Customer.objects.get(user=request.user) 
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)         
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateA(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
-            
-            if obj.status == 'Delivered':
-                rider.filter(anonymous = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(anonymous = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
-            messages.success(request, f'You just updated a customer satus to delivered {obj.order_id}')
+            get_rider = obj.riders          
+
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                Anonymous.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False) 
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to delivered {obj.order_id}')
 
             return redirect('fleetManager', user = pk)
     context = {'o_form': o_form,
@@ -2197,28 +2348,56 @@ def UpdateAForm(request, pk):
 def UpdateFForm(request, pk):
     r_request = Front_desk.objects.get(id=pk)
     o_form = FleetManagerUpdateF(instance= r_request)
-    customer = Customer.objects.get(user=request.user) 
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)         
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateF(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
-            obj.save()
-            
-            if obj.status == 'Delivered':
-                rider.filter(front_desk = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(front_desk = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            obj.save()            
+            get_rider = obj.riders
+
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                Front_desk.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
            
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2242,28 +2421,56 @@ def UpdateFForm(request, pk):
 def Update_Errand_Form(request, pk):
     r_request =Errand_service.objects.get(id=pk)
     o_form = AdminErrandForm(instance= r_request)
-    customer = Customer.objects.get(user=request.user)  
-    rider = RidersDeliveries.objects.all()  
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)          
 
     if request.method == 'POST':
         o_form = AdminErrandForm(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
-            obj.save()            
+            obj.save()    
+            get_rider = obj.riders
 
-            if obj.status == 'Delivered':
-                rider.filter(errand = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(errand = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                Errand_service.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
 
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2287,28 +2494,56 @@ def Update_Errand_Form(request, pk):
 def Update_Front_Fesk_Form(request, pk):
     r_request = Front_desk.objects.get(id=pk)
     o_form = AdminFrontForm(instance= r_request)
-    customer = Customer.objects.get(user = request.user) 
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user = request.user)         
 
     if request.method == 'POST':
         o_form = AdminFrontForm(request.POST, instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
+            get_rider = obj.riders
+            
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if obj.status == 'Delivered':
-                rider.filter(front_desk = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(front_desk = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            if get_rider != None:
+                Front_desk.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)    
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
 
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2331,29 +2566,56 @@ def Update_Front_Fesk_Form(request, pk):
 @admin_only
 def updateRequestAnon(request, pk):
     r_request = Anonymous.objects.get(id=pk)
-    a_form = AdminAnonForm(instance= r_request)
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    a_form = AdminAnonForm(instance= r_request)        
 
     if request.method == 'POST':
         a_form = AdminAnonForm(request.POST,instance=r_request)
         if a_form.is_valid():
             instance = a_form.save(commit=False)
             instance.save()
+            get_rider = instance.riders
 
-            if instance.status == 'Delivered':
-                rider.filter(anonymous = instance).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(anonymous = instance).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            if instance.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {instance.status}')                     
+            elif instance.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {instance.status}')
+            elif instance.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {instance.order_id} and No rider was assigned')                
+            elif instance.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {instance.order_id}')
 
+            if get_rider != None:
+                Anonymous.objects.filter(pk = instance.pk).update(assigned = True)
+
+            if instance.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)  
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
             messages.success(request, f'Successful:{instance.order_id}')
 
             return redirect('anonymous-request')
@@ -2413,28 +2675,56 @@ def cancelRequestAnon(request, pk):
 def updateRequestForm(request, pk):
     r_request = MakeRequest.objects.get(id=pk)
     o_form = adminform(instance= r_request)    
-    customer = Customer.objects.get(user=request.user) 
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)         
 
     if request.method == 'POST':
         o_form = adminform(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)        
             obj.save()     
+            get_rider = obj.riders
 
-            if obj.status == 'Delivered':
-                rider.filter(e_payemnt_request = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(e_payment_request = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                MakeRequest.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
 
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2459,28 +2749,56 @@ def updateRequestForm(request, pk):
 def updateRequestFormCash(request, pk):
     r_request1 = MakeRequestCash.objects.get(id=pk)
     c_form = adminformCash(instance= r_request1)
-    customer = Customer.objects.get(user=request.user) 
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)         
 
     if request.method == 'POST':
         c_form = adminformCash(request.POST,instance = r_request1)
         if c_form.is_valid():
             obj = c_form.save(commit=False)            
             obj.save()
+            get_rider = obj.riders
 
-            if obj.status == 'Delivered':
-                rider.filter(cash_request = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(cash_request = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                MakeRequestCash.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
 
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2506,9 +2824,7 @@ def updateRequestFormCash(request, pk):
 def updateRequestFormShopping(request, pk):
     r_request2 = Shopping.objects.get(id=pk)
     s_form = adminformShopping(instance= r_request2)
-    customer = Customer.objects.get(user=request.user) 
-    rider = RidersDeliveries.objects.all()
-    riders_profile = RidersProfile.objects.all()
+    customer = Customer.objects.get(user=request.user)         
 
     if request.method == 'POST':
         s_form = adminformShopping(request.POST,instance = r_request2)
@@ -2516,18 +2832,49 @@ def updateRequestFormShopping(request, pk):
             obj = s_form.save(commit=False)            
             obj.save()
 
-            if obj.status == 'Delivered':
-                rider.filter(shoppng = obj).update(staus = 'Delivered')
-                try:
-                    all4 = rider.filter(shopping = obj).get(rider__in = riders_profile)
-                    at = all4.rider     
-                    all3 = RidersDeliveries.objects.filter(rider = at).filter(staus = 'Pending').exists()                                          
-                    if all3 == True:
-                        pass                
-                    elif all3 == False:
-                        riders_profile.filter(pk = all4.rider.pk).update(busy = False)
-                except RidersDeliveries.DoesNotExist:
-                    raise Http404(f'Hello {request.user.username} You havent assigned this order to a rider please do so.')
+            get_rider = obj.riders 
+
+            if obj.status != 'Delivered' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
+            elif obj.status != 'Delivered' and get_rider != None:
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
+                messages.warning(request, f'You just updated a customer status to {obj.status}')
+            elif obj.status == 'Canceled' and get_rider == None:
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
+            elif obj.status == 'Canceled' and get_rider != None: 
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
+
+            if get_rider != None:
+                Shopping.objects.filter(pk = obj.pk).update(assigned = True)
+
+            if obj.status == 'Delivered':                                               
+                search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_makeRequestCash_out = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_errand = Errand_service.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_errand_process = Errand_service.objects.filter(riders = get_rider).filter(status = 'Purchase in Process').exists()
+                search_errand_out = Errand_service.objects.filter(riders = get_rider).filter(status = 'On Route for Delivery').exists()
+                search_anon = Anonymous.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_anon_out = Anonymous.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+                search_shopping = Shopping.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_shopping_out = Shopping.objects.filter(riders = get_rider).filter(status = 'At the Mall').exists()
+                search_frontDesk = Front_desk.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
+                search_frontDesk_out = Front_desk.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
+
+                all_search = [
+                            search_makeRequest, search_makeRequest_out, 
+                            search_makeRequestCash, search_makeRequestCash_out, 
+                            search_errand, search_errand_process, search_errand_out,
+                            search_anon, search_anon_out,
+                            search_shopping, search_shopping_out, 
+                            search_frontDesk, search_frontDesk_out
+                            ]                
+                                                       
+                the_count = all_search.count(False)
+                if the_count >= 13:
+                    RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
 
             chk_delivered = customer.delivered_set.filter(order_id = obj.order_id).exists()            
             if obj.status == 'Delivered' and chk_delivered == True:                
@@ -2716,7 +3063,7 @@ def fuel_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -2801,7 +3148,7 @@ def gas_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -2886,7 +3233,7 @@ def drugs_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -2971,7 +3318,7 @@ def bread_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -3056,7 +3403,7 @@ def shawarma_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -3141,7 +3488,7 @@ def pizza_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -3226,7 +3573,7 @@ def fruits_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -3311,7 +3658,7 @@ def icecream_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -3396,7 +3743,7 @@ def food_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 
@@ -3481,7 +3828,7 @@ def other_errand(request, user):
             
             adminNotification.objects.create(
                 customer = instance.customer,
-                item_created = instance,
+                item_created = "Errand Service",
                 order_id = h
             )
 

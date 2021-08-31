@@ -17,7 +17,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('FDS_app.urls')),
 
-    path('', include('BikeControl.urls')),    
+    path('', include('BikeControl.urls')), 
+
+    path('', include('PortHarcourt.urls')),
+
+    path('', include('Management.urls')),
 
     path('404/', user_views.response_error_handler),
 

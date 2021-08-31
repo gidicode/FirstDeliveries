@@ -65,6 +65,8 @@
               <p class="dropdown-item">{{user.first_name}} {{user.last_name}}</p>
               <p class="dropdown-item">{{user.email}}</p>
               <p class="dropdown-item">{{customer.phone_number}}</p>
+
+              <a class="btn btn-danger ml-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'management_dashboard' user.id %}" role="button">Manegment</a>
               <div class="dropdown-divider"></div>
               <a class="btn btn-danger ml-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'logout' %}" role="button">Log out</a>
               {% if request.user|front_desk:"Front Desk" %}

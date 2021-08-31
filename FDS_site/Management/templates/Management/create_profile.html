@@ -1,0 +1,50 @@
+{% extends "FDS_app/signupBase.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %} Update Profile {{user.username }} {% endblock title %}
+
+{% block content %}
+<div class="container">
+<br>
+<br>
+<div class="row mt-4">
+    <div class="col-lg-4"> </div>
+    <div class="col-lg-4 p-4">  
+        {% if customer.staff_created == True %}
+            <p class="text-left"><i class="fas fa-check-circle big text-success"></i> Your profile has been updated</p>
+            <a class="center" role="button" href="{% url 'management_dashboard' user.id %}">back</a>
+        {% else %}
+            <div class="the_form p-3">
+            <small>Update your profile {{customer.first_name}}</small>
+            <br>
+            <br>
+            <form method="POST" enctype="multipart/form-data"> 
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col">
+                    {{m_form|crispy}}
+                    </div>                            
+                </div>
+                <button class="btn btn-block rounded-lg text-white" style="background-color: #7373FF;"  type="submit">Submit</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-lg-4"> </div>
+</div>
+</div>
+
+<style>
+    .the_form{
+        border-radius: 20px;
+        background-color: #E5E5FF;
+
+    }
+</style>
+
+{% endblock content %}
+
+{% block whatsapp%}
+
+{% endblock whatsapp %}

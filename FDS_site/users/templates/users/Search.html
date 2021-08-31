@@ -1,14 +1,14 @@
 {% extends "FDS_app/base.html" %}
 {% load crispy_forms_tags %}
-
+{% load user_tags %}
 {% block title %} Search Result {% endblock title %}
 
 {% block content %}
 <br>
 <div class="row order-3 p-3 bd-highlight">
-    <div class="col-md-4"></div>
-    <div class="col-lg-4">
-        <div class=" p-2 text-dark shadow rounded-lg ">
+    <div class="col-md-3"></div>
+    <div class="col-lg-6">
+        <div class="p-2 text-dark  shadow rounded-lg ">
         {% if query %}
         
             <ul>
@@ -494,93 +494,412 @@
         {% if query %}
             <ul>
             {% for r in results6 %}
-            <h4>Front desk Request</h4>
-            <li>Date: {{r.date_created}}</li>
-            <li>Customer: {{r.customer}}</li>
-            <li>Delivery Type: {{r.Delivery_type}}</li>
-            <li>
-                <div class="dropdown">
-                    <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Details
-                    </p>
-                    <div class="dropdown-menu p-2 user-select-all" style="background-color: rgb(0, 30, 202);" aria-labelledby="dropdownMenuButton">
-                    {% if r.Delivery_type == 'Pick & Drop'%}
-                        {% if r.customer_name %}
-                            <small class=" text-white"> <strong> Customer Name:</strong> {{r.customer_name}}  </small>
-                            <br>
-                        {% endif %}
-                            <small class=" text-white"><strong>Customer Number:</strong> {{r.Customer_phone_number}} </small>
-                            <br>
-                            <small class=" text-white"><strong>Customer Location:</strong> {{r.customer_location}} </small>                                        
-                            <hr>
-                            <small class=" text-white"><strong>Item Description:</strong> {{r.item_description}} </small>
-                            <br>
-                            <small class=" text-white"><strong>Delivery Destination:</strong> {{r.delivery_destination}} </small>
-                            <br>
-                            <small class=" text-white"><strong>Reciever Number:</strong> {{r.Reciever_phone_number}} </small>
-                            <br>                                        
-                        {% if r.Note %}
-                        <small class=" text-white"><strong>Note</strong> {{r.Note}} </small>
-                        {% else %}
-                        {% endif %}
+
+            <table class="table table-center justify-content-center">
+                <thead>
+                  <tr> <h4>Your Request (FD)</h4></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-weight-bold">Date</td>
+                    <td>{{r.date_created}}</td>                    
+                  </tr>                  
+                {% if r.Delivery_type == 'Pick & Drop' %}
+                    <tr>
+                        <td  class="font-weight-bold">Delivery Type</td>
+                        <td>{{ r.Delivery_type}}</td>                    
+                    </tr>                   
                     
-                    {% elif r.Delivery_type == 'Errand' %}
-                    <small class=" text-white"><strong>Customer Name:</strong> {{r.customer_name}} </small>
-                    <br>
-                    <small class=" text-white"><strong>Customer Number:</strong> {{r.Customer_phone_number}} </small>
-                    <br>
-                    <small class=" text-white"><strong>Customer Location:</strong> {{r.customer_location}} </small>
-                    <hr> 
-                    <small class=" text-white"><strong>Item Description:</strong> {{r.item_description}} </small>
-                    <br>
-                    <small class=" text-white"><strong>Reciever Address:</strong> {{r.delivery_destination}} </small>
-                    <br>
-                    <small class=" text-white"><strong>Quantity:</strong> {{r.Quantity}} </small>
-                    <br>                            
-                    <small class=" text-white"><strong>Reciever Number:</strong> {{r.Reciever_phone_number}} </small>
-                    <br> 
-                    <small class=" text-white"><strong>Purchase Location:</strong> {{r.Purchase_location}} </small>
-                    <br>
-                    {% if Note %}
-                    <small class="text-warning"><strong>Note:</strong> {{r.Note}} </small>
+                    {% if r.customer_name %}
+                    <tr>                    
+                        <td class="font-weight-bold">Customer Name</td>
+                        <td>{{r.customer_name}}</td>                    
+                    </tr> 
                     {% endif %}
+
+                    <tr>                    
+                        <td class="font-weight-bold">Customer Number</td>
+                        <td>{{r.Customer_phone_number}}</td>                    
+                    </tr> 
+                    
+                    <tr>                    
+                        <td class="font-weight-bold">Customer Location</td>
+                        <td>{{r.customer_location}}</td>                    
+                    </tr>  
+                    
+                    <tr>                    
+                        <td class="font-weight-bold">Item Description:</td>
+                        <td>{{r.item_description}}</td>                    
+                    </tr>
+                    
+                    <tr>                    
+                        <td class="font-weight-bold">Reciever Number</td>
+                        <td>{{r.Reciever_phone_number}}</td>                    
+                    </tr> 
+                    
+                    <tr>                    
+                        {% if r.status == 'Pending' %}
+                        <td class="font-weight-bold"> Delivery Satus</td>
+                        <td><span class="bg bg-warning rounded-lg font-weight-bold text-white p-1">{{r.status}}</span></td>  
+                        {% elif r.status == 'Out for delivery' %}    
+                        <td class="font-weight-bold"> Delivery Satus</td>
+                        <td><span class="bg bg-info text-white p-1">{{r.status}}</span></td>        
+                        {% elif r.status == 'Delivered' %}          
+                        <td class="font-weight-bold"> Delivery Satus</td>
+                        <td><span class="bg bg-success  text-white p-1">{{r.status}}</span></td> 
+                        {% else%} 
+                        <td class="font-weight-bold"> Delivery Satus</td>
+                        <td><span class="bg bg-danger p-1">{{r.status}}</span></td> 
+                        {% endif %}
+                    </tr> 
+
+                    <tr>                    
+                        <td class="font-weight-bold">Choice for TP</td>
+                        <td> {{r.Choice_for_TP}} </td>                    
+                    </tr> 
+                    {% if r.Amount_paid %}
+                    <tr>
+                        <td class="font-weight-bold"> Amount Paid</td>
+                        <td>N{{r.Amount_Paid}}</td>                    
+                    </tr>     
+                    {% endif %}
+
+                    {% if request.user|fleet:"Fleet Manager" %}
+                        {% if r.assigned == True%}
+                            <tr>
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-white"></i> </td>                    
+                            </tr>                          
+                        {% else %}
+                            <tr>                    
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-danger"></i></i> </td>                    
+                            </tr>                             
+                        {% endif %}
+                    {% endif %} 
+
+                    {% if request.user|front_desk:"Fleet Manager" %}
+                            {% if r.assigned == True%}
+                            <tr>
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-white"></i> </td>                    
+                            </tr>                          
+                        {% else %}
+                            <tr>                    
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-danger"></i></i> </td>                    
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user|cashier:"Fleet Manager" %}
+                            {% if r.assigned == True%}
+                            <tr>
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-white"></i> </td>                    
+                            </tr>                          
+                        {% else %}
+                            <tr>                    
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-danger"></i> </td>                    
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user|fleet:"Fleet Manager" %}
+                        {% if r.confirmed == True %}
+                            <tr>                    
+                                <td class="font-weight-bold">Confirmed:</td>
+                                <td> <i class="fas fa-check-circle text-success"></i> </td>                    
+                            </tr>                        
+                        {% else %}
+                            <tr>                    
+                                <td class="font-weight-bold">Confirmed:</td>
+                                <td> <i class="fas fa-check-circle text-danger"></i> </td>                    
+                            </tr>                          
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user|cashier:"Fleet Manager" %}
+                        {% if r.confirmed == True %}
+                        <tr>                    
+                            <td class="font-weight-bold">Confirmed:</td>
+                            <td> <i class="fas fa-check-circle text-success"></i> </td>                    
+                        </tr>                        
+                    {% else %}
+                        <tr>                    
+                            <td class="font-weight-bold">Confirmed:</td>
+                            <td> <i class="fas fa-check-circle text-danger"></i> </td>                    
+                        </tr>    
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user|front_desk:"Fleet Manager" %}
+                    {% if r.confirmed == True %}
+                        <tr>                    
+                            <td class="font-weight-bold">Confirmed:</td>
+                            <td> <i class="fas fa-check-circle text-success"></i> </td>                    
+                        </tr>                        
+                    {% else %}
+                        <tr>                    
+                            <td class="font-weight-bold">Confirmed:</td>
+                            <td> <i class="fas fa-check-circle text-danger"></i> </td>                    
+                        </tr>    
+                        {% endif %}
+                    {% endif %}
+                    <tr>  
+                        <td class="font-weight-bold">Reference Number</td>
+                        <td> {{r.order_id}}</td>                    
+                    </tr>                         
+                    
+                    {% elif r.Delivery_type == 'Errand' %}                        
+
+                        <tr>  
+                            <td class="font-weight-bold">Delivery Type</td>
+                            <td> {{r.Delivery_type}}</td>                    
+                        </tr>
+
+                        {% if r.customer_name %}
+                        <tr>                    
+                            <td class="font-weight-bold">Customer Name</td>
+                            <td>{{r.customer_name}}</td>                    
+                        </tr> 
+                        {% endif %}
+                        
+                        <tr>  
+                            <td class="font-weight-bold">Customer Number</td>
+                            <td> {{r.Customer_phone_number}}</td>                    
+                        </tr>
+                       
+
+                        <tr>  
+                            <td class="font-weight-bold">Customer Location</td>
+                            <td> {{r.customer_location}}</td>                    
+                        </tr>
+
+                        <tr>  
+                            <td class="font-weight-bold">Item Description</td>
+                            <td> {{r.item_description}}</td>                    
+                        </tr>
+
+                        <tr>  
+                            <td class="font-weight-bold">Quantity</td>
+                            <td> {{r.Quantity}}</td>                    
+                        </tr>
+
+                        <tr>  
+                            <td class="font-weight-bold">Purchase Location</td>
+                            <td>{{r.Purchase_location}}</td>                    
+                        </tr>
+                                               
+
+                        {% if r.Receiver_name %}
+                        <tr>  
+                            <td class="font-weight-bold">Reciever Number</td>
+                            <td> {{r.reciever_name}}</td>                    
+                        </tr>
+                        {% endif %}
+
+                        {% if r.Reciever_phone_number %}
+                        <tr>  
+                            <td class="font-weight-bold">Reciever Number</td>
+                            <td> {{r.Reciever_phone_number}}</td>                    
+                        </tr>
+                        {% endif %}
+
+                        <tr>  
+                            <td class="font-weight-bold">Reciever Address</td>
+                            <td> {{r.delivery_destination}}</td>                    
+                        </tr>  
+
+                        <tr>  
+                            <td class="font-weight-bold">Item Amount</td>
+                            <td> N{{r.Enter_amount}}</td>                    
+                        </tr>
+
+                        <tr>  
+                            <td class="font-weight-bold">Delivery Fee</td>
+                            <td> N{{r.Delivery_Fee}}</td>                    
+                        </tr> 
+
+                        <tr>  
+                            <td class="font-weight-bold">Total</td>
+                            <td> N{{r.Total}}</td>                    
+                        </tr> 
+
+                        {% if r.Amount_Paid %}
+                        <tr>  
+                            <td class="font-weight-bold">Amount Paid</td>
+                            <td> {{r.Amount_Paid}}</td>                 
+                        </tr> 
+                        {% endif %}
+
+                        {% if r.customer_payment_method %}
+                        <tr>  
+                            <td class="font-weight-bold">Payment Method</td>
+                            <td> {{r.customer_payment_method}}</td>                 
+                        </tr> 
+                        {% endif %}
+                        
+                        <tr>  
+                            <td class="font-weight-bold">Choice of TP</td>
+                            <td> {{r.Choice_for_TP}}</td>                 
+                        </tr>                         
+                    
+                        {% if r.riders %}
+                        <tr>  
+                            <td class="font-weight-bold">Rider (Handler)</td>
+                            <td> {{r.riders.attached_bike}}</td>                    
+                        </tr> 
+                        {% endif %}  
+                        
+                        {% if r.Cancelation_Reason %}
+                        <tr>  
+                            <td class="font-weight-bold">Cancelation Reason</td>
+                            <td> {{r.Cancelation_Reason}}</td>                    
+                        </tr> 
+                        {% endif %}
+                        
+                        {% if request.user|fleet:"Fleet Manager" %}
+                            {% if Note %}
+                            <tr>  
+                                <td class="font-weight-bold text-warning"> Note </td>
+                                <td> {{r.Note}}</td>                    
+                            </tr>                            
+                            {% endif %}
+                        {% endif %} 
+
+                        {% if request.user|front_desk:"Fleet Manager" %}
+                            {% if Note %}
+                            <tr>  
+                                <td class="font-weight-bold text-warning"> Note </td>
+                                <td> {{r.Note}}</td>                    
+                            </tr>    
+                            {% endif %}
+                        {% endif %}
+
+                        {% if request.user|cashier:"Fleet Manager" %}
+                            {% if Note %}
+                            <tr>  
+                                <td class="font-weight-bold text-warning"> Note </td>
+                                <td> {{r.Note}}</td>                    
+                            </tr>    
+                            {% endif %}
+                        {% endif %}
+                        
+                        <tr>                    
+                            {% if r.status == 'Pending' %}
+                                <td class="font-weight-bold"> Delivery Status</td>
+                                <td><span class="bg bg-warning rounded-lg font-weight-bold text-white p-1">{{r.status}}</span></td>  
+                                {% elif r.status == 'Out for delivery' %}    
+                                <td class="font-weight-bold"> Delivery Status</td>
+                                <td><span class="bg bg-info text-white p-1">{{r.status}}</span></td>        
+                                {% elif r.status == 'Delivered' %}          
+                                <td class="font-weight-bold"> Delivery Status</td>
+                                <td><span class="bg bg-success  text-white p-1">{{r.status}}</span></td> 
+                                {% else%} 
+                                <td class="font-weight-bold"> Delivery Status</td>
+                                <td><span class="bg bg-danger p-1">{{r.status}}</span></td> 
+                            {% endif %}
+                        </tr> 
+                               
+                        </tr>  
+                        {% if request.user|fleet:"Fleet Manager" %}
+                        {% if r.assigned == True%}
+                            <tr>
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-white"></i> </td>                    
+                            </tr>                          
+                        {% else %}
+                            <tr>                    
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-danger"></i></i> </td>                    
+                            </tr>                             
+                        {% endif %}
+                    {% endif %} 
+
+                    {% if request.user|front_desk:"Fleet Manager" %}
+                            {% if r.assigned == True%}
+                            <tr>
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-white"></i> </td>                    
+                            </tr>                          
+                        {% else %}
+                            <tr>                    
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-danger"></i></i> </td>                    
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user|cashier:"Fleet Manager" %}
+                            {% if r.assigned == True%}
+                            <tr>
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-white"></i> </td>                    
+                            </tr>                          
+                        {% else %}
+                            <tr>                    
+                                <td class="font-weight-bold">Assigned:</td>
+                                <td> <i class="fas fa-check-circle text-danger"></i> </td>                    
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user|fleet:"Fleet Manager" %}
+                        {% if r.confirmed == True %}
+                            <tr>                    
+                                <td class="font-weight-bold">Confirmed:</td>
+                                <td> <i class="fas fa-check-circle text-success"></i> </td>                    
+                            </tr>                        
+                        {% else %}
+                            <tr>                    
+                                <td class="font-weight-bold">Confirmed:</td>
+                                <td> <i class="fas fa-check-circle text-danger"></i> </td>                    
+                            </tr>                          
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user|cashier:"Fleet Manager" %}
+                        {% if r.confirmed == True %}
+                        <tr>                    
+                            <td class="font-weight-bold">Confirmed:</td>
+                            <td> <i class="fas fa-check-circle text-success"></i> </td>                    
+                        </tr>                        
+                    {% else %}
+                        <tr>                    
+                            <td class="font-weight-bold">Confirmed:</td>
+                            <td> <i class="fas fa-check-circle text-danger"></i> </td>                    
+                        </tr>    
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user|front_desk:"Fleet Manager" %}
+                    {% if r.confirmed == True %}
+                        <tr>                    
+                            <td class="font-weight-bold">Confirmed:</td>
+                            <td> <i class="fas fa-check-circle text-success"></i> </td>                    
+                        </tr>                        
+                    {% else %}
+                        <tr>                    
+                            <td class="font-weight-bold">Confirmed:</td>
+                            <td> <i class="fas fa-check-circle text-danger"></i> </td>                    
+                        </tr>    
+                        {% endif %}
+                    {% endif %}
+
+                    <tr>  
+                        <td class="font-weight-bold">Reference Number</td>
+                        <td> {{r.order_id}}</td>                    
+                    </tr>   
                 {% endif %}
-                </div>
-            </li>
-            <li>Choice for TP: {{r.Choice_for_TP}}</li>
-            {% if r.status == 'Pending' %}
-                <li> Delivery Satus: <span class="bg bg-warning">{{r.status}}</span></li>
-            {% elif r.status == 'Out for delivery' %}
-                <li> Delivery Satus: <span class="bg bg-info text-white ">{{r.status}}</span></li>
-            {% elif r.status == 'Delivered' %}
-                <li> Delivery Satus: <span class="bg bg-success text-white">{{r.status}}</span></li>
-            {% else%}
-                <li> Delivery Satus: <span class="bg bg-danger">{{r.status}}</span></li>
-            {% endif %}
-            <li>Amount Paid: {{r.Amount_Paid}}</li>
-            <li> Amount Payable: {{r.Amount_Payable}}</li>
-            <li> Order ID: {{r.order_id}}</li> 
-            <li>
-                {% if r.assigned == True%}
-                       Assigned:  <i class="fas fa-check-circle text-white">
-                {% else %}
-                      Assigned:  <i class="fas fa-check-circle text-danger"></i>
-                {% endif %}
-            </li>
-            <li >
-                {% if r.confirmed == True %}
-                    Confirmed: <i class="fas fa-check-circle text-success"></i>
-                {% else %}
-                   Confiremd: <i class="fas fa-check-circle text-danger"></i>
-                {% endif %}
-            </li>
-            {% endfor %}
-            </ul>
+                </tbody>
+              </table>                                                       
+            {% endfor %}            
         {% endif %}
         </div>
-
     </div>
-    <div class="col-md-4"></div>
+    <div class="col-md-6"></div>
 
 </div>
 

@@ -1,8 +1,8 @@
-from users.models import MakeRequest, MakeRequestCash, Shopping, Anonymous, Front_desk, Errand_service
 from django.db import models
 from django.core.validators import RegexValidator
 from datetime import date
 from django.utils import timezone
+from users.models import MakeRequest, MakeRequestCash, Shopping, Anonymous, Front_desk, Errand_service
 
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,12}$')
 

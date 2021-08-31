@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='{% static "/FDS_app/main.css" %}' rel='stylesheet' type='text/css'>
     <link href="https://unpkg.com/@popperjs/core@2">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -18,34 +19,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@1,700&family=Red+Hat+Display:wght@900&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" 
     integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link rel="shortcut icon" type="image/png" href="{% static 'FDS_app/favicon.ico' %}"/>
-    <link href='{% static "/FDS_app/main.css" %}' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" type="image/png" href="{% static 'FDS_app/favicon.ico' %}"/>    
     <script>
       $(function () {
       $('[data-toggle="tooltip"]').tooltip()
       })
     </script>
 
-    <style>
-      .zoom {
-    width: 300px;
-    }
-
-    .zoom img {
-        transition: 1s all ease-in-out;
-    }
-
-    .zoom:hover img {
-      transform: scale(1.1);
-    }
-
+    <style>    
     .dot {
     height: 15px;
     width: 15px;
@@ -75,39 +63,39 @@
   
   </script> 
 </head>
-
-
-  <body onload="spin()">
-    <div id="loader"></div>    
-    <ul class="nav justify-content-end">
+  <body > 
+    {% block management %} 
+      
+    {% endblock management%}
+    <ul class="nav justify-content-end" style="background-color: rgb(2, 25, 100);">
       <li class="nav-item">
-        <small class="nav-link text-muted" style="height: 25px; font-size: 13px;">Call: +234 90138143504</small>
+        <small class="nav-link text-white mb-2" style="height: 25px; font-size: 13px;">Calabar: +234 9138143504</small>
       </li>      
     </ul>
     <div class="sticky-top">
-      <nav class="navbar navbar navbar-expand-md text-truncate navbar-dark  shadow-sm" style="background-image: linear-gradient(to right, rgb(0, 55, 107),rgb(0, 91, 209));" >        
+      <nav class="navbar navbar navbar-expand-md text-truncate navbar-dark  shadow-sm" style="background-color: rgb(1, 31, 131);" >        
         <a class="navbar-brand font-weight-bold" href="{% url 'fds-home' %}"> 
-          <img src="/static/FDS_app/Flls_Logo.png" class="img-fluid" style="width: 150x; height: 45px" alt="Flls Logo">
+          <img src="{% static '/FDS_app/First Laurel Logistics Logo.png'%}" class="img-fluid mr-4" style="width: 150px; " alt="Flls Logo">
+          <img src="/static/FDS_app/First Laurel Logistics Logo.png" class="img-fluid mr-4" style="width: 150px; " alt="Flls Logo">
         </a>      
         <div class=" collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item  active">
+          <ul class="navbar-nav ml-4">
+            <li class="nav-item active">
               <a class="nav-link" href="{% url 'fds-home' %}">Home</a>
             </li>
 
-            <li class="nav-item  active"> 
+            <li class="nav-item active"> 
               <a class="nav-link " href="{% url 'fds-about' %}">About</a>
             </li>
 
-            <li class="nav-item  active">
+            <li class="nav-item active">
               <a class="nav-link" href="{% url 'fds-pricing' %}"> Pricing </a>
             </li>
 
           </ul>
         </div>
         
-            {% if user.is_authenticated %}
-            
+            {% if user.is_authenticated %}            
             <ul class="navbar-nav">
               <li>
                 <a class="btn btn-danger font-weight-bold btn-sm rounded-pill mr-2" href="{% url 'dashboard' user.id %}" role="button">Dashboard</a>  
@@ -127,7 +115,7 @@
           {% endif %}    
       </nav>
     </div>
-    <div style="display:none;" id="myDiv" class="animate-bottom">
+    <div  id="myDiv" class="animate-bottom">
     <main role="main" style="padding-top: -2rem;">
       <div>
       {% block content %}
@@ -154,72 +142,7 @@
     {% block contentf %}
 
     {% endblock contentf %}
-    </main>
-
-
-    <style>
-      /* Center the loader */
-      #loader {
-        position: absolute;
-        left: 60%;
-        top: 50%;
-        z-index: 1;
-        width: 60px;
-        height: 60px;
-        margin: -76px 0 0 -76px;
-        border: 3px solid #d9d7ff;
-        border-radius: 50%;
-        border-top: 3px solid #db4734;
-        -webkit-animation: spin 2s linear infinite;
-        animation: spin 1s linear infinite;
-      }
-      
-      @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
-      }
-      
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      /* Add animation to "page content" */
-      .animate-bottom {
-        position: relative;
-        -webkit-animation-name: animatebottom;
-        -webkit-animation-duration: 1s;
-        animation-name: animatebottom;
-        animation-duration: 1s
-      }
-      
-      @-webkit-keyframes animatebottom {
-        from { bottom:-100px; opacity:0 } 
-        to { bottom:0px; opacity:1 }
-      }
-      
-      @keyframes animatebottom { 
-        from{ bottom:-100px; opacity:0 } 
-        to{ bottom:0; opacity:1 }
-      }
-      
-      #myDiv {
-        display: none;
-      }
-      </style>
-
-    <script>
-      var myVar;
-      
-      function spin() {
-        myVar = setTimeout(showPage, 1000);
-      }
-      
-      function showPage() {
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("myDiv").style.display = "block";
-      }
-    </script>
+    </main>    
    </div>
   </body>
 </html> 

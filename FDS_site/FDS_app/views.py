@@ -20,18 +20,17 @@ def index(request):
             h= hashids.encode(instance.id)
             Anonymous.objects.filter(pk = instance.id).update(order_id= h)
             adminNotification.objects.create(
-                item_created = instance,
+                item_created = "Anonymous",
                 order_id = h,                
             )
+                        
             if instance.Choice_for_TP == 'Bike':
                 def SendSms():
                     url = 'http://login.betasms.com/api/?'
                     link = f'http://aea79bb23073.ngrok.io/search/?order_id={h}'
                     sms_message = f"Created succesfully, to check status visit {link}, Fee is N500 "
                     number = '+234' + instance.Your_phone_number
-                    tokenid = settings.TOKENID
-                    print(tokenid)
-                    print(number)
+                    tokenid = settings.TOKENID            
                     payload = {
                         'username': 'usuugwo@gmail.com',
                         'password':tokenid,
@@ -45,7 +44,7 @@ def index(request):
                     }
                     response = requests.request('POST', url, headers=headers, data=payload)                            
                     result = response.json()                       
-                    print(response)             
+                    print(result)             
                     return result
                 SendSms()                
 

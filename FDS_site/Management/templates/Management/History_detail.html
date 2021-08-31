@@ -1,0 +1,565 @@
+{% extends "FDS_app/signupBase.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+{% load user_tags %}
+
+{% block title %}Create Report {{user.username }} {% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mt-4 justify-content-center">
+        <div class="col-lg-3"> </div>
+        <div class="col-lg-6 ">
+            <div class="report text-center">
+                <h3 class="pt-3 the-report1">REPORT STATUS/HISTORY</h3>            
+            </div>
+            
+            {% for i in report %}
+                {% if request.user|operations:"OPERATIONS" %}
+                <div class="d-flex flex-row upper bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
+                    </div>  
+                    
+                    <div class="bd-highlight">   
+                        <div class="ticket">
+                            <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num}}</small>
+                        </div>       
+                    </div>      
+                </div> 
+
+                
+                <div class="item">                  
+                    <div class="d-flex flex-row bd-highlight justify-content-left">
+                        <div class="bd-highlight mr-1">                                       
+                            <h6 class="text-dark"><strong>DATE: <br></strong> {{i.date_created}}</h6>  
+                            <h6 class="text-dark"><strong>WORK SCHEDULE FOR THE DAY:</strong><br> {{i.work_schedule}}</h6>  
+                            <h6 class="text-dark"><strong>WORK DESCRIPTION: <br></strong> {{i.Work_description}}</h6>  
+                            <h6 class="text-dark"><strong>EXTENT OF COMPLETION: <br></strong> {{i.extent_of_completion}}</h6>  
+                            <h6 class="text-dark"><strong>TIME TAKEN: <br></strong> {{i.time_taken}}</h6> 
+                            <h6 class="text-dark"><strong>WORK LEFT: <br></strong> {{i.work_left}}</h6>  
+                            <h6 class="text-dark"><strong>CHALLENGES: <br></strong> {{i.challenges}}</h6>  
+                            <h6 class="text-dark"><strong>SOLUTIONS: <br></strong> {{i.solutions}}</h6>  
+                        </div>  
+                        
+                        <div class="bd-highlight p-2"> 
+                            <div class="back">
+                                {% if i.chairman_seen%}
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <br>
+                                {% endif  %}
+    
+                                {% if i.operations_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.manager_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.admin_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.runyi_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <br>
+                                {% endif %}
+                                <br>         
+                                
+                                
+                                {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
+                                    <h6 class="font-weight-bold feed">FEED BACK</h6>
+                                {% endif %}
+                                {% if i.feedback_chairman %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_operations %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_admin %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_manager %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_runyi %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+
+                            </div>  
+                        </div>      
+                    </div>                                               
+                </div>   
+            {% endif %}
+
+            {% if request.user|fleet:"Fleet Manager" %}
+                <div class="d-flex flex-row upper bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
+                    </div>  
+                    
+                    <div class="bd-highlight">   
+                        <div class="ticket">
+                            <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num}}</small>
+                        </div>       
+                    </div>      
+                </div> 
+
+                
+                <div class="item">                  
+                    <div class="d-flex flex-row bd-highlight justify-content-left">
+                        <div class="bd-highlight mr-1">                                       
+                            <h6 class="text-dark"><strong>DATE: <br></strong> {{i.date_created}}</h6>  
+                            <h6 class="text-dark"><strong>Report Title:</strong><br> {{i.Fleet_report_title}}</h6>  
+                            <h6 class="text-dark"><strong>Report Details: <br></strong> {{i.Fleet_report}}</h6>  
+
+                            {% if i.Fleet_challenges %}
+                            <h6 class="text-dark"><strong>Challenges: <br></strong> {{i.Fleet_challenges}}</h6>  
+                            {% endif %}
+                            {% if i.Fleet_solutions %}
+                            <h6 class="text-dark"><strong>Solutions: <br></strong> {{i.Fleet_solutions}}</h6> 
+                            {% endif %}
+                        </div>                          
+                        <div class="bd-highlight p-2"> 
+                            <div class="back">
+                                {% if i.chairman_seen%}
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <br>
+                                {% endif  %}
+    
+                                {% if i.operations_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.manager_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.admin_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.runyi_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <br>
+                                {% endif %}
+                                <br>         
+                                
+                                
+                                {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
+                                    <h6 class="font-weight-bold feed">FEED BACK</h6>
+                                {% endif %}
+                                {% if i.feedback_chairman %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_operations %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_admin %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_manager %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_runyi %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+                            </div>  
+                        </div>      
+                    </div>                                               
+                </div>   
+            {% endif %}
+
+            {% if request.user|front_desk:"Front Desk" %}
+            <div class="d-flex flex-row upper bd-highlight justify-content-between ">
+                <div class="bd-highlight mr-1">          
+                    <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
+                </div>  
+                
+                <div class="bd-highlight">   
+                    <div class="ticket">
+                        <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num}}</small>
+                    </div>       
+                </div>      
+            </div> 
+
+            
+            <div class="item">                  
+                <div class="d-flex flex-row bd-highlight justify-content-left">
+                    <div class="bd-highlight mr-1">
+                        <h6 class="text-dark"><strong>DATE: <br></strong> {{i.date_created}}</h6>  
+                        <h6 class="text-dark"><strong>Report Title: </strong><br> {{i.FrontDesk_report_Title}}</h6>  
+                        <h6 class="text-dark"><strong>Report Details: <br></strong> {{i.FrontDesk_report}}</h6>  
+                        <h6 class="text-dark"><strong>Total Rides: <br></strong> {{i.Front_desk_total_rides}}</h6>  
+                        <h6 class="text-dark"><strong>Amount Generated : <br></strong> {{i.Front_desk_total_amount}}</h6>  
+
+                        {% if i.Fleet_challenges %}
+                        <h6 class="text-dark"><strong>Challenges: <br></strong> {{i.FrontDesk_challenges}}</h6>  
+                        {% endif %}
+                        {% if i.Fleet_solutions %}
+                        <h6 class="text-dark"><strong>Solutions: <br></strong> {{i.FrontDesk_solutions}}</h6> 
+                        {% endif %}
+                    </div>  
+                    
+                    <div class="bd-highlight p-2"> 
+                        <div class="back">
+                            {% if i.chairman_seen%}
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <br>
+                                {% endif  %}
+    
+                                {% if i.operations_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.manager_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.admin_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <br>
+                                {% endif %}
+    
+                                {% if i.runyi_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <br>
+                                {% endif %}
+                                <br>         
+                                
+                                
+                                {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
+                                    <h6 class="font-weight-bold feed">FEED BACK</h6>
+                                {% endif %}
+                                {% if i.feedback_chairman %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_operations %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_admin %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_manager %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_runyi %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}
+                        </div>  
+                    </div>      
+                </div>                                               
+            </div> 
+            {% endif %}
+
+            {% if request.user|Marketing:"Marketing" %}
+            <div class="d-flex flex-row upper bd-highlight justify-content-between ">
+                <div class="bd-highlight mr-1">          
+                    <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
+                </div>  
+                
+                <div class="bd-highlight">   
+                    <div class="ticket">
+                        <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num}}</small>
+                    </div>       
+                </div>      
+            </div> 
+
+            
+            <div class="item">                  
+                <div class="d-flex flex-row bd-highlight justify-content-left">
+                    <div class="bd-highlight mr-1">                                       
+                        <h6 class="text-dark"><strong>DATE: <br></strong> {{i.date_created}}</h6>  
+                        <h6 class="text-dark"><strong>Report Title:</strong><br> {{i.Marketing_report_title}}</h6>  
+                        <h6 class="text-dark"><strong>Report Details: <br></strong> {{i.Marketing_report}}</h6>  
+
+                        {% if i.Fleet_challenges %}
+                        <h6 class="text-dark"><strong>Challenges: <br></strong> {{i.Marketting_challenges}}</h6>  
+                        {% endif %}
+                        {% if i.Fleet_solutions %}
+                        <h6 class="text-dark"><strong>Solutions: <br></strong> {{i.Marketing_solutions}}</h6> 
+                        {% endif %}
+                    </div>  
+                    
+                    <div class="bd-highlight p-2"> 
+                        <div class="back">
+                            {% if i.chairman_seen%}
+                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <br>
+                            {% endif  %}
+
+                            {% if i.operations_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.manager_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.admin_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.runyi_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                            <br>
+                            {% endif %}
+                            <br>         
+                            
+                            
+                            {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
+                                <h6 class="font-weight-bold feed">FEED BACK</h6>
+                            {% endif %}
+                            {% if i.feedback_chairman %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_operations %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_admin %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_manager %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_runyi %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                            <br>
+                            {% endif %}
+                        </div>  
+                    </div>      
+                </div>                                               
+            </div> 
+            {% endif %}
+
+            {% if request.user|ICT:"ICT" %}
+            <div class="d-flex flex-row upper bd-highlight justify-content-between ">
+                <div class="bd-highlight mr-1">          
+                    <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
+                </div>  
+                
+                <div class="bd-highlight">   
+                    <div class="ticket">
+                        <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num}}</small>
+                    </div>       
+                </div>      
+            </div> 
+
+            
+            <div class="item">                  
+                <div class="d-flex flex-row bd-highlight justify-content-left">
+                    <div class="bd-highlight mr-1">                                       
+                        <h6 class="text-dark"><strong>DATE: <br></strong> {{i.date_created}}</h6>  
+                        <h6 class="text-dark"><strong>Report Title:</strong><br> {{i.Ict_report_Title}}</h6>  
+                        <h6 class="text-dark"><strong>Report Details: <br></strong> {{i.Ict_report}}</h6>  
+
+                        {% if i.Fleet_challenges %}
+                        <h6 class="text-dark"><strong>Challenges: <br></strong> {{i.Ict_challenges}}</h6>  
+                        {% endif %}
+                        {% if i.Fleet_solutions %}
+                        <h6 class="text-dark"><strong>Solutions: <br></strong> {{i.Ict_solutions}}</h6> 
+                        {% endif %}
+                    </div>  
+                    
+                    <div class="bd-highlight p-2"> 
+                        <div class="back">
+                            {% if i.chairman_seen%}
+                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <br>
+                            {% endif  %}
+
+                            {% if i.operations_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.manager_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.admin_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <br>
+                            {% endif %}
+
+                            {% if i.runyi_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                            <br>
+                            {% endif %}
+                            <br>         
+                            
+                            
+                            {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
+                                <h6 class="font-weight-bold feed">FEED BACK</h6>
+                            {% endif %}
+                            {% if i.feedback_chairman %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_operations %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_admin %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_manager %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                            <br>
+                            {% endif %}
+                            {% if i.feedback_runyi %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                            <br>
+                            {% endif %}
+                        </div>  
+                    </div>      
+                </div>                                               
+            </div> 
+            {% endif %}
+
+            {% endfor %}       
+        </div>
+        <div class="col-lg-3"> </div>
+    </div>
+</div>
+<style>
+
+    .report{
+        border-radius: 10px;
+        background-color: #9494FF;
+        color: #E5E5FF;
+        height: 15mm;
+    }
+
+    .upper{
+        margin-top: 10mm;
+    }
+    .ticket{
+        background-color: #3535D4;
+        border-radius: 5px;
+        height: 8mm;     
+
+    }
+
+    .item{
+        background-color: #E5E5FF;
+        margin-top: 1mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: auto;
+        border-left: 10px solid #9494FF;
+    }
+
+    .big{        
+        font-size: 20px;        
+    }
+
+    .up{        
+        position: relative;
+        top: -2px;
+        font-size: 10px;
+    }
+
+    .back{
+        margin-top: 40px;
+        background-color: #f7f8ff;
+        border-radius: 15px;
+        width: 7cm;
+        height: 8cm;
+        padding: 25px;
+    }
+
+    @media only screen and (max-width: 400px){
+   .text-dark{
+       font-size: 13px;
+   }
+
+   .back{
+       width: 100%;
+       padding: 5px;
+       height: auto;
+   }
+
+   .the-report1{
+       font-size: 25px;
+   }
+   .big{        
+        font-size: 15px;        
+    }
+
+    .feed{
+        font-size: 15px;
+    }
+
+    .feedback{
+        font-size: 13px;
+    }
+  }
+
+  @media only screen and (min-width: 400px){
+    .text-dark{
+       font-size: 13px;
+   }
+
+   .back{
+       width: 100%;
+       padding: 5px;
+       height: auto;
+   }
+
+   .the-report1{
+       font-size: 25px;
+   }
+   .big{        
+        font-size: 15px;        
+    }
+
+    .feed{
+        font-size: 15px;
+    }
+
+    .feedback{
+        font-size: 13px;
+    }
+  }
+    
+</style>
+
+{% endblock content %}
+
+{% block whatsapp%}
+
+{% endblock whatsapp %}

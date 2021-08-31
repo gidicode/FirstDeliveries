@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %} {{user.username }}: Dashboard {% endblock title %}
+{% block title %} {{user.username }}: Dashboard FLLS {% endblock title %}
 
 
 {% block content2 %}
@@ -33,26 +33,37 @@
             <div id="errand" class="mr-2 zoom eps">
                 <div class="p-2 bd-highlight">                        
                   <h1><i class="fas fa-boxes"></i></h1>
+                  {% if customer.Location == 'Calabar'%}
                   <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a></h6>
+                  {% elif customer.Location == 'Port Harcourt' %}
+                  <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errand_menu_ph' user.id %}" role="button">Errand Service</a></h6>
+                  {% endif %}
                 </div>
             </div>
             
             <div id="request" class="zoom" data-toggle="modal" data-target="#Gaserrand">
                 <div class="p-2 bd-highlight">       
-                    <h1><i class="fas fa-shipping-fast"></i></h1>               
+                    <h1><i class="fas fa-shipping-fast"></i></h1>                    
+                    {% if customer.Location == 'Calabar'%}            
                     <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'requestForm_Cash' user.id %}" >Request Dispatch</a></h6>
+                    {% elif customer.Location == 'Port Harcourt' %}
+                    <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'cash_request_ph' user.id %}" > Request Dispatch </a></h6>
+                    {% endif %}
                 </div>
             </div>              
         </div>
         
         <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
+          {% if customer.Location == 'Calabar' %}
           <div id="Erequest" class="mr-2 zoom">
             <div class="p-2 bd-highlight">
               <h1><i class="fas fa-truck"></i></h1>
               <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'requestForm_Online' user.id %}">Request Dispatch (E-payment)</a></h6>
             </div>
           </div>
-        
+          {% endif %}
+
+          {% if customer.Location == 'Calabar' %}
           <div id="shopping" class="zoom" data-toggle="modal" data-target="#Gaserrand">
             <div class="p-2 bd-highlight">
               <h1><i class="fas fa-dolly"></i></h1>
@@ -60,6 +71,15 @@
               </a>              
             </div>
           </div>
+          {% elif customer.Location == 'Port Harcourt' %}          
+          <div id="shopping2" class="zoom" data-toggle="modal" data-target="#Gaserrand">
+            <div class="p-2 bd-highlight">
+              <h1><i class="fas fa-dolly"></i></h1>
+              <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'shopping' user.id %}">Shopping Request</h6>
+              </a>              
+            </div>
+          </div>
+          {% endif %}
         </div>
         <!--new-->
         <div class="d-flex p-3 flex-column text-center bg-light rounded-lg justify-content-center bd-highlight mb-3">  
@@ -810,6 +830,13 @@
       background-color: rgb(83, 168, 202);
       border-radius: 12px;   
   }
+
+  #shopping2 {
+      height: 120px;
+      width: 330px;
+      background-color: rgb(83, 168, 202);
+      border-radius: 12px;       
+  }
     
   .zoom:hover {      
       border: 2px solid rgb(255, 136, 165);
@@ -828,4 +855,10 @@
     width: fit-content;    
   }  
 </style>
+
+<script> 
+function Location() {
+  window.alert("Confirm your location is the same city you are currently present in")
+}
+</script>
 {% endblock content2 %}

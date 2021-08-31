@@ -31,7 +31,7 @@ SECRET_KEY =env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '90728b4016c0.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', '2322-197-210-79-16.ngrok.io']
 
 
 # Application definition
@@ -47,6 +47,10 @@ INSTALLED_APPS = [
     'FDS_app.apps.FdsAppConfig',
     
     'BikeControl.apps.BikecontrolConfig',
+
+    'PortHarcourt.apps.PortHarcourtConfig',
+
+    'Management.apps.ManagementConfig',
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -154,7 +158,7 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "flls.ng"
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'support@flls.ng'
-EMAIL_HOST_PASSWORD = '@@QUK~,5Ef$u'
+EMAIL_HOST_PASSWORD = '78f8r7y#nU48Z5@G'
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -183,3 +187,7 @@ HASHANON =env('HASHANON')
 ERRAND = env('ERRAND')
 
 FRONT_DESK = env('FRONT_DESK')
+
+MANAGEMENT = env('THEMANAGEMENT')
+
+MANAGEMENT2 = env('THEMANAGEMENT2')

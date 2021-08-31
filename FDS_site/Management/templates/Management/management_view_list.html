@@ -1,0 +1,389 @@
+{% extends "FDS_app/signupBase.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+{% load user_tags %}
+
+{% block title %} Report List {{user.username }} {% endblock title %}
+
+{% block content %}
+<nav class="navbar navbar-expand-md text-truncate navbar-light shadow-sm">                         
+    <div class=" collapse navbar-collapse" id="collapsibleNavbar">
+        <form class="form-inline my-3 mx-4 my-lg-1 bd-highlight font-weight-bold text-dark">   
+            <div class="bd-highlight mr-1">                                                                  
+                {{filter_name.form|crispy }}                                            
+            </div>  
+
+            <div class="bd-highlight ">          
+                <button class="btn btn-outline-secondary  my-sm-2" type="submit">Search</button>
+            </div>  
+        </form>  
+    </div> 
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
+        <span class=" fas fa-bars"></span>
+      </button>                           
+</nav>
+<div class="container">
+    <div class="row mt-3 justify-content-center">
+        <div class="col-lg-3">
+            <a href="{% url 'management_dashboard' user.id %}"><i class="fas fa-arrow-circle-left text-secondary"></i></a> 
+        </div>
+        <div class="col-lg-6 col-md-6">  
+            <div class="report text-center">
+                <h3 class="pt-3 the-report">SUBMITTED REPORT</h3>
+                <p class="text-dark ">Total Report <span class="badge badge-primary">{{ all_submitted_report.count}}</span></p>
+            </div>
+            <div class="d-flex flex-row bd-highlight all justify-content-between ">
+                              
+            </div>
+
+            {% for i in page_obj %}
+            {% if request.user|chairman:"MANAGEMENT_CHAIRMAN" %}
+            {% if i.chairman_seen == True %}
+            <div class="item">
+                <div class="d-flex flex-row bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                    </div>  
+                    <div class="bd-highlight ">          
+                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
+                    </div>  
+                    <div class="bd-highlight">   
+                        <div class="ticket2">
+                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
+                        </div>       
+                    </div>      
+                </div>
+            </div>
+            {% else %}
+                <div class="item2">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext font-weight-bolder" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                        </div>  
+                        <div class="bd-highlight ">          
+                            <p class="dtext font-weight-bolder">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 font-weight-bolder">ID: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>
+                </div>
+            {% endif %}
+            {% endif %}
+
+
+            {% if request.user|m_operation:"MANAGEMENT_OPERATION" %}
+            {% if i.operations_seen == True %}
+            <div class="item">
+                <div class="d-flex flex-row bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                    </div>  
+                    <div class="bd-highlight ">          
+                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
+                    </div>  
+                    <div class="bd-highlight">   
+                        <div class="ticket2">
+                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
+                        </div>       
+                    </div>      
+                </div>
+            </div>
+            {% else %}
+                <div class="item2">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext font-weight-bolder" href="{% url 'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                        </div>  
+                        <div class="bd-highlight ">          
+                            <p class="dtext font-weight-bolder">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>
+                </div>
+            {% endif %}
+            {% endif %}
+
+
+            {% if request.user|m_manager:"MANAGEMENT_MANAGER" %}
+            {% if i.manager_seen == True %}
+            <div class="item">
+                <div class="d-flex flex-row bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                    </div>  
+                    <div class="bd-highlight ">
+                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
+                    </div>  
+                    <div class="bd-highlight">   
+                        <div class="ticket2">
+                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
+                        </div>       
+                    </div>      
+                </div>
+            </div>
+            {% else %}
+                <div class="item2">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext font-weight-bolder" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                        </div>  
+                        <div class="bd-highlight ">          
+                            <p class="dtext font-weight-bolder">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 font-weight-bold">ID: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>
+                </div>
+            {% endif %}
+            {% endif %}
+
+            {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
+            {% if i.runyi_seen == True %}
+            <div class="item">
+                <div class="d-flex flex-row bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                    </div>  
+                    <div class="bd-highlight ">          
+                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
+                    </div>  
+                    <div class="bd-highlight">   
+                        <div class="ticket2">
+                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
+                        </div>       
+                    </div>      
+                </div>
+            </div>
+            {% else %}
+                <div class="item2">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext font-weight-bolder" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                        </div>  
+                        <div class="bd-highlight ">          
+                            <p class="dtext font-weight-bolder">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 font-weight-bolder">ID: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>
+                </div>
+            {% endif %}
+            {% endif %}
+
+            {% if request.user|admin:"MANAGEMENT_ADMIN" %}
+            {% if i.admin_seen == True %}
+            <div class="item shadow-sm">
+                <div class="d-flex flex-row bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                    </div>  
+                    <div class="bd-highlight ">          
+                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
+                    </div>  
+                    <div class="bd-highlight">   
+                        <div class="ticket2">
+                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
+                        </div>       
+                    </div>      
+                </div>
+            </div>
+            {% else %}
+                <div class="item2 shadow-sm">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext font-weight-bolder" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                        </div>  
+                        <div class="bd-highlight ">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bolder dfont-1">ID: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>
+                </div>
+            {% endif %}
+            {% endif %}
+            {% empty %}
+            <p>You have no report yet</p>
+            
+            {% endfor %}
+            <div class="pagination mb-3">
+                <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-warning" href="?page=1">&laquo; first</a>
+                    <a class="btn btn-danger" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a class="btn btn-warning" href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a class="btn btn-danger" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </div>
+        </table>
+        </div>
+        <div class="col-lg-3"> </div>
+    </div>
+</div>
+<style>
+    .report{
+        border-radius: 10px;
+        background-color: #7fb5fd;
+        color: #ffffff;
+        height: 15mm;
+    }
+
+    .item{
+        background-color: #ffffff;
+        margin-top: 10mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: 50px;        
+        color: aquamarine;
+        border-left: 10px solid #868686;
+    }   
+
+    .item2{
+        background-color: #ffffff;
+        margin-top: 10mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: 50px;
+        animation: mymove 5s infinite;
+    }
+
+    @keyframes mymove {
+        50% {border-left: 10px solid #868686; }
+    }
+
+    .ticket{
+        background-color: #000000;
+        border-radius: 5px;
+        height: 8mm;        
+    }
+
+    .ticket2{
+        background-color: #868686;
+        border-radius: 5px;
+        height: 8mm;        
+    }
+
+    .dtext{
+        color: #000000;
+    }
+
+    .dtext2{
+        color: #868686;
+    }
+
+    .all{
+        position: relative;
+        top: 30px;
+    }
+
+    @media only screen and (max-width: 400px){
+    .the-report{
+        font-size: 25px;
+    }
+
+    .dtext{
+        font-size: 12px;
+    }
+
+    .dtext2{
+        font-size: 13px;
+    }
+
+    .dfont-1{
+        font-size: 11px;
+    }
+
+    .item{
+        background-color: #ffffff;
+        margin-top: 10mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: 50px;        
+        color: aquamarine;
+        border-left: 10px solid #868686;
+    }   
+
+    .item2{
+        background-color: #ffffff;
+        margin-top: 10mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: 50px;
+        animation: mymove 5s infinite;
+    }
+
+    @keyframes mymove {
+        50% {border-left: 10px solid #868686; }
+    }
+  }
+
+  @media only screen and (max-width: 625px){
+    .the-report{
+        font-size: 25px;
+    }
+
+    .dtext{
+        font-size: 12px;
+    }
+
+    .dtext2{
+        font-size: 13px;
+    }
+
+    .dfont-1{
+        font-size: 11px;
+    }
+
+    .item{
+        background-color: #ffffff;
+        margin-top: 10mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: 50px;        
+        color: aquamarine;
+        border-left: 10px solid #868686;
+    }   
+
+    .item2{
+        background-color: #ffffff;
+        margin-top: 10mm;
+        padding: 10px;
+        border-radius: 8px;                      
+        height: 50px;
+        animation: mymove 5s infinite;
+    }
+
+    @keyframes mymove {
+        50% {border-left: 10px solid #868686; }
+    }
+  }
+</style>
+
+{% endblock content %}
+
+{% block whatsapp%}
+
+{% endblock whatsapp %}

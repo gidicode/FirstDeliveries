@@ -40,20 +40,19 @@
         </div>
         <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 p-1">
             <div  id="fuel"> 
-                <div class="d-flex flex-row bd-highlight justify-content-between">
+                <div class="d-flex flex-row bd-highlight justify-content-between">                    
                     <div class="bd-highlight">
-                        <h5 class="font-weight-bold">Front Desk(ERRAND) </h5>
-                    </div>
-                    <div class="bd-highlight">
-                        <h6> Reciever information</h6>
+                        <h6 class="font-weight-bold p-2 shadow-sm"> Item/ Reciever information</h6>
                     </div>   
                 </div>
             </div>
             <div class="bg-white shadow p-3" id="the">
                 {{ errand_Form.item_description|as_crispy_field }}
-                {{ errand_Form.Reciever_phone_number|as_crispy_field }}
-                {{ errand_Form.delivery_destination|as_crispy_field }}
                 {{ errand_Form.Quantity|as_crispy_field }}
+                {{ errand_Form.Purchase_location|as_crispy_field }}
+                {{ errand_Form.Enter_amount|as_crispy_field }}
+                {{ errand_Form.Reciever_phone_number|as_crispy_field }}
+                {{ errand_Form.delivery_destination|as_crispy_field }}                
             </div>
             
         </div>
@@ -68,9 +67,9 @@
                     </div>   
                 </div>
             </div>
-            <div class="bg-white shadow p-3" id="the">
-                {{ errand_Form.Enter_amount|as_crispy_field }}
-                {{ errand_Form.Purchase_location|as_crispy_field }}
+            <div class="bg-white shadow p-3" id="the"> 
+                {{ errand_Form.Delivery_Fee|as_crispy_field }}                               
+                {{ errand_Form.Choice_for_TP|as_crispy_field }}
                 {{ errand_Form.Note|as_crispy_field }}
                 <button class="btn btn-danger btn-block rounded-lg" type="submit">Submit</button>
                 
@@ -90,7 +89,7 @@
     }
 
     #the { 
-        height: 380px;
+        height: 550px;
     }
 </style>
 {% endblock %}

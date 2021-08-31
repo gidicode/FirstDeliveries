@@ -7,11 +7,27 @@ from datetime import date
 from django.utils import timezone
 from django.conf import settings
 
-
 User = settings.AUTH_USER_MODEL
 
 
-class Customer(models.Model):   
+class Customer(models.Model):  
+    Department_FLLS = [ 
+        (None, None),                
+        ('FIRST LOGISTICS', 'FIRST LOGISTICS'),
+        ('FIRST MARINE', 'FIRST MARINE'),            
+    ]
+
+    DESIGNATION_FLLS = [
+        (None, None),
+        ('MARKETING', 'MARKETING'),
+        ('ICT', 'ICT'),
+        ('FLEET MANAGER', 'FLEET MANAGER'),
+        ('FRONT DESK', 'FRONT DESK'), 
+        ('ADMIN', 'ADMIN'),
+        ('MANAGER', 'MANAGER'),
+        ('ACCOUNT', 'ACCOUNT'),     
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     first_name = models.CharField(max_length=15, null=True)
     last_name = models.CharField(max_length=15, null=True)
@@ -23,6 +39,9 @@ class Customer(models.Model):
     email = models.EmailField(max_length=100, null=True)
     signup_confirmation = models.BooleanField(default=False)
     TermsAgreement = models.BooleanField(default=False, verbose_name= 'Terms & Agreement')
+    Department = models.CharField(max_length=15, choices=Department_FLLS, default=None, null=True)
+    Designation = models.CharField(max_length=15, choices=DESIGNATION_FLLS, default='ACCOUNT', null=True)
+    staff_created = models.BooleanField(default=False)
     
     def __str__(self):
         return f'{self.user.username}'
@@ -70,6 +89,7 @@ class MakeRequest(models.Model):
     }
 
     customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
+    riders = models.ForeignKey('BikeControl.RidersProfile', null=True, on_delete= models.SET_NULL)        
     type = models.CharField(max_length=50, choices=Typeof, default='Single', null=True)
     reciever_name = models.CharField(max_length=50, null=True, verbose_name="Reciever Name")
     reciever_name2 = models.CharField(max_length=50, null=True, blank=True, verbose_name="Reciever Name (2)")
@@ -105,6 +125,7 @@ class MakeRequest(models.Model):
     Amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     Amount_Payable = models.IntegerField(null= True, default=0, )
     charge_id = models.CharField(max_length=100, null=True, validators=[alphanumeric])
+    Cancelation_Reason = models.CharField(max_length= 100,blank=True,  null=True)
     paid = models.BooleanField(default=False)
     confirmed = models.BooleanField(default=False)
     order_id = models.CharField(max_length=10, null=True, default=0)
@@ -142,6 +163,7 @@ class MakeRequestCash(models.Model):
     ]
 
     type = models.CharField(max_length=50, choices=Typeof, default='Single', null=True)
+    riders = models.ForeignKey('BikeControl.RidersProfile', null=True, on_delete= models.SET_NULL)        
     customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
     reciever_name = models.CharField(max_length=20, null=True)
     reciever_name2 = models.CharField(max_length=20, null=True, blank=True, verbose_name="Reciever Name (2)")
@@ -179,6 +201,7 @@ class MakeRequestCash(models.Model):
     Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     Amount_Payable = models.IntegerField(null= True, )
     order_id= models.CharField(max_length=10, null=True, default=0)
+    Cancelation_Reason = models.CharField(max_length= 100, blank=True,  null=True)
     assigned = models.BooleanField(default=False)
 
     def __str__(self):
@@ -201,9 +224,18 @@ class Anonymous(models.Model):
         ('Delivered', 'Delivered'),
     }
 
+    cus_payment_method = {
+        ('Card', 'Card'),
+        ('Cash', 'Cash'),
+        ('Transfer', 'Transfer'),
+        ('Transfer & Cash', 'Transfer & Cash'),
+        
+    }
+
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
 
     Package_description = models.CharField(max_length=100, null=True, blank=True)
+    riders = models.ForeignKey('BikeControl.RidersProfile', null=True, blank=True, on_delete= models.SET_NULL)        
     Choice_for_TP = models.CharField(max_length=20, choices=OPTIONS2, default='Bike', null=True, 
                     help_text=" COST: Bike N500, Tricycle N1000")
     Your_location = models.CharField(max_length=100, null=True, verbose_name="Pickup Location", help_text="The location we would pick your item from")  
@@ -220,6 +252,8 @@ class Anonymous(models.Model):
     receiver_name = models.CharField(null=True, max_length=100, default = "Not Given" )
     receiver_address = models.CharField(null=True, max_length=100, default = "Not Given")
     receiver_contact = models.CharField(null=True, max_length=100, default = "Not Given")
+    Cancelation_Reason = models.CharField(max_length= 100,blank=True,  null=True)
+    customer_payment_method = models.CharField(max_length=100, choices=cus_payment_method, null=True)
     assigned = models.BooleanField(default=False)
 
 
@@ -243,6 +277,7 @@ class Shopping(models.Model):
     }
 
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+    riders = models.ForeignKey('BikeControl.RidersProfile', null=True, on_delete= models.SET_NULL)        
     List_Items= models.TextField(max_length=500, null=True)
     Place_of_purchase = models.CharField(max_length=100, null=True, help_text='Specify a place for purchase if any.')
     Note = models.CharField(max_length=200, null=True, blank=True, help_text='Any further description')
@@ -261,6 +296,7 @@ class Shopping(models.Model):
     paid = models.BooleanField(default=False)
     confirmed = models.BooleanField(default=False)
     payment_channel = models.CharField(max_length=100, choices= PAYMENT_CHOICE, null=True, verbose_name='Payment Choice')
+    Cancelation_Reason = models.CharField(max_length= 100,blank=True,  null=True)
     Ps_reference = models.CharField(max_length=10, null=True)
     
     def __str__(self):
@@ -299,6 +335,7 @@ class Errand_service(models.Model):
     }
 
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+    riders = models.ForeignKey('BikeControl.RidersProfile', null=True, on_delete= models.SET_NULL)        
     category = models.CharField(max_length = 100, null=True, choices=category_choice)
     fuel_per_amount = models.IntegerField(null=True, verbose_name='Petrol Amount', help_text='Enter amount for fuel needed (Not litres)')
     payment_channel = models.CharField(max_length=100, choices=payment_choice, null=True, verbose_name='Payment Choice')
@@ -333,6 +370,7 @@ class Errand_service(models.Model):
     Amount_Paid = models.DecimalField(max_digits=10, null=True, decimal_places=2)
     Amount_Payable = models.IntegerField(null= True )
     status = models.CharField(max_length=100, choices=STATUS, default='Pending', null=True)
+    Cancelation_Reason = models.CharField(max_length= 100,blank=True,  null=True)
 
     def __str__(self):
         return f'{self.customer}, {self.order_id}, {self.category}'
@@ -373,37 +411,50 @@ class Front_desk(models.Model):
         ('Delivered', 'Delivered'),
     }
 
-    class Meta:
-        ordering = ('-date_created',)
+    cus_payment_method = {
+        ('Card', 'Card'),
+        ('Cash', 'Cash'),
+        ('Transfer', 'Transfer'),
+        ('Transfer & Cash', 'Transfer & Cash'),
+        
+    }
 
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
-
-    customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
+    customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)        
+    riders = models.ForeignKey('BikeControl.RidersProfile', null=True, blank=True, on_delete= models.SET_NULL)        
     customer_name = models.CharField( max_length=100, null=True, blank=True)
     item_description = models.CharField(max_length=200, null=True, blank=True)
-    customer_location = models.CharField(max_length=100, null=True, blank=True)
-    delivery_destination = models.CharField(max_length=200, null=True, blank=True)
+    customer_location = models.CharField(max_length=100, null=True, verbose_name='Delivery Address'  , blank=True)
+    delivery_destination = models.CharField(max_length=200, null=True, verbose_name='Receiver Location', blank=True)
     Reciever_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, blank=True, verbose_name="Reciever Number")
-    Customer_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, verbose_name="Customer Phone Number")
-    Choice_for_TP = models.CharField(max_length=20, choices=OPTIONS2, null=True)
-    Delivery_type = models.CharField(max_length=20, choices=delivery_type, null=True)
-    Purchase_location = models.CharField(max_length=20,blank=True, null=True)
-    Quantity = models.IntegerField(null=True, blank=True)
-    Enter_amount = models.IntegerField(null=True, verbose_name='Item Amount', help_text='Cost to purchase items')
-    Note = models.CharField(max_length=20, null=True, blank="True")
+    Receiver_name = models.CharField(max_length=100,blank=True, null=True)
+    Customer_phone_number = models.CharField(validators=[phone_regex], max_length=17, null=True, blank=True, verbose_name="Customer Phone Number")
+    Choice_for_TP = models.CharField(max_length=100, choices=OPTIONS2, null=True)
+    Delivery_type = models.CharField(max_length=100, choices=delivery_type, null=True)
+    Purchase_location = models.CharField(max_length=100,blank=True, null=True)
+    Cancelation_Reason = models.CharField(max_length= 100,blank=True,  null=True)
+    Quantity = models.CharField(max_length= 100,blank=True,  null=True)
+    Enter_amount = models.IntegerField(null=True, verbose_name='Item Amount', blank=True, help_text='Cost to purchase items')
+    Note = models.CharField(max_length=100, null=True, blank="True")
     date_created = models.DateTimeField(default=timezone.now, null=True)
     order_id = models.CharField(max_length=7, null=True)
     assigned = models.BooleanField(default=False)
-    status = models.CharField(max_length=20, choices=STATUS, default='Pending', null=True)
+    status = models.CharField(max_length=100, choices=STATUS, default="Pending", null=True)
+    customer_payment_method = models.CharField(max_length=100, choices=cus_payment_method, null=True)
     payments_confirmed = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
     confirmed = models.BooleanField(default=False)
     profit = models.IntegerField(null= True, default=0)
-    Amount_Paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    Amount_Payable = models.IntegerField(null= True, default=0)
+    Amount_Paid = models.DecimalField(max_digits=10, null= True, decimal_places=2)
+    Amount_Payable = models.IntegerField(null= True, default=500)
+    Total = models.IntegerField(null=True)   
+    Delivery_Fee = models.IntegerField(null=True)
 
     def __str__(self):
-        return f"{self.customer}, {self.order_id}"
+        return f"  {self.customer}, {self.order_id}"
+
+    class Meta:
+        ordering = ('-date_created',)
 
 class ForPayments(models.Model):
     OPTION2 = {
@@ -439,7 +490,6 @@ class Delivered(models.Model):
 
     def __str__(self):
         return f'{self.customer, self.date_created}'
-
 
 class adminNotification(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)

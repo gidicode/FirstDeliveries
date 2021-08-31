@@ -5,6 +5,7 @@ from django_filters import DateFilter
 
 from.models import *
 from BikeControl.models import RidersDeliveries
+from Management.models import OFFICE_REPORT
 
 class OrderFilter(django_filters.FilterSet):
     class Meta:
@@ -53,4 +54,9 @@ class BikeFilter(django_filters.FilterSet):
         model = RidersDeliveries
         fields = ['rider', 'cash_request__order_id', 'anonymous__order_id', 'shopping__order_id', 'e_payment_request__order_id']
 
+class Staff_Name(django_filters.FilterSet):
+    customer__first_name = django_filters.CharFilter(lookup_expr='icontains')
+    class Meta:        
+        model = OFFICE_REPORT
+        fields = ['customer__first_name']
         

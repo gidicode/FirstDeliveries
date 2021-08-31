@@ -1,0 +1,240 @@
+{% extends "FDS_app/dashBase.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Errand Service: PH{% endblock title %}
+
+{% block content2 %}
+<div class="pb-5">
+    <div class="row p-3" id="fade">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 col-sm-4 col-xl-4">
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
+                <div id="errand" class="mr-2 zoom">
+                    <div class="p-2 bd-highlight">
+                        <span id="icon" class=""><i class="fas fa-gas-pump" ></i></span>
+                        <a href="{% url 'fuel_errand_ph' user.id %}" class="text-decoration-none text-white"><h5 id="font_style">Fuel Errand</h5></a>
+                    </div>
+                </div>
+                
+                <div id="gaserrand" class="zoom" data-toggle="modal" data-target="#Gaserrand">
+                    <div class="p-2 bd-highlight">
+                        <span id="icon" class=""><i class="fas fa-burn"></i></span>
+                        <a href="{% url 'gas_errand_ph' user.id  %}" class="text-decoration-none text-white">
+                            <h5 id="font_style"> Gas Errand</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center" >
+                <div id="drugserrand" class="mr-2 zoom">
+                    <div class="p-2 bd-highlight">
+                        <span id="icon"><i class="fas fa-capsules"></i></span>
+                        <a href="{% url 'drugs_errand_ph' user.id%}" class="text-decoration-none text-white">
+                            <h5 id="font_style">Drugs Errand</h5>
+                        </a>
+                    </div>
+                </div>
+                <div id="breaderrand" class="zoom">
+                    <div class="p-2 bd-highlight">
+                        <span id="icon" class=""><i class="fas fa-bread-slice"></i></span>
+                        <a href="{% url 'bread_errand_ph' user.id%}" class="text-decoration-none text-white">
+                            <h5 id="font_style"> Bread Errand</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
+                <div id="shawarmaerrand" class="mr-2 zoom">
+                    <div class="p-2 bd-highlight">
+                        <img src="/static/FDS_app/Shawarma.png" alt="Shawarma image" id="imgsize" class="img-fluid">
+                        <a href="{% url 'sharwarmaerrand_ph' user.id%}" class="text-decoration-none text-white">
+                            <h5 id="font_style">Shawarma Errand</h5>
+                        </a>
+                    </div>
+                </div>
+                <div id="pizzaerrand" class="zoom">
+                    <div class="p-2 bd-highlight">
+                        <span id="icon"> <i class="fas fa-pizza-slice"></i></span>
+                        <a href="{% url 'pizzaerrand' user.id%}" class="text-decoration-none text-white">
+                            <h5 id="font_style"> Pizza Errand</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
+                <div id="fruiterrand" class="mr-2 zoom" data-toggle="modal" data-target="#Fruiterrand">
+                    <div class="p-2 bd-highlight">
+                        <img src="/static/FDS_app/fruits.png" alt="Fruits image" id="imgsize2" class="img-fluid">
+                        <a href="{% url 'fruitserrand' user.id%}" class="text-decoration-none text-white">
+                            <h5 id="font_style">Fruits Errand</h5>
+                        </a>
+                    </div>
+                </div>
+                <div id="icecreamerrand" class="zoom" data-toggle="modal" data-target="#Icecreamerrand">
+                    <div class="p-2 bd-highlight">
+                        <span id="icon"><i class="fas fa-ice-cream"></i></span>
+                        <a href="{% url 'icecreamerrand' user.id%}" class="text-decoration-none text-white">
+                            <h5 id="font_style"> Ice Cream Errand</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">
+                <div id="fooderrand" class="mr-2 zoom" data-toggle="modal" data-target="#Fooderrand">
+                    <div class="p-2 bd-highlight">
+                        <img src="/static/FDS_app/food.png" alt="Fruits image" id="imgsize2" class="img-fluid">
+                        <a href="{% url 'fooderrand' user.id%}" class="text-decoration-none text-white">
+                            <h5 id="font_style"> Food Errand </h5>
+                        </a>
+                    </div>
+                </div>
+                <div id="otherserrand" class="text-white zoom" data-toggle="modal" data-target="#Othererrand">
+                    <div class="p-2 bd-highlight ">
+                        <span id="icon"><i class="fas fa-car"></i></span>
+                        <a href="{% url 'othererrand' user.id%}" class="text-decoration-none text-white">
+                            <h5 id="font_style"> Other Errand</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+<style>
+    #errand {
+        height: 120px; 
+        background-color: rgb(0, 168, 235);
+        width: 150px;
+        border-radius: 12px;   
+    }
+
+    #gaserrand {
+        height: 120px;
+        width: 150px;
+        background-color: rgb(0, 168, 235);
+        border-radius: 12px;   
+    }
+
+    #drugserrand {
+        height: 120px;
+        width: 150px;
+        background-color: rgb(0, 168, 235);
+        border-radius: 12px;   
+    }
+
+    #breaderrand {
+        height: 120px;
+        width: 150px;
+        background-color: rgb(0, 168, 235);
+        border-radius: 12px;   
+    }
+
+    #shawarmaerrand {
+        height: 120px;
+        width: 150px;
+        background-color: rgb(0, 168, 235);
+        border-radius: 12px;   
+    }
+
+    #pizzaerrand {
+        height: 120px;
+        width: 150px;
+        background-color: rgb(0, 168, 235);
+        border-radius: 12px;   
+    }
+
+    #fruiterrand {
+        height: 120px;
+        width: 150px;
+        background-color: rgb(0, 168, 235);
+        border-radius: 12px;   
+    }
+    #icecreamerrand {
+        height: 120px;
+        width: 150px;
+        background-color: rgb(0, 168, 235);
+        border-radius: 12px;   
+    }
+
+    #fooderrand {
+        height: 120px;
+        width: 150px;
+        background-color: rgb(0, 168, 235);
+        border-radius: 12px;   
+    }
+    #otherserrand {
+        height: 120px;
+        width: 150px;
+        background-image: linear-gradient(to left, rgb(8, 23, 51),rgb(0, 43, 134));
+        border-radius: 12px;   
+    }
+    #icon {
+       font-size: 35px;
+    }
+    #font_style {
+        font-family: 'Fredoka One', cursive;
+    }
+
+    	
+    #imgsize {
+        width: 75px;
+        height: 50px;
+    }
+    #imgsize2 {
+        width: 75px;
+        height: 60px;
+    }
+
+    .zoom {
+        transition: transform .2s;
+    }
+
+    .zoom:hover {
+        transform: scale(1.0111);
+        border: 2px solid rgb(0, 89, 255);
+    }
+
+    #fade div{
+    animation: fadein 1s;
+    -moz-animation: fadein 1s; /* Firefox */
+    -webkit-animation: fadein 1s; /* Safari and Chrome */
+    -o-animation: fadein 1s; /* Opera */
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+</style>
+{% endblock content2 %}

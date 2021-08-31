@@ -1,0 +1,405 @@
+{% extends "FDS_app/signupBase.html" %}
+{% load static%}
+{% load user_tags %}
+
+{% block title %} MANAGEMENT {{user.username }} {% endblock title %}
+
+{% block content %}
+<nav class="navbar navbar navbar-expand-md text-truncate text-center navbar-dark  shadow-sm" style="background-color: rgb(1, 31, 131);">
+    <div class=" collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav ml-4">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'dashboard' user.id %}">Home</a>
+          </li>         
+        </ul>
+      </div>                          
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
+        <span class=" fas fa-bars"></span>
+    </button>         
+</nav>
+<div class="container-fluid">   
+    <div class="row mt-4">
+        <div class="col-lg-3"> </div>
+        <div class="col-lg-6"> 
+            <div class="">
+                {% if messages %}
+                    <div class="messages p-3 container align-self-center">
+                        {% for message in messages %}
+                        <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button> 
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            {% if request.user|management:"MANAGEMENT" or request.user|operations:"OPERATIONS"%}
+                <div class="management">
+                    <div class="d-flex flex-row bd-highlight justify-content-center">
+                        <div class="bd-highlight mr-2 ">          
+                            <div class="activities shadow">    
+                                <h2 class="top2"><i class="fas fa-truck-loading text-white"></i></h2>
+                                <a role="button" href="">                     
+                                    <h4 class="activities-text2" > Logistics</h4>    
+                                </a>                        
+                            </div>
+                        </div>  
+                        <div class="bd-highlight ">          
+                            <div class="activities shadow">
+                                {% if request.user|m_operation:"MANAGEMENT_OPERATION" %}
+                                {% if operation.count > 0 %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{operation.count}} Unread Report">{{operation.count}}</span>       
+                                {% endif %}
+                                {% endif %}  
+                                
+                                {% if request.user|chairman:"MANAGEMENT_CHAIRMAN" %}
+                                {% if chairman.count > 0 %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{chairman.count}} Unread Report">{{chairman.count}}</span>       
+                                {% endif %}
+                                {% endif %}
+
+                                {% if request.user|m_manager:"MANAGEMENT_MANAGER" %}
+                                {% if manager.count > 0 %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{manager.count}} Unread Report">{{manager.count}}</span>       
+                                {% endif %}
+                                {% endif %} 
+                                
+                                {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
+                                {% if runyi.count > 0 %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{runyi.count}} Unread Report">{{runyi.count}}</span>       
+                                {% endif %}
+                                {% endif %} 
+
+                                {% if request.user|admin:"MANAGEMENT_ADMIN" %}
+                                {% if admin.count > 0 %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{admin.count}} Unread Report">{{admin.count}}</span>       
+                                {% endif %}
+                                {% endif %} 
+                                <h2 class="top"><i class="far fa-folder-open text-white "></i></h2>
+                                <a role="button" href="{% url 'management_list' user.id %}">
+                                    <h4 class="activities-text text-2">Daily Report</h4>                                    
+                                </a>                               
+                            </div>
+                        </div>                           
+                    </div>
+                </div>
+
+            {% else %}                
+            <div class="bg-white p-3 shadow text-center the-radius">
+                <h3 class="text-style">DAILY WORK REPORT</h3>
+                <div class="d-flex flex-row bd-highlight justify-content-center">
+                    <div class="bd-highlight mr-1">          
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'create_profile' user.id %}"> Create Profile</a>
+                    </div>  
+                    <div class="bd-highlight mr-1"> 
+                        {% if request.user|operations:"OPERATIONS" %}
+                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'create_report' user.id %}"> Operations Report </a>    
+                        {% endif %} 
+                        
+                        {% if request.user|fleet:"Fleet Manager" %}
+                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'fleet_create_report' user.id %}"> Fleet Report </a>    
+                        {% endif %} 
+
+                        {% if request.user|ICT:"ICT" %}
+                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'ict_create_report' user.id %}"> ICT Report </a>    
+                        {% endif %} 
+
+                        {% if request.user|Marketing:"Marketing" %}
+                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'market_create_report' user.id %}"> Marketing Report </a>    
+                        {% endif %}
+
+                        {% if request.user|front_desk:"Front Desk" %}
+                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'front_create_report' user.id %}"> Front Desk Report </a>    
+                        {% endif %}
+                        
+                    </div>  
+                    <div class="bd-highlight">          
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'report_history' user.id %}"> Report Status </a>
+                    </div>      
+                </div>
+            </div>
+
+            {% for i in report %}
+                {% if request.user|fleet:"Fleet Manager" %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight ">          
+                                <p>{{i.Fleet_report_title}}</p>
+                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">         
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_fleet_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endif %}  
+
+                {% if request.user|ICT:"ICT" %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight ">          
+                                <p>{{i.Ict_report_Title}}</p>
+                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">         
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_ict_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                {% endif %}  
+
+                {% if request.user|Marketing:"Marketing" %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight ">          
+                                <p>{{i.Marketing_report_title}}</p>
+                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">         
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_market_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endif %}  
+                
+                {% if request.user|operations:"OPERATIONS" %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight ">          
+                                <p>{{i.Work_description}}</p>
+                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">         
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endif %}  
+
+                {% if request.user|front_desk:"Front Desk" %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight ">          
+                                <p>{{i.FrontDesk_report_Title}}</p>
+                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">         
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_fleet_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endif %}  
+            {% endfor %}
+            {% endif %}
+
+            {% if request.user|operations:"OPERATIONS" %}
+            <div class="bg-white p-3 mt-4 shadow text-center the-radius">
+                <h3 class="text-style">DAILY WORK REPORT</h3>
+                <div class="d-flex flex-row bd-highlight justify-content-center">
+                    <div class="bd-highlight mr-1">          
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'create_profile' user.id %}"> Create Profile</a>
+                    </div>  
+                    <div class="bd-highlight mr-1"> 
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'create_report' user.id %}"> Operations Report </a>    
+                    </div>
+                    <div class="bd-highlight">          
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'report_history' user.id %}"> Report Status </a>
+                    </div>     
+                </div>
+            </div>
+
+            {% for i in report %}
+            <div class="pending text-center font-weight-bolder ">
+                <p> Pending</p>
+            </div>
+            <div class="list shadow-sm">
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between">
+                        <div class="bd-highlight ">          
+                            <p>{{i.Work_description}}</p>
+                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                        </div>  
+                        <div class="bd-highlight">         
+                            <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                        </div>                           
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            
+            <br>           
+        </div>
+        <div class="col-lg-3"> </div>
+    </div>
+</div>
+
+<style>
+    .the-radius{
+        border-radius: 10px;
+        border-style: solid;
+        border-color: #e6e6ff;      
+    }
+    .text-style{
+        color:#55559c;
+    }
+    .btn-color {
+        background-color: #55559c;
+        color: cornsilk;
+    }
+
+    .btn-color:hover {
+        background-color: #6b6bfa;
+        color: rgb(245, 244, 243);
+    }
+    .btn-color1 {
+        background-color: #9191FF;
+        color: white;
+    }
+    .btn-color1:hover {
+        background-color: #1515f5;
+        color: rgb(255, 254, 249);
+    }
+    
+    .list{
+        border-radius: 15px;    
+        margin-top: 1cm;    
+        background-color: #E5E5FF;
+        height: 50pt;
+    }
+
+    .item{
+        width: 100%;
+        
+        padding: 10pt;
+    }
+    
+    .pending{
+        background-color: #9191FF;
+        border-radius: 6px;
+        color: #e6e6ff;
+        width: 5rem;
+        position: relative;
+        top: 50px;
+        left: 20px;
+    }
+
+    .ticket-num{
+        position: relative;
+        top: -20px;
+    }
+
+    .activities{
+        background-color: #1100ff;
+        border-radius: 20px;
+        height: 100px;
+        width: 150px;
+        padding: 10px;
+    }
+
+    .activities:hover{
+        background-color: #6a6afc;       
+    }
+
+    .activities-text{
+        position: relative;
+        bottom: -30px;
+        font-size: 18px;
+        color: rgb(255, 255, 255);
+    }
+
+    .activities-text2{
+        position: relative;
+        top: 10px;
+        font-size: 18px;
+        color: rgb(255, 255, 255);
+    }
+
+    .text-2{
+        position: relative;
+        top: 10px;
+        color: #efeeff ;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: rgb(255, 255, 255);
+        display: inline-block;
+        position: relative;
+        top: -20px;
+        left: 115px;
+    }
+
+    .top{
+        position: relative;
+        margin-top: -35px;
+    }
+
+    .top2{
+        position: relative;
+        margin-top: -5px;
+    }
+
+    @media only screen and (max-width: 385px){
+    .text-style{
+        color:#55559c;
+        font-size: 30px;
+    }
+
+    .the-btn{
+        font-size: 10px;
+    }
+  }
+
+
+  @media only screen and (max-width: 625px){
+    .text-style{
+        color:#55559c;
+        font-size: 25px;
+    }
+
+    .the-btn{
+        font-size: 10px;
+    }
+  }
+    
+</style>
+
+{% endblock content %}
+
+{% block whatsapp%}
+
+{% endblock whatsapp %}
