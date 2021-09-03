@@ -13,12 +13,20 @@ urlpatterns = [
     path('ICT_Create_Report/<hashid:user>/', management_views.ICT_Report, name='ict_create_report'),
     path('Market_Create_Report/<hashid:user>/', management_views.Marketing_Report, name='market_create_report'),
     path('Front_Create_Report/<hashid:user>/', management_views.Front_Desk_Report, name='front_create_report'),
+    path('Runyi_Create_Report/<hashid:user>/', management_views.Runyi_Report, name='runyi_create_report'),
+    path('IWH_Create_Report/<hashid:user>/', management_views.IWH_Report, name='iwh_create_report'),
+    path('TANKFARM_Create_Report/<hashid:user>/', management_views.TANK_FARM_Report, name='tankfarm_create_report'),
+    path('Manager_Create_Report/<hashid:user>/', management_views.Manager_Report, name='manager_create_report'),
 
     path('Edit_Report/<hashid:pk>/', management_views.Edit_Report, name='edit_report'),
     path('Edit_Fleet_Report/<hashid:pk>/', management_views.Edit_Fleet_Report, name='edit_fleet_report'),
     path('Edit_Ict_Report/<hashid:pk>/', management_views.Edit_ict_Report, name='edit_ict_report'),
     path('Edit_Market_Report/<hashid:pk>/', management_views.Edit_market_Report, name='edit_market_report'),
     path('Edit_Front_Report/<hashid:pk>/', management_views.Edit_front_Report, name='edit_front_report'),
+    path('Edit_Runyi_Report/<hashid:pk>/', management_views.Edit_Runyi_Report, name='edit_runyi_report'),
+    path('Edit_Iwh_Report/<hashid:pk>/', management_views.Edit_IWH_Report, name='edit_iwh_report'),
+    path('Edit_TankFarm_Report/<hashid:pk>/', management_views.Edit_Tank_Farm_Report, name='edit_tank_farm_report'),
+    path('Edit_Manager_Report/<hashid:pk>/', management_views.Edit_Manager_Report, name='edit_manager_report'),
 
     path('Report_History/<hashid:user>/', management_views.Status_History, name='report_history'),
 
@@ -31,8 +39,11 @@ urlpatterns = [
     path('Admin_response/<hashid:pk>/', management_views.Admin_response, name='admin_response'),
     path('Manager_response/<hashid:pk>/', management_views.Manager_response, name='manager_response'),
     path('Runyi_response/<hashid:pk>/', management_views.Runyi_Response, name='runyi_response'),
+    path('FLM_response/<hashid:pk>/', management_views.FLM_Response, name='flm_response'),
 
     path('Management_view_List/<hashid:user>/', management_views.Management_report_list, name='management_list'),
-
     path('Management_view_details/<hashid:pk>/', management_views.History_details_management, name='management_list_details'),
+
+    path('FLLS_Manager_view_list/<hashid:user>/', management_views.FLLS_manager_report_list, name='flls_manager_list'),
+    path('FLM_Manager_view_list/<hashid:user>/', management_views.FLM_manager_report_list, name='flm_manager_list'),
 ]

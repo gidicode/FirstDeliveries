@@ -27,6 +27,10 @@ class OFFICE_REPORT(models.Model):
         ('ICT', 'ICT'),
         ('Front', 'Front'),
         ('Market', 'Market'),
+        ('Tank Farm', 'Tank Farm'),
+        ('IWH', 'IWH'),
+        ('RUNYI', 'RUNYI'),
+        ('MANAGER', 'MANAGER'),
     ]
     
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL, verbose_name="STAFF")
@@ -59,17 +63,34 @@ class OFFICE_REPORT(models.Model):
     FrontDesk_challenges =models.TextField(null=True, max_length=300, blank=True)
     FrontDesk_solutions = models.CharField(null=True, blank=True, max_length=100)
 
-     #IWH
+    #IWH
     Iwh_report_title = models.CharField(null=True, max_length=100)
-    Iwh_report_= models.TextField(null=True, max_length=500)
+    Iwh_report = models.TextField(null=True, max_length=500)
     Iwh_challenges = models.TextField(null=True, blank=True, max_length=500, verbose_name="Challenges")
-    Iwh_solutions = models.TextField(null=True, blank=True, max_length=500, verbose_name="Solutions")    
+    Iwh_solutions = models.CharField(null=True, blank=True, max_length=500, verbose_name="Solutions")    
 
-    #ICT    
+    #TankFarm
+    Tank_farm_report_title = models.CharField(null=True, max_length=100, verbose_name="Report Title")
+    Tank_farm_report = models.TextField(null=True, max_length=500)
+    Tank_farm_challenges = models.TextField(null=True, blank=True, max_length=500, verbose_name="Challenges")
+    Tank_farm_solutions = models.CharField(null=True, blank=True, max_length=500, verbose_name="Solutions")
+
+    #Runyi
+    Runyi_report_Title = models.CharField(null=True, max_length=100)
+    Runyi_report = models.TextField(null=True, max_length=300)
+    Runyi_challenges = models.TextField(null=True, blank=True, max_length=300)
+    Runyi_solutions = models.CharField(null=True, blank=True, max_length=100)
+
+    #Manager_report
+    Manager_report_title = models.CharField(null=True, max_length=100)
+    Manager_report = models.TextField(null=True, max_length=300)
+    Manager_challenges = models.TextField(null=True, blank=True, max_length=300)
+    Manager_solutions = models.CharField(null=True, blank=True, max_length=100)   
+
     Ict_report_Title = models.CharField(null=True, max_length=100)
     Ict_report = models.TextField(null=True, max_length=300)
     Ict_challenges = models.TextField(null=True, blank=True, max_length=300)
-    Ict_solutions = models.CharField(null=True, blank=True, max_length=100)    
+    Ict_solutions = models.CharField(null=True, blank=True, max_length=100)   
 
     Categoty = models.CharField(null=True, choices=CATEGORY, max_length=100)
 
@@ -78,7 +99,7 @@ class OFFICE_REPORT(models.Model):
     feedback_admin = models.CharField(null=True, max_length=100)
     feedback_manager = models.CharField(null=True, max_length=100)
     feedback_runyi = models.CharField(null=True, max_length=100)
-
+    feedback_Manager_FLM = models.CharField(null=True, max_length=100)
     solutions = models.CharField(max_length=100, null=True)
 
     operations_seen = models.BooleanField(default=False)
@@ -86,11 +107,18 @@ class OFFICE_REPORT(models.Model):
     admin_seen = models.BooleanField(default=False)
     manager_seen = models.BooleanField(default=False)
     runyi_seen = models.BooleanField(default=False)
+    manager_flm_seen = models.BooleanField(default=False)
 
     attended_to = models.BooleanField(default=False)
-    ticket_num = models.CharField(null=True, max_length=5)
-    submit = models.BooleanField(default=False)
+    ticket_num = models.CharField(null=True, max_length=5)    
     date_created = models.DateTimeField(default=timezone.now, null=True)
+
+    for_mangerFLLS = models.BooleanField(default=False)
+    for_chairman_manager = models.BooleanField(default=False)
+    for_manager_FLM = models.BooleanField(default=False)
+    for_admin = models.BooleanField(default=False)
+    for_operation = models.BooleanField(default=False)
+    for_runyi = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.customer}, Order ID:{self.Categoty}'

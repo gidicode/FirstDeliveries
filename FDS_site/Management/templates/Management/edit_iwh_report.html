@@ -1,0 +1,52 @@
+{% extends "FDS_app/signupBase.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Report {{user.username }} {% endblock title %}
+
+{% block content %}
+
+<div class="row mt-4 justify-content-center p-3">
+    <div class="col-lg-4"> </div>
+    <div class="col-lg-4 p-4">         
+       <div class="the_form shadow p-3">
+        <p class="text-primary text-center">Edit Your Report</p>
+        <br>
+        <form method="POST" enctype="multipart/form-data"> 
+            {% csrf_token %}                    
+            
+            <div class="form-row">
+                <div class="col">
+                   {{iwh_form|crispy}}
+                </div>                            
+            </div>  
+            <div class="d-flex flex-row bd-highlight justify-content-between ">
+                <div class="bd-highlight align-self-center mr-1">          
+                    <button class="btn btn-sm rounded-lg text-white" style="background-color: #0060f0;" type="submit" name="btn_save">Save</button>
+                </div>  
+                <div class="bd-highlight justify-content-left mr-1">          
+                    <button class="btn btn-sm rounded-lg text-white" style="background-color: #ff1717;" type="reset" >Reset</button>
+                </div>  
+                <div class="bd-highlight justify-content-right">          
+                    <button class="btn btn-sm rounded-lg text-white" style="background-color: #00a11b;" type="submit" name="btn_submit">Submit</button>
+                </div>      
+            </div>                  
+            
+        </form>
+       </div>
+    </div>
+    <div class="col-lg-4"> </div>
+</div>
+
+<style>
+    .the_form{
+        border-radius: 20px;
+        background-color: #ffffff;
+    }
+</style>
+
+{% endblock content %}
+
+{% block whatsapp%}
+
+{% endblock whatsapp %}

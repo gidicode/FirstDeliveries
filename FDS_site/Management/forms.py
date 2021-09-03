@@ -94,6 +94,51 @@ class Marketing_Report_Form(forms.ModelForm):
             'Marketing_report':Textarea(attrs={'cols': 5, 'row':5}),
             'Marketting_challenges':Textarea(attrs={'cols': 5, 'row':5}),}
 
+class IWH_Form(forms.ModelForm):    
+    class Meta:
+        model = OFFICE_REPORT
+        fields = ['Iwh_report_title', 'Iwh_report', 
+        'Iwh_challenges', 'Iwh_solutions',
+       ]
+        widgets = {
+            'Iwh_report':Textarea(attrs={'cols': 5, 'row':5}),
+            'Iwh_challenges':Textarea(attrs={'cols': 5, 'row':5}),
+            }
+
+class TANK_Form(forms.ModelForm):    
+    class Meta:
+        model = OFFICE_REPORT
+        fields = ['Tank_farm_report_title', 'Tank_farm_report', 
+        'Tank_farm_challenges', 'Tank_farm_solutions',
+       ]
+        widgets = {
+            'Tank_farm_report':Textarea(attrs={'cols': 5, 'row':5}),
+            'Tank_farm_challenges':Textarea(attrs={'cols': 5, 'row':5}),            
+            }
+
+class RUNYI_Form(forms.ModelForm):    
+    class Meta:
+        model = OFFICE_REPORT
+        fields = ['Runyi_report_Title', 'Runyi_report', 
+        'Runyi_challenges', 'Runyi_solutions',
+       ]
+        widgets = {
+            'Runyi_report':Textarea(attrs={'cols': 5, 'row':5}),
+            'Runyi_challenges':Textarea(attrs={'cols': 5, 'row':5}),
+            }
+
+class Manager_FLLS_report_Form(forms.ModelForm):    
+    class Meta:
+        model = OFFICE_REPORT
+        fields = ['Manager_report_title', 'Manager_report', 
+        'Manager_challenges', 'Manager_solutions',
+       ]
+        widgets = {
+            'Manager_report':Textarea(attrs={'cols': 5, 'row':5}),
+            'Manager_challenges':Textarea(attrs={'cols': 5, 'row':5}),
+        }
+
+
 class Chairman_Response_Form(forms.ModelForm):    
     class Meta:
         model = OFFICE_REPORT
@@ -118,3 +163,8 @@ class Runyi_Response_Form(forms.ModelForm):
     class Meta:
         model = OFFICE_REPORT
         fields = ['feedback_runyi']
+
+class FLLM_Manager_Response_Form(forms.ModelForm):    
+    class Meta:
+        model = OFFICE_REPORT
+        fields = ['feedback_Manager_FLM']

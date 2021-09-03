@@ -36,7 +36,7 @@
             </div>
 
             {% if request.user|fleet:"Fleet Manager" %}
-                {% for i in all_submitted_report %}           
+                {% for i in all_fleet_report %}           
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
@@ -141,7 +141,95 @@
                     </div>                     
                 </div>   
                 {% empty %}
-                    <p class="empty">sssYou have no report yet</p>
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
+
+            {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
+                {% for i in all_runyi_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Runyi_report_Title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}         
+
+            {% if request.user|IWHADMIN:"IWH" %}
+                {% for i in all_IWH_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Iwh_report_title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
+
+            {% if request.user|FARM_TANK:"TANK" %}
+                {% for i in all_farm_tank_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Tank_farm_report_title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
+
+            {% if request.user|m_manager:"MANAGEMENT_MANAGER" %}
+                {% for i in all_managers_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Manager_report_title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
                 {% endfor%}
             {% endif %}
         

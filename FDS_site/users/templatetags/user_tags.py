@@ -112,3 +112,30 @@ def has_group(user, MANAGEMENT_ADMIN):
     else:
         return False
 
+@register.filter(name='IWHADMIN') 
+def IWH_GROUP(user, IWH):
+    group = Group.objects.filter(name= IWH)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False
+
+@register.filter(name='FARM_TANK') 
+def FARM_TANK_GROUP(user, TANK):
+    group = Group.objects.filter(name= TANK)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False
+
+@register.filter(name='flm_manager') 
+def FLM_MANAGER_GROUP(user, FLM_MANAGER):
+    group = Group.objects.filter(name = FLM_MANAGER)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False
+

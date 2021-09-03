@@ -34,7 +34,7 @@
                     </div>
                 {% endif %}
             </div>
-            {% if request.user|management:"MANAGEMENT" or request.user|operations:"OPERATIONS"%}
+            {% if request.user|management:"MANAGEMENT" %}
                 <div class="management">
                     <div class="d-flex flex-row bd-highlight justify-content-center">
                         <div class="bd-highlight mr-2 ">          
@@ -51,18 +51,37 @@
                                 {% if operation.count > 0 %}
                                     <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
                                     data-placement="top" title="You have {{operation.count}} Unread Report">{{operation.count}}</span>       
+                                    {% else %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{operation.count}} Unread Report">{{operation.count}}</span>       
                                 {% endif %}
                                 {% endif %}  
-                                
+
                                 {% if request.user|chairman:"MANAGEMENT_CHAIRMAN" %}
                                 {% if chairman.count > 0 %}
                                     <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
                                     data-placement="top" title="You have {{chairman.count}} Unread Report">{{chairman.count}}</span>       
+                                    {% else %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{chairman.count}} Unread Report">{{chairman.count}}</span>       
+                                {% endif %}
+                                {% endif %}
+                                
+                                {% if request.user|flm_manager:"FLM MANAGER" %}
+                                {% if fllm_manager.count > 0 %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{fllm_manager.count}} Unread Report">{{fllm_manager.count}}</span>       
+                                    {% else %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{fllm_manager.count}} Unread Report">{{fllm_manager.count}}</span>       
                                 {% endif %}
                                 {% endif %}
 
                                 {% if request.user|m_manager:"MANAGEMENT_MANAGER" %}
                                 {% if manager.count > 0 %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{manager.count}} Unread Report">{{manager.count}}</span>       
+                                    {% else %}
                                     <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
                                     data-placement="top" title="You have {{manager.count}} Unread Report">{{manager.count}}</span>       
                                 {% endif %}
@@ -72,6 +91,9 @@
                                 {% if runyi.count > 0 %}
                                     <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
                                     data-placement="top" title="You have {{runyi.count}} Unread Report">{{runyi.count}}</span>       
+                                    {% else %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{runyi.count}} Unread Report">{{runyi.count}}</span>       
                                 {% endif %}
                                 {% endif %} 
 
@@ -79,18 +101,32 @@
                                 {% if admin.count > 0 %}
                                     <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
                                     data-placement="top" title="You have {{admin.count}} Unread Report">{{admin.count}}</span>       
+                                    {% else %}
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                    data-placement="top" title="You have {{admin.count}} Unread Report">{{admin.count}}</span> 
                                 {% endif %}
                                 {% endif %} 
+
                                 <h2 class="top"><i class="far fa-folder-open text-white "></i></h2>
-                                <a role="button" href="{% url 'management_list' user.id %}">
-                                    <h4 class="activities-text text-2">Daily Report</h4>                                    
-                                </a>                               
+                                {% if request.user|chairman:"MANAGEMENT_CHAIRMAN"%}        
+                                <a role="button" href="{% url 'management_list' user.id %}">                                    
+                                    <h4 class="activities-text text-2 text text-decoration-none">Daily Report</h4>                                    
+                                </a>  
+                                {% elif request.user|m_manager:"MANAGEMENT_MANAGER" %}
+                                    <a role="button" href="{% url 'flls_manager_list' user.id %}">                                    
+                                        <h4 class="activities-text text-2 text text-decoration-none">Daily Report</h4>                                    
+                                    </a>  
+                                {% elif request.user|flm_manager:"FLM MANAGER" %}
+                                    <a role="button" href="{% url 'flm_manager_list' user.id %}">                                    
+                                        <h4 class="activities-text text-2 text text-decoration-none">Daily Report</h4>                                    
+                                    </a>  
+                                {% endif %}
+                                                             
                             </div>
                         </div>                           
                     </div>
-                </div>
-
-            {% else %}                
+                </div>            
+            {% else %}
             <div class="bg-white p-3 shadow text-center the-radius">
                 <h3 class="text-style">DAILY WORK REPORT</h3>
                 <div class="d-flex flex-row bd-highlight justify-content-center">
@@ -99,7 +135,7 @@
                     </div>  
                     <div class="bd-highlight mr-1"> 
                         {% if request.user|operations:"OPERATIONS" %}
-                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'create_report' user.id %}"> Operations Report </a>    
+                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'create_report' user.id %}"> cOperations Report </a>    
                         {% endif %} 
                         
                         {% if request.user|fleet:"Fleet Manager" %}
@@ -116,16 +152,67 @@
 
                         {% if request.user|front_desk:"Front Desk" %}
                             <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'front_create_report' user.id %}"> Front Desk Report </a>    
-                        {% endif %}
+                        {% endif %}   
                         
+                        {% if request.user|FARM_TANK:"TANK" %}
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'tankfarm_create_report' user.id %}">Create Report </a>    
+                        {% endif %}
+
+                        {% if request.user|IWHADMIN:"IWH" %}
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'iwh_create_report' user.id %}"> IWH Report </a>    
+                        {% endif %}
+
+
                     </div>  
-                    <div class="bd-highlight">          
-                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'report_history' user.id %}"> Report Status </a>
+                    <div class="bd-highlight">                         
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'report_history' user.id %}"> Report Status </a>                        
                     </div>      
                 </div>
             </div>
+            
+            {% if request.user|FARM_TANK:"TANK" %}            
+            {% for i in managers_report %}
+            <div class="pending text-center font-weight-bolder ">
+                <p> Pending</p>
+            </div>
+            <div class="list shadow-sm">
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between">
+                        <div class="bd-highlight">          
+                            <p>{{i.Tank_farm_report_title}}</p>
+                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                        </div>  
+                        <div class="bd-highlight">         
+                            <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_tank_farm_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                        </div>                           
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+            {% endif %}
 
-            {% for i in report %}
+            {% if request.user|IWHADMIN:"IWH" %}           
+            {% for i in managers_report %}
+            <div class="pending text-center font-weight-bolder ">
+                <p> Pending</p>
+            </div>
+            <div class="list shadow-sm">
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between">
+                        <div class="bd-highlight">          
+                            <p>{{i.Iwh_report_title}}</p>
+                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                        </div>  
+                        <div class="bd-highlight">
+                            <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_iwh_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                        </div>                           
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+            {% endif %}   
+
+            {% for i in flls_team %}
                 {% if request.user|fleet:"Fleet Manager" %}
                 <div class="pending text-center font-weight-bolder ">
                     <p> Pending</p>
@@ -181,26 +268,7 @@
                         </div>
                     </div> 
                 </div>
-                {% endif %}  
-                
-                {% if request.user|operations:"OPERATIONS" %}
-                <div class="pending text-center font-weight-bolder ">
-                    <p> Pending</p>
-                </div>
-                <div class="list shadow-sm">
-                    <div class="item">
-                        <div class="d-flex flex-row bd-highlight justify-content-between">
-                            <div class="bd-highlight ">          
-                                <p>{{i.Work_description}}</p>
-                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
-                            </div>  
-                            <div class="bd-highlight">         
-                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
-                            </div>                           
-                        </div>
-                    </div> 
-                </div>
-                {% endif %}  
+                {% endif %}                              
 
                 {% if request.user|front_desk:"Front Desk" %}
                 <div class="pending text-center font-weight-bolder ">
@@ -214,7 +282,7 @@
                                 <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
                             </div>  
                             <div class="bd-highlight">         
-                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_fleet_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_front_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
                             </div>                           
                         </div>
                     </div> 
@@ -239,7 +307,7 @@
                 </div>
             </div>
 
-            {% for i in report %}
+            {% for i in managers_report %}
             <div class="pending text-center font-weight-bolder ">
                 <p> Pending</p>
             </div>
@@ -259,8 +327,77 @@
             {% endfor %}
             {% endif %}
 
-            
-            <br>           
+            {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
+            <div class="bg-white p-3 mt-4 shadow text-center the-radius">
+                <h3 class="text-style">DAILY WORK REPORT</h3>
+                <div class="d-flex flex-row bd-highlight justify-content-center">
+                    <div class="bd-highlight mr-1">          
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'create_profile' user.id %}"> Create Profile</a>
+                    </div>  
+                    <div class="bd-highlight mr-1"> 
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'runyi_create_report' user.id %}"> Runyis Report </a>    
+                    </div>
+                    <div class="bd-highlight">          
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'report_history' user.id %}"> Report Status </a>
+                    </div>     
+                </div>
+            </div>
+
+            {% for i in managers_report %}
+            <div class="pending text-center font-weight-bolder ">
+                <p> Pending</p>
+            </div>
+            <div class="list shadow-sm">
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between">
+                        <div class="bd-highlight ">          
+                            <p>{{i.Runyi_report_Title}}</p>
+                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                        </div>  
+                        <div class="bd-highlight">         
+                            <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_runyi_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                        </div>                           
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% if request.user|m_manager:"MANAGEMENT_MANAGER" %}
+            <div class="bg-white p-3 mt-4 shadow text-center the-radius">
+                <h3 class="text-style">DAILY WORK REPORT</h3>
+                <div class="d-flex flex-row bd-highlight justify-content-center">
+                    <div class="bd-highlight mr-1">          
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'create_profile' user.id %}"> Create Profile</a>
+                    </div>  
+                    <div class="bd-highlight mr-1"> 
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'manager_create_report' user.id %}"> Managers Report </a>    
+                    </div>
+                    <div class="bd-highlight">          
+                        <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'report_history' user.id %}"> Report Status </a>
+                    </div>     
+                </div>
+            </div>
+
+            {% for i in managers_report %}
+            <div class="pending text-center font-weight-bolder ">
+                <p> Pending</p>
+            </div>
+            <div class="list shadow-sm">
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between">
+                        <div class="bd-highlight ">          
+                            <p>{{i.Manager_report_title}}</p>
+                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                        </div>  
+                        <div class="bd-highlight">         
+                            <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_manager_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                        </div>                           
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+            {% endif %}                                
         </div>
         <div class="col-lg-3"> </div>
     </div>
