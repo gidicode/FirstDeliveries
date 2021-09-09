@@ -4,14 +4,6 @@ from users.models import Customer
 # Create your models here.
 
 class OFFICE_REPORT(models.Model):
-    COMPLETION = [
-        (None, None),
-        ('Just Started', 'Just Started'),
-        ('Far From Completion', 'Far From Completion'),
-        ('Almost Completed', 'Almost Completed'),
-        ('Completed', 'Completed')
-    ]
-
     TIME = [
         (None, None),
         ('0-1HR', '0-1HR'),
@@ -36,12 +28,12 @@ class OFFICE_REPORT(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL, verbose_name="STAFF")
 
     #Operations
-    work_schedule = models.TextField(max_length=500, null=True)
-    Work_description = models.CharField(null=True, max_length=100)
-    extent_of_completion = models.CharField(null=True, choices= COMPLETION, max_length=100)
-    time_taken = models.CharField(null=True, choices=TIME, max_length=100)    
-    work_left = models.CharField(null=True, max_length=100)
-    challenges = models.TextField(max_length=500, null=True)
+    work_schedule = models.TextField(max_length=1000, verbose_name="Task Schedule", blank=True, null=True)
+    Work_description = models.TextField(null=True, verbose_name="Main Report", blank=True, max_length=1000)
+    extent_of_completion = models.CharField(null=True, verbose_name="Task Completed", blank=True, max_length=1000)
+    time_taken = models.TextField(null=True, choices=TIME, max_length=200)    
+    work_left = models.TextField(null=True, verbose_name="Task Left", blank=True, max_length=200)
+    challenges = models.TextField(max_length=1000, blank=True, null=True)
 
     #Fleet
     Fleet_report_title = models.CharField(null=True, max_length=100)
@@ -121,7 +113,7 @@ class OFFICE_REPORT(models.Model):
     for_runyi = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.customer}, Order ID:{self.Categoty}'
+        return f'{self.customer}, Order ID:{self.Categoty}, {self.ticket_num}'
 
     class Meta:
         ordering = ('-date_created',)

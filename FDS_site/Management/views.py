@@ -6,9 +6,32 @@ from hashids import Hashids
 from django.conf import settings
 from users.filters import Staff_Name
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from users.decorators import *
 
 
-# Create your views here.
+def Notification_email(recipient_list, staff_name):
+              
+        send_mas = send_mail(
+            subject ='New Request!!!', 
+            message = f"{staff_name} just sent in a  report, Visit flls.ng/login/ to view report",                
+            from_email = 'support@flls.ng',
+            recipient_list= recipient_list,
+            fail_silently = False,
+        )
+        return HttpResponse('%s'%send_mas)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'ICT',
+        'MANAGEMENT_OPERATION', 'OPERATIONS',
+        'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
+        'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
+        'MANAGEMENT_CHAIRMAN', 'Marketing',
+        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',
+        ])
 def Front_page(request, user):
     customer = Customer.objects.get(user=request.user)  
     managers_report = customer.office_report_set.filter(for_chairman_manager=False)         
@@ -33,6 +56,15 @@ def Front_page(request, user):
     }
     return render(request, 'Management/front_page.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'ICT',
+        'MANAGEMENT_OPERATION', 'OPERATIONS',
+        'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
+        'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
+        'MANAGEMENT_CHAIRMAN', 'Marketing',
+        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',
+        ])
 def Create_Profile_management(request, user):
     customer = Customer.objects.get(user=request.user)    
     m_form =  Management_profile(request.POST, instance=customer)    
@@ -54,6 +86,22 @@ def Create_Profile_management(request, user):
     }
     return render(request, 'Management/create_profile.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT',
+        'MANAGEMENT_OPERATION', 'OPERATIONS',
+        'FLM MANAGER', 'MANAGEMENT_RUNYI', 
+        'MANAGEMENT_MANAGER', 'MANAGEMENT_CHAIRMAN',
+        'MANAGEMENT_ADMIN',
+        ])
+def Logistics(request, user):
+    return render(request, "Management/logiscticsPage.html")
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT',
+        'MANAGEMENT_OPERATION', 'OPERATIONS',        
+        ])
 def Create_report(request, user):
     customer = Customer.objects.get(user = request.user)
     if customer.staff_created == False:
@@ -70,6 +118,7 @@ def Create_report(request, user):
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)
+
             messages.warning(request, "Your Report has been created, Look below to view active report")
             return redirect('management_dashboard', user)
 
@@ -81,11 +130,13 @@ def Create_report(request, user):
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
             instance.Categoty = 'Operations'
-            instance.save()
+            instance.save()                    
 
             hashids = Hashids(settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
-            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)            
+            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id) 
+            
+
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -96,6 +147,8 @@ def Create_report(request, user):
     }
     return render(request, 'Management/create_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'MANAGEMENT', 'MANAGEMENT_OPERATION', 'OPERATIONS',])   
 def Edit_Report(request, pk):
     customer = Customer.objects.get(user=request.user)
     report_form = OFFICE_REPORT.objects.get(id=pk)
@@ -125,12 +178,16 @@ def Edit_Report(request, pk):
     context = {
         'E_form':E_form,
         'customer':customer,
-            }
-    
+            }    
     return render(request, 'Management/Edit_form.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'Fleet Manager',])
 def Fleet_Report(request, user):
     customer = Customer.objects.get(user=user)
+    if customer.staff_created == False:
+        messages.error(request, 'please update your profile to create report')
+        return redirect('management_dashboard', user)
     if request.method == 'POST' and 'btn_save' in request.POST:        
         fleet_form = Fleet_Report_Form(request.POST)
         if fleet_form.is_valid():
@@ -151,15 +208,16 @@ def Fleet_Report(request, user):
             instance = fleet_form.save(commit=False)
             instance.customer = customer
             instance.Categoty = 'Fleet'
-            instance.for_mangerFLLS = True
-            instance.for_admin = True
-            instance.for_operation = True
-            instance.for_runyi = True
+            instance.for_mangerFLLS = True            
             instance.save()  
                  
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)
+
+            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)
             
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
@@ -172,6 +230,8 @@ def Fleet_Report(request, user):
     }
     return render(request, 'Management/fleet_create_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'Fleet Manager',])
 def Edit_Fleet_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     fleet_report = OFFICE_REPORT.objects.get(id = pk)
@@ -187,11 +247,12 @@ def Edit_Fleet_Report(request, pk):
         fleet_form = Fleet_Report_Form(request.POST, instance=fleet_report)
         if fleet_form.is_valid():
             instance = fleet_form.save(commit=False)                                   
-            instance.for_mangerFLLS = True
-            instance.for_admin = True
-            instance.for_operation = True
-            instance.for_runyi = True       
+            instance.for_mangerFLLS = True                 
             instance.save()           
+
+            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -203,8 +264,13 @@ def Edit_Fleet_Report(request, pk):
     }
     return render(request, 'Management/Edit_fleet_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'ICT',])
 def ICT_Report(request, user):
-    customer = Customer.objects.get(user=user)
+    customer = Customer.objects.get(user= request.user)
+    if customer.staff_created == False:
+        messages.error(request, 'please update your profile to create report')
+        return redirect('management_dashboard', user)
     if request.method == 'POST' and 'btn_save' in request.POST:        
         ict_form = ICT_Report_Form(request.POST)
         if ict_form.is_valid():
@@ -225,16 +291,16 @@ def ICT_Report(request, user):
             instance = ict_form.save(commit=False)
             instance.customer = customer
             instance.Categoty = 'ICT'
-            instance.for_mangerFLLS = True
-            instance.for_admin = True
-            instance.for_operation = True
-            instance.for_runyi = True              
+            instance.for_mangerFLLS = True                         
             instance.save()
                  
-
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
-            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)            
+            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
+            
+            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)          
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -246,6 +312,8 @@ def ICT_Report(request, user):
     }
     return render(request, 'Management/ICT_create_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'ICT',])
 def Edit_ict_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     ICT_report = OFFICE_REPORT.objects.get(id = pk)
@@ -260,12 +328,12 @@ def Edit_ict_Report(request, pk):
         ict_form = EditICT_Report_Form(request.POST, instance= ICT_report)
         if ict_form.is_valid():
             instance = ict_form.save(commit=False)                       
-            instance.for_mangerFLLS = True
-            instance.for_admin = True
-            instance.for_operation = True
-            instance.for_runyi = True  
+            instance.for_mangerFLLS = True             
             instance.save()
             
+            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -277,8 +345,13 @@ def Edit_ict_Report(request, pk):
     }
     return render(request, 'Management/Edit_ict_form.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'Marketing',])
 def Marketing_Report(request, user):
     customer = Customer.objects.get(user=user)
+    if customer.staff_created == False:
+        messages.error(request, 'please update your profile to create report')
+        return redirect('management_dashboard', user)
     if request.method == 'POST' and 'btn_save' in request.POST:        
         Market_form = Marketing_Report_Form(request.POST)
         if Market_form.is_valid():
@@ -299,16 +372,16 @@ def Marketing_Report(request, user):
             instance = Market_form.save(commit=False)
             instance.customer = customer
             instance.Categoty = 'Market'
-            instance.for_mangerFLLS = True
-            instance.for_admin = True
-            instance.for_operation = True
-            instance.for_runyi = True              
+            instance.for_mangerFLLS = True                         
             instance.save()
 
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)
-            
+
+            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -320,6 +393,8 @@ def Marketing_Report(request, user):
     }
     return render(request, 'Management/Marketing_report_.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'Marketing',])
 def Edit_market_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     market_report = OFFICE_REPORT.objects.get(id = pk)
@@ -335,11 +410,12 @@ def Edit_market_Report(request, pk):
         market_form = Marketing_Report_Form(request.POST, instance= market_report)
         if market_form.is_valid():
             instance = market_form.save(commit=False)                       
-            instance.for_mangerFLLS = True
-            instance.for_admin = True
-            instance.for_operation = True
-            instance.for_runyi = True              
+            instance.for_mangerFLLS = True                       
             instance.save()
+
+            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -351,8 +427,13 @@ def Edit_market_Report(request, pk):
     }
     return render(request, 'Management/Edit_market_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'Front_Desk',])
 def Front_Desk_Report(request, user):
     customer = Customer.objects.get(user=user)
+    if customer.staff_created == False:
+        messages.error(request, 'please update your profile to create report')
+        return redirect('management_dashboard', user)
     if request.method == 'POST' and 'btn_save' in request.POST:        
         front_form = Front_Report_Form(request.POST)
         if front_form.is_valid():
@@ -373,15 +454,16 @@ def Front_Desk_Report(request, user):
             instance = front_form.save(commit=False)
             instance.customer = customer
             instance.Categoty = 'Front'
-            instance.for_mangerFLLS = True
-            instance.for_admin = True
-            instance.for_operation = True
-            instance.for_runyi = True             
+            instance.for_mangerFLLS = True                      
             instance.save()
 
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
-            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)            
+            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)
+
+            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)          
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -393,6 +475,8 @@ def Front_Desk_Report(request, user):
     }
     return render(request, 'Management/Front_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'Front_Desk',])
 def Edit_front_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     front_report = OFFICE_REPORT.objects.get(id = pk)
@@ -408,11 +492,12 @@ def Edit_front_Report(request, pk):
         front_form = Front_Report_Form(request.POST, instance= front_report)
         if front_form.is_valid():
             instance = front_form.save(commit=False)                       
-            instance.for_mangerFLLS = True
-            instance.for_admin = True
-            instance.for_operation = True
-            instance.for_runyi = True            
+            instance.for_mangerFLLS = True                      
             instance.save()
+
+            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)            
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -424,8 +509,13 @@ def Edit_front_Report(request, pk):
     }
     return render(request, 'Management/edit_front_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'MANAGEMENT', 'MANAGEMENT_RUNYI', ])
 def Runyi_Report(request, user):
     customer = Customer.objects.get(user=user)
+    if customer.staff_created == False:
+        messages.error(request, 'please update your profile to create report')
+        return redirect('management_dashboard', user)
     if request.method == 'POST' and 'btn_save' in request.POST:        
         runyi_form = RUNYI_Form(request.POST)
         if runyi_form.is_valid():
@@ -452,7 +542,11 @@ def Runyi_Report(request, user):
 
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
-            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)            
+            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id) 
+
+            #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)           
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -464,6 +558,8 @@ def Runyi_Report(request, user):
     }
     return render(request, 'Management/Runyi_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'MANAGEMENT', 'MANAGEMENT_RUNYI', ])
 def Edit_Runyi_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     runyi_report = OFFICE_REPORT.objects.get(id = pk)
@@ -482,7 +578,11 @@ def Edit_Runyi_Report(request, pk):
             instance = runyi_form.save(commit=False)                                  
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
-            instance.save()            
+            instance.save()           
+
+            #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name) 
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -494,8 +594,13 @@ def Edit_Runyi_Report(request, pk):
     }
     return render(request, 'Management/edit_runyi_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'IWH',])
 def IWH_Report(request, user):
     customer = Customer.objects.get(user=user)
+    if customer.staff_created == False:
+        messages.error(request, 'please update your profile to create report')
+        return redirect('management_dashboard', user)
     if request.method == 'POST' and 'btn_save' in request.POST:        
         iwh_form = IWH_Form(request.POST)
         if iwh_form.is_valid():
@@ -524,7 +629,11 @@ def IWH_Report(request, user):
 
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
-            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)            
+            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id) 
+
+            #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)           
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -536,6 +645,8 @@ def IWH_Report(request, user):
     }
     return render(request, 'Management/IWH_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'IWH',])
 def Edit_IWH_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     IWH_report = customer.office_report_set.get(id = pk)
@@ -556,6 +667,10 @@ def Edit_IWH_Report(request, pk):
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
             instance.save()
+
+            #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -567,8 +682,13 @@ def Edit_IWH_Report(request, pk):
     }
     return render(request, 'Management/edit_iwh_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'TANK',])
 def TANK_FARM_Report(request, user):
     customer = Customer.objects.get(user=user)
+    if customer.staff_created == False:
+        messages.error(request, 'please update your profile to create report')
+        return redirect('management_dashboard', user)
     if request.method == 'POST' and 'btn_save' in request.POST:
         Tank_Farm_form = TANK_Form(request.POST)
         if Tank_Farm_form.is_valid():
@@ -595,8 +715,12 @@ def TANK_FARM_Report(request, user):
 
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
-            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)            
-            messages.success(request, f"Your report has been submitted successfully")
+            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
+
+            #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)          
+            messages.success(request, f"Your report has been submitted successfully")            
             return redirect('management_dashboard', user)
     else:
         Tank_Farm_form = TANK_Form()
@@ -607,6 +731,8 @@ def TANK_FARM_Report(request, user):
     }
     return render(request, 'Management/Tank_Farm_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'TANK',])
 def Edit_Tank_Farm_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     Tank_Farm_Report = customer.office_report_set.get(id = pk)
@@ -625,6 +751,11 @@ def Edit_Tank_Farm_Report(request, pk):
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True       
             instance.save()
+
+            #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)
+
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -636,8 +767,13 @@ def Edit_Tank_Farm_Report(request, pk):
     }    
     return render(request, 'Management/edit_TankForm_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER',])
 def Manager_Report(request, user):
     customer = Customer.objects.get(user=user)
+    if customer.staff_created == False:
+        messages.error(request, 'please update your profile to create report')
+        return redirect('management_dashboard', user)
     if request.method == 'POST' and 'btn_save' in request.POST:        
         manager_form = Manager_FLLS_report_Form(request.POST)
         if manager_form.is_valid():
@@ -649,6 +785,7 @@ def Manager_Report(request, user):
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)
+
             messages.warning(request, "Your Report has been created, Look below to view active report")
             return redirect ('management_dashboard', user)
 
@@ -657,18 +794,20 @@ def Manager_Report(request, user):
         if manager_form.is_valid():
             instance = manager_form.save(commit=False)
             instance.customer = customer
-            instance.Categoty = 'MANAGER'          
-            instance.for_mangerFLLS = True
+            instance.Categoty = 'MANAGER'                      
             instance.for_admin = True
             instance.for_operation = True
-            instance.for_runyi = True  
-            instance.for_chairman_manager = True
-            instance.for_manager_FLM = True
+            instance.for_runyi = True        
             instance.save()
 
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
             hashing_the_id = hashids.encode(instance.id)
-            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)            
+            customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
+
+            #email_list = ['krischukwuka@gmail.com', 'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)        
+
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -680,6 +819,8 @@ def Manager_Report(request, user):
     }
     return render(request, 'Management/Manager_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER',])
 def Edit_Manager_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     FLLS_Report = customer.office_report_set.get(id = pk)
@@ -698,10 +839,12 @@ def Edit_Manager_Report(request, pk):
             instance.for_mangerFLLS = True
             instance.for_admin = True
             instance.for_operation = True
-            instance.for_runyi = True  
-            instance.for_chairman_manager = True
-            instance.for_manager_FLM = True         
+            instance.for_runyi = True                
             instance.save()
+
+            #email_list = ['krischukwuka@gmail.com', 'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
+           # Staff_Name = instance.customer.first_name
+            #Notification_email(email_list, Staff_Name)  
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -713,6 +856,15 @@ def Edit_Manager_Report(request, pk):
     }    
     return render(request, 'Management/edit_manager_report.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'ICT',
+        'MANAGEMENT_OPERATION', 'OPERATIONS',
+        'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
+        'MANAGEMENT_MANAGER', 'MANAGEMENT_CHAIRMAN', 
+        'Marketing', 'Fleet Manager', 'Front Desk', 
+        'MANAGEMENT_ADMIN',
+        ])
 def Status_History(request, user):
     customer = Customer.objects.get(user = user)
     all_fleet_report = customer.office_report_set.filter(for_mangerFLLS = True).filter( Categoty = 'Fleet')   
@@ -725,7 +877,6 @@ def Status_History(request, user):
     all_IWH_report = customer.office_report_set.filter(for_chairman_manager = True).filter( Categoty = 'IWH')    
     all_farm_tank_report = customer.office_report_set.filter(for_chairman_manager = True).filter( Categoty = 'Tank Farm')    
     
-
     context = {
         'all_fleet_report':all_fleet_report,
         'all_operations_report': all_operations_report,
@@ -740,6 +891,15 @@ def Status_History(request, user):
     }
     return render(request, 'Management/Report_History.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'ICT',
+        'MANAGEMENT_OPERATION', 'OPERATIONS',
+        'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
+        'MANAGEMENT_MANAGER', 'MANAGEMENT_CHAIRMAN', 
+        'Marketing', 'Fleet Manager', 'Front Desk', 
+        'MANAGEMENT_ADMIN',
+        ])
 def History_details(request, pk):
     customer = Customer.objects.get(user= request.user)
     report = customer.office_report_set.filter( id= pk)
@@ -750,6 +910,14 @@ def History_details(request, pk):
     }
     return render(request, 'Management/History_detail.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT',
+        'MANAGEMENT_OPERATION', 'OPERATIONS',
+        'FLM MANAGER', 'MANAGEMENT_RUNYI', 
+        'MANAGEMENT_MANAGER', 'MANAGEMENT_CHAIRMAN',          
+        'MANAGEMENT_ADMIN',
+        ])
 def History_details_management(request, pk):
     customer = Customer.objects.get(user= request.user)
     report = OFFICE_REPORT.objects.filter( id= pk)
@@ -771,6 +939,7 @@ def History_details_management(request, pk):
     }  
     return render(request, 'Management/History_details_management.html', context)
 
+@login_required(login_url='login')
 def Management_view(request, user):
     all_report = OFFICE_REPORT.objects.filter(submit = True)
     customer = Customer.objects.get(user = user)
@@ -779,9 +948,14 @@ def Management_view(request, user):
         'all_report': all_report,
         'customer':customer,
     }
-
     return render(request,'Management/management_view_report.html', context)
 
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 
+        'MANAGEMENT_CHAIRMAN',        
+        ])
 def Chairman_response(request, pk):
     customer = Customer.objects.get(user = request.user)
     actual_form = OFFICE_REPORT.objects.get(id = pk)
@@ -802,6 +976,11 @@ def Chairman_response(request, pk):
     }
     return render(request, 'Management/Chairman_response.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 
+        'MANAGEMENT_OPERATION', 'OPERATIONS',        
+        ])
 def Operations_response(request, pk):
     customer = Customer.objects.get(user = request.user)
     actual_form = OFFICE_REPORT.objects.get(id = pk)
@@ -822,6 +1001,11 @@ def Operations_response(request, pk):
     }
     return render(request, 'Management/Operations_Response.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT',        
+        'MANAGEMENT_ADMIN',
+        ])
 def Admin_response(request, pk):
     customer = Customer.objects.get(user = request.user)
     actual_form = OFFICE_REPORT.objects.get(id = pk)
@@ -842,6 +1026,11 @@ def Admin_response(request, pk):
     }
     return render(request, 'Management/Admin_response.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT',
+        'MANAGEMENT_MANAGER',        
+        ])
 def Manager_response(request, pk):
     customer = Customer.objects.get(user = request.user)
     actual_form = OFFICE_REPORT.objects.get(id = pk)
@@ -862,6 +1051,11 @@ def Manager_response(request, pk):
     }
     return render(request, 'Management/Manager_response.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 
+        'MANAGEMENT_RUNYI',        
+        ])
 def Runyi_Response(request, pk):
     customer = Customer.objects.get(user = request.user)
     actual_form = OFFICE_REPORT.objects.get(id = pk)
@@ -882,7 +1076,10 @@ def Runyi_Response(request, pk):
     }
     return render(request, 'Management/Runyi_response.html', context)
 
-
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'FLM MANAGER', 
+        ])
 def FLM_Response(request, pk):
     customer = Customer.objects.get(user = request.user)
     actual_form = OFFICE_REPORT.objects.get(id = pk)
@@ -903,8 +1100,11 @@ def FLM_Response(request, pk):
     }
     return render(request, 'Management/fllm_response.html', context)
 
-
-def Management_report_list(request, user):
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'MANAGEMENT_CHAIRMAN',                
+        ])
+def Chairman_report_list(request, user):
     customer = Customer.objects.get(user = user)
     
     for_chairman_GM = OFFICE_REPORT.objects.filter(for_chairman_manager = True)
@@ -920,11 +1120,14 @@ def Management_report_list(request, user):
         'filter_name':filter_name,
         'page_obj':page_obj,
     }
-    return render(request, 'Management/management_view_list.html', context)
+    return render(request, 'Management/chairman_view_list.html', context)
 
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'            
+        ])
 def FLLS_manager_report_list(request, user):
-    customer = Customer.objects.get(user = user)
-    
+    customer = Customer.objects.get(user = user)    
     for_flls_manager = OFFICE_REPORT.objects.filter(for_mangerFLLS = True)
     filter_name  = Staff_Name(request.GET, queryset = for_flls_manager)
     for_flls_manager = filter_name.qs
@@ -940,7 +1143,11 @@ def FLLS_manager_report_list(request, user):
     }
     return render(request, 'Management/flls_manager_view_list.html', context)
 
-
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT',        
+        'FLM MANAGER',
+        ])
 def FLM_manager_report_list(request, user):
     customer = Customer.objects.get(user = user)
     
@@ -958,4 +1165,74 @@ def FLM_manager_report_list(request, user):
         'page_obj':page_obj,
     }
     return render(request, 'Management/flm_manager_view_list.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'MANAGEMENT_RUNYI', 
+        ])
+def Runyi_report_list(request, user):
+    customer = Customer.objects.get(user = user)
+    
+    for_runyi = OFFICE_REPORT.objects.filter(for_runyi = True)
+    filter_name  = Staff_Name(request.GET, queryset = for_runyi)
+    for_runyi = filter_name.qs
+
+    paginator1 = Paginator(for_runyi, 10)
+    page = request.GET.get('page')
+    page_obj = paginator1.get_page(page)
+    context = {
+        'for_runyi':for_runyi,
+        'customer':customer,
+        'filter_name':filter_name,
+        'page_obj':page_obj,
+    }
+    return render(request, 'Management/runyi_view_list.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 
+        'MANAGEMENT_OPERATION', 'OPERATIONS',
+        ])
+def Operations_report_list(request, user):
+    customer = Customer.objects.get(user = user)
+    
+    for_operations = OFFICE_REPORT.objects.filter(for_operation = True)
+    filter_name  = Staff_Name(request.GET, queryset = for_operations)
+    for_operations = filter_name.qs
+
+    paginator1 = Paginator(for_operations, 10)
+    page = request.GET.get('page')
+    page_obj = paginator1.get_page(page)
+    context = {
+        'for_operations':for_operations,
+        'customer':customer,
+        'filter_name':filter_name,
+        'page_obj':page_obj,
+    }
+    return render(request, 'Management/operations_view_list.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=[
+        'FLLS', 'MANAGEMENT', 'MANAGEMENT_ADMIN',
+        ])
+def Admin_report_list(request, user):
+    customer = Customer.objects.get(user = user)
+    
+    for_admin_list = OFFICE_REPORT.objects.filter(for_admin = True)
+    filter_name  = Staff_Name(request.GET, queryset = for_admin_list)
+    for_admin_list = filter_name.qs
+
+    paginator1 = Paginator(for_admin_list, 10)
+    page = request.GET.get('page')
+    page_obj = paginator1.get_page(page)
+    context = {
+        'for_admin_list':for_admin_list,
+        'customer':customer,
+        'filter_name':filter_name,
+        'page_obj':page_obj,
+    }
+    return render(request, 'Management/admin_view_list.html', context)    
 

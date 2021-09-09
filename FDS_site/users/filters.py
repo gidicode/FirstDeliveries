@@ -56,7 +56,8 @@ class BikeFilter(django_filters.FilterSet):
 
 class Staff_Name(django_filters.FilterSet):
     customer__first_name = django_filters.CharFilter(lookup_expr='icontains')
+    date_created = django_filters.DateTimeFilter(field_name='date_created', lookup_expr="date")
     class Meta:        
         model = OFFICE_REPORT
-        fields = ['customer__first_name']
+        fields = ['customer__first_name', 'date_created']
         

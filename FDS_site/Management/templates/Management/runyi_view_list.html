@@ -44,14 +44,14 @@
         <div class="col-lg-6 col-md-6">  
             <div class="report text-center">
                 <h3 class="pt-3 the-report">SUBMITTED REPORT</h3>
-                <p class="text-dark ">Total Report <span class="badge badge-primary">{{ for_flm_manager.count}}</span></p>
+                <p class="text-dark ">Total Report <span class="badge badge-primary">{{ for_runyi.count}}</span></p>
             </div>
             <div class="d-flex flex-row bd-highlight all justify-content-between ">
                               
             </div>
 
             {% for i in page_obj %}                    
-            {% if i.manager_flm_seen == True %}
+            {% if i.runyi_seen == True %}
             <div class="item">
                 <div class="d-flex flex-row bd-highlight justify-content-between ">
                     <div class="bd-highlight mr-1">          

@@ -41,9 +41,14 @@ urlpatterns = [
     path('Runyi_response/<hashid:pk>/', management_views.Runyi_Response, name='runyi_response'),
     path('FLM_response/<hashid:pk>/', management_views.FLM_Response, name='flm_response'),
 
-    path('Management_view_List/<hashid:user>/', management_views.Management_report_list, name='management_list'),
+    path('Management_view_List/<hashid:user>/', management_views.Chairman_report_list, name='management_list'),
     path('Management_view_details/<hashid:pk>/', management_views.History_details_management, name='management_list_details'),
 
     path('FLLS_Manager_view_list/<hashid:user>/', management_views.FLLS_manager_report_list, name='flls_manager_list'),
     path('FLM_Manager_view_list/<hashid:user>/', management_views.FLM_manager_report_list, name='flm_manager_list'),
+    path('runyi_view_list/<hashid:user>/', management_views.Runyi_report_list, name='runyi_list'),
+    path('operation_view_list/<hashid:user>/', management_views.Operations_report_list, name='operations_list'),
+    path('admin_view_list/<hashid:user>/', management_views.Admin_report_list, name='admin_list'),
+
+    path('logistics_page/<hashid:user>/', management_views.Logistics, name='Logistics'),
 ]

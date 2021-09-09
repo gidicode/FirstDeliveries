@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% load user_tags %}
 
-{% block title %}Create Report {{user.username }} {% endblock title %}
+{% block title %}Report Details {{user.username }} {% endblock title %}
 
 {% block content %}
 <div class="container-fluid">
@@ -665,7 +665,7 @@
                                 {% endif %}
 
                                 {% if i.manager_flm_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
                                 <br>
                                 {% endif %}
 
@@ -693,7 +693,99 @@
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_Manager_FLM %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLM:</span> {{i.feedback_Manager_FLM}}</small>
+                                <br>
+                                {% endif %}   
+                                {% if i.feedback_operations %}
                                 <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_manager %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_manager}}</small>
+                                <br>
+                                {% endif %}                                
+                                {% if i.feedback_admin %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin}}</small>
+                                <br>
+                                {% endif %}                                
+                                {% if i.feedback_runyi %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_runyi}}</small>
+                                <br>
+                                {% endif %}                                                                                          
+                            </div>  
+                        </div>      
+                    </div>                                               
+                </div>   
+            {% endif %}
+
+            {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
+                <div class="d-flex flex-row upper bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
+                    </div>                    
+                    <div class="bd-highlight">   
+                        <div class="ticket">
+                            <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num}}</small>
+                        </div>       
+                    </div>      
+                </div> 
+                
+                <div class="item">                  
+                    <div class="d-flex flex-row bd-highlight justify-content-left">
+                        <div class="bd-highlight mr-1">                                       
+                            <h6 class="text-dark"><strong>DATE: <br></strong> {{i.date_created}}</h6>  
+                            <h6 class="text-dark"><strong>Report Title:</strong><br> {{i.Runyi_report_Title}}</h6>  
+                            <h6 class="text-dark"><strong>Report Details: <br></strong> {{i.Runyi_report}}</h6>  
+
+                            {% if i.Runyi_challenges %}
+                            <h6 class="text-dark"><strong>Challenges: <br></strong> {{i.Runyi_challenges}}</h6>  
+                            {% endif %}
+                            {% if i.Runyi_solutions %}
+                            <h6 class="text-dark"><strong>Solutions: <br></strong> {{i.Runyi_solutions}}</h6> 
+                            {% endif %}
+                        </div>                          
+                        <div class="bd-highlight p-2"> 
+                            <div class="back">
+                                {% if i.chairman_seen%}
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <br>
+                                {% endif  %}
+
+                                {% if i.operations_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.manager_flm_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.manager_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.admin_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.runyi_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <br>
+                                {% endif %}
+                                <br>                                         
+                                    
+                                {% if i.feedback_chairman or i.feedback_Manager_FLM or i.feedback_runyi or i.feedback_operations %}
+                                    <h6 class="font-weight-bold feed">FEED BACK</h6>
+                                {% endif %}                                                                
+                                {% if i.feedback_chairman %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_Manager_FLM %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLM:</span> {{i.feedback_Manager_FLM}}</small>
                                 <br>
                                 {% endif %}   
                                 {% if i.feedback_operations %}
@@ -713,11 +805,7 @@
                     </div>                                               
                 </div>   
             {% endif %}
-            {% endfor %}     
-            
-            
-
-            
+            {% endfor %}                                     
         </div>
         <div class="col-lg-3"> </div>
     </div>

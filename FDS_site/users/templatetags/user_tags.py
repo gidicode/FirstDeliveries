@@ -139,3 +139,12 @@ def FLM_MANAGER_GROUP(user, FLM_MANAGER):
     else:
         return False
 
+@register.filter(name='flls_team') 
+def FLLS_GROUP(user, FLLS):
+    group = Group.objects.filter(name = FLLS)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False        
+

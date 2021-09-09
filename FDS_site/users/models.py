@@ -14,7 +14,8 @@ class Customer(models.Model):
     Department_FLLS = [ 
         (None, None),                
         ('FIRST LOGISTICS', 'FIRST LOGISTICS'),
-        ('FIRST MARINE', 'FIRST MARINE'),            
+        ('FIRST MARINE', 'FIRST MARINE'),  
+        ('IWH', 'IWH'),             
     ]
 
     DESIGNATION_FLLS = [
@@ -25,7 +26,10 @@ class Customer(models.Model):
         ('FRONT DESK', 'FRONT DESK'), 
         ('ADMIN', 'ADMIN'),
         ('MANAGER', 'MANAGER'),
-        ('ACCOUNT', 'ACCOUNT'),     
+        ('ACCOUNT', 'ACCOUNT'),  
+        ('DEPOT MANAGER', 'DEPOT MANAGER'), 
+        ('OPERATIONS', 'OPERATIONS'), 
+        ('ADMIN MANAGER', 'ADMIN MANAGER'),     
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -445,7 +449,7 @@ class Front_desk(models.Model):
     paid = models.BooleanField(default=False)
     confirmed = models.BooleanField(default=False)
     profit = models.IntegerField(null= True, default=0)
-    Amount_Paid = models.DecimalField(max_digits=10, null= True, decimal_places=2)
+    Amount_Paid = models.DecimalField(max_digits=10, default=0, decimal_places=2)
     Amount_Payable = models.IntegerField(null= True, default=500)
     Total = models.IntegerField(null=True)   
     Delivery_Fee = models.IntegerField(null=True)
