@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row mt-4 justify-content-center">
         <div class="col-lg-3 text-left"> 
-            <a href="{% url 'management_list' user.id %}"><i class="fas fa-arrow-circle-left text-secondary"></i></a> 
+            <!--<a href="{% url 'management_list' user.id %}"><i class="fas fa-arrow-circle-left text-secondary"></i></a> -->
         </div>
         <div class="col-lg-6 ">
             {% if messages %}
@@ -43,10 +43,11 @@
             <div class="d-flex flex-row upper mb-3 bd-highlight justify-content-between ">                                              
                 <div class="bd-highlight"> 
                     {% if request.user|chairman:"MANAGEMENT_CHAIRMAN" %} 
-                        {% if i.feedback_chariman %}
-                    {% else %}
+                        {% if i.feedback_chairman %}                       
+                       
+                        {% else %}
                         <a href="{% url 'chairman_response' i.pk %}" role="button" class="btn btn-success text-center btn-sm">Comment</a>
-                    {% endif %}
+                        {% endif %}
                     {% endif %}
 
                     {% if request.user|m_operation:"MANAGEMENT_OPERATION" %}
@@ -98,23 +99,19 @@
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>WORK SCHEDULE FOR THE DAY:</strong> <br> {{i.work_schedule}}</h6>  
+                    <h6 class="text-dark"><strong>TASK SCHEDULE FOR THE DAY:</strong> <br> {{i.work_schedule}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>WORK DESCRIPTION: </strong> <br> {{i.Work_description}}</h6>  
+                    <h6 class="text-dark"><strong>MAIN REPORT: </strong> <br> {{i.Work_description}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>EXTENT OF COMPLETION: </strong> <br> {{i.extent_of_completion}}</h6>  
-                </div>
+                    <h6 class="text-dark"><strong>TASK COMPLETED: </strong> <br> {{i.extent_of_completion}}</h6>  
+                </div>              
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>TIME TAKEN: </strong> <br> {{i.time_taken}}</h6> 
-                </div>
-
-                <div class="item"> 
-                    <h6 class="text-dark"><strong>WORK LEFT: </strong> <br> {{i.work_left}}</h6>  
+                    <h6 class="text-dark"><strong>TASK LEFT: </strong> <br> {{i.work_left}}</h6>  
                 </div>
 
                 <div class="item"> 
@@ -194,7 +191,7 @@
                     <br>
                     {% endif %}
                     {% if i.feedback_manager %}
-                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}</small>
+                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}}</small>
                     <br>
                     {% endif %}
                     {% if i.feedback_runyi %}
@@ -210,19 +207,27 @@
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.Fleet_report_title}}</h6>  
+                    <h6 class="text-dark"><strong>TASK SCHEDULE:</strong> <br> {{i.work_schedule}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.Fleet_report}}</h6>  
+                    <h6 class="text-dark"><strong>TASK SCHEDULE:</strong> <br> {{i.work_schedule}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.Fleet_challenges}}</h6>  
+                    <h6 class="text-dark"><strong>REPORT TITLE:</strong> <br> {{i.Fleet_report_title}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.Fleet_solutions}}</h6> 
+                    <h6 class="text-dark"><strong>REPORT DETAILS: </strong> <br> {{i.Fleet_report}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong>CHALLENGES: </strong> <br> {{i.Fleet_challenges}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong>SOLUTIONS: </strong> <br> {{i.Fleet_solutions}}</h6> 
                 </div>                
                 <div class="item2">                  
                     <div class="d-flex flex-row bd-highlight justify-content-left">                  
@@ -295,7 +300,7 @@
                     {% endif %}
 
                     {% if i.feedback_manager %}
-                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}</small>
+                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}</small>
                     <br>
                     {% endif %}
 
@@ -335,48 +340,46 @@
                     <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.FrontDesk_solutions}}</h6> 
                 </div>                
                 <div class="item2">                  
-                    <div class="d-flex flex-row bd-highlight justify-content-left">                  
-                        <div class="bd-highlight">                                                                     
-                            <div class="bd-highlight mr-1">                                                                                                 
-                                {% if i.chairman_seen%}
-                                <i class="far fa-eye  big text-secondary"></i> <small class="text-secondary font-weight-bold up"> CHAIRMAN</small>
-                                <br>
-                                {% endif  %}
-                            </div>  
+                    <div class="d-flex flex-row bd-highlight justify-content-left">                                                                                                              
+                        <div class="bd-highlight mr-1">                                                                                                 
+                            {% if i.chairman_seen%}
+                            <i class="far fa-eye  big text-secondary"></i> <small class="text-secondary font-weight-bold up"> CHAIRMAN</small>
+                            <br>
+                            {% endif  %}
+                        </div>  
 
-                            <div class="bd-highlight mr-1"> 
-                                {% if i.manager_flm_seen%}
-                                <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">MANAGER FLM</small>
-                                <br>
-                                {% endif %}
-                            </div> 
+                        <div class="bd-highlight mr-1"> 
+                            {% if i.manager_flm_seen%}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">MANAGER FLM</small>
+                            <br>
+                            {% endif %}
+                        </div> 
 
-                            <div class="bd-highlight mr-1"> 
-                                {% if i.operations_seen %}
-                                <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  OPERATIONS</small>
-                                <br>
-                                {% endif %}
-                            </div>
-                            <div class="bd-highlight mr-1"> 
-                                {% if i.manager_seen %}
-                                <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  MANAGER</small>
-                                <br>
-                                {% endif %}
-                            </div>
-                            <div class="bd-highlight mr-1">     
-                                {% if i.admin_seen %}
-                                <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  ADMIN</small>
-                                <br>
-                                {% endif %}
-                            </div>
-                            <div class="bd-highlight"> 
-                                {% if i.runyi_seen %}
-                                <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  RUNYI</small>
-                                <br>
-                                {% endif %}
-                                <br>                                                                                                            
-                            </div>                         
-                        </div>      
+                        <div class="bd-highlight mr-1"> 
+                            {% if i.operations_seen %}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  OPERATIONS</small>
+                            <br>
+                            {% endif %}
+                        </div>
+                        <div class="bd-highlight mr-1"> 
+                            {% if i.manager_seen %}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  MANAGER</small>
+                            <br>
+                            {% endif %}
+                        </div>
+                        <div class="bd-highlight mr-1">     
+                            {% if i.admin_seen %}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  ADMIN</small>
+                            <br>
+                            {% endif %}
+                        </div>
+                        <div class="bd-highlight"> 
+                            {% if i.runyi_seen %}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  RUNYI</small>
+                            <br>
+                            {% endif %}
+                            <br>                                                                                                            
+                        </div>                                                    
                     </div>                                               
                 </div>  
                 
@@ -405,7 +408,7 @@
                     <br>
                     {% endif %}
                     {% if i.feedback_manager %}
-                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}</small>
+                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}</small>
                     <br>
                     {% endif %}
                     {% if i.feedback_runyi %}
@@ -507,7 +510,7 @@
 
 
                 {% if i.feedback_manager %}
-                <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}</small>
+                <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}}</small>
                 <br>
                 {% endif %}
 
@@ -609,7 +612,7 @@
                 {% endif %}
                 
                 {% if i.feedback_manager %}
-                <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}</small>
+                <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}</small>
                 <br>
                 {% endif %}
                 {% if i.feedback_runyi %}
@@ -703,7 +706,7 @@
                     <br>
                     {% endif %}
                     {% if i.feedback_manager %}
-                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}</small>
+                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}}</small>
                     <br>
                     {% endif %}
                     {% if i.feedback_runyi %}
@@ -797,7 +800,7 @@
                     <br>
                     {% endif %}
                     {% if i.feedback_manager %}
-                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}</small>
+                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}}</small>
                     <br>
                     {% endif %}
                     {% if i.feedback_runyi %}
@@ -891,7 +894,7 @@
                     <br>
                     {% endif %}
                     {% if i.feedback_manager %}
-                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}</small>
+                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}}</small>
                     <br>
                     {% endif %}
                     {% if i.feedback_runyi %}
@@ -900,7 +903,100 @@
                     {% endif %}
                 </div>
             {% endif %}
+            
+            {% if i.Categoty == 'RUNYI' %}
+                <div class="item">
+                    <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                </div>
 
+                <div class="item"> 
+                    <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.Runyi_report_Title}}</h6>  
+                </div>
+    
+                <div class="item"> 
+                    <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.Runyi_report}}</h6>  
+                </div>
+    
+                <div class="item"> 
+                    <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.Runyi_challenges}}</h6>  
+                </div>
+                
+                <div class="item"> 
+                    <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.Runyi_solutions}}</h6> 
+                </div>                
+                <div class="item2">                  
+                    <div class="d-flex flex-row bd-highlight justify-content-left">                  
+                        <div class="bd-highlight mr-1">                                                                                                 
+                            {% if i.chairman_seen%}
+                            <i class="far fa-eye  big text-secondary"></i> <small class="text-secondary font-weight-bold up"> CHAIRMAN</small>
+                            <br>
+                            {% endif  %}
+                        </div>  
+                        <div class="bd-highlight mr-1"> 
+                            {% if i.manager_flm_seen%}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">MANAGER FLM</small>
+                            <br>
+                            {% endif %}
+                        </div>
+                        <div class="bd-highlight mr-1"> 
+                            {% if i.operations_seen %}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  OPERATIONS</small>
+                            <br>
+                            {% endif %}
+                        </div>                                             
+                        <div class="bd-highlight mr-1"> 
+                            {% if i.manager_seen %}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  MANAGER</small>
+                            <br>
+                            {% endif %}
+                        </div>
+                        <div class="bd-highlight mr-1">     
+                            {% if i.admin_seen %}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  ADMIN</small>
+                            <br>
+                            {% endif %}
+                        </div>
+                        <div class="bd-highlight"> 
+                            {% if i.runyi_seen %}
+                            <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">  RUNYI</small>
+                            <br>
+                            {% endif %}
+                            <br>                                                                                                            
+                        </div>
+                    </div>                                               
+                </div>  
+                
+                <div class="item2">
+                    {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin or i.feedback_Manager_FLM %}
+                    <h6 class="font-weight-bold feed">FEED BACK</h6>
+                    {% endif %}
+                    
+                    {% if i.feedback_chairman %}
+                    <small class="feedback font-weight-bold"><span class="text-secondary">CHARIMAN:</span> {{i.feedback_chairman}}</small>
+                    <br>
+                    {% endif %}
+                    {% if i.feedback_Manager_FLM %}
+                    <small class="feedback font-weight-bold"><span class="text-secondary">FLM MANAGER:</span> {{i.feedback_Manager_FLM}}</small>
+                    <br>
+                    {% endif %}
+                    {% if i.feedback_operations %}
+                    <small class="feedback font-weight-bold"><span class="text-secondary">OPERATIONS:</span> {{i.feedback_operations}}</small>
+                    <br>
+                    {% endif %}                    
+                    {% if i.feedback_admin %}
+                    <small class="feedback font-weight-bold"><span class="text-secondary">ADMIN:</span> {{i.feedback_admin}}</small>
+                    <br>
+                    {% endif %}
+                    {% if i.feedback_manager %}
+                    <small class="feedback font-weight-bold"><span class="text-secondary">MANAGER:</span> {{i.feedback_manager}}}</small>
+                    <br>
+                    {% endif %}
+                    {% if i.feedback_runyi %}
+                    <small class="feedback font-weight-bold"><span class="text-secondary">RUNYI:</span> {{i.feedback_runyi}}</small>
+                    <br>
+                    {% endif %}
+                </div>
+            {% endif %}
                         
             {% endfor %}       
         </div>
