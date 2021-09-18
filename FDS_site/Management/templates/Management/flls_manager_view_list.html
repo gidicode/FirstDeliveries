@@ -12,11 +12,11 @@
             <div class="bd-highlight mr-2">                                                                                  
                 <div id="div_id_customer__first_name" class="form-group">
                     <label for="div_id_customer__first_name"> </label>
-                    <div >
+                    <div>
                         <input type="text" name="customer__first_name" placeholder="Staff First Name" class="textinput form-control" id="id_customer__first_name">
                     </div>
                 </div>                                           
-            </div>  
+            </div> 
 
             <div class="bd-highlight mr-3">
                 <div id="div_id_date_created" class="form-group">
@@ -34,7 +34,7 @@
     </div> 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> 
         <span class=" fas fa-bars"></span>
-      </button>                           
+      </button>
 </nav>
 <div class="container">
     <div class="row mt-3 justify-content-center">
@@ -50,87 +50,14 @@
                               
             </div>
 
-            {% for i in page_obj %}
-            {% if request.user|chairman:"MANAGEMENT_CHAIRMAN" %}
-            {% if i.chairman_seen == True %}
-            <div class="item">
-                <div class="d-flex flex-row bd-highlight justify-content-between ">
-                    <div class="bd-highlight mr-1">          
-                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
-                    </div>  
-                    <div class="bd-highlight ">          
-                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
-                    </div>  
-                    <div class="bd-highlight">   
-                        <div class="ticket2">
-                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
-                        </div>       
-                    </div>      
-                </div>
-            </div>
-            {% else %}
-                <div class="item2">
-                    <div class="d-flex flex-row bd-highlight justify-content-between ">
-                        <div class="bd-highlight mr-1">          
-                            <a class="dtext font-weight-bolder" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
-                        </div>  
-                        <div class="bd-highlight ">          
-                            <p class="dtext font-weight-bolder">{{ i.date_created|date:"d M Y" }}</p>
-                        </div>  
-                        <div class="bd-highlight">   
-                            <div class="ticket">
-                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 font-weight-bolder">ID: {{i.ticket_num}}</small>
-                            </div>       
-                        </div>      
-                    </div>
-                </div>
-            {% endif %}
-            {% endif %}
-
-
-            {% if request.user|m_operation:"MANAGEMENT_OPERATION" %}
-            {% if i.operations_seen == True %}
-            <div class="item">
-                <div class="d-flex flex-row bd-highlight justify-content-between ">
-                    <div class="bd-highlight mr-1">          
-                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
-                    </div>  
-                    <div class="bd-highlight ">          
-                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
-                    </div>  
-                    <div class="bd-highlight">   
-                        <div class="ticket2">
-                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
-                        </div>       
-                    </div>      
-                </div>
-            </div>
-            {% else %}
-                <div class="item2">
-                    <div class="d-flex flex-row bd-highlight justify-content-between ">
-                        <div class="bd-highlight mr-1">          
-                            <a class="dtext font-weight-bolder" href="{% url 'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
-                        </div>  
-                        <div class="bd-highlight ">          
-                            <p class="dtext font-weight-bolder">{{ i.date_created|date:"d M Y" }}</p>
-                        </div>  
-                        <div class="bd-highlight">   
-                            <div class="ticket">
-                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
-                            </div>       
-                        </div>      
-                    </div>
-                </div>
-            {% endif %}
-            {% endif %}
-
-
+            {% for i in page_obj %}            
             {% if request.user|m_manager:"MANAGEMENT_MANAGER" %}
             {% if i.manager_seen == True %}
             <div class="item">
                 <div class="d-flex flex-row bd-highlight justify-content-between ">
                     <div class="bd-highlight mr-1">          
-                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                        <a class="dtext2 items" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
+                        <button class=" btn text-success items" data-number="{{i.customer.first_name}}: {{i.ticket_num}}"><i class="fas fa-plus"></i></button>                        
                     </div>  
                     <div class="bd-highlight ">
                         <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
@@ -161,77 +88,7 @@
             {% endif %}
             {% endif %}
 
-            {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
-            {% if i.runyi_seen == True %}
-            <div class="item">
-                <div class="d-flex flex-row bd-highlight justify-content-between ">
-                    <div class="bd-highlight mr-1">          
-                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
-                    </div>  
-                    <div class="bd-highlight ">          
-                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
-                    </div>  
-                    <div class="bd-highlight">   
-                        <div class="ticket2">
-                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
-                        </div>       
-                    </div>      
-                </div>
-            </div>
-            {% else %}
-                <div class="item2">
-                    <div class="d-flex flex-row bd-highlight justify-content-between ">
-                        <div class="bd-highlight mr-1">          
-                            <a class="dtext font-weight-bolder" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
-                        </div>  
-                        <div class="bd-highlight ">          
-                            <p class="dtext font-weight-bolder">{{ i.date_created|date:"d M Y" }}</p>
-                        </div>  
-                        <div class="bd-highlight">   
-                            <div class="ticket">
-                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 font-weight-bolder">ID: {{i.ticket_num}}</small>
-                            </div>       
-                        </div>      
-                    </div>
-                </div>
-            {% endif %}
-            {% endif %}
-
-            {% if request.user|admin:"MANAGEMENT_ADMIN" %}
-            {% if i.admin_seen == True %}
-            <div class="item shadow-sm">
-                <div class="d-flex flex-row bd-highlight justify-content-between ">
-                    <div class="bd-highlight mr-1">          
-                        <a class="dtext2" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
-                    </div>  
-                    <div class="bd-highlight ">          
-                        <p class="dtext2">{{ i.date_created|date:"d M Y" }}</p>
-                    </div>  
-                    <div class="bd-highlight">   
-                        <div class="ticket2">
-                            <small class="p-2 pt-3 text-white font-weight-bold dfont-1">ID: {{i.ticket_num}}</small>
-                        </div>       
-                    </div>      
-                </div>
-            </div>
-            {% else %}
-                <div class="item2 shadow-sm">
-                    <div class="d-flex flex-row bd-highlight justify-content-between ">
-                        <div class="bd-highlight mr-1">          
-                            <a class="dtext font-weight-bolder" href="{% url  'management_list_details' i.pk %}">From {{i.customer.first_name}} {{i.customer.last_name}}</a>
-                        </div>  
-                        <div class="bd-highlight ">          
-                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
-                        </div>  
-                        <div class="bd-highlight">   
-                            <div class="ticket">
-                                <small class="p-2 pt-3 text-white font-weight-bolder dfont-1">ID: {{i.ticket_num}}</small>
-                            </div>       
-                        </div>      
-                    </div>
-                </div>
-            {% endif %}
-            {% endif %}
+            
             {% empty %}
             <p>You have no report yet</p>
             
@@ -254,10 +111,49 @@
             </div>
         </table>
         </div>
-        <div class="col-lg-3"> </div>
+
+
+        <div class="col-lg-3"> 
+            <div class="">
+                <h4>Added Report</h4>
+                <form action="{% url 'manager_create_report' user.id %}">                
+                    <textarea rows="10" cols="50" name="comment" id="myTextarea"> </textarea>                
+                    <button class="btn btn-outline-secondary" onclick="copyText()"><i class="fas fa-copy"></i> Copy</button>
+                    <a role="button" class="btn btn-outline-secondary" href="#"> Create Report</a>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    $('.items').click(function () {
+        var number = $(this).data('number');
+        $('#myTextarea').val(function () {
+                return this.value + number;
+        });
+    });
+
+    function copyText() {
+        var copytext = document.getElementById("myTextarea");
+        copytext.select();
+        copytext.setSelectionRange(0, 9999);
+        navigator.clipboard.writeText(copytext.value);        
+    }
+  
+</script>
+
 <style>
+    textarea {
+        width: 100%;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid rgb(252, 230, 230);
+        border-radius: 4px;
+        background-color: #fff9f9;
+        resize: none;
+    }
+
     .report{
         border-radius: 10px;
         background-color: #7fb5fd;

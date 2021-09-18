@@ -28,15 +28,15 @@
                 {% for i in report %} 
                 <div class="d-flex flex-row bd-highlight text-secondary text-left bg-light p-2 mt-3 justify-content-between shadow-sm ">
                     <div class="bd-highlight ">          
-                        <small class=" "><strong>STAFF:</strong> {{i.customer.first_name}} {{i.customer.last_name}}</small>
+                        <small class=" "><strong class="text-primary">STAFF:</strong> {{i.customer.first_name}} {{i.customer.last_name}}</small>
                     </div>  
 
                     <div class="bd-highlight">                              
-                        <small class=" "> <strong>DESIGNATION: </strong> {{i.customer.Designation}}</small>
+                        <small class=" "> <strong class="text-primary">DESIGNATION: </strong> {{i.customer.Designation}}</small>
                     </div> 
                     
                     <div class="bd-highlight">                                                              
-                        <small class=""> <strong> DEPARTMENT: </strong> {{i.customer.Department}}</small>
+                        <small class=""> <strong class="text-primary"> DEPARTMENT: </strong> {{i.customer.Department}}</small>
                     </div>      
                 </div>            
             </div>            
@@ -95,31 +95,31 @@
 
             {% if i.Categoty == 'Operations' %}
                 <div class="item">
-                    <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>TASK SCHEDULE FOR THE DAY:</strong> <br> {{i.work_schedule}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE FOR THE DAY:</strong> <br> {{i.work_schedule|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>MAIN REPORT: </strong> <br> {{i.Work_description}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">MAIN REPORT: </strong> <br> {{i.Work_description|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>TASK COMPLETED: </strong> <br> {{i.extent_of_completion}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK COMPLETED: </strong> <br> {{i.extent_of_completion|safe}}</h6>  
                 </div>              
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>TASK LEFT: </strong> <br> {{i.work_left}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK LEFT: </strong> <br> {{i.work_left|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>CHALLENGES: </strong> <br> {{i.challenges}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">CHALLENGES: </strong> <br> {{i.challenges|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>SOLUTIONS: </strong> <br> {{i.solutions}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">SOLUTIONS: </strong> <br> {{i.solutions}}</h6>  
                 </div>
                 <div class="item2">                  
                     <div class="d-flex flex-row bd-highlight justify-content-left">                  
@@ -203,31 +203,31 @@
 
             {% if i.Categoty == 'Fleet' %}
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>TASK SCHEDULE:</strong> <br> {{i.work_schedule}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE:</strong> <br> {{i.work_schedule|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>TASK SCHEDULE:</strong> <br> {{i.work_schedule}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong> <br> {{i.work_left|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>REPORT TITLE:</strong> <br> {{i.Fleet_report_title}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">REPORT TITLE:</strong> <br> {{i.Fleet_report_title}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>REPORT DETAILS: </strong> <br> {{i.Fleet_report}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">REPORT DETAILS: </strong> <br> {{i.Fleet_report|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>CHALLENGES: </strong> <br> {{i.Fleet_challenges}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">CHALLENGES: </strong> <br> {{i.Fleet_challenges|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>SOLUTIONS: </strong> <br> {{i.Fleet_solutions}}</h6> 
+                    <h6 class="text-dark"><strong class="text-primary">SOLUTIONS: </strong> <br> {{i.Fleet_solutions}}</h6> 
                 </div>                
                 <div class="item2">                  
                     <div class="d-flex flex-row bd-highlight justify-content-left">                  
@@ -313,31 +313,39 @@
 
             {% if i.Categoty == 'Front' %}
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.FrontDesk_report_Title}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE:</strong> <br> {{i.work_schedule|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.FrontDesk_report}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong> <br> {{i.work_left|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Total Rides: </strong> <br> {{i.Front_desk_total_rides}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Report Title:</strong> <br> {{i.FrontDesk_report_Title}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Amount Generated: </strong> <br> {{i.Front_desk_total_amount}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Report Details: </strong> <br> {{i.FrontDesk_report|safe}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.FrontDesk_challenges}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Total Rides: </strong> <br> {{i.Front_desk_total_rides}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.FrontDesk_solutions}}</h6> 
+                    <h6 class="text-dark"><strong class="text-primary">Amount Generated: </strong> <br> {{i.Front_desk_total_amount}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">Challenges: </strong> <br> {{i.FrontDesk_challenges|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">Solutions: </strong> <br> {{i.FrontDesk_solutions}}</h6> 
                 </div>                
                 <div class="item2">                  
                     <div class="d-flex flex-row bd-highlight justify-content-left">                                                                                                              
@@ -420,23 +428,31 @@
 
             {% if i.Categoty == 'Market' %}
             <div class="item"> 
-                <h6 class="text-dark"><strong>Date Created: </strong> {{i.date_created}}</h6>  
+                <h6 class="text-dark"><strong class="text-primary">Date Created: </strong> {{i.date_created}}</h6>  
             </div>
 
             <div class="item"> 
-                <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.Marketing_report_title}}</h6>  
+                <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE:</strong> <br> {{i.work_schedule|safe}}</h6>  
             </div>
 
             <div class="item"> 
-                <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.Marketing_report}}</h6>  
+                <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong> <br> {{i.work_left|safe}}</h6>  
             </div>
 
             <div class="item"> 
-                <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.Marketting_challenges}}</h6>  
+                <h6 class="text-dark"><strong class="text-primary">Report Title:</strong> <br> {{i.Marketing_report_title}}</h6>  
             </div>
 
             <div class="item"> 
-                <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.Marketing_solutions}}</h6> 
+                <h6 class="text-dark"><strong class="text-primary">Report Details: </strong> <br> {{i.Marketing_report|safe}}</h6>  
+            </div>
+
+            <div class="item"> 
+                <h6 class="text-dark"><strong class="text-primary">Challenges: </strong> <br> {{i.Marketting_challenges|safe}}</h6>  
+            </div>
+
+            <div class="item"> 
+                <h6 class="text-dark"><strong class="text-primary">Solutions: </strong> <br> {{i.Marketing_solutions}}</h6> 
             </div>                
             <div class="item2">                  
                 <div class="d-flex flex-row bd-highlight justify-content-left">                  
@@ -525,23 +541,31 @@
 
             {% if i.Categoty == 'ICT' %}            
             <div class="item"> 
-                <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
             </div>
 
             <div class="item"> 
-                <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.Ict_report_Title}}</h6>  
+                <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE:</strong> <br> {{i.work_schedule|safe}}</h6>  
             </div>
 
             <div class="item"> 
-                <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.Ict_report}}</h6>  
+                <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong> <br> {{i.work_left|safe}}</h6>  
             </div>
 
             <div class="item"> 
-                <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.Ict_challenges}}</h6>  
+                <h6 class="text-dark"><strong class="text-primary">Report Title:</strong> <br> {{i.Ict_report_Title}}</h6>  
+            </div>
+
+            <div class="item"> 
+                <h6 class="text-dark"><strong class="text-primary">Report Details: </strong> <br> {{i.Ict_report|safe}}</h6>  
+            </div>
+
+            <div class="item"> 
+                <h6 class="text-dark"><strong class="text-primary">Challenges: </strong> <br> {{i.Ict_challenges|safe}}</h6>  
             </div>
             
             <div class="item"> 
-                <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.Ict_solutions}}</h6> 
+                <h6 class="text-dark"><strong class="text-primary">Solutions: </strong> <br> {{i.Ict_solutions}}</h6> 
             </div>       
             
             
@@ -624,23 +648,31 @@
 
             {% if i.Categoty == 'Tank Farm' %}
                 <div class="item">
-                    <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.Tank_farm_report_title}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE:</strong> <br> {{i.work_schedule|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong> <br> {{i.work_left|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">Report Title:</strong> <br> {{i.Tank_farm_report_title}}</h6>  
                 </div>
     
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.Tank_farm_report}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Report Details: </strong> <br> {{i.Tank_farm_report|safe}}</h6>  
                 </div>
     
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.Tank_farm_challenges}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Challenges: </strong> <br> {{i.Tank_farm_challenges|safe}}</h6>  
                 </div>
                 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.Tank_farm_solutions}}</h6> 
+                    <h6 class="text-dark"><strong class="text-primary">Solutions: </strong> <br> {{i.Tank_farm_solutions}}</h6> 
                 </div>                
                 <div class="item2">                  
                     <div class="d-flex flex-row bd-highlight justify-content-left">                  
@@ -718,23 +750,31 @@
 
             {% if i.Categoty == 'IWH' %}
                 <div class="item">
-                    <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.Iwh_report_title}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE:</strong> <br> {{i.work_schedule|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong> <br> {{i.work_left|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">Report Title:</strong> <br> {{i.Iwh_report_title}}</h6>  
                 </div>
     
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.Iwh_report}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Report Details: </strong> <br> {{i.Iwh_report|safe}}</h6>  
                 </div>
     
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.Iwh_challenges}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Challenges: </strong> <br> {{i.Iwh_challenges|safe}}</h6>  
                 </div>
                 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.Iwh_solutions}}</h6> 
+                    <h6 class="text-dark"><strong class="text-primary">Solutions: </strong> <br> {{i.Iwh_solutions}}</h6> 
                 </div>                
                 <div class="item2">                  
                     <div class="d-flex flex-row bd-highlight justify-content-left">                  
@@ -812,23 +852,31 @@
 
             {% if i.Categoty == 'MANAGER' %}
                 <div class="item">
-                    <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.Manager_report_title}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE:</strong> <br> {{i.work_schedule|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong> <br> {{i.work_left|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">Report Title:</strong> <br> {{i.Manager_report_title}}</h6>  
                 </div>
     
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.Manager_report}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Report Details: </strong> <br> {{i.Manager_report|safe}}</h6>  
                 </div>
     
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.Manager_challenges}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Challenges: </strong> <br> {{i.Manager_challenges|safe}}</h6>  
                 </div>
                 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.Manager_solutions}}</h6> 
+                    <h6 class="text-dark"><strong class="text-primary">Solutions: </strong> <br> {{i.Manager_solutions}}</h6> 
                 </div>                
                 <div class="item2">                  
                     <div class="d-flex flex-row bd-highlight justify-content-left">                  
@@ -906,23 +954,31 @@
             
             {% if i.Categoty == 'RUNYI' %}
                 <div class="item">
-                    <h6 class="text-dark"><strong>DATE: </strong> {{i.date_created}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
                 </div>
 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Title:</strong> <br> {{i.Runyi_report_Title}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE:</strong> <br> {{i.work_schedule|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong> <br> {{i.work_left|safe}}</h6>  
+                </div>
+
+                <div class="item"> 
+                    <h6 class="text-dark"><strong class="text-primary">Report Title:</strong> <br> {{i.Runyi_report_Title}}</h6>  
                 </div>
     
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Report Details: </strong> <br> {{i.Runyi_report}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Report Details: </strong> <br> {{i.Runyi_report|safe}}</h6>  
                 </div>
     
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Challenges: </strong> <br> {{i.Runyi_challenges}}</h6>  
+                    <h6 class="text-dark"><strong class="text-primary">Challenges: </strong> <br> {{i.Runyi_challenges|safe}}</h6>  
                 </div>
                 
                 <div class="item"> 
-                    <h6 class="text-dark"><strong>Solutions: </strong> <br> {{i.Runyi_solutions}}</h6> 
+                    <h6 class="text-dark"><strong class="text-primary">Solutions: </strong> <br> {{i.Runyi_solutions}}</h6> 
                 </div>                
                 <div class="item2">                  
                     <div class="d-flex flex-row bd-highlight justify-content-left">                  
@@ -933,7 +989,7 @@
                             {% endif  %}
                         </div>  
                         <div class="bd-highlight mr-1"> 
-                            {% if i.manager_flm_seen%}
+                            {% if i.manager_flm_seen%} m
                             <i class="far fa-eye  big text-secondary"></i><small class="text-secondary font-weight-bold up">MANAGER FLM</small>
                             <br>
                             {% endif %}

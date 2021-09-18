@@ -1,6 +1,7 @@
 {% extends "FDS_app/base.html" %}
 {% load crispy_forms_tags %}
 {% load user_tags %}
+{% load static %}
 {% block title %} Search Result {% endblock title %}
 
 {% block content %}
@@ -557,11 +558,34 @@
                         <td class="font-weight-bold">Choice for TP</td>
                         <td> {{r.Choice_for_TP}} </td>                    
                     </tr> 
-                    {% if r.Amount_paid %}
+                    
+                    {% if r.Delivery_Fee %}
+                    <tr>
+                        <td class="font-weight-bold">Delivery fee</td>
+                        <td><img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">{{r.Delivery_Fee}}</td>                    
+                    </tr>     
+                    {% endif %}
+
+                    {% if r.Amount_Payable %}
+                    <tr>
+                        <td class="font-weight-bold">Total Amount</td>
+                        <td><img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">{{r.Amount_Payable}}</td>                    
+                    </tr>     
+                    {% endif %}
+                    
+
+                    {% if r.Amount_Paid%}
                     <tr>
                         <td class="font-weight-bold"> Amount Paid</td>
-                        <td>N{{r.Amount_Paid}}</td>                    
-                    </tr>     
+                        <td><img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">{{r.Amount_Paid}}</td>                    
+                    </tr> 
+                    {% endif %}    
+                    
+                    {% if r.customer_payment_method %}
+                        <tr>
+                            <td class="font-weight-bold"> Payment Method</td>
+                            <td>{{r.customer_payment_method}}</td>                    
+                        </tr> 
                     {% endif %}
 
                     {% if request.user|fleet:"Fleet Manager" %}
@@ -701,36 +725,51 @@
                         {% endif %}
 
                         {% if r.Reciever_phone_number %}
-                        <tr>  
-                            <td class="font-weight-bold">Reciever Number</td>
-                            <td> {{r.Reciever_phone_number}}</td>                    
-                        </tr>
+                            <tr>  
+                                <td class="font-weight-bold">Reciever Number</td>
+                                <td> {{r.Reciever_phone_number}}</td>                    
+                            </tr>
                         {% endif %}
 
                         <tr>  
-                            <td class="font-weight-bold">Reciever Address</td>
+                            <td class="font-weight-bold">Delivery Destination</td>
                             <td> {{r.delivery_destination}}</td>                    
                         </tr>  
 
-                        <tr>  
-                            <td class="font-weight-bold">Item Amount</td>
-                            <td> N{{r.Enter_amount}}</td>                    
-                        </tr>
+                        {% if r.Enter_amount%}
+                            <tr>  
+                                <td class="font-weight-bold">Item Amount</td>
+                                <td> <img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign"> 
+                                    {{r.Enter_amount}}
+                                </td>                    
+                            </tr>
+                        {% endif %}
 
-                        <tr>  
-                            <td class="font-weight-bold">Delivery Fee</td>
-                            <td> N{{r.Delivery_Fee}}</td>                    
-                        </tr> 
+                        {% if r.Delivery_Fee %}
+                            <tr>  
+                                <td class="font-weight-bold">Delivery Fee</td>
+                                <td> <img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">
+                                    {{r.Delivery_Fee}}
+                                </td>                    
+                            </tr> 
+                        {% endif %}
 
+                        {% if r.Total %}
                         <tr>  
                             <td class="font-weight-bold">Total</td>
-                            <td> N{{r.Total}}</td>                    
+                            <td> <img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">
+                                {{r.Total}}
+                            </td>                    
                         </tr> 
+                        {% endif %}
 
                         {% if r.Amount_Paid %}
                         <tr>  
                             <td class="font-weight-bold">Amount Paid</td>
-                            <td> {{r.Amount_Paid}}</td>                 
+                            <td>
+                                <img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">
+                                 {{r.Amount_Paid}}
+                            </td>                 
                         </tr> 
                         {% endif %}
 

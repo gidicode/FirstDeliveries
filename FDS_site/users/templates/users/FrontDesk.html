@@ -832,7 +832,8 @@
                         <th scope="col">Amount Payable</th>                    
                         <th scope="col">Order ID</th>
                         <th scope="col">Assigned</th>
-                        <th scope="col">Confirmed</th>                        
+                        <th scope="col">Confirmed</th>
+                        <th scope="col">Update</th>                        
                     </tr>
                     </thead>
                     <tbody>
@@ -842,6 +843,7 @@
                         <td>{{i.date_created|timesince}}</td>
                         <td>{{i.customer}}</td>
                         <td>{{i.Delivery_type}}</td>
+                        <td>{{i.riders.first_name}}</td>
                         <td>
                             <div class="dropdown">
                                 <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -898,22 +900,29 @@
                         <td>{{i.Choice_for_TP}}</td>
                         <td>{{i.status}}</td> 
                         <td>{{i.Amount_Paid}}</td>
+                        <td>{{i.Delivery_Fee}}</td>
                         <td>{{i.Amount_Payable}}</td>
                         <td>{{i.order_id}}</td> 
+
                         <td class="text-center">
-                            {% if i.assigned == True%}
+                            {% if i.assigned == True %}
                                     <i class="fas fa-check-circle text-white">
                             {% else %}
                                     <i class="fas fa-check-circle text-danger"></i>
                             {% endif %}
                         </td>
+
                         <td class="text-center">
                             {% if i.confirmed == True %}
                                 <i class="fas fa-check-circle text-success"></i>
                             {% else %}
                                 <i class="fas fa-check-circle text-danger"></i>
-                            {% endif %}
-                        </td>                       
+                            {% endif %}                      
+                        </td>   
+
+                        <td class="text-center">
+                            <a class="" href="{% url 'fleetF' i.pk %}"><i class="fas fa-pen-alt"></i></a>
+                        </td>                          
                     </tr>
                     {% endfor %}
                     

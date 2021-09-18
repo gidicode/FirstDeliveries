@@ -343,7 +343,7 @@ def front_desk(request, user):
     request5 = Errand_service.objects.all()
     request6 = Front_desk.objects.all()
 
-    customer = Customer.objects.get( user= user )
+    customer = Customer.objects.get( user= request.user )
     notification_filter = adminNotification.objects.all()
     notify = notification_filter.filter(viewed = False) 
 
@@ -467,13 +467,14 @@ def PickDrop(request, user):
         'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Front Desk'])
 def FrontErrand(request, user):
     customer = Customer.objects.get(user = request.user)
+    all_frontdesk = Front_desk.objects.all()    
     if request.method == "POST":
         errand_Form = Front_desk_errand(request.POST)
         if errand_Form.is_valid():
             instance = errand_Form.save(commit = False)
             instance.customer = customer
             instance.Delivery_type = 'Errand'
-            instance.save()            
+            instance.save()
 
             hashids = Hashids(salt=settings.FRONT_DESK, min_length=7)
             h = hashids.encode(instance.id)
@@ -492,7 +493,11 @@ def FrontErrand(request, user):
                 customer=instance.customer,
                 item_created = "Front Desk",
                 order_id = h   
-            )                 
+            )         
+            
+            print(instance)
+            finding_duplicate_count = all_frontdesk.count(instance)
+            print(finding_duplicate_count)            
             
             return redirect('frontdesk', user=user)
     else:
@@ -2554,7 +2559,10 @@ def UpdateFForm(request, pk):
                                 )
                 messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
-            return redirect('fleetManager', user = pk)
+            if request.user.groups.filter(name = 'Fleet Manager'):
+                return redirect('fleetManager', user = pk)
+            elif request.user.groups.filter(name = 'Front Desk'):
+                return redirect('frontdesk', user = pk)
     context = {'o_form': o_form,
               'customer':customer 
               }

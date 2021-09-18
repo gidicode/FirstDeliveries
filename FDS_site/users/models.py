@@ -419,8 +419,7 @@ class Front_desk(models.Model):
         ('Card', 'Card'),
         ('Cash', 'Cash'),
         ('Transfer', 'Transfer'),
-        ('Transfer & Cash', 'Transfer & Cash'),
-        
+        ('Transfer & Cash', 'Transfer & Cash'),        
     }
 
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
@@ -448,8 +447,8 @@ class Front_desk(models.Model):
     payments_confirmed = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
     confirmed = models.BooleanField(default=False)
-    profit = models.IntegerField(null= True, default=0)
-    Amount_Paid = models.DecimalField(max_digits=10, default=0, decimal_places=2)
+    profit = models.IntegerField(null= True, blank=True, default=0)
+    Amount_Paid = models.DecimalField(max_digits=10, blank=True, default=0, decimal_places=2)
     Amount_Payable = models.IntegerField(null= True, default=500)
     Total = models.IntegerField(null=True)   
     Delivery_Fee = models.IntegerField(null=True)

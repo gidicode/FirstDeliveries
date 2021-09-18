@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from users.models import Customer
+from tinymce import models as tinymce_models
+
 # Create your models here.
 
 class OFFICE_REPORT(models.Model):
@@ -28,71 +30,71 @@ class OFFICE_REPORT(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL, verbose_name="STAFF")
 
     #Operations
-    work_schedule = models.TextField(max_length=1000, verbose_name="Task Schedule", blank=True, null=True)
-    Work_description = models.TextField(null=True, verbose_name="Main Report", blank=True, max_length=1000)
-    extent_of_completion = models.CharField(null=True, verbose_name="Task Completed", blank=True, max_length=1000)
-    time_taken = models.TextField(null=True, choices=TIME, max_length=200)    
-    work_left = models.TextField(null=True, verbose_name="Task Left", blank=True, max_length=200)
-    challenges = models.TextField(max_length=1000, blank=True, null=True)
+    work_schedule = tinymce_models.HTMLField(max_length=5000, verbose_name="Task Schedule", blank=True, null=True)
+    Work_description = tinymce_models.HTMLField(null=True, verbose_name="Main Report", blank=True, max_length=5000)
+    extent_of_completion = tinymce_models.HTMLField(null=True, verbose_name="Task Completed", blank=True, max_length=5000)
+    time_taken = tinymce_models.HTMLField(null=True, choices=TIME, max_length=2000)    
+    work_left = tinymce_models.HTMLField(null=True, verbose_name="Task Left", blank=True, max_length=2000)
+    solutions = models.CharField(max_length=2000, blank=True, null=True)
+    challenges = tinymce_models.HTMLField(max_length=5000, blank=True, null=True)
 
     #Fleet
-    Fleet_report_title = models.CharField(null=True, max_length=100)
-    Fleet_report = models.TextField(null=True, max_length=300)
-    Fleet_challenges =models.TextField(null=True, max_length=300, blank=True)
-    Fleet_solutions = models.CharField(null=True, blank=True, max_length=100)
+    Fleet_report_title = models.CharField(null=True, blank=True, max_length=100)
+    Fleet_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Fleet_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Fleet_solutions = models.CharField(null=True, blank=True, max_length=5000)
     
     #Marketing
-    Marketing_report_title = models.CharField(null=True, max_length=100)
-    Marketing_report = models.TextField(null=True, max_length=300)
-    Marketting_challenges =models.TextField(null=True, max_length=300, blank=True)
-    Marketing_solutions = models.CharField(null=True, blank=True, max_length=100)
+    Marketing_report_title = models.CharField(null=True, blank=True, max_length=100)
+    Marketing_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Marketting_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000, )
+    Marketing_solutions = models.CharField(null=True, blank=True, max_length=5000)
 
     #Front_desk
-    FrontDesk_report_Title = models.CharField(null=True, max_length=100)
-    FrontDesk_report = models.TextField(null=True, max_length=300)
-    Front_desk_total_rides = models.IntegerField(null=True, verbose_name='Total Rides Today')
-    Front_desk_total_amount = models.IntegerField(null=True, verbose_name='Total Amount Today')
-    FrontDesk_challenges =models.TextField(null=True, max_length=300, blank=True)
-    FrontDesk_solutions = models.CharField(null=True, blank=True, max_length=100)
+    FrontDesk_report_Title = models.CharField(null=True, blank=True, max_length=100)
+    FrontDesk_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Front_desk_total_rides = models.IntegerField(null=True, blank=True, verbose_name='Total Rides Today')
+    Front_desk_total_amount = models.IntegerField(null=True, blank=True, verbose_name='Total Amount Today')
+    FrontDesk_challenges =tinymce_models.HTMLField(null=True, blank=True, max_length=5000,)
+    FrontDesk_solutions = models.CharField(null=True, blank=True, max_length=1000)
 
     #IWH
-    Iwh_report_title = models.CharField(null=True, max_length=100)
-    Iwh_report = models.TextField(null=True, max_length=500)
-    Iwh_challenges = models.TextField(null=True, blank=True, max_length=500, verbose_name="Challenges")
-    Iwh_solutions = models.CharField(null=True, blank=True, max_length=500, verbose_name="Solutions")    
+    Iwh_report_title = models.CharField(null=True, blank=True, max_length=100)
+    Iwh_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Iwh_challenges = tinymce_models.HTMLField(null=True, blank=True,  max_length=5000, verbose_name="Challenges")
+    Iwh_solutions = models.CharField(null=True, blank=True, max_length=1000, verbose_name="Solutions")    
 
     #TankFarm
-    Tank_farm_report_title = models.CharField(null=True, max_length=100, verbose_name="Report Title")
-    Tank_farm_report = models.TextField(null=True, max_length=500)
-    Tank_farm_challenges = models.TextField(null=True, blank=True, max_length=500, verbose_name="Challenges")
-    Tank_farm_solutions = models.CharField(null=True, blank=True, max_length=500, verbose_name="Solutions")
+    Tank_farm_report_title = models.CharField(null=True, blank=True, max_length=100, verbose_name="Report Title")
+    Tank_farm_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Tank_farm_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000, verbose_name="Challenges")
+    Tank_farm_solutions = models.CharField(null=True, blank=True, max_length=5000, verbose_name="Solutions")
 
     #Runyi
-    Runyi_report_Title = models.CharField(null=True, max_length=100)
-    Runyi_report = models.TextField(null=True, max_length=300)
-    Runyi_challenges = models.TextField(null=True, blank=True, max_length=300)
-    Runyi_solutions = models.CharField(null=True, blank=True, max_length=100)
-
+    Runyi_report_Title = models.CharField(null=True, blank=True, max_length=100)
+    Runyi_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Runyi_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Runyi_solutions = models.CharField(null=True, blank=True, max_length=1000)
+                
     #Manager_report
-    Manager_report_title = models.CharField(null=True, max_length=100)
-    Manager_report = models.TextField(null=True, max_length=300)
-    Manager_challenges = models.TextField(null=True, blank=True, max_length=300)
-    Manager_solutions = models.CharField(null=True, blank=True, max_length=100)   
+    Manager_report_title = models.CharField(null=True, blank=True, max_length=100)
+    Manager_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Manager_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Manager_solutions = models.CharField(null=True, blank=True, max_length=1000)   
 
-    Ict_report_Title = models.CharField(null=True, max_length=100)
-    Ict_report = models.TextField(null=True, max_length=300)
-    Ict_challenges = models.TextField(null=True, blank=True, max_length=300)
-    Ict_solutions = models.CharField(null=True, blank=True, max_length=100)   
+    Ict_report_Title = models.CharField(null=True, blank=True, max_length=100)
+    Ict_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Ict_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
+    Ict_solutions = models.CharField(null=True, blank=True, max_length=1000)   
 
     Categoty = models.CharField(null=True, choices=CATEGORY, max_length=100)
 
-    feedback_chairman = models.CharField(null=True, max_length=100)
-    feedback_operations = models.CharField(null=True, max_length=100)
-    feedback_admin = models.CharField(null=True, max_length=100)
-    feedback_manager = models.CharField(null=True, max_length=100)
-    feedback_runyi = models.CharField(null=True, max_length=100)
-    feedback_Manager_FLM = models.CharField(null=True, max_length=100)
-    solutions = models.CharField(max_length=100, null=True)
+    feedback_chairman = models.CharField(null=True, max_length=1000)
+    feedback_operations = models.CharField(null=True, max_length=1000)
+    feedback_admin = models.CharField(null=True, max_length=1000)
+    feedback_manager = models.CharField(null=True, max_length=1000)
+    feedback_runyi = models.CharField(null=True, max_length=1000)
+    feedback_Manager_FLM = models.CharField(null=True, max_length=1000)
 
     operations_seen = models.BooleanField(default=False)
     chairman_seen = models.BooleanField(default=False)
