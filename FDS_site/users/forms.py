@@ -389,4 +389,8 @@ class FleetManagerUpdateA(forms.ModelForm):
 class FleetManagerUpdateF(forms.ModelForm):
     class Meta:
         model = Front_desk
-        fields= ['status', 'Cancelation_Reason', 'riders']
+        fields= [
+            'status', 'Cancelation_Reason', 'riders', 
+            'customer_payment_method', 'confirmed', 
+             'Amount_Paid', 'profit',
+            ]

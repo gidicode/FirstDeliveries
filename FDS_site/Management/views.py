@@ -12,11 +12,11 @@ from django.contrib.auth.decorators import login_required
 from users.decorators import *
 
 
-def Notification_email(recipient_list, staff_name):
+def Notification_email(recipient_list, Staff_Name):
               
         send_mas = send_mail(
             subject ='New Request!!!', 
-            message = f"{staff_name} just sent in a  report, Visit flls.ng/login/ to view report",                
+            message = f"{Staff_Name} just sent in a  report, Visit flls.ng/login/ to view report",                
             from_email = 'support@flls.ng',
             recipient_list= recipient_list,
             fail_silently = False,
@@ -129,6 +129,7 @@ def Create_report(request, user):
             instance.customer = customer
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
+            instance.for_runyi = True
             instance.Categoty = 'Operations'
             instance.save()                    
 
@@ -167,6 +168,7 @@ def Edit_Report(request, pk):
             instance = E_form.save(commit=False)            
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
+            instance.for_runyi = True
             instance.save()
 
             messages.success(request, f"Your report has been submitted successfully")                      
@@ -331,9 +333,9 @@ def Edit_ict_Report(request, pk):
             instance.for_mangerFLLS = True             
             instance.save()
             
-            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
-           # Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -428,7 +430,7 @@ def Edit_market_Report(request, pk):
     return render(request, 'Management/Edit_market_report.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['FLLS', 'Front_Desk',])
+@allowed_user(allowed_roles=['FLLS', 'Front Desk',])
 def Front_Desk_Report(request, user):
     customer = Customer.objects.get(user=user)
     if customer.staff_created == False:
@@ -476,7 +478,7 @@ def Front_Desk_Report(request, user):
     return render(request, 'Management/Front_report.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['FLLS', 'Front_Desk',])
+@allowed_user(allowed_roles=['FLLS', 'Front Desk',])
 def Edit_front_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     front_report = OFFICE_REPORT.objects.get(id = pk)
@@ -538,6 +540,7 @@ def Runyi_Report(request, user):
             instance.Categoty = 'RUNYI'                      
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
+            instance.for_operation = True
             instance.save()
 
             hashids = Hashids( settings.MANAGEMENT, 5, settings.MANAGEMENT2)
@@ -578,6 +581,7 @@ def Edit_Runyi_Report(request, pk):
             instance = runyi_form.save(commit=False)                                  
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
+            instance.for_operation = True
             instance.save()           
 
             #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
@@ -921,7 +925,7 @@ def History_details(request, pk):
 def History_details_management(request, pk):
     customer = Customer.objects.get(user= request.user)
     report = OFFICE_REPORT.objects.filter( id= pk)
-    if request.user.groups.filter(name = 'MANAGEMENT_OPERATION'):        
+    if request.user.groups.filter(name = 'MANAGEMENT_OPERATION'):
         OFFICE_REPORT.objects.filter( id= pk).update(operations_seen = True)
     elif request.user.groups.filter(name = 'MANAGEMENT_CHAIRMAN'):
         OFFICE_REPORT.objects.filter( id= pk).update(chairman_seen = True)
