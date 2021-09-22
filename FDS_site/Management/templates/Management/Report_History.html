@@ -232,6 +232,28 @@
                     <p class="empty">You have no report yet</p>
                 {% endfor%}
             {% endif %}
+
+            {% if request.user|COMMERCIAL:"COMMERCIAL" %}
+                {% for i in all_commercial_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Commectial_Report_Title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
         
         </div>
         <div class="col-lg-3"> </div>

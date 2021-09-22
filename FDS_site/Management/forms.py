@@ -120,6 +120,16 @@ class Manager_FLLS_report_Form(forms.ModelForm):
             'Manager_solutions',
        ]        
 
+class Commercial_report_Form(forms.ModelForm): 
+    
+    class Meta:
+        model = OFFICE_REPORT
+        fields = [
+            'Commectial_Report_Title', 'Commercial_Report',  'Commercial_Challenges',
+            'Commercial_Accomplishment', 'Commercial_Breakdown', 
+            'Commercial_Balance',
+       ]        
+
 class Chairman_Response_Form(forms.ModelForm):    
     class Meta:
         model = OFFICE_REPORT

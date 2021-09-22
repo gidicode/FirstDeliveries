@@ -29,7 +29,8 @@ class Customer(models.Model):
         ('ACCOUNT', 'ACCOUNT'),  
         ('DEPOT MANAGER', 'DEPOT MANAGER'), 
         ('OPERATIONS', 'OPERATIONS'), 
-        ('ADMIN MANAGER', 'ADMIN MANAGER'),     
+        ('ADMIN MANAGER', 'ADMIN MANAGER'),
+        ('COMMERCIAL', 'COMMERCIAL'),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)

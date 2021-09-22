@@ -151,7 +151,7 @@
                     </div>  
                     <div class="bd-highlight mr-1"> 
                         {% if request.user|operations:"OPERATIONS" %}
-                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'create_report' user.id %}"> cOperations Report </a>    
+                            <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'create_report' user.id %}"> Operations Report </a>    
                         {% endif %} 
                         
                         {% if request.user|fleet:"Fleet Manager" %}
@@ -178,6 +178,9 @@
                         <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'iwh_create_report' user.id %}"> IWH Report </a>    
                         {% endif %}
 
+                        {% if request.user|COMMERCIAL:"COMMERCIAL" %}
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'commercial_create_report' user.id %}"> Commercial Report </a>    
+                        {% endif %}
 
                     </div>  
                     <div class="bd-highlight">                         
@@ -303,7 +306,28 @@
                         </div>
                     </div> 
                 </div>
-                {% endif %}  
+                {% endif %}                 
+            {% endfor %}
+            {% endif %}
+            
+            {% if request.user|COMMERCIAL:"COMMERCIAL" %}
+            {% for i in managers_report %}
+            <div class="pending text-center font-weight-bolder ">
+                <p> Pending</p>
+            </div>
+            <div class="list shadow-sm">
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between">
+                        <div class="bd-highlight ">          
+                            <p>{{i.Commectial_Report_Title}}</p>
+                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                        </div>  
+                        <div class="bd-highlight">         
+                            <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_commercial_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                        </div>                           
+                    </div>
+                </div> 
+            </div>
             {% endfor %}
             {% endif %}
 

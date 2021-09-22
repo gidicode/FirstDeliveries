@@ -146,5 +146,14 @@ def FLLS_GROUP(user, FLLS):
         group = group.first()
         return group in user.groups.all()
     else:
-        return False        
+        return False       
+
+@register.filter(name='COMMERCIAL') 
+def COMMERCIAL_GROUP(user, COMMERCIAL):
+    group = Group.objects.filter(name = COMMERCIAL)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False    
 

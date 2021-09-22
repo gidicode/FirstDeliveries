@@ -6,6 +6,260 @@
 {% block title %}Report Details {{user.username }} {% endblock title %}
 
 {% block content %}
+{% for i in report %} 
+<div class="the-bg shadow-sm container-fluid sticky-top">  
+    <div class="row"> 
+        <div class="col-md-12">               
+            <div class="d-flex  mb-3 align-items-baseline justify-content-around">
+                <div class="p-2 bd-highlight">
+                    <div data-toggle="tooltip" data-placement="bottom" title="back">
+                        <h4><i class="fas fa-arrow-circle-left text-white "></i></h4>
+                    </div>
+                </div>
+
+                <div class="p-2 bd-highlight">
+                    <div class="dropdown">
+                        <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <h5 style="font-family: 'Oswald', sans-serif;" class="text-white">
+                                STAFF NAME: <span>{{i.customer.first_name}} 
+                                <i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i>                                        
+                                </span>
+                            </h5>
+                        </button>              
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <p class="dropdown-item text-primary" style="font-family: 'Oswald', sans-serif;" >{{i.customer.first_name}} {{i.customer.last_name}}</p>  
+                        <p class="dropdown-item text-primary" style="font-family: 'Oswald', sans-serif;" >{{i.customer.Designation}}</p>  
+                        <p class="dropdown-item text-primary" style="font-family: 'Oswald', sans-serif;" >{{i.customer.Department}}</p>  
+                        </div>
+                    </div>
+                    <h6></h6>
+                </div>
+
+                <div class="p-2 bd-highlight">
+                    <div data-toggle="tooltip" data-placement="bottom" title="Make Comment">
+                        <h5  class="text-light" data-toggle="modal" data-target="#exampleModal">
+                            <i class="fas fa-comments"></i>
+                        </h5>
+                    </div>
+                </div>
+
+                <div class="p-2 bd-highlight"> 
+                    <div class="ticket">
+                        <small class="p-2 pt-3 text-primary  font-weight-bold">Ticket Num: {{i.ticket_num}}</small>
+                    </div>  
+                </div>
+            </div>
+        </div>    
+    </div>    
+</div>
+
+<div class="container-fluid">
+    <div class="col-md-4">  </div>
+    <div class="col-md-4">
+        {% if messages %}
+            <div class="messages p-3 container align-self-center">
+                {% for message in messages %}
+                <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-4">  </div>        
+</div>
+
+
+<div class="container-fluid mt-4">
+    <div class="row ">
+        <div class="col-md-3">  </div>
+        <div class="col-md-6">       
+            {% if i.Categoty == 'COMMERCIAL' %}
+                <div class="item mb-3">
+                    <h6 class="text-dark"><strong class="text-primary">DATE: </strong> {{i.date_created}}</h6>  
+                </div>
+
+                <div class="item mb-3"> 
+                    <h5 class="title-font"> Report Title</h5> 
+                    <hr> 
+                    <p>{{i.Commectial_Report_Title}}</p>
+                </div>
+
+                <div class="item mb-3"> 
+                    <h5 class="title-font"> Report Details</h5>  
+                    <hr> 
+                    <p>{{i.Commercial_Report|safe}}</p>                    
+                </div>
+
+                <div class="item mb-3"> 
+                    <h5 class="title-font"> Report Breakdown</h5> 
+                    <hr> 
+                    <p>{{i.Commercial_Breakdown|safe}}</p>                          
+                </div>
+
+                <div class="item mb-3"> 
+                    <h5 class="title-font"> Balance</h5> 
+                    <hr>  
+                    <p>{{i.Commercial_Balance|safe}}</p>                     
+                </div>
+
+                <div class="item mb-3">
+                    <h5 class="title-font">Accomplishment</h5> 
+                    <hr>  
+                    <p>{{i.Commercial_Accomplishment|safe}}</p>                      
+                </div>
+
+                <div class="item mb-3"> 
+                    <h5 class="title-font">Challenges:</h5> 
+                    <hr>  
+                    <p>{{i.Commercial_Challenges|safe}}</p>                       
+                </div>  
+                                               
+        </div>
+        <div class="col-md-3"> 
+            <div class="item2 container-fluid">     
+                <div class="row justify-content-center">                    
+                    <div class="col-md-12">
+                        <div class="viewed shadow"> 
+                            <div class="d-flex align-items-baseline justify-content-LEFT">
+                                <div class="p-2 bd-highlight">
+                                    {% if i.chairman_seen%}
+                                        <div class="viewd-inner2 shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> CHAIRMAN</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="viewd-inner shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Not Viewed ">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> CHAIRMAN</small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                
+                                <div class="p-2 bd-highlight">
+                                    {% if i.manager_flm_seen%}
+                                        <div class="viewd-inner2 shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> GGM FLM</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="viewd-inner shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Not Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> GGM FLM</small>
+                                        </div>
+                                    {% endif %}
+                                </div>                                
+                            </div>
+
+                            <div class="d-flex  mb-3 align-items-baseline justify-content-left">                                               
+                                <div class="p-2 bd-highlight">
+                                    {% if i.operations_seen%}
+                                        <div class="viewd-inner2 shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> GM OPERATIONS</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="viewd-inner shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Not Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> GM OPERATIONS</small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                
+                                <div class="p-2 bd-highlight"> 
+                                    {% if i.manager_seen%}
+                                        <div class="viewd-inner2 shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> GM FLLS</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="viewd-inner shadow-sm" data-toggle="tooltip" data-placement="bottom" title=" Not Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> GM FLLS</small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+
+                            <div class="d-flex  mb-3 align-items-baseline justify-content-left">                                               
+                                <div class="p-2 bd-highlight">
+                                    {% if i.admin_seen%}
+                                        <div class="viewd-inner2 shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> ADMIN/HR </small>
+                                        </div>
+                                    {% else %}
+                                        <div class="viewd-inner shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Not Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> ADMIN/HR </small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                
+                                <div class="p-2 bd-highlight"> 
+                                    {% if i.runyi_seen%}
+                                        <div class="viewd-inner2 shadow-sm" data-toggle="tooltip" data-placement="bottom" title="Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> GM ADMIN</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="viewd-inner shadow-sm" data-toggle="tooltip" data-placement="bottom" title=" Not Viewed">
+                                            <i class="far fa-eye "> </i><small class="font-weight-bold"> GM ADMIN</small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                
+
+                <div class="feedback mt-4 shadow">
+                    <div>
+                        {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin or i.feedback_Manager_FLM %}
+                        <h5 class="title-font feed">FEED BACK</h5>
+                        <hr>
+                        {% endif %}    
+                        
+                        {% if i.feedback_chairman %}
+                            <h6 class="title-font text-success">Chairman</h6>
+                            <p>{{i.feedback_chairman|safe}}</p>
+                            <hr>
+                        {% endif %}
+
+                        {% if i.feedback_Manager_FLM %}
+                            <h6 class="title-font text-success">GGM FLM</h6>
+                            <p>{{i.feedback_Manager_FLM|safe}}</p>
+                            <hr>
+                        {% endif %}
+
+                        {% if i.feedback_operations %}
+                            <h6 class="title-font text-success">GM Operations</h6>
+                            <p>{{i.feedback_operations|safe}}</p>
+                            <hr>
+                        {% endif %}
+
+                        {% if i.feedback_admin %}
+                            <h6 class="title-font text-success">Admin/HR</h6>
+                            <p> {{i.feedback_admin|safe}}</p>
+                            <hr>
+                        {% endif %}
+
+                        {% if i.feedback_manager %}
+                            <h6 class="title-font text-success">GM Flls</h6>
+                            <p>{{i.feedback_manager}}</p>
+                            <hr>
+                        {% endif %}
+
+                        {% if i.feedback_runyi %}
+                            <h6 class="title-font text-success">GM Admin </h6>
+                            <p>{{i.feedback_runyi}}</p>
+                            <hr>
+                        {% endif %}
+                        
+                    </div>
+                </div>                                                         
+                                                                                                                    
+            </div>
+            {% endif %}        
+        </div>        
+    </div>
+</div>
+
+<!---->
+
 <div class="container-fluid">
     <div class="row mt-4 justify-content-center">
         <div class="col-lg-3 text-left"> 
@@ -25,7 +279,7 @@
             {% endif %}
             <div class="report text-center">
                 <h3 class="pt-3 the-report1">REPORT DETAILS MANAGEMENT</h3>
-                {% for i in report %} 
+                
                 <div class="d-flex flex-row bd-highlight text-secondary text-left bg-light p-2 mt-3 justify-content-between shadow-sm ">
                     <div class="bd-highlight ">          
                         <small class=" "><strong class="text-primary">STAFF:</strong> {{i.customer.first_name}} {{i.customer.last_name}}</small>
@@ -65,9 +319,10 @@
                     {% endif %}
 
                     {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
-                        {% if i.feedback_runyi %}
-                    {% else %}
-                        <a href="{% url 'runyi_response' i.pk %}" role="button" class="btn btn-success text-center btn-sm">Comment</a>
+                        {% if i.feedback_runyi %}                    
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            Comment
+                        </button>
                         {% endif %}
                     {% endif %}
 
@@ -1053,26 +1308,80 @@
                     {% endif %}
                 </div>
             {% endif %}
-                        
-            {% endfor %}       
+
+                      
+        {% endfor %}       
         </div>
         <div class="col-lg-3"> </div>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            
+            <div class="modal-body">
+                {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
+                    <form method="POST" enctype="multipart/form-data"> 
+                        {% csrf_token %}                    
+                        
+                        <div class="form-row">
+                            <div class="col">
+                            {{runyi_form|crispy}}
+                            </div>                            
+                        </div>  
+                        <div class="d-flex flex-row bd-highlight justify-content-center ">
+                            
+                            <div class="bd-highlight justify-content-right">          
+                                <button class="btn btn-sm rounded-lg text-white" style="background-color: #00a11b;" type="submit" name="runyi">Submit</button>
+                            </div>      
+                        </div>                              
+                    </form>
+                {% endif %}
+
+                {% if request.user|m_manager:"MANAGEMENT_MANAGER" %}
+                    <form method="POST" enctype="multipart/form-data"> 
+                        {% csrf_token %}                    
+                        
+                        <div class="form-row">
+                            <div class="col">
+                            {{response_form|crispy}}
+                            </div>                            
+                        </div>  
+                        <div class="d-flex flex-row bd-highlight justify-content-between ">                        
+                            <div class="bd-highlight justify-content-right">          
+                                <button class="btn btn-sm rounded-lg text-white" style="background-color: #00a11b;" type="submit" name="ict">Submit</button>
+                            </div>      
+                        </div>                              
+                    </form>
+                {% endif %}
+            </div>
+            
+        </div>
+      </div>
 </div>
 <style>
 
+    .the-bg{
+        background-color: #0000FF;
+        height: 45pt;        
+    }
     .report{
         border-radius: 10px;
         background-color: #9494FF;
         color: #E5E5FF;
         height: 15mm;
+    }    
+
+    .title-font{
+        font-family: 'Oswald', sans-serif;
+        color: #0000FF;
     }
 
     .upper{
         margin-top: 10mm;
     }
     .ticket{
-        background-color: #7fb5fd;
+        background-color: #ffffff;
         border-radius: 5px;
         height: 8mm;     
 
@@ -1082,9 +1391,37 @@
         background-color: #ffffff;
         margin-top: 1mm;
         padding: 10px;
-        border-radius: 8px;                      
+        border-radius: 4px;                      
+        height: auto;                
+    }
+
+    .viewed{
+        margin-top: 20pt;
+        background-color: #ffffff;
+        border-radius: 10px; 
+        width: auto;   
         height: auto;
-        border-left: 10px solid #7fb5fd;        
+    }
+
+    .viewd-inner{        
+        border-radius: 10px;
+        background-color: rgb(243, 243, 243);
+        padding: 5px;
+        color: rgb(205, 214, 208);      
+    }
+
+    .viewd-inner2{        
+        border-radius: 10px;        
+        background-color: rgb(196, 255, 216);        
+        padding: 5px;
+        color: rgb(136, 170, 147);
+      
+    }
+
+    .feedback{
+        background-color: rgb(255, 255, 255);
+        padding: 10px;
+        border-radius: 10px;
     }
 
     .item:hover{
@@ -1094,17 +1431,14 @@
         border-radius: 8px;                      
         height: auto;
         box-shadow: #10f878;
-        border-left: 10px solid #8181ff;
+        border-left: 10px solid #0000FF;
     }
 
-    .item2{
-        background-color: #f6f6ff;
+    .item2{        
         margin-top: 3mm;
-        margin-bottom: 3mm;
-        padding: 10px;
+        margin-bottom: 3mm;        
         border-radius: 8px;                      
-        height: auto;
-        border-left: 10px solid #7fb5fd;
+        height: auto;             
     }
 
     .big{        

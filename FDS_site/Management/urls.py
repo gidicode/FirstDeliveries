@@ -17,6 +17,7 @@ urlpatterns = [
     path('IWH_Create_Report/<hashid:user>/', management_views.IWH_Report, name='iwh_create_report'),
     path('TANKFARM_Create_Report/<hashid:user>/', management_views.TANK_FARM_Report, name='tankfarm_create_report'),
     path('Manager_Create_Report/<hashid:user>/', management_views.Manager_Report, name='manager_create_report'),
+    path('Commercial_Create_Report/<hashid:user>/', management_views.Commercial_Report, name='commercial_create_report'),
 
     path('Edit_Report/<hashid:pk>/', management_views.Edit_Report, name='edit_report'),
     path('Edit_Fleet_Report/<hashid:pk>/', management_views.Edit_Fleet_Report, name='edit_fleet_report'),
@@ -27,6 +28,7 @@ urlpatterns = [
     path('Edit_Iwh_Report/<hashid:pk>/', management_views.Edit_IWH_Report, name='edit_iwh_report'),
     path('Edit_TankFarm_Report/<hashid:pk>/', management_views.Edit_Tank_Farm_Report, name='edit_tank_farm_report'),
     path('Edit_Manager_Report/<hashid:pk>/', management_views.Edit_Manager_Report, name='edit_manager_report'),
+    path('Edit_Commercial_Report/<hashid:pk>/', management_views.Edit_Commercial_Report, name='edit_commercial_report'),
 
     path('Report_History/<hashid:user>/', management_views.Status_History, name='report_history'),
 

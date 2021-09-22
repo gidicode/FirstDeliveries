@@ -25,6 +25,7 @@ class OFFICE_REPORT(models.Model):
         ('IWH', 'IWH'),
         ('RUNYI', 'RUNYI'),
         ('MANAGER', 'MANAGER'),
+        ('COMMERCIAL', 'COMMERCIAL'),
     ]
     
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL, verbose_name="STAFF")
@@ -93,8 +94,15 @@ class OFFICE_REPORT(models.Model):
     feedback_operations = models.CharField(null=True, max_length=1000)
     feedback_admin = models.CharField(null=True, max_length=1000)
     feedback_manager = models.CharField(null=True, max_length=1000)
-    feedback_runyi = models.CharField(null=True, max_length=1000)
+    feedback_runyi = tinymce_models.HTMLField(null=True, max_length=1000)
     feedback_Manager_FLM = models.CharField(null=True, max_length=1000)
+
+    Commectial_Report_Title = models.CharField(null=True, blank=True, max_length=200)
+    Commercial_Report = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Report Details")
+    Commercial_Challenges = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Challenges")
+    Commercial_Accomplishment = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Acomplishment")
+    Commercial_Breakdown = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Break Down")
+    Commercial_Balance = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Balance")
 
     operations_seen = models.BooleanField(default=False)
     chairman_seen = models.BooleanField(default=False)
