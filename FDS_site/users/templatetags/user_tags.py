@@ -157,3 +157,33 @@ def COMMERCIAL_GROUP(user, COMMERCIAL):
     else:
         return False    
 
+@register.filter(name='MAINTENANCE') 
+def MAINTENANCE_GROUP(user, MAINTENANCE):
+    group = Group.objects.filter(name = MAINTENANCE)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False   
+
+@register.filter(name='MANAGER_PH') 
+def PORTHARCOURT_GROUP(user, MANAGER_PH):
+    group = Group.objects.filter(name = MANAGER_PH)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False    
+
+@register.filter(name='ACCOUNT') 
+def ACCOUNT_GROUP(user, ACCOUNT):
+    group = Group.objects.filter(name = ACCOUNT)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False 
+    
+
+
+

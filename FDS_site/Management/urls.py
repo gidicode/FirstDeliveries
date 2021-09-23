@@ -18,6 +18,10 @@ urlpatterns = [
     path('TANKFARM_Create_Report/<hashid:user>/', management_views.TANK_FARM_Report, name='tankfarm_create_report'),
     path('Manager_Create_Report/<hashid:user>/', management_views.Manager_Report, name='manager_create_report'),
     path('Commercial_Create_Report/<hashid:user>/', management_views.Commercial_Report, name='commercial_create_report'),
+    path('Admin_Create_Report/<hashid:user>/', management_views.Admin_Report, name='admin_create_report'),
+    path('Account_Create_Report/<hashid:user>/', management_views.Account_Report, name='account_create_report'),
+    path('Maintenance_Create_Report/<hashid:user>/', management_views.MaintenanceAccount_Report, name='maintenance_create_report'),
+    path('PH_Create_Report/<hashid:user>/', management_views.PortHatcourt_office_Report, name='ph_create_report'),
 
     path('Edit_Report/<hashid:pk>/', management_views.Edit_Report, name='edit_report'),
     path('Edit_Fleet_Report/<hashid:pk>/', management_views.Edit_Fleet_Report, name='edit_fleet_report'),
@@ -29,6 +33,10 @@ urlpatterns = [
     path('Edit_TankFarm_Report/<hashid:pk>/', management_views.Edit_Tank_Farm_Report, name='edit_tank_farm_report'),
     path('Edit_Manager_Report/<hashid:pk>/', management_views.Edit_Manager_Report, name='edit_manager_report'),
     path('Edit_Commercial_Report/<hashid:pk>/', management_views.Edit_Commercial_Report, name='edit_commercial_report'),
+    path('Edit_admin_Report/<hashid:pk>/', management_views.Edit_admin_Report, name='edit_admin_report'),
+    path('Edit_account_Report/<hashid:pk>/', management_views.Edit_account_Report, name='edit_account_report'),
+    path('Edit_maintenance_Report/<hashid:pk>/', management_views.Edit_maintenance_Report, name='edit_maintenance_report'),
+    path('Edit_ph_Report/<hashid:pk>/', management_views.Edit_portharcourt_office_Report, name='edit_ph_report'),
 
     path('Report_History/<hashid:user>/', management_views.Status_History, name='report_history'),
 

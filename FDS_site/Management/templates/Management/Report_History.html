@@ -254,6 +254,95 @@
                     <p class="empty">You have no report yet</p>
                 {% endfor%}
             {% endif %}
+
+            {% if request.user|admin:"MANAGEMENT_ADMIN" %}
+                {% for i in all_admin_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Admin_report_title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
+
+
+            {% if request.user|MAINTENANCE:"MAINTENANCE" %}
+                {% for i in all_maintainance_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Maintenance_report_title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
+
+            {% if request.user|ACCOUNT:"ACCOUNT" %}
+                {% for i in all_account_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Account_report_title}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
+
+            {% if request.user|MANAGER_PH:"MANAGER_PH" %}
+                {% for i in all_PH_report %}
+                <div class="item">
+                    <div class="d-flex flex-row bd-highlight justify-content-between ">
+                        <div class="bd-highlight mr-1">          
+                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Manager_report_title_PH}}</a>
+                        </div>  
+                        <div class="bd-highlight">          
+                            <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
+                        </div>  
+                        <div class="bd-highlight">   
+                            <div class="ticket">
+                                <small class="p-2 pt-3 text-white font-weight-bold dfont-1 text-truncate">Ticket Num: {{i.ticket_num}}</small>
+                            </div>       
+                        </div>      
+                    </div>                     
+                </div>   
+                {% empty %}
+                    <p class="empty">You have no report yet</p>
+                {% endfor%}
+            {% endif %}
         
         </div>
         <div class="col-lg-3"> </div>

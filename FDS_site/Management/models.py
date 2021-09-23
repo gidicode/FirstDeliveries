@@ -26,6 +26,10 @@ class OFFICE_REPORT(models.Model):
         ('RUNYI', 'RUNYI'),
         ('MANAGER', 'MANAGER'),
         ('COMMERCIAL', 'COMMERCIAL'),
+        ('ADMIN', 'ADMIN'),
+        ('ACCOUNT', 'ACCOUNT'),
+        ('MAINTENANCE', 'MAINTENANCE'),
+        ('MANAGER_PH', 'MANAGER_PH'),
     ]
     
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL, verbose_name="STAFF")
@@ -36,20 +40,20 @@ class OFFICE_REPORT(models.Model):
     extent_of_completion = tinymce_models.HTMLField(null=True, verbose_name="Task Completed", blank=True, max_length=5000)
     time_taken = tinymce_models.HTMLField(null=True, choices=TIME, max_length=2000)    
     work_left = tinymce_models.HTMLField(null=True, verbose_name="Task Left", blank=True, max_length=2000)
-    solutions = models.CharField(max_length=2000, blank=True, null=True)
+    solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
     challenges = tinymce_models.HTMLField(max_length=5000, blank=True, null=True)
 
     #Fleet
     Fleet_report_title = models.CharField(null=True, blank=True, max_length=100)
     Fleet_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
     Fleet_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
-    Fleet_solutions = models.CharField(null=True, blank=True, max_length=5000)
+    Fleet_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
     
     #Marketing
     Marketing_report_title = models.CharField(null=True, blank=True, max_length=100)
     Marketing_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
     Marketting_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000, )
-    Marketing_solutions = models.CharField(null=True, blank=True, max_length=5000)
+    Marketing_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
 
     #Front_desk
     FrontDesk_report_Title = models.CharField(null=True, blank=True, max_length=100)
@@ -57,13 +61,13 @@ class OFFICE_REPORT(models.Model):
     Front_desk_total_rides = models.IntegerField(null=True, blank=True, verbose_name='Total Rides Today')
     Front_desk_total_amount = models.IntegerField(null=True, blank=True, verbose_name='Total Amount Today')
     FrontDesk_challenges =tinymce_models.HTMLField(null=True, blank=True, max_length=5000,)
-    FrontDesk_solutions = models.CharField(null=True, blank=True, max_length=1000)
+    FrontDesk_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
 
     #IWH
     Iwh_report_title = models.CharField(null=True, blank=True, max_length=100)
     Iwh_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
     Iwh_challenges = tinymce_models.HTMLField(null=True, blank=True,  max_length=5000, verbose_name="Challenges")
-    Iwh_solutions = models.CharField(null=True, blank=True, max_length=1000, verbose_name="Solutions")    
+    Iwh_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
 
     #TankFarm
     Tank_farm_report_title = models.CharField(null=True, blank=True, max_length=100, verbose_name="Report Title")
@@ -75,34 +79,54 @@ class OFFICE_REPORT(models.Model):
     Runyi_report_Title = models.CharField(null=True, blank=True, max_length=100)
     Runyi_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
     Runyi_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
-    Runyi_solutions = models.CharField(null=True, blank=True, max_length=1000)
+    Runyi_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
                 
     #Manager_report
     Manager_report_title = models.CharField(null=True, blank=True, max_length=100)
     Manager_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
     Manager_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
-    Manager_solutions = models.CharField(null=True, blank=True, max_length=1000)   
+    Manager_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
 
     Ict_report_Title = models.CharField(null=True, blank=True, max_length=100)
     Ict_report = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
     Ict_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length=5000)
-    Ict_solutions = models.CharField(null=True, blank=True, max_length=1000)   
+    Ict_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+
+    Admin_report_title = models.CharField(null=True, blank=True, max_length=500)
+    Admin_report_details = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+    Admin_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+    Admin_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+
+    Account_report_title = models.CharField(null=True, blank=True, max_length=500)
+    Account_report_details = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+    Account_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+    Account_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+
+    Maintenance_report_title = models.CharField(null=True, blank=True, max_length=500)
+    Maintenacne_report_details = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+    Maintenance_challenges = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+    Maintenance_solutions = tinymce_models.HTMLField(null=True, blank=True, max_length = 5000)
+
+    Manager_report_title_PH = models.CharField(null=True, blank=True, max_length=200, verbose_name="Report Title")
+    Manager_report_PH = tinymce_models.HTMLField(null=True, blank=True, max_length=5000, verbose_name="Report Details")
+    Manager_challenges_PH = tinymce_models.HTMLField(null=True, blank=True, max_length=5000, verbose_name="Challenges")
+    Manager_solutions_PH = tinymce_models.HTMLField(null=True, blank=True, max_length=5000, verbose_name="Solutions")
 
     Categoty = models.CharField(null=True, choices=CATEGORY, max_length=100)
 
-    feedback_chairman = models.CharField(null=True, max_length=1000)
-    feedback_operations = models.CharField(null=True, max_length=1000)
-    feedback_admin = models.CharField(null=True, max_length=1000)
-    feedback_manager = models.CharField(null=True, max_length=1000)
-    feedback_runyi = tinymce_models.HTMLField(null=True, max_length=1000)
-    feedback_Manager_FLM = models.CharField(null=True, max_length=1000)
+    feedback_chairman = tinymce_models.HTMLField(null=True, blank=True, max_length=1000)
+    feedback_operations = tinymce_models.HTMLField(null=True, blank=True, max_length=1000)
+    feedback_admin = tinymce_models.HTMLField(null=True, blank=True, max_length=1000)
+    feedback_manager = models.CharField(null=True, blank=True, max_length=1000)
+    feedback_runyi = tinymce_models.HTMLField(null=True, blank=True, max_length=1000)
+    feedback_Manager_FLM = tinymce_models.HTMLField(null=True, blank=True, max_length=1000)
 
     Commectial_Report_Title = models.CharField(null=True, blank=True, max_length=200)
     Commercial_Report = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Report Details")
     Commercial_Challenges = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Challenges")
     Commercial_Accomplishment = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Acomplishment")
     Commercial_Breakdown = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Break Down")
-    Commercial_Balance = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Balance")
+    Commercial_Balance = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Company GOV | Total truck out | Stock balance")
 
     operations_seen = models.BooleanField(default=False)
     chairman_seen = models.BooleanField(default=False)

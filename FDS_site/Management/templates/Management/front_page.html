@@ -132,12 +132,10 @@
                                 </a>  
 
                                 {% elif request.user|admin:"MANAGEMENT_ADMIN" %}
-                                <a role="button" href="{% url 'admin_list' user.id %}">                                    
+                                <a role="button" href="{% url 'admin_list' user.id %}">                 
                                     <h4 class="activities-text text-2 text text-decoration-none">Daily Report</h4>                                    
                                 </a>  
-                                {% endif %}
-                                
-                                                             
+                                {% endif %}                                                                                             
                             </div>
                         </div>                           
                     </div>
@@ -182,14 +180,115 @@
                         <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'commercial_create_report' user.id %}"> Commercial Report </a>    
                         {% endif %}
 
+                        {% if request.user|MAINTENANCE:"MAINTENANCE" %}
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'maintenance_create_report' user.id %}">Maintenance Report</a>
+                        {% endif %}
+
+                        {% if request.user|MANAGER_PH:"MANAGER_PH" %}
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'ph_create_report' user.id %}">PH Report</a>
+                        {% endif %}
+
+                        {% if request.user|ACCOUNT:"ACCOUNT" %}
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'account_create_report' user.id %}">Account Report</a>
+                        {% endif %}
+
+                        {% if request.user|admin:"MANAGEMENT_ADMIN" %}
+                        <a class="btn btn-span rounded-pill the-btn btn-color1" role="button" href="{% url 'admin_create_report' user.id %}">Admin Report</a>
+                        {% endif %}
+
                     </div>  
                     <div class="bd-highlight">                         
                         <a class="btn btn-span rounded-pill the-btn btn-color" role="button" href="{% url 'report_history' user.id %}"> Report Status </a>                        
                     </div>      
                 </div>
             </div>
+
+
+            {% if request.user|admin:"MANAGEMENT_ADMIN" %}
+                {% for i in managers_report %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight">          
+                                <p>{{i.Admin_report_title}}</p>
+                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_admin_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if request.user|ACCOUNT:"ACCOUNT" %}
+                {% for i in managers_report %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight">          
+                                <p>{{i.Account_report_title}}</p>
+                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">         
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_account_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if request.user|MANAGER_PH:"MANAGER_PH" %}
+                {% for i in managers_report %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight">          
+                                <p>{{i.Manager_report_title_PH}}</p>
+                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">         
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_ph_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if request.user|MAINTENANCE:"MAINTENANCE" %}
+                {% for i in managers_report %}
+                    <div class="pending text-center font-weight-bolder ">
+                        <p> Pending</p>
+                    </div>
+                    <div class="list shadow-sm">
+                        <div class="item">
+                            <div class="d-flex flex-row bd-highlight justify-content-between">
+                                <div class="bd-highlight">          
+                                    <p>{{i.Maintenance_report_title}}</p>
+                                    <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                </div>  
+                                <div class="bd-highlight">         
+                                    <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_maintenance_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                </div>                           
+                            </div>
+                        </div> 
+                    </div>
+                {% endfor %}
+            {% endif %}
             
-            {% if request.user|FARM_TANK:"TANK" %}            
+            {% if request.user|FARM_TANK:"TANK" %}
             {% for i in managers_report %}
             <div class="pending text-center font-weight-bolder ">
                 <p> Pending</p>
@@ -437,7 +536,7 @@
                 </div> 
             </div>
             {% endfor %}
-            {% endif %}                                
+            {% endif %}                                 
         </div>
         <div class="col-lg-3"> </div>
     </div>
