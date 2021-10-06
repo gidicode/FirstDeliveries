@@ -43,27 +43,27 @@
                         <div class="bd-highlight p-2"> 
                             <div class="back">
                                 {% if i.chairman_seen%}
-                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                                 <br>
                                 {% endif  %}
     
                                 {% if i.operations_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                                 <br>
                                 {% endif %}
     
                                 {% if i.manager_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                                 <br>
                                 {% endif %}
     
                                 {% if i.admin_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                                 <br>
                                 {% endif %}
     
                                 {% if i.runyi_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                                 <br>
                                 {% endif %}
                                 <br>         
@@ -76,8 +76,14 @@
                             <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                             <br>
                             {% endif %}
+
+                            {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_admin %}
@@ -85,7 +91,7 @@
                             <br>
                             {% endif %}
                             {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_runyi %}
@@ -132,27 +138,32 @@
                         <div class="bd-highlight p-2"> 
                             <div class="back">
                                 {% if i.chairman_seen%}
-                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                                 <br>
                                 {% endif  %}
+
+                                {% if i.manager_flm_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
+                                <br>
+                                {% endif %}
     
                                 {% if i.operations_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                                 <br>
                                 {% endif %}
     
                                 {% if i.manager_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                                 <br>
                                 {% endif %}
     
                                 {% if i.admin_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                                 <br>
                                 {% endif %}
     
                                 {% if i.runyi_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                                 <br>
                                 {% endif %}
                                 <br>         
@@ -165,8 +176,14 @@
                             <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                             <br>
                             {% endif %}
+
+                            {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_admin %}
@@ -174,7 +191,7 @@
                             <br>
                             {% endif %}
                             {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_runyi %}
@@ -223,32 +240,32 @@
                     <div class="bd-highlight p-2"> 
                         <div class="back">
                             {% if i.chairman_seen%}
-                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                             <br>
                             {% endif  %}
 
                             {% if i.operations_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_flm_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER</small>
                             <br>
                             {% endif %}
 
                             {% if i.admin_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                             <br>
                             {% endif %}
 
                             {% if i.runyi_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> RUNYI</small>
                             <br>
                             {% endif %}
                             <br>         
@@ -262,15 +279,21 @@
                             <br>
                             {% endif %}
                             {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                             <br>
                             {% endif %}
+
+                            {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.feedback_admin %}
                             <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_runyi %}
@@ -317,27 +340,32 @@
                     <div class="bd-highlight p-2"> 
                         <div class="back">
                             {% if i.chairman_seen%}
-                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                             <br>
                             {% endif  %}
 
+                            {% if i.manager_flm_seen %}
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.operations_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                             <br>
                             {% endif %}
 
                             {% if i.admin_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                             <br>
                             {% endif %}
 
                             {% if i.runyi_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                             <br>
                             {% endif %}
                             <br>         
@@ -350,8 +378,14 @@
                             <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                             <br>
                             {% endif %}
+
+                            {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_admin %}
@@ -359,7 +393,7 @@
                             <br>
                             {% endif %}
                             {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_runyi %}
@@ -406,32 +440,32 @@
                     <div class="bd-highlight p-2"> 
                         <div class="back">
                             {% if i.chairman_seen%}
-                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                             <br>
                             {% endif  %}
 
                             {% if i.operations_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_flm_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up">GGM</small>
                             <br>
                             {% endif %}
 
                             {% if i.admin_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                             <br>
                             {% endif %}
 
                             {% if i.runyi_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                             <br>
                             {% endif %}
                             <br>         
@@ -444,8 +478,14 @@
                             <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                             <br>
                             {% endif %}
+
+                            {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_admin %}
@@ -453,7 +493,7 @@
                             <br>
                             {% endif %}
                             {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_runyi %}
@@ -499,32 +539,32 @@
                         <div class="bd-highlight p-2"> 
                             <div class="back">
                             {% if i.chairman_seen%}
-                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                             <br>
                             {% endif  %}
 
                             {% if i.operations_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_flm_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM </small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                             <br>
                             {% endif %}
 
                             {% if i.admin_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                             <br>
                             {% endif %}
 
                             {% if i.runyi_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                             <br>
                             {% endif %}
                             <br>       
@@ -536,8 +576,14 @@
                             <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                             <br>
                             {% endif %}
+
+                            {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_admin %}
@@ -545,7 +591,7 @@
                             <br>
                             {% endif %}
                             {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_runyi %}
@@ -590,32 +636,32 @@
                         <div class="bd-highlight p-2"> 
                             <div class="back">
                                 {% if i.chairman_seen%}
-                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                                 <br>
                                 {% endif  %}
 
                                 {% if i.operations_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.manager_flm_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.manager_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.admin_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.runyi_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                                 <br>
                                 {% endif %}
                                 <br>                                           
@@ -627,8 +673,14 @@
                                 <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                                 <br>
                                 {% endif %}
+
+                                {% if i.feedback_Manager_FLM %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                                <br>
+                                {% endif %}
+
                                 {% if i.feedback_operations %}
-                                <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                                <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_admin %}
@@ -636,13 +688,14 @@
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_manager %}
-                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_runyi %}
                                 <small class="feedback font-weight-bold"><span class="text-primary">GM ADMIN:</span> {{i.feedback_runyi|safe}}</small>
                                 <br>
-                                {% endif %}                                                                                       
+                                {% endif %}                                  
+                                                                                                                     
                             </div>  
                         </div>      
                     </div>                                               
@@ -681,32 +734,33 @@
                         <div class="bd-highlight p-2"> 
                             <div class="back">
                                 {% if i.chairman_seen%}
-                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                                 <br>
                                 {% endif  %}
+                                
 
                                 {% if i.operations_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.manager_flm_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.manager_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.admin_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.runyi_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                                 <br>
                                 {% endif %}
                                 <br>                                         
@@ -718,8 +772,14 @@
                                 <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                                 <br>
                                 {% endif %}
+
+                                {% if i.feedback_Manager_FLM %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                                <br>
+                                {% endif %}
+
                                 {% if i.feedback_operations %}
-                                <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                                <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_admin %}
@@ -727,13 +787,14 @@
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_manager %}
-                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_runyi %}
                                 <small class="feedback font-weight-bold"><span class="text-primary">GM ADMIN:</span> {{i.feedback_runyi|safe}}</small>
                                 <br>
-                                {% endif %}                                                                               
+                                {% endif %}                                  
+                                                                                                             
                             </div>  
                         </div>      
                     </div>                                               
@@ -771,32 +832,32 @@
                         <div class="bd-highlight p-2"> 
                             <div class="back">
                                 {% if i.chairman_seen%}
-                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                                 <br>
                                 {% endif  %}
 
                                 {% if i.operations_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.manager_flm_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.manager_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS </small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.admin_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                                 <br>
                                 {% endif %}
 
                                 {% if i.runyi_seen %}
-                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                                 <br>
                                 {% endif %}
                                 <br>                                         
@@ -809,7 +870,7 @@
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_operations %}
-                                <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                                <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_admin %}
@@ -817,13 +878,19 @@
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_manager %}
-                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                                 <br>
                                 {% endif %}
                                 {% if i.feedback_runyi %}
                                 <small class="feedback font-weight-bold"><span class="text-primary">GM ADMIN:</span> {{i.feedback_runyi|safe}}</small>
                                 <br>
-                                {% endif %}                                                                                        
+                                {% endif %}  
+
+                                {% if i.feedback_Manager_FLM %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GGM:</span> {{i.feedback_Manager_FLM|safe}}</small>
+                                <br>
+                                {% endif %}  
+                                                                                                                      
                             </div>  
                         </div>      
                     </div>                                               
@@ -860,32 +927,32 @@
                     <div> 
                         <div class="back">
                             {% if i.chairman_seen%}
-                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                             <br>
                             {% endif  %}
 
                             {% if i.operations_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up">GM OPERATIONS</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_flm_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                             <br>
                             {% endif %}
 
                             {% if i.admin_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                             <br>
                             {% endif %}
 
                             {% if i.runyi_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                             <br>
                             {% endif %}
                             <br>                                         
@@ -897,8 +964,14 @@
                             <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                             <br>
                             {% endif %}
+
+                            {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_admin %}
@@ -906,7 +979,7 @@
                             <br>
                             {% endif %}
                             {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_runyi %}
@@ -934,7 +1007,9 @@
             <div class="item">                  
                 <div class="d-flex flex-row bd-highlight justify-content-left">
                     <div class="bd-highlight mr-1">                                       
-                        <h6 class="text-dark"><strong class="text-primary">DATE: <br></strong> {{i.date_created}}</h6>  
+                        <h6 class="text-dark"><strong class="text-primary">DATE: <br></strong> {{i.date_created}}</h6> 
+                        <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE FOR THE DAY:</strong><br> {{i.work_schedule|safe}}</h6>  
+                            <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong><br> {{i.work_left|safe}}</h6>   
                         <h6 class="text-dark"><strong class="text-primary">Report Title:</strong><br> {{i.Admin_report_title}}</h6>  
                         <h6 class="text-dark"><strong class="text-primary">Report Details:</strong><br> {{i.Admin_report_details|safe}}</h6>                                                  
                         
@@ -949,32 +1024,32 @@
                     <div> 
                         <div class="back">
                             {% if i.chairman_seen%}
-                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                             <br>
                             {% endif  %}
 
                             {% if i.operations_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_flm_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
                             <br>
                             {% endif %}
 
                             {% if i.manager_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                             <br>
                             {% endif %}
 
                             {% if i.admin_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                             <br>
                             {% endif %}
 
                             {% if i.runyi_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                             <br>
                             {% endif %}
                             <br>                                         
@@ -986,8 +1061,14 @@
                             <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                             <br>
                             {% endif %}
+
+                            {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                            {% endif %}
+
                             {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_admin %}
@@ -995,7 +1076,7 @@
                             <br>
                             {% endif %}
                             {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                             <br>
                             {% endif %}
                             {% if i.feedback_runyi %}
@@ -1007,96 +1088,7 @@
                 </div>                                               
             </div>   
         {% endif %}        
-
-               {% if request.user|admin:"MANAGEMENT_ADMIN" %}
-            <div class="d-flex flex-row upper bd-highlight justify-content-between ">
-                <div class="bd-highlight mr-1">          
-                    <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
-                </div>                    
-                <div class="bd-highlight">   
-                    <div class="ticket">
-                        <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num|safe}}</small>
-                    </div>       
-                </div>      
-            </div> 
-            
-            <div class="item">                  
-                <div class="d-flex flex-row bd-highlight justify-content-left">
-                    <div class="bd-highlight mr-1">                                       
-                        <h6 class="text-dark"><strong class="text-primary">DATE: <br></strong> {{i.date_created}}</h6>  
-                        <h6 class="text-dark"><strong class="text-primary">Report Title:</strong><br> {{i.Admin_report_title}}</h6>  
-                        <h6 class="text-dark"><strong class="text-primary">Report Details:</strong><br> {{i.Admin_report_details|safe}}</h6>                                                  
-                        
-                        {% if i.Admin_challenges %}
-                        <h6 class="text-dark"><strong class="text-primary">Challenges: <br></strong> {{i.Admin_challenges|safe}}</h6>  
-                        {% endif %}
-
-                        {% if i.Admin_solutions %}
-                        <h6 class="text-dark"><strong class="text-primary">Solutions<br></strong> {{i.Admin_solutions|safe}}</h6>  
-                        {% endif %}
-                    </div>                          
-                    <div> 
-                        <div class="back">
-                            {% if i.chairman_seen%}
-                            <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
-                            <br>
-                            {% endif  %}
-
-                            {% if i.operations_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
-                            <br>
-                            {% endif %}
-
-                            {% if i.manager_flm_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
-                            <br>
-                            {% endif %}
-
-                            {% if i.manager_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
-                            <br>
-                            {% endif %}
-
-                            {% if i.admin_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
-                            <br>
-                            {% endif %}
-
-                            {% if i.runyi_seen %}
-                            <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
-                            <br>
-                            {% endif %}
-                            <br>                                         
-                                
-                            {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
-                                <h6 class="font-weight-bold feed">FEED BACK</h6>
-                            {% endif %}
-                            {% if i.feedback_chairman %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
-                            <br>
-                            {% endif %}
-                            {% if i.feedback_operations %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
-                            <br>
-                            {% endif %}
-                            {% if i.feedback_admin %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin|safe}}</small>
-                            <br>
-                            {% endif %}
-                            {% if i.feedback_manager %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
-                            <br>
-                            {% endif %}
-                            {% if i.feedback_runyi %}
-                            <small class="feedback font-weight-bold"><span class="text-primary">GM ADMIN:</span> {{i.feedback_runyi|safe}}</small>
-                            <br>
-                            {% endif %}                                                                              
-                        </div>  
-                    </div>      
-                </div>                                               
-            </div>   
-        {% endif %}
-
+               
         {% if request.user|MAINTENANCE:"MAINTENANCE" %}
         <div class="d-flex flex-row upper bd-highlight justify-content-between ">
             <div class="bd-highlight mr-1">          
@@ -1113,46 +1105,48 @@
             <div class="d-flex flex-row bd-highlight justify-content-left">
                 <div class="bd-highlight mr-1">                                       
                     <h6 class="text-dark"><strong class="text-primary">DATE: <br></strong> {{i.date_created}}</h6>
+                    <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE FOR THE DAY:</strong><br> {{i.work_schedule|safe}}</h6>  
+                            <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong><br> {{i.work_left|safe}}</h6>  
                     <h6 class="text-dark"><strong class="text-primary">Report Title:</strong><br> {{i.Maintenance_report_title}}</h6>
                     <h6 class="text-dark"><strong class="text-primary">Report Details:</strong><br> {{i.Maintenacne_report_details|safe}}</h6>                                             
                     
-                    {% if i.Admin_challenges %}
+                    {% if i.Maintenance_challenges %}
                     <h6 class="text-dark"><strong class="text-primary">Challenges: <br></strong> {{i.Maintenance_challenges|safe}}</h6>  
                     {% endif %}
 
-                    {% if i.Admin_solutions %}
+                    {% if i.Maintenance_solutions %}
                     <h6 class="text-dark"><strong class="text-primary">Solutions<br></strong> {{i.Maintenance_solutions|safe}}</h6>
                     {% endif %}
                 </div>                          
                 <div> 
                     <div class="back">
                         {% if i.chairman_seen%}
-                        <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
+                        <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
                         <br>
                         {% endif  %}
 
                         {% if i.operations_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
+                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
                         <br>
                         {% endif %}
 
                         {% if i.manager_flm_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
+                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
                         <br>
                         {% endif %}
 
                         {% if i.manager_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
+                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
                         <br>
                         {% endif %}
 
                         {% if i.admin_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
+                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
                         <br>
                         {% endif %}
 
                         {% if i.runyi_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
+                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
                         <br>
                         {% endif %}
                         <br>                                         
@@ -1164,8 +1158,14 @@
                         <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
                         <br>
                         {% endif %}
+
+                        {% if i.feedback_Manager_FLM %}
+                            <small class="feedback font-weight-bold"><span class="text-primary">GGM </span> {{i.feedback_Manager_FLM|safe}}</small>
+                            <br>
+                        {% endif %}
+
                         {% if i.feedback_operations %}
-                        <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                        <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
                         <br>
                         {% endif %}
                         {% if i.feedback_admin %}
@@ -1173,7 +1173,7 @@
                         <br>
                         {% endif %}
                         {% if i.feedback_manager %}
-                        <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
+                        <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
                         <br>
                         {% endif %}
                         {% if i.feedback_runyi %}
@@ -1186,94 +1186,201 @@
         </div>   
     {% endif %}       
 
-    {% if request.user|ACCOUNT:"ACCOUNT" %}
-        <div class="d-flex flex-row upper bd-highlight justify-content-between ">
-            <div class="bd-highlight mr-1">          
-                <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
-            </div>                    
-            <div class="bd-highlight">   
-                <div class="ticket">
-                    <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num|safe}}</small>
-                </div>       
-            </div>      
-        </div> 
-        
-        <div class="item">                  
-            <div class="d-flex flex-row bd-highlight justify-content-left">
-                <div class="bd-highlight mr-1">                                       
-                    <h6 class="text-dark"><strong class="text-primary">DATE: <br></strong> {{i.date_created}}</h6>
-                    <h6 class="text-dark"><strong class="text-primary">Report Title:</strong><br> {{i.Account_report_title}}</h6>
-                    <h6 class="text-dark"><strong class="text-primary">Report Details:</strong><br> {{i.Account_report_details|safe}}</h6>                                             
-                    
-                    {% if i.Admin_challenges %}
-                    <h6 class="text-dark"><strong class="text-primary">Challenges: <br></strong> {{i.Account_challenges|safe}}</h6>  
-                    {% endif %}
-
-                    {% if i.Admin_solutions %}
-                    <h6 class="text-dark"><strong class="text-primary">Solutions<br></strong> {{i.Account_solutions|safe}}</h6>
-                    {% endif %}
-                </div>                          
-                <div> 
-                    <div class="back">
-                        {% if i.chairman_seen%}
-                        <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up">VIEWED BY CHAIRMAN</small>
-                        <br>
-                        {% endif  %}
-
-                        {% if i.operations_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY OPERATIONS</small>
-                        <br>
-                        {% endif %}
-
-                        {% if i.manager_flm_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER FLM</small>
-                        <br>
-                        {% endif %}
-
-                        {% if i.manager_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY MANAGER</small>
-                        <br>
-                        {% endif %}
-
-                        {% if i.admin_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY ADMIN</small>
-                        <br>
-                        {% endif %}
-
-                        {% if i.runyi_seen %}
-                        <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> VIEWED BY RUNYI</small>
-                        <br>
-                        {% endif %}
-                        <br>                                         
+            {% if request.user|ACCOUNT:"ACCOUNT" %}
+                <div class="d-flex flex-row upper bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
+                    </div>                    
+                    <div class="bd-highlight">   
+                        <div class="ticket">
+                            <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num|safe}}</small>
+                        </div>       
+                    </div>      
+                </div> 
+                
+                <div class="item">                  
+                    <div class="d-flex flex-row bd-highlight justify-content-left">
+                        <div class="bd-highlight mr-1">                                       
+                            <h6 class="text-dark"><strong class="text-primary">DATE: <br></strong> {{i.date_created}}</h6>
+                            <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE FOR THE DAY:</strong><br> {{i.work_schedule|safe}}</h6>  
+                            <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong><br> {{i.work_left|safe}}</h6>  
+                            <h6 class="text-dark"><strong class="text-primary">Report Title:</strong><br> {{i.Account_report_title}}</h6>
+                            <h6 class="text-dark"><strong class="text-primary">Report Details:</strong><br> {{i.Account_report_details|safe}}</h6>                                             
                             
-                        {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
-                            <h6 class="font-weight-bold feed">FEED BACK</h6>
-                        {% endif %}
-                        {% if i.feedback_chairman %}
-                        <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
-                        <br>
-                        {% endif %}
-                        {% if i.feedback_operations %}
-                        <small class="feedback font-weight-bold"><span class="text-primary">OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
-                        <br>
-                        {% endif %}
-                        {% if i.feedback_admin %}
-                        <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin|safe}}</small>
-                        <br>
-                        {% endif %}
-                        {% if i.feedback_manager %}
-                        <small class="feedback font-weight-bold"><span class="text-primary">MANAGER :</span> {{i.feedback_manager|safe}}</small>
-                        <br>
-                        {% endif %}
-                        {% if i.feedback_runyi %}
-                        <small class="feedback font-weight-bold"><span class="text-primary">GM ADMIN:</span> {{i.feedback_runyi|safe}}</small>
-                        <br>
-                        {% endif %}                                                                              
-                    </div>  
-                </div>      
-            </div>                                               
-        </div>   
-    {% endif %} 
+                            {% if i.Account_challenges %}
+                            <h6 class="text-dark"><strong class="text-primary">Challenges: <br></strong> {{i.Account_challenges|safe}}</h6>  
+                            {% endif %}
+
+                            {% if i.Account_solutions %}
+                            <h6 class="text-dark"><strong class="text-primary">Solutions<br></strong> {{i.Account_solutions|safe}}</h6>
+                            {% endif %}
+                        </div>
+                        <div> 
+                            <div class="back">
+                                {% if i.chairman_seen%}
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
+                                <br>
+                                {% endif  %}
+
+                                {% if i.operations_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.manager_flm_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.manager_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.admin_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.runyi_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
+                                <br>
+                                {% endif %}
+                                <br>                                         
+                                    
+                                {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
+                                    <h6 class="font-weight-bold feed">FEED BACK</h6>
+                                {% endif %}
+                                {% if i.feedback_chairman %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
+                                <br>
+                                {% endif %}                               
+
+                                {% if i.feedback_operations %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_admin %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin|safe}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_manager %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_runyi %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GM ADMIN:</span> {{i.feedback_runyi|safe}}</small>
+                                <br>
+                                {% endif %}  
+
+                                {% if i.feedback_Manager_FLM %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GGM:</span> {{i.feedback_Manager_FLM|safe}}</small>
+                                <br>
+                                {% endif %}  
+                                                                                                            
+                            </div>  
+                        </div>      
+                    </div>                                               
+                </div>   
+            {% endif %} 
+
+            {% if request.user|MANAGER_PH:"MANAGER_PH" %}
+                <div class="d-flex flex-row upper bd-highlight justify-content-between ">
+                    <div class="bd-highlight mr-1">          
+                        <a class="dtext " href="{% url  'report_history' user.id %}">back</a>
+                    </div>                    
+                    <div class="bd-highlight">   
+                        <div class="ticket">
+                            <small class="p-2 pt-3 text-white font-weight-bold">Ticket Num: {{i.ticket_num|safe}}</small>
+                        </div>
+                    </div>      
+                </div> 
+                
+                <div class="item">                  
+                    <div class="d-flex flex-row bd-highlight justify-content-left">
+                        <div class="bd-highlight mr-1">                                       
+                            <h6 class="text-dark"><strong class="text-primary">DATE: <br></strong> {{i.date_created}}</h6>
+                            <h6 class="text-dark"><strong class="text-primary">TASK SCHEDULE FOR THE DAY:</strong><br> {{i.work_schedule|safe}}</h6>  
+                            <h6 class="text-dark"><strong class="text-primary">TASK LEFT:</strong><br> {{i.work_left|safe}}</h6>  
+                            <h6 class="text-dark"><strong class="text-primary">Report Title:</strong><br> {{i.Manager_report_title_PH}}</h6>
+                            <h6 class="text-dark"><strong class="text-primary">Report Details:</strong><br> {{i.Manager_report_PH|safe}}</h6>                                             
+                            
+                            {% if i.Manager_challenges_PH %}
+                            <h6 class="text-dark"><strong class="text-primary">Challenges: <br></strong> {{i.Manager_challenges_PH|safe}}</h6>  
+                            {% endif %}
+
+                            {% if i.Manager_solutions_PH %}
+                            <h6 class="text-dark"><strong class="text-primary">Solutions<br></strong> {{i.Manager_solutions_PH|safe}}</h6>
+                            {% endif %}
+                        </div>
+                        
+                        <div>   
+                            <div class="back">
+                                {% if i.chairman_seen%}
+                                <i class="fas fa-check-circle big text-success"></i> <small class="text-primary font-weight-bold up"> CHAIRMAN</small>
+                                <br>
+                                {% endif  %}
+
+                                {% if i.operations_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM OPERATIONS</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.manager_flm_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GGM</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.manager_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> MANAGER FLLS</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.admin_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> ADMIN</small>
+                                <br>
+                                {% endif %}
+
+                                {% if i.runyi_seen %}
+                                <i class="fas fa-check-circle big text-success"></i><small class="text-primary font-weight-bold up"> GM ADMIN</small>
+                                <br>
+                                {% endif %}
+                                <br>                                         
+                                    
+                                {% if i.feedback_chairman or i.feedback_operations or i.feedback_admin%}
+                                    <h6 class="font-weight-bold feed">FEED BACK</h6>
+                                {% endif %}
+                                {% if i.feedback_chairman %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">CHARIMAN:</span> {{i.feedback_chairman|safe}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_operations %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GM OPERATIONS:</span> {{i.feedback_operations|safe}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_admin %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">ADMIN:</span> {{i.feedback_admin|safe}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_manager %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">MANAGER FLLS :</span> {{i.feedback_manager|safe}}</small>
+                                <br>
+                                {% endif %}
+                                {% if i.feedback_runyi %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GM ADMIN:</span> {{i.feedback_runyi|safe}}</small>
+                                <br>
+                                {% endif %}  
+
+                                {% if i.feedback_Manager_FLM %}
+                                <small class="feedback font-weight-bold"><span class="text-primary">GGM:</span> {{i.feedback_Manager_FLM|safe}}</small>
+                                <br>
+                                {% endif %}  
+                                                                                                            
+                            </div>  
+                        </div>      
+                    </div>                                               
+                </div>   
+            {% endif %} 
         {% endfor %}                                     
         </div>
         <div class="col-lg-3"> </div>
