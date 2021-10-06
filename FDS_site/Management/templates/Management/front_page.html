@@ -37,19 +37,19 @@
             {% if request.user|management:"MANAGEMENT" %}
                 <div class="management">
                     <div class="d-flex flex-row bd-highlight justify-content-center">
-                        <div class="bd-highlight mr-2 ">          
-                            <div class="activities shadow">    
+                        <div class="bd-highlight mr-2 ">
+                            <div class="activities shadow">
                                 <h2 class="top2"><i class="fas fa-truck-loading text-white"></i></h2>
                                 <a role="button" href="{% url 'Logistics' user.id %}">                     
                                     <h4 class="activities-text2" > Logistics</h4>    
                                 </a>                        
                             </div>
                         </div>  
-                        <div class="bd-highlight ">          
+                        <div class="bd-highlight ">  
                             <div class="activities shadow">
-                                {% if request.user|m_operation:"MANAGEMENT_OPERATION" %}
-                                {% if operation.count > 0 %}
-                                    <span class="dottext-center text-primary font-weight-bold" data-toggle="tooltip" 
+                                {% if request.user|m_operation:"MANAGEMENT_OPERATION" %}                                
+                                {% if operation.count > 0 %}                             
+                                    <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
                                     data-placement="top" title="You have {{operation.count}} Unread Report">{{operation.count}}</span>       
                                     {% else %}
                                     <span class="dot text-center text-primary font-weight-bold" data-toggle="tooltip" 
@@ -213,8 +213,9 @@
                     <div class="item">
                         <div class="d-flex flex-row bd-highlight justify-content-between">
                             <div class="bd-highlight">          
-                                <p>{{i.Admin_report_title}}</p>
-                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Admin_report_title}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                             </div>  
                             <div class="bd-highlight">
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_admin_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -234,8 +235,9 @@
                     <div class="item">
                         <div class="d-flex flex-row bd-highlight justify-content-between">
                             <div class="bd-highlight">          
-                                <p>{{i.Account_report_title}}</p>
-                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Account_report_title}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_account_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -255,8 +257,9 @@
                     <div class="item">
                         <div class="d-flex flex-row bd-highlight justify-content-between">
                             <div class="bd-highlight">          
-                                <p>{{i.Manager_report_title_PH}}</p>
-                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Manager_report_title_PH}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_ph_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -276,8 +279,9 @@
                         <div class="item">
                             <div class="d-flex flex-row bd-highlight justify-content-between">
                                 <div class="bd-highlight">          
-                                    <p>{{i.Maintenance_report_title}}</p>
-                                    <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                    <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Maintenance_report_title}}</p>
+                                    <br>
+                                    <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                                 </div>  
                                 <div class="bd-highlight">         
                                     <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_maintenance_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -297,8 +301,9 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between">
                         <div class="bd-highlight">          
-                            <p>{{i.Tank_farm_report_title}}</p>
-                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Tank_farm_report_title}}</p>
+                            <br>
+                            <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_tank_farm_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -318,8 +323,9 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between">
                         <div class="bd-highlight">          
-                            <p>{{i.Iwh_report_title}}</p>
-                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Iwh_report_title}}</p>
+                            <br>
+                            <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                         </div>  
                         <div class="bd-highlight">
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_iwh_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -339,8 +345,9 @@
                     <div class="item">
                         <div class="d-flex flex-row bd-highlight justify-content-between">
                             <div class="bd-highlight ">          
-                                <p>{{i.Fleet_report_title}}</p>
-                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Fleet_report_title}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_fleet_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -358,8 +365,9 @@
                     <div class="item">
                         <div class="d-flex flex-row bd-highlight justify-content-between">
                             <div class="bd-highlight ">          
-                                <p>{{i.Ict_report_Title}}</p>
-                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Ict_report_Title}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_ict_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -377,8 +385,9 @@
                     <div class="item">
                         <div class="d-flex flex-row bd-highlight justify-content-between">
                             <div class="bd-highlight ">          
-                                <p>{{i.Marketing_report_title}}</p>
-                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Marketing_report_title}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_market_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -396,8 +405,9 @@
                     <div class="item">
                         <div class="d-flex flex-row bd-highlight justify-content-between">
                             <div class="bd-highlight ">          
-                                <p>{{i.FrontDesk_report_Title}}</p>
-                                <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.FrontDesk_report_Title}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_front_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -418,8 +428,9 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between">
                         <div class="bd-highlight ">          
-                            <p>{{i.Commectial_Report_Title}}</p>
-                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Commectial_Report_Title}}</p>
+                            <br>
+                            <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_commercial_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -454,8 +465,9 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between">
                         <div class="bd-highlight ">          
-                            <p>{{i.Work_description}}</p>
-                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Work_description}}</p>
+                            <br>
+                            <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -490,8 +502,9 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between">
                         <div class="bd-highlight ">          
-                            <p>{{i.Runyi_report_Title}}</p>
-                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Runyi_report_Title}}</p>
+                            <br>
+                            <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_runyi_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
@@ -526,8 +539,9 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between">
                         <div class="bd-highlight ">          
-                            <p>{{i.Manager_report_title}}</p>
-                            <small class="ticket-num">Ticket Number: {{i.ticket_num}}</small>
+                            <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Manager_report_title}}</p>
+                            <br>
+                            <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_manager_report' i.id %}" style="background-color: #9191FF;"> Edit </a>

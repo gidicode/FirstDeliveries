@@ -62,7 +62,7 @@
                     <div class="item">
                         <div class="d-flex flex-row bd-highlight justify-content-between ">
                             <div class="bd-highlight mr-1">          
-                                <a class="dtext text-truncate" href="{% url  'history_detail' i.pk %}">{{i.Work_description}}</a>
+                                <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Work_description|safe}}</a>
                             </div>  
                             <div class="bd-highlight">          
                                 <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -84,7 +84,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.FrontDesk_report_Title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.FrontDesk_report_Title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -106,7 +106,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Marketing_report_title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Marketing_report_title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -128,7 +128,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Ict_report_Title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Ict_report_Title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -150,7 +150,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Runyi_report_Title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Runyi_report_Title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -172,7 +172,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Iwh_report_title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Iwh_report_title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -194,7 +194,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Tank_farm_report_title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Tank_farm_report_title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -216,7 +216,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Manager_report_title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Manager_report_title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -238,7 +238,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Commectial_Report_Title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Commectial_Report_Title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -260,7 +260,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Admin_report_title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Admin_report_title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -283,7 +283,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Maintenance_report_title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Maintenance_report_title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -305,7 +305,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Account_report_title}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Account_report_title}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>
@@ -327,7 +327,7 @@
                 <div class="item">
                     <div class="d-flex flex-row bd-highlight justify-content-between ">
                         <div class="bd-highlight mr-1">          
-                            <a class="dtext" href="{% url  'history_detail' i.pk %}">{{i.Manager_report_title_PH}}</a>
+                            <a class="dtext d-inline-block text-truncate" style="max-width: 150px;" href="{% url  'history_detail' i.pk %}">{{i.Manager_report_title_PH}}</a>
                         </div>  
                         <div class="bd-highlight">          
                             <p class="dtext">{{ i.date_created|date:"d M Y" }}</p>

@@ -4,7 +4,7 @@ from users.utils import HashIdConverter
 register_converter(HashIdConverter, "hashid")
 
 urlpatterns = [
-    path('Management_Dashboard/<hashid:user>/', management_views.Front_page, name='management_dashboard'),
+    path('Management_Dashboard/<str:user>/', management_views.Front_page, name='management_dashboard'),
 
     path('Create_Profile/<hashid:user>/', management_views.Create_Profile_management, name='create_profile'),
 

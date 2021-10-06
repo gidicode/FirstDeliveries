@@ -117,6 +117,7 @@ class RUNYI_Form(forms.ModelForm):
             'work_schedule', 'work_left', 
             'Runyi_report_Title', 'Runyi_report', 
             'Runyi_challenges', 'Runyi_solutions',
+            'for_operation', 'for_manager_FLM',
        ]
         
 class Manager_FLLS_report_Form(forms.ModelForm): 
@@ -143,6 +144,7 @@ class Admin_report_form(forms.ModelForm):
     class Meta:
         model = OFFICE_REPORT
         fields = [
+            'work_schedule', 'work_left', 
             'Admin_report_title', 'Admin_report_details',
             'Admin_challenges', 'Admin_solutions',
         ]
@@ -151,6 +153,7 @@ class Account_report_form(forms.ModelForm):
     class Meta:
         model = OFFICE_REPORT
         fields = [
+            'work_schedule', 'work_left', 
             'Account_report_title', 'Account_report_details',
             'Account_challenges', 'Account_solutions',
         ]
@@ -159,6 +162,7 @@ class Maintenance_report_form(forms.ModelForm):
     class Meta:
         model = OFFICE_REPORT
         fields = [
+            'work_schedule', 'work_left', 
             'Maintenance_report_title', 'Maintenacne_report_details',
             'Maintenance_challenges', 'Maintenance_solutions',
         ]
@@ -167,6 +171,7 @@ class PH_report_form(forms.ModelForm):
     class Meta:
         model = OFFICE_REPORT
         fields = [
+            'work_schedule', 'work_left', 
             'Manager_report_title_PH', 'Manager_report_PH',
             'Manager_challenges_PH', 'Manager_solutions_PH',
         ]

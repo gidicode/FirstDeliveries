@@ -69,7 +69,10 @@ class LoginView(auth_views.LoginView):
     template_name = 'users/login.html'
 
 def redirectView(request):
-    return redirect('dashboard', user = request.user.pk)
+    if request.user.groups.filter(name = 'FLLS'):
+        return redirect('management_dashboard', user = request.user.pk)
+    else:
+        return redirect('dashboard', user = request.user.pk)
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'FLLS',
