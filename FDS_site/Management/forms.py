@@ -119,7 +119,7 @@ class RUNYI_Form(forms.ModelForm):
             'Runyi_challenges', 'Runyi_solutions',
             'for_operation', 'for_manager_FLM',
        ]
-        
+ 
 class Manager_FLLS_report_Form(forms.ModelForm): 
     
     class Meta:
@@ -130,14 +130,13 @@ class Manager_FLLS_report_Form(forms.ModelForm):
             'Manager_solutions',
        ]        
 
-class Commercial_report_Form(forms.ModelForm): 
-    
+class Commercial_report_Form(forms.ModelForm):     
     class Meta:
         model = OFFICE_REPORT
         fields = [
-            'Commectial_Report_Title', 'Commercial_Report',  'Commercial_Challenges',
-            'Commercial_Accomplishment', 'Commercial_Breakdown', 
-            'Commercial_Balance',
+            'Commectial_Report_Title', 'work_schedule', 
+            'Commercial_Report', 'Commercial_Breakdown', 
+            'Commercial_Balance', 'Commercial_Challenges', 
        ]   
 
 class Admin_report_form(forms.ModelForm):

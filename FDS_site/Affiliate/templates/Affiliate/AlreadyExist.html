@@ -1,0 +1,78 @@
+{% extends "FDS_app/base.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Join affiliate {{user.username }} {% endblock title %}
+
+{% block content %}
+<
+<div class="container ">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 justify-content-center">
+           <div class="content text-center p-4">
+                <div class="circle text-center">
+                    <i class="far fa-times-circle good"></i>                    
+                </div>                
+                <h4 class="text2 mt-2">{{message}} </h4>
+                <h6 class="text">When your referee uses this code to place an order
+                    and the order gets delivered you get credited 20% of the delivery amount.
+                </h6>
+                <a href="{% url 'affiliate_dashboard' user.id%}" class="btn btn-lg Continue text-decoration-none" role="button" >Continue </a>
+           </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+
+<style>
+    .content{
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);  
+        width: auto;
+        align-content: center; 
+              
+    }
+
+    .circle{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 83px;
+        height: 85px;
+        background: #ffe0e0;
+        backdrop-filter: blur(10px);
+        position: relative;
+        margin-left: auto;       
+        margin-right: auto;
+    }
+
+    .good{
+        position: relative;
+        font-size: 54px;
+        top: 12px;
+        color: #d60000;
+    }
+
+    .text{
+        color: #000F80;    
+        font-family: 'Roboto', sans-serif; 
+        font-weight: 300;   
+    }
+
+    .text2{
+        color: #000F80;
+        margin-bottom: 50px;
+        font-weight: 700;
+        line-height: 10px;
+        font-family: 'Roboto', sans-serif; 
+    }
+
+    .Continue{
+        background: #003A92;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 15px;
+        color: white;
+    }
+</style>
+
+{% endblock content %}
