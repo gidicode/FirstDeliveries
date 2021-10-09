@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'PortHarcourt.apps.PortHarcourtConfig',
 
     'Management.apps.ManagementConfig',
+
+    'Affiliate.apps.AffiliateConfig',
     
     'django.contrib.admin',
     'django.contrib.auth',

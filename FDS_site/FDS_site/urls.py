@@ -23,6 +23,8 @@ urlpatterns = [
 
     path('', include('Management.urls')),
 
+    path('', include('Affiliate.urls')),
+
     path('tinymce/', include('tinymce.urls')),
 
     path('404/', user_views.response_error_handler),

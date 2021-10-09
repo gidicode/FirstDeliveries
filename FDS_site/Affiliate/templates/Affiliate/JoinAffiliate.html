@@ -1,0 +1,190 @@
+{% extends "FDS_app/base.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Join affiliate {{user.username }} {% endblock title %}
+
+{% block content %}
+<div class="container-fluid landing-background text-center">
+    <div class="row mt-4">
+        <div class="col-md-2">
+            <img src="{% static '/FDS_app/sitting-2.png'%}" class="affiliate-pics img-fluid mr-4" alt="FLLS">
+        </div>
+        <div class="col-md-8 text-center align-items-center">            
+            <h4 id="landingFont1" class="text-center">LOOKING TO MAKE SOME EXTRA CASH?</h5>                    
+            <h4 id="landingFont3" class="text-center">Join Our Affiliate </h4>
+            <h4 id="landingFont4" class="text-center">Marketing Program</h4>
+            <h4 id="landingFont5" class="text-center">Earn up to 20% on every delivery referred </h4>
+            <a class="btn btn-lg join-button text-decoration-none" role="button" href="{% url 'welcome_affiliate' user.id %}">Join Us Today</a>
+            <p id="landingFont6" class="text-center">By joining you agree to our terms and condition for the affiliate marketing program.                         
+                <span>
+                    <a href="#">Terms & Condiition</a>
+                </span>                        
+            </p>  
+        </div>                                                                        
+        <div class="col-md-2">
+            <img src="{% static '/FDS_app/sitting-2.png'%}" class="affiliate-pics img-fluid mr-4" alt="FLLS">                         
+        </div>        
+    </div>
+</div>    
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        About First Laurel Logistics 
+                      </button>
+                    </h2>
+                  </div>
+              
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum facilisis sapien urna scelerisque non viverra pellentesque blandit. Ante tincidunt volutpat, diam arcu aenean quisque. A sed nunc eu turpis euismod dignissim ut vulputate praesent. At at vehicula tristique suspendisse rhoncus tincidunt. Id semper justo, placerat tortor, diam dignissim. Sed elementum arcu donec nunc mauris condimentum. Et purus elit tristique tortor quam cras scelerisque quisque est. Phasellus donec consequat luctus pharetra. Adipiscing dignissim rutrum non penatibus. Convallis a sed sed amet consectetur elementum proin.
+                            Egestas elementum blandit at eget dictum euismod. Nisl, non curabitur nunc, quis in velit ut sed bibendum. Scelerisque vitae lorem enim vel nec mattis aliquet eget eget. Viverra at turpis risus, tincidunt diam mollis tortor, in. Ante aliquam feugiat vitae pretium id sed elit vel vitae. Tortor et ac, tincidunt ante. Massa sit neque nec et magnis consequat. Diam sit lacus aenean congue. Orci mauris feugiat justo lacinia. Rutrum posuere varius lorem ultrices enim, felis tristique eu. Pretium id ut vel, habitasse netus sagittis tellus mi tellus. Est mus dui tempus amet dolor. Bibendum ac erat odio interdum morbi nisi et ipsum id. Massa at mauris, ultrices ut id pellentesque. Mauris iaculis dis nulla sed diam adipiscing nunc orci scelerisque.
+                            Neque amet, a at elementum. Pretium porttitor at tellus amet, donec ultrices tincidunt auctor. Laoreet quisque morbi fames tristique tellus lectus sem. Nulla ipsum suspendisse ipsum volutpat. Velit ut fringilla tellus hac sed faucibus orci scelerisque. Sit orci, facilisis sagittis pretium, adipiscing. Mauris imperdiet gravida turpis scelerisque.                
+                        </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Joining Our Affiliate Program
+                      </button>
+                    </h2>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <p class="text-justify">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum facilisis sapien urna scelerisque non viverra pellentesque blandit. Ante tincidunt volutpat, diam arcu aenean quisque. A sed nunc eu turpis euismod dignissim ut vulputate praesent. At at vehicula tristique suspendisse rhoncus tincidunt. Id semper justo, placerat tortor, diam dignissim. Sed elementum arcu donec nunc mauris condimentum. Et purus elit tristique tortor quam cras scelerisque quisque est. Phasellus donec consequat luctus pharetra. Adipiscing dignissim rutrum non penatibus. Convallis a sed sed amet consectetur elementum proin.
+                            Egestas elementum blandit at eget dictum euismod. Nisl, non curabitur nunc, quis in velit ut sed bibendum. Scelerisque vitae lorem enim vel nec mattis aliquet eget eget. Viverra at turpis risus, tincidunt diam mollis tortor, in. Ante aliquam feugiat vitae pretium id sed elit vel vitae. Tortor et ac, tincidunt ante. Massa sit neque nec et magnis consequat. Diam sit lacus aenean congue. Orci mauris feugiat justo lacinia. Rutrum posuere varius lorem ultrices enim, felis tristique eu. Pretium id ut vel, habitasse netus sagittis tellus mi tellus. Est mus dui tempus amet dolor. Bibendum ac erat odio interdum morbi nisi et ipsum id. Massa at mauris, ultrices ut id pellentesque. Mauris iaculis dis nulla sed diam adipiscing nunc orci scelerisque.
+                            Neque amet, a at elementum. Pretium porttitor at tellus amet, donec ultrices tincidunt auctor. Laoreet quisque morbi fames tristique tellus lectus sem. Nulla ipsum suspendisse ipsum volutpat. Velit ut fringilla tellus hac sed faucibus orci scelerisque. Sit orci, facilisis sagittis pretium, adipiscing. Mauris imperdiet gravida turpis scelerisque.
+                            Quis aliquam feugiat ut ipsum, eu nec. Molestie nibh duis mauris in diam dui, lectus amet. Dolor ipsum in commodo vestibulum. Dictum sit tellus mus ultrices libero, nunc, morbi. Orci cursus sed tellus ac platea quis ipsum. Rhoncus sed lectus massa at ipsum eget facilisis augue neque. Aliquet integer varius vel faucibus. Mauris dictum magna mauris eget gravida quis nibh.
+                            Mauris pretium iaculis enim sem ultrices auctor. Sodales odio nec elementum duis ultricies. Faucibus malesuada amet sed aliquet sit non dis. Semper dapibus urna facilisis venenatis elementum facilisis quis viverra. Nunc nunc ut morbi iaculis lectus turpis vitae.
+                            Dolor proin cras lobortis odio quis mauris parturient risus. Nibh quis at amet purus quam sociis eleifend nam elit. Mi venenatis sollicitudin gravida turpis rhoncus eget eget euismod nibh. Nulla dictum adipiscing semper molestie dolor. Et feugiat ac ridiculus lacus 
+                        </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingThree">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Payments to Marketers
+                      </button>
+                    </h2>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <p>
+                            Quis aliquam feugiat ut ipsum, eu nec. Molestie nibh duis mauris in diam dui, lectus amet. Dolor ipsum in commodo vestibulum. Dictum sit tellus mus ultrices libero, nunc, morbi. Orci cursus sed tellus ac platea quis ipsum. Rhoncus sed lectus massa at ipsum eget facilisis augue neque. Aliquet integer varius vel faucibus. Mauris dictum magna mauris eget gravida quis nibh.
+                        </p>
+                    </div>
+                  </div>
+                </div>
+              </div>            
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+<style>
+
+    #landingFont1{
+        font-family: 'Roboto', sans-serif;      
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 80px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #0c384d;
+        margin-top: 10px;
+        
+    }   
+
+    #landingFont3{
+        font-family: 'Roboto', sans-serif;  
+        font-size: 64px;
+        font-style: normal;
+        font-weight: 550;
+        line-height: 45px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #005e8a;
+    }
+
+    #landingFont4{
+        font-family: 'Roboto', sans-serif;  
+        font-size: 62px;
+        font-style: normal;
+        font-weight: 200;
+        line-height: 55px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #005e8a;       
+    }
+
+    #landingFont5{
+        font-family: 'Roboto', sans-serif;  
+        font-size: 19px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 100px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #ff922c;
+    }
+
+    #landingFont6{
+        font-family: 'Roboto', sans-serif;  
+        font-size: 13px;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 10px;
+        text-align: left;
+        color: #000000;
+    }    
+    .join-button{
+        background: #ffbb11;
+        color: cornsilk;
+        font-weight: 400;
+        font-family: 'Roboto', sans-serif; 
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);  
+        position: relative;
+        top: -45px;     
+        border-radius: 15px;
+    }
+
+    .join-button:hover{
+        background: #ff922c;
+    }
+
+    .affiliate-pics{
+        position: relative;  
+        opacity: 20%;
+        top: 40%;
+    }   
+    
+    .landing-background{
+        background-color: #f6fcff;
+        position: relative;
+        bottom: 25px;    
+        border-right: 50px solid transparent;  
+        border-left: 50px solid transparent;  
+        border-top: 40px solid #ffbb11; 
+        width: auto;
+        height: max-content;
+    }
+
+    
+</style>
+{% endblock content %}
