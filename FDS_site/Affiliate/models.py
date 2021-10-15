@@ -15,10 +15,10 @@ class Affiliate_Group(models.Model):
     Referal_ID = models.CharField(unique=True, null=True, max_length=5, editable=False)
     Date_Joined = models.DateTimeField(default=timezone.now, editable=False, null = True, blank=True)
     Total_Referal = models.IntegerField(default=0, editable=False, null=True)
-    Amount_Genreated = models.DecimalField(max_digits=10, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
-    Amount_Credited = models.DecimalField(max_digits=10, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
-    Wallet_Balance = models.DecimalField(max_digits=10, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
-    Profit_Generated = models.DecimalField(max_digits=10, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    Amount_Genreated = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    Amount_Credited = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    Wallet_Balance = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    Profit_Generated = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
 
     def __str__(self):
         return f"{self.Marketer}, {self.Referal_ID}"
@@ -76,6 +76,7 @@ class Request_Payout(models.Model):
         ('Canceled', 'Canceled'),
         ('Pending', 'Pending'),        
     }
+    
     marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
     Debit_amount = models.IntegerField(default=0, null=True)
     Select_bank = models.ForeignKey(Bank_Account_Details, on_delete=models.CASCADE, null=True, related_name="banks")

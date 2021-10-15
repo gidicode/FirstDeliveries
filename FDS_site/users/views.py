@@ -2514,12 +2514,14 @@ def UpdateFForm(request, pk):
             #Affiliate marketers logic
             if obj.status == 'Delivered' and obj.Marketer_ID != None:
                 marketer = Affiliate_Group.objects.get(Referal_ID = obj.Marketer_ID.Referal_ID)                               
-                all_customer_referral = Referrals.objects.filter(marketer = obj.Marketer_ID)
+                all_customer_referral = Referrals.objects.filter(marketer = obj.Marketer_ID)  
+
+                print(Decimal(20)/Decimal(100) * obj.profit)              
                 all_customer_referral.filter(Order_ID = obj.order_id).update(
                     Rider = obj.riders,
                     Delivery_Fee = obj.profit,
-                    Customer_percentage_profit = 20/100 * obj.profit,
-                    FLLS_perentage_profit = 80/100 * obj.profit,
+                    Customer_percentage_profit = Decimal(20)/Decimal(100) * obj.profit,
+                    FLLS_perentage_profit = Decimal(80)/Decimal(100) * obj.profit,
                     Delivery_status = obj.status,
                 )     
 

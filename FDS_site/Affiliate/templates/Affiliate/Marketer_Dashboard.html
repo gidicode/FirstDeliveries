@@ -9,8 +9,12 @@
     <div class="row">
         <div class="col">
             <div class="d-flex flex-row bd-highlight mb-3">
-                <div class="p-2 bd-highlight">
-                    <a href="{% url 'balance_status' user.id %}" class="btn btn-sm text-white request" role="button">Request Payout</a>         
+                <div class="p-2 bd-highlight">                    
+                    <div class="spinner-border htmx-indicator text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <a href="{% url 'balance_status' user.id %}" class="btn btn-sm text-white request" role="button">Request Payout                        
+                    </a>
                 </div>
                 <div class="p-2 bd-highlight">
                     <a href="{% url 'add-bank' user.id%}" class="text-decoration-none create"><i class="fas fa-university"></i></a>
@@ -32,23 +36,37 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="row">
+        <div class="col"></div>
+
+
+        <div class="col">
+            {% if messages %}
+            <div class="messages p-3 container align-self-center">
+                {% for message in messages %}
+                <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+
+        <div class="col"></div>
+    </div>    
+</div>
+
+
+
 <main class="container">
     <div class="row no-gutters ">
         <div class="col">
-            <div class="">
-                {% if messages %}
-                    <div class="messages p-3 container align-self-center">
-                        {% for message in messages %}
-                        <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button> 
-                        </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
             
+
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-end">
                 <div class="p-2 bd-highlight">
                     <section class="earnings">
@@ -90,7 +108,7 @@
                             <i class="fas fa-history time"></i>                                                            
                         </figure>
                         <button type="button" class="btn pending">
-                            Pending <span class="badge badge-light">1</span>
+                            Pending <span class="badge badge-light">{{payout_history}}</span>
                             <span class="sr-only">Pending withdrawal</span>
                         </button>
                     </section>
@@ -103,7 +121,11 @@
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 {% for i in all_customer_referral %}
-                <section class="orders-list mb-4">
+                <section class="orders-list mb-4"
+                    hx-get = '{% url "delivery_details" i.pk%}'
+                    hx-swap='outterHTML'
+                    hx-target = '#delete-account'
+                    hx-trigger = 'click'>
                     <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
                         <div class="p-2 bd-highlight">
                             <small class="date">{{i.Date_Time|date:"SHORT_DATE_FORMAT"}}</small>
@@ -118,7 +140,7 @@
 
                         <div class="p-2 bd-highlight">
                             <div class="del-back text-center">
-                                <h6 class="del-amount p-2"><img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">{{i.Delivery_Fee|default:"0" }}</h6>
+                                <h6 class="del-amount p-2"><img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">{{i.Customer_percentage_profit|default:"0" }}</h6>
                             </div>
                             
                         </div>                    

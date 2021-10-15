@@ -12,56 +12,62 @@
             <div class="col-md-6">
                 <h4 class="with">Withdrawal History</h4>
                 <p>Check pending payment and cashed out payments.</p>
-               <section class="orders-list mt-4">
-                    <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
-                        <div class="p-2 bd-highlight">
-                            <small class="date">12/04/2021</small>
-                            <h6 class="cus-name">Gideon Ugwo</h6>                        
-                        </div>
+                {% for i in all_payout %}
+                    {% if i.Payment_status == 'Pending'%}
+                    <section class="orders-list mt-4">
+                            <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
+                                <div class="p-2 bd-highlight">
+                                    <small class="date">{{i.Date_Requested}}</small>
+                                    <h6 class="cus-name">N{{i.Debit_amount}}</h6>                        
+                                </div>
 
-                        <div class="p-2 bd-highlight">
-                            <div class="status-background p-2">
-                                <a href="{% url 'payout_history_details' user.id %}" class="text-decoration-none"> 
-                                    <h6 class="status text-decoration-none">Pending</h6>  
-                                </a>
-                            </div>                          
-                        </div>                    
-                    </div>                                
-                </section>
+                                <div class="p-2 bd-highlight">
+                                    <div class="status-background p-2">
+                                        <a href="{% url 'payout_history_details' i.pk %}" class="text-decoration-none"> 
+                                            <h6 class="status text-decoration-none">{{i.Payment_status}}</h6>  
+                                        </a>
+                                    </div>                          
+                                </div>                    
+                            </div>                                
+                        </section>
+                    {% elif i.Payment_status == 'Paid' %}
+                        <section class="orders-list2 mt-4">
+                            <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
+                                <div class="p-2 bd-highlight">
+                                    <small class="date2">{{i.Date_Requested}}</small>
+                                    <h6 class="cus-name2">N{{i.Debit_amount}}</h6>                        
+                                </div>
 
-                <section class="orders-list2 mt-4">
-                    <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
-                        <div class="p-2 bd-highlight">
-                            <small class="date2">12/04/2021</small>
-                            <h6 class="cus-name2">Gideon Ugwo</h6>                        
-                        </div>
+                                <div class="p-2 bd-highlight">
+                                    <div class="status-background2 text-center p-2">
+                                        <a href="{% url 'payout_history_details' i.pk %}">                                        
+                                            <h5 class="status2"><i class="far fa-check-circle"></i></h5>  
+                                        </a>
+                                    </div>                          
+                                </div>                    
+                            </div>                                
+                        </section>
+                    {% elif i.Payment_status == 'Canceled' %}
+                        <section class="orders-list3 mt-4">
+                            <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
+                                <div class="p-2 bd-highlight">
+                                    <small class="date3">{{i.Date_Requested}}</small>
+                                    <h6 class="cus-name3">N{{i.Debit_amount}}</h6>                        
+                                </div>
 
-                        <div class="p-2 bd-highlight">
-                            <div class="status-background2 text-center p-2">
-                                <a href="{% url 'payout_history_details' user.id %}">                                        
-                                    <h5 class="status2"><i class="far fa-check-circle"></i></h5>  
-                                </a>
-                            </div>                          
-                        </div>                    
-                    </div>                                
-                </section>
-
-                <section class="orders-list3 mt-4">
-                    <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
-                        <div class="p-2 bd-highlight">
-                            <small class="date3">12/04/2021</small>
-                            <h6 class="cus-name3">Gideon Ugwo</h6>                        
-                        </div>
-
-                        <div class="p-2 bd-highlight">
-                            <div class="status-background3 text-center p-2">
-                                <a href="{% url 'payout_history_details' user.id %}">
-                                    <h5 class="status3"><i class="far fa-times-circle"></i></h5>  
-                                </a>
-                            </div>                          
-                        </div>                    
-                    </div>                                
-                </section>
+                                <div class="p-2 bd-highlight">
+                                    <div class="status-background3 text-center p-2">
+                                        <a href="{% url 'payout_history_details' i.pk %}">
+                                            <h5 class="status3"><i class="far fa-times-circle"></i></h5>  
+                                        </a>
+                                    </div>                          
+                                </div>                    
+                            </div>                                
+                        </section>
+                    {% endif %}
+                {% empty %}
+                <p class="text-danger">You have no request for funds.</p>
+                {% endfor %}
             </div>
             <div class="col-md-3"></div>
         </div>

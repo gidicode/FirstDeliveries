@@ -10,43 +10,56 @@
         <div class="col-md-3 ">           
         </div>
         <div class="col-md-6">
+          {% for i in payout_details %}     
+
             <section class="success p-3">
                 <div class="status text-center">
+                  {% if i.Payment_status == "Paid" %}
                     <h5 class="details">Withdrawal Details  <i class="far fa-check-circle"></i></h5>
+                  {% elif i.Payment_status == 'Canceled' %}
+                    <h5 class="details2">Withdrawal Details  <i class="far fa-check-circle"></i></h5>
+                  {% elif i.Payment_status == "Pending" %}
+                    <h5 class="details3">Withdrawal Details  <i class="far fa-check-circle"></i></h5>
+                  {% endif %}
                 </div>
+               
                 <table class="table mt-4">                    
                     <tbody>
                       <tr>                   
                         <td>Request Date</td>
-                        <td class="font-weight-bold">12/02/2021</td>                       
+                        <td class="font-weight-bold">{{i.Date_Requested}}</td>                       
                       </tr>
                       <tr>          
                         <td>Request Amount</td>
-                        <td class="font-weight-bold">N5000</td>                        
+                        <td class="font-weight-bold">N{{i.Debit_amount}}</td>                        
                       </tr>
                       <tr>                
                         <td>Payment Status</td>
-                        <td class="font-weight-bold">Pending</td>                        
+                        <td class="font-weight-bold">{{i.Payment_status}}</td>                        
                       </tr>
                       <tr>                
                         <td>Transaction ID</td>
-                        <td class="font-weight-bold">12346738</td>                        
+                        <td class="font-weight-bold">{{i.Transaction_ID}}</td>                        
                       </tr>
                       <tr>                
                         <td>Amount Paid</td>
-                        <td class="font-weight-bold">N5000</td>                        
+                        <td class="font-weight-bold">N{{I.Amount_credited|default:"Not Paid"}}</td>                        
                       </tr>
                       <tr>                
                         <td>Bank Account</td>
-                        <td class="font-weight-bold">Zenith, 2234567343, Asuquo Etim Asuquo</td>                        
+                        <td class="font-weight-bold">{{i.Selet_bank|default:"No account"}}</td>                        
                       </tr>
                       <tr>                
                         <td>Date Paid</td>
-                        <td class="font-weight-bold">12/02/2021</td>                        
+                        <td class="font-weight-bold">{{i.Payment_date|default:"Not Paid"}}</td>                        
                       </tr>
                     </tbody>
-                  </table>
+                  </table>                
             </section>
+
+            {% empty %}
+                <p>You dont hane a pending request.</p>
+            {% endfor%}
         </div>         
         <div class="col-md-3">           
         </div> 
@@ -63,12 +76,27 @@
        border-radius: 10px;
        background: rgba(236, 252, 237, 1);
        width: max-content;
-       padding: 5px;
-       width: 190px;       
+       padding: 5px;           
    }
 
    .details{
       color: rgb(0, 206, 27);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      margin-top: 10px;
+      font-size: 16px;
+   }
+
+   .details2{
+      color: rgb(206, 0, 0);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      margin-top: 10px;
+      font-size: 16px;
+   }
+
+   .details3{
+      color: rgb(206, 192, 0);
       font-family: 'Nunito', sans-serif;
       font-weight: 600;
       margin-top: 10px;

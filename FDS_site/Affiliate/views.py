@@ -48,12 +48,14 @@ def Marketer_Dashboard(request, user):
     count_total_referals = all_customer_referral.count()
     all_time_earnings = marketer.Amount_Credited
     wallet_balance = marketer.Wallet_Balance
+    payout_history = marketer.request_payout_set.filter(Payment_status = 'Pending').count()
 
     context = {
         'wallet_balance':wallet_balance,
         'all_time_earnings':all_time_earnings,
         'all_customer_referral':all_customer_referral,
         'count_total_referals':count_total_referals,
+        'payout_history':payout_history,
     }
     return render(request, 'Affiliate/Marketer_Dashboard.html', context)
 
@@ -83,7 +85,7 @@ def Delete_account(request, pk):
     return redirect('add-bank', user = request.user.pk)
 
 
-def Request_Payout(request, user):
+def Request_Payout_form(request, user):
     Marketer = Affiliate_Group.objects.get(Marketer = user)
     wallet_balance = Marketer.Wallet_Balance
     
@@ -113,18 +115,21 @@ def Request_Payout(request, user):
     return render(request, 'Affiliate/Request_payout.html', context)
 
 def Payout_History_list(request, user):
-    return render(request, 'Affiliate/Payout_history.html')
+    Marketer = Affiliate_Group.objects.get(Marketer = user)
+    all_payout = Marketer.request_payout_set.all()
+    return render(request, 'Affiliate/Payout_history.html', {'all_payout':all_payout},)
 
-def Payout_History_Details(request, user):
-    return render(request, 'Affiliate/Payout_history_details.html')
+def Payout_History_Details(request, pk):
+    payout_details = Request_Payout.objects.filter(id= pk)
+    return render(request, 'Affiliate/Payout_history_details.html', {'payout_details':payout_details})
 
 def Balance_status(request, user):
     marketer = Affiliate_Group.objects.get(Marketer = user )
     return render(request, 'Affiliate/Balance_status.html', {'Balance':marketer})
 
 def Delivery_Details(request, pk):
-    an_order = Referrals.objects.get()
-    return render(request, 'Affiliate/DeliveryDetails.html')
+    delivery_details = Referrals.objects.filter(id = pk)
+    return render(request, 'Affiliate/DeliveryDetails.html', {'delivery_details':delivery_details})
 
 
 #CheckingUser
