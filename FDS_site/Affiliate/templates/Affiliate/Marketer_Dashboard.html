@@ -10,10 +10,10 @@
         <div class="col">
             <div class="d-flex flex-row bd-highlight mb-3">
                 <div class="p-2 bd-highlight">
-                    <a href="#" class="btn btn-sm text-white request" role="button">Request Payout</a>         
+                    <a href="{% url 'balance_status' user.id %}" class="btn btn-sm text-white request" role="button">Request Payout</a>         
                 </div>
                 <div class="p-2 bd-highlight">
-                    <a href="#" class="text-decoration-none create" >Create Account Number</a>
+                    <a href="{% url 'add-bank' user.id%}" class="text-decoration-none create"><i class="fas fa-university"></i></a>
                     </div>                
               </div>
         </div>
@@ -25,20 +25,120 @@
                     </div>                               
                 </div>
                 <div class="p-2 bd-highlight">                   
-                    <p>REFERAL CODE: Gids</p>
+                    <p class="referal">REFERAL CODE: <span class="Username">Gids</span></p>
                 </div>
             </div>
         </div>        
     </div>
 </div>
 
+<main class="container">
+    <div class="row no-gutters ">
+        <div class="col">
+            <div class="">
+                {% if messages %}
+                    <div class="messages p-3 container align-self-center">
+                        {% for message in messages %}
+                        <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button> 
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-end">
+                <div class="p-2 bd-highlight">
+                    <section class="earnings">
+                        <h6 class="all">All time earnings</h6>
+                        <h3 class="money">{{all_time_earnings}}</h3>
+                        <figure class="circle-money">
+                            <i class="fas fa-money-bill-alt bill"></i>
+                        </figure>
+                    </section>
+                </div>
+                <div class="p-2 bd-highlight">
+                    <section class="balance">
+                        <h6 class="account">Account Balance</h6>
+                        <h3 class="money2">{{wallet_balance}}</h3>
+                        <figure class="circle-money2">
+                            <img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1 bill2" style="height: 30px; width: 30px;" alt="Naira Sign">                            
+                        </figure>
+                    </section>
+                </div>               
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="d-flex flex-row bd-highlight mb-3">
+                <div class="p-2 bd-highlight">
+                    <section class="referred">
+                        <h6 class="orders">All Referred Deliveries</h6>
+                        <h3 class="count">{{count_total_referals}}</h3>
+                        <figure class="circle-box"> 
+                            <i class="fas fa-box-open box"></i>                                
+                        </figure>
+                    </section>
+                </div>
+                <div class="p-2 bd-highlight">
+                    <section class="History">
+                        <h6 class="history">Payout History</h6>
+                        <a href="{% url 'payout_history' user.id %}" class="btn btn-sm view text-white" role="button">View</a>
+                        <figure class="circle-time"> 
+                            <i class="fas fa-history time"></i>                                                            
+                        </figure>
+                        <button type="button" class="btn pending">
+                            Pending <span class="badge badge-light">1</span>
+                            <span class="sr-only">Pending withdrawal</span>
+                        </button>
+                    </section>
+                </div>               
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                {% for i in all_customer_referral %}
+                <section class="orders-list mb-4">
+                    <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
+                        <div class="p-2 bd-highlight">
+                            <small class="date">{{i.Date_Time|date:"SHORT_DATE_FORMAT"}}</small>
+                            <h6 class="cus-name">{{i.Order_ID}}</h6>                        
+                        </div>
+
+                        <div class="p-2 bd-highlight">
+                            <div class="status-background p-2">
+                                <h6 class="status">{{i.Delivery_status}}</h6>  
+                            </div>                      
+                        </div>  
+
+                        <div class="p-2 bd-highlight">
+                            <div class="del-back text-center">
+                                <h6 class="del-amount p-2"><img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">{{i.Delivery_Fee|default:"0" }}</h6>
+                            </div>
+                            
+                        </div>                    
+                    </div>                                
+                </section>
+               {% endfor %}
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+</main>
+
+
 <style>
   .request{
-    background: #66FF7A;
+    background: #4aeb60;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
-    font-weight: 500; 
-    font-family: 'Roboto', sans-serif; 
+    font-weight: 700; 
+    font-family: 'Nunito', sans-serif;
   }
 
   .request:hover{
@@ -47,30 +147,324 @@
 
   .create{
       color: #022BBD;
-      font-family: 'Roboto', sans-serif; 
+      font-family: 'Nunito', sans-serif;
       font-style: normal;
-      font-weight: 500;
+      font-weight: 700;
+      font-size: 24px;
+  }
+
+  .Username{
+      color: #022BBD;
+      font-family: 'Nunito', sans-serif;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 15px;
+  }
+
+  .referal{
+      color: #7a97ff;
+      font-family: 'Nunito', sans-serif;
+      font-style: normal;
+      font-weight: 600;
       font-size: 12px;
+      line-height: 30px;
   }
 
   .circle{
         padding: 5px 8px;
         border-radius: 50%;               
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         background: #E4EAFF;
         backdrop-filter: blur(10px);
-        position: relative;
-        margin-left: auto;       
-        margin-right: auto;
+        position: relative;        
     }
 
     .good{
         position: relative;
-        font-size: 30px;
-        top: 12px;
+        font-size: 20px;
+        top: 0px;
+        right: 3px;
         color: #4967D5;
     }
+
+    .earnings{
+        width: 234px;
+        height: 152px;
+        left: 235px;
+        top: 287px;
+        background: #EFE8FF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 21px;
+        padding: 10px;
+    }
+
+    .all{
+        position: relative;
+        top: 30px;
+        left: 105px;
+        color: #2D2C2C;
+        font-family: 'Nunito', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .money{
+        position: relative;
+        top: 50px;
+        left: 50px;
+        color: #8756FB;
+        font-family: 'Roboto', sans-serif; 
+        font-size: 36px;
+        font-weight: 800;
+    }
+
+    .money2{
+        position: relative;
+        top: 50px;
+        left: 50px;
+        color: #36df4c;
+        font-family: 'Roboto', sans-serif; 
+        font-size: 36px;
+        font-weight: 800;
+    }
+
+    .circle-money{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 52px;
+        height: 52px;
+        background: #e2d6ff;
+        backdrop-filter: blur(10px);
+        position: relative;   
+        bottom: 70px;
+    }
+
+    .circle-money2{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 52px;
+        height: 52px;
+        background: #ceffca;
+        backdrop-filter: blur(10px);
+        position: relative;   
+        bottom: 70px;
+    }
+
+    .circle-box{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 52px;
+        height: 52px;
+        background: #FFE6CE;
+        backdrop-filter: blur(10px);
+        position: relative;   
+        bottom: 80px;
+    }
+
+    .circle-time{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 52px;
+        height: 52px;
+        background: #D1FB77;
+        backdrop-filter: blur(10px);
+        position: relative;   
+        bottom: 50px;
+    }
+    
+
+    .bill{
+        color: #8756FB;
+        position: relative;
+        right: -3px;
+        top: 20%;
+        font-size: 25px;
+    }
+
+    .bill2{
+        color: #36df4c;
+        position: relative;
+        right: -3px;
+        top: 20%;
+        font-size: 25px;
+    }
+
+    .box{
+        color: #FCAE67;
+        position: relative;
+        right: -3px;
+        top: 20%;
+        font-size: 25px;
+    }
+
+    .time{
+        color: #69842F;
+        position: relative;
+        right: -3px;
+        top: 20%;
+        font-size: 25px;
+    }
+
+    .balance{
+        width: 234px;
+        height: 152px;
+        left: 235px;
+        top: 287px;
+        background: #DBFFDE;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 21px;
+        padding: 10px;
+    }
+
+    .account{
+        position: relative;
+        top: 30px;
+        left: 105px;
+        color: #2D2C2C;
+        font-family: 'Nunito', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+    }    
+
+    .referred{
+        width: 234px;
+        height: 152px;
+        left: 235px;
+        top: 287px;
+        background: #FFF3E8;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 21px;
+        padding: 10px;
+    }
+
+    .History{
+        width: 234px;
+        height: 152px;
+        left: 235px;
+        top: 287px;
+        background: #E7FFB4;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 21px;
+        padding: 10px;
+    }
+
+    .orders{
+        position: relative;
+        top: 30px;
+        left: 70px;
+        color: #2D2C2C;
+        font-family: 'Nunito', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+    }    
+
+    .history{
+        position: relative;
+        top: 30px;
+        left: 115px;
+        color: #2D2C2C;
+        font-family: 'Nunito', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+    }    
+
+    .count{
+        position: relative;
+        top: 50px;
+        left: 70px;
+        color: #FCAE67;
+        font-family: 'Roboto', sans-serif; 
+        font-size: 48px;
+        font-weight: 800;        
+    }
+
+    .view{
+        position: relative;
+        top: 37px;
+        left: 95px;
+        color: white;
+        font-family: 'Roboto', sans-serif; 
+        font-size: 14px;
+        font-weight: 400;
+        background: #86BD11;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+        border-radius: 10px;  
+    }
+
+    .view:hover{
+        position: relative;
+        top: 37px;
+        left: 95px;
+        color: white;
+        font-family: 'Roboto', sans-serif; 
+        font-size: 14px;
+        font-weight: 400;
+        background: #659204;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+        border-radius: 10px;  
+    }
+
+    .pending{
+        position: relative;
+        background: #D1FB77;
+        color: #69842F;        
+        box-shadow: 0px 4px 4px rgba(231, 215, 215, 0.08);
+        border-radius: 5px;
+        height: min-content;  
+        font-size: 12px;
+        font-weight: bold;
+        bottom: 20px;
+    }
+
+    .color{
+        color: #021f8a;
+    }
+
+    .orders-list{
+        width: auto;
+        height: 70px;
+        background-image: linear-gradient(to right, rgb(224, 237, 255), rgb(250, 254, 255));
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
+        padding: 10px;        
+    }
+
+    .date{
+        font-weight: bold;       
+        color: rgb(109, 109, 109);
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .cus-name{
+        font-weight: bold;
+        line-height: 20px;
+        color: rgb(44, 132, 247);
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .status{       
+        font-family: 'Nunito', sans-serif;        
+        color: rgb(44, 132, 247); 
+        position: relative;                              
+        top: 5px;
+    }
+
+    .status-background{
+        background: rgb(229, 240, 255);
+        border-radius: 10px;        
+    }  
+
+    .del-back{
+        background: rgb(228, 240, 255);
+        border-radius: 10px;        
+    }
+
+    .del-amount{
+        font-family: 'Nunito', sans-serif;   
+        color: rgb(44, 132, 247);
+    }
+    
 </style>
 
 {% endblock content %}

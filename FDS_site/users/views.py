@@ -1,4 +1,3 @@
-
 from re import search
 from BikeControl.models import RidersDeliveries, RidersProfile
 from django.shortcuts import render, redirect
@@ -27,14 +26,12 @@ from .forms import *
 from .filters import OrderFilter, AdminFilter, AdminFilterUsers
 
 from .decorators import unauthenticated_user, allowed_user, admin_only
-
 import requests
-
 from django.core.paginator import Paginator
-
 import json
-
 from django.db.models import Q
+from Affiliate.models import *
+from decimal import Decimal
 
 #Error 404 page
 def response_error_handler(request, exception = None):
@@ -438,6 +435,7 @@ def PickDrop(request, user):
             instance.Delivery_type = 'Pick & Drop'
             instance.save()
 
+      
             messages.success(request, f'Hello {request.user.username}, action Successful')
 
             hashids = Hashids(salt=settings.FRONT_DESK, min_length=7)
@@ -448,7 +446,7 @@ def PickDrop(request, user):
                 customer=instance.customer,
                 item_created = "Front Desk",
                 order_id = h   
-            )             
+            )        
             return redirect('frontdesk', user=user)
     else:
         pickdrop_Form = Front_desk_pick(instance = customer)
@@ -497,10 +495,14 @@ def FrontErrand(request, user):
                 item_created = "Front Desk",
                 order_id = h   
             )         
-            
-            print(instance)
-            finding_duplicate_count = all_frontdesk.count(instance)
-            print(finding_duplicate_count)            
+                        
+            Referrals.objects.create(
+                marketer = instance.Marketer_ID,
+                Referal_ID = instance.Marketer_ID,                
+                Choice_for_TP = instance.Choice_for_TP,
+                Delivery_status = instance.status,                
+                Order_ID = h,
+            )
             
             return redirect('frontdesk', user=user)
     else:
@@ -2496,7 +2498,7 @@ def UpdateAForm(request, pk):
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+        'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
 def UpdateFForm(request, pk):
     r_request = Front_desk.objects.get(id=pk)
     o_form = FleetManagerUpdateF(instance= r_request)
@@ -2508,6 +2510,29 @@ def UpdateFForm(request, pk):
             obj = o_form.save(commit=False)
             obj.save()            
             get_rider = obj.riders
+
+            #Affiliate marketers logic
+            if obj.status == 'Delivered' and obj.Marketer_ID != None:
+                marketer = Affiliate_Group.objects.get(Referal_ID = obj.Marketer_ID.Referal_ID)                               
+                all_customer_referral = Referrals.objects.filter(marketer = obj.Marketer_ID)
+                all_customer_referral.filter(Order_ID = obj.order_id).update(
+                    Rider = obj.riders,
+                    Delivery_Fee = obj.profit,
+                    Customer_percentage_profit = 20/100 * obj.profit,
+                    FLLS_perentage_profit = 80/100 * obj.profit,
+                    Delivery_status = obj.status,
+                )     
+
+                #updating the wallet balance                
+                getting_the_order = Referrals.objects.get(Order_ID = obj.order_id)
+                check_process_complete = getting_the_order.Completed
+                if check_process_complete == False:                                            
+                    marketer.Amount_Genreated  += obj.profit
+                    marketer.Amount_Credited += Decimal(20/100) * obj.profit                     
+                    marketer.Wallet_Balance += Decimal(20/100) * obj.profit
+                    marketer.Profit_Generated += Decimal(80/100) * obj.profit
+                    marketer.save()                              
+                    all_customer_referral.filter(Order_ID = obj.order_id).update(Completed = True)                    
 
             if obj.status != 'Delivered' and get_rider == None:
                 messages.warning(request, f'You just updated a customer status to {obj.status}')                     
@@ -2565,6 +2590,8 @@ def UpdateFForm(request, pk):
             if request.user.groups.filter(name = 'Fleet Manager'):
                 return redirect('fleetManager', user = pk)
             elif request.user.groups.filter(name = 'Front Desk'):
+                return redirect('frontdesk', user = pk)   
+            else:
                 return redirect('frontdesk', user = pk)
     context = {'o_form': o_form,
               'customer':customer 
@@ -2657,7 +2684,7 @@ def Update_Errand_Form(request, pk):
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+        'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
 def Update_Front_Fesk_Form(request, pk):
     r_request = Front_desk.objects.get(id=pk)
     o_form = AdminFrontForm(instance= r_request)
@@ -2668,8 +2695,7 @@ def Update_Front_Fesk_Form(request, pk):
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
-            get_rider = obj.riders
-            
+            get_rider = obj.riders           
             if obj.status != 'Delivered' and get_rider == None:
                 messages.warning(request, f'You just updated a customer status to {obj.status}')                     
             elif obj.status != 'Delivered' and get_rider != None:
@@ -2684,7 +2710,7 @@ def Update_Front_Fesk_Form(request, pk):
             if get_rider != None:
                 Front_desk.objects.filter(pk = obj.pk).update(assigned = True)
 
-            if obj.status == 'Delivered':                                               
+            if obj.status == 'Delivered':                                                                              
                 search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
                 search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
                 search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
@@ -2721,7 +2747,7 @@ def Update_Front_Fesk_Form(request, pk):
                                 Item_delivered = obj,
                                 order_id = obj.order_id
                                 )
-                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')                    
 
             return redirect('allfront-request')
     context = {'o_form': o_form,

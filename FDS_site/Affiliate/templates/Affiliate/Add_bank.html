@@ -1,0 +1,136 @@
+{% extends "FDS_app/base.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Request Payout {{user.username }} {% endblock title %}
+
+{% block content %}
+<main class="container mt-4">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-6 justify-content-center"> 
+            <div class="d-flex flex-row bd-highlight mb-3">
+                <div class="p-2 bd-highlight">
+                    <i class="fas fa-info-circle info"></i> 
+                </div>
+                <div class="p-2 bd-highlight">
+                    <p class="info-content">Add your bank account details you want payment to be made into.<br>
+                        <strong>
+                            Note that the payment won’t be made if the name you register with and 
+                            the Bank account name are different.
+                        </strong>
+                    </p>
+                </div>
+              </div> 
+              
+              <form method="POST" > 
+                {% csrf_token %}                    
+                
+                <div class="form-row">
+                    <div class="col">
+                    {{bank_form|crispy}}
+                    </div>             
+                </div>  
+                <button class="btn btn-sm rounded-lg text-white" style="background-color: #0060f0;" type="submit" >Save</button>                              
+            </form>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <div class="d-flex flex-column bd-highlight mb-3">
+                <div class="p-2 bd-highlight">
+                    <div class="d-flex flex-row bd-highlight mb-3">
+                        <div class="p-2 bd-highlight">
+                            <div class="circle-box">
+                                <i class="fas fa-university bank"></i>                        
+                            </div>
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <h4 class="saved">Saved Account</h4>
+                        </div>                        
+                      </div>                                      
+                </div>
+                <div class="p-2 bd-highlight" 
+                hx-target = "#delete-account"
+                hx-swap = "outterHTML">
+                    {% for i in all_account %}
+                    <section class="acct-details mb-3">
+                        <h6>Account Name: <strong>{{i.Account_Name}}</strong></h6>
+                        <h6>Account Number: <strong>{{i.Account_Number}}</strong></h6>
+                        <h6>Bank Name: <strong>{{i.Bank_Name}}</strong></h6>
+                        <figure class="delete">
+                            <a hx-delete="{% url 'delete_account' i.pk %}"  
+                               role="button"
+                               hx-confirm = "Are you sure you want to delete {{i.Account_Number}}"                               
+                            ><i class="far fa-trash-alt text-danger"></i></a>
+                        </figure>
+                    </section>
+                    {% empty %}
+                    <p>You have no saved account </p>
+                    {% endfor %}
+                </div>                       
+                </div>   
+            </div>                              
+        </div>
+    </div>
+</main>
+
+<style>
+    .acct-details{
+        padding: 10px;
+        border-radius: 15px;
+        color: rgba(124, 177, 255, 1);
+        background: #F8FBFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        height: 120px;
+    }
+    .bank{        
+        color: rgba(163, 200, 255, 1);
+        width: 27px;
+    	height: 27px;
+        font-size: 35px;
+    }
+    .info{
+        font-size: 50px;
+        color: greenyellow;
+    }
+
+    .info-content{
+        font-size: smaller;
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .circle-box{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 52px;
+        height: 52px;
+        background: #003A92;
+        backdrop-filter: blur(10px);               
+    }
+
+    .delete{              
+        position: relative;
+        margin-left: 280px;
+        bottom: 10px;
+    }
+
+    .delete:hover{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 30px;
+        height: 30px;
+        background: #ffdada;
+        backdrop-filter: blur(10px);
+        position: relative;
+        margin-left: 274px;
+        bottom: 15px;
+    }
+
+    .saved{
+        color: #003A92;
+        line-height: 50px;
+    }
+</style>
+
+{% endblock content %}

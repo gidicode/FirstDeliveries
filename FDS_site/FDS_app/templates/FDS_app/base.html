@@ -29,7 +29,7 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'FDS_app/favicon.ico' %}"/>    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
+    <script src="https://unpkg.com/htmx.org@1.1.0"></script>
     <script>
       $(function () {
       $('[data-toggle="tooltip"]').tooltip()
@@ -66,7 +66,7 @@
   
   </script> 
 </head>
-  <body > 
+  <body id="delete-account"> 
     {% block management %} 
       
     {% endblock management%}
@@ -118,12 +118,17 @@
       </nav>
     </div>
     <div  id="myDiv" class="animate-bottom">
-    <main role="main" style="padding-top: -2rem;">
+    <main role="main" style="padding-top: -2rem;" >
       <div>
       {% block content %}
 
 
       {% endblock content %}
+      <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+          event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+      </script>
     </div>
 
     <div class="chatservice mr-4">

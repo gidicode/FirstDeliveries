@@ -324,12 +324,12 @@ class Other_errand(forms.ModelForm):
 class Front_desk_pick(forms.ModelForm):
     class Meta:
         model = Front_desk
-        fields = ['customer_name', 'Customer_phone_number', 'item_description', 'delivery_destination', 'Reciever_phone_number', 'customer_location', 'Amount_Payable', 'Choice_for_TP', 'Note' ]
+        fields = [ 'Marketer_ID','customer_name', 'Customer_phone_number', 'item_description', 'delivery_destination', 'Reciever_phone_number', 'customer_location', 'Amount_Payable', 'Choice_for_TP', 'Note' ]
 
 class Front_desk_errand(forms.ModelForm):
     class Meta:
         model = Front_desk
-        fields = ['customer_name', 'Customer_phone_number', 'Quantity', 'delivery_destination', 'item_description', 'Enter_amount', 'Delivery_Fee', 'Reciever_phone_number', 'Purchase_location', 'Receiver_name', 'Choice_for_TP', 'customer_location', 'Note']
+        fields = ['Marketer_ID', 'customer_name', 'Customer_phone_number', 'Quantity', 'delivery_destination', 'item_description', 'Enter_amount', 'Delivery_Fee', 'Reciever_phone_number', 'Purchase_location', 'Receiver_name', 'Choice_for_TP', 'customer_location', 'Note']
 
 class CashierFormE(forms.ModelForm): 
     class Meta:

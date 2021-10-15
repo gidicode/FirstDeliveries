@@ -61,4 +61,6 @@ urlpatterns = [
     path('admin_view_list/<hashid:user>/', management_views.Admin_report_list, name='admin_list'),
 
     path('logistics_page/<hashid:user>/', management_views.Logistics, name='Logistics'),
+
+    path('Delete_report/<hashid:pk>/', management_views.Delete_report, name="delete_report"),
 ]

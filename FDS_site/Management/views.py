@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from users.decorators import *
 from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 
 
 def Notification_email(recipient_list, Staff_Name):
@@ -1910,5 +1911,12 @@ def Admin_report_list(request, user):
         'filter_name':filter_name,
         'page_obj':page_obj,
     }
-    return render(request, 'Management/admin_view_list.html', context)    
+    return render(request, 'Management/admin_view_list.html', context)  
+
+@require_http_methods(['DELETE'])
+def Delete_report(request, pk):    
+    OFFICE_REPORT.objects.filter(id = pk).delete()
+    messages.success(request, f"Deleted")
+    return redirect('management_dashboard', request.user.pk)
+    
 

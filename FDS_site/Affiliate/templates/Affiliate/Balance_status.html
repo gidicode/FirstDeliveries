@@ -1,0 +1,224 @@
+{% extends "FDS_app/base.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Request Payout {{user.username }} {% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            {% if Balance.Wallet_Balance >= 1000 %}  
+            <section class="text-center">
+                <small>
+                    <strong>
+                        Hello Gideon, you can request for withdrawal. 
+                    </strong>
+                </small>     
+                <br>
+                <small>Note: The amount would be credited to you in 3 business days. </small>
+
+                <div class="background text-center">
+                    <div class="second-back">                        
+                        <h4 class="balance">Balance</h4>
+                        <h4 class="amount">N{{Balance.Wallet_Balance}}</h4>
+                        <div class="line"></div>
+                        <div class="line2"></div>
+                        <div class="line3"></div>
+                        <div><i class="far fa-check-circle circle"></i></div>
+                        <a href="{% url 'request_payout' user.id %}" class="btn proceed mt-4 text-white" role="button">Proceed <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+            {% else %}
+
+            <section >
+               
+                <small class="text-left">
+                    Hello Gideon, you can not request for withdrawal at the 
+                    moment because  your balance is below the withdrawl limit 
+                    or its not yet the withfrawal period. 
+                </small>
+                <div class="background-2 text-center">
+                    <div class="second-back-2">                        
+                        <h4 class="balance-2">Balance</h4>
+                        <h4 class="amount-2">N{{Balance.Wallet_Balance}}</h4>
+                        <div class="line-2"></div>
+                        <div class="line2-3"></div>
+                        <div class="line3-3"></div>
+                        <div><i class="far fa-times-circle circle-2"></i></div>
+                        <a href="{% url 'affiliate_dashboard' user.id %}" class="btn proceed-2 mt-4 text-white" role="button">Proceed <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+            {% endif%}
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+
+<style>  
+    .background{
+        background: rgba(195, 255, 201, 1);
+        padding: 50px;
+        border-radius: 15px;        
+    }
+    .line{
+        width: 200px;
+        background: rgba(123, 255, 141, 1);
+        height: 10px;
+        border-radius: 20px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;        
+    }
+
+    .line2{
+        width: 150px;
+        background: rgba(123, 255, 141, 1);
+        height: 10px;
+        border-radius: 20px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+
+    .line3{
+        width: 100px;
+        background: rgba(123, 255, 141, 1);
+        height: 10px;
+        border-radius: 20px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+
+
+    .balance{
+        font-size: 20px;
+        font-weight: 500;
+        font-family: 'Nunito', sans-serif;
+        position: relative;
+        top: 18px;
+        right: 50px;
+    }
+
+    .amount{
+        font-size: 50px;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 600;
+    }
+
+    .second-back{
+        background: rgb(255, 255, 255);
+        padding: 20px;        
+    }
+
+    .circle{
+        margin-top: 10px;
+        font-size: 80px;
+        color: rgb(1, 146, 20);
+    }
+
+    .proceed{
+        background: rgb(17, 49, 17);
+        color: white;
+        font-weight: 500;
+        border-radius: 10px;
+    }
+
+    .proceed:hover{
+        background: rgb(21, 83, 21);
+        color: white;
+        font-weight: 500;
+        border-radius: 10px;
+    }
+    
+    
+
+
+    .background-2{
+        background: rgba(255, 238, 238, 1);
+        padding: 50px;
+        border-radius: 15px;        
+    }
+    .line-2{
+        width: 200px;
+        background: rgba(249, 165, 165, 1);
+        height: 10px;
+        border-radius: 20px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;        
+    }
+
+    .line2-3{
+        width: 150px;
+        background: rgba(249, 165, 165, 1);
+        height: 10px;
+        border-radius: 20px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+
+    .line3-3{
+        width: 100px;
+        background: rgba(249, 165, 165, 1);
+        height: 10px;
+        border-radius: 20px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+
+
+    .balance-2{
+        font-size: 20px;
+        font-weight: 500;
+        font-family: 'Nunito', sans-serif;
+        position: relative;
+        top: 18px;
+        right: 50px;
+        color: rgba(249, 165, 165, 1);
+    }
+
+    .amount-2{
+        font-size: 50px;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 600;
+        color: rgba(178, 124, 124, 1);
+    }
+
+    .second-back-2{
+        background: rgba(255, 202, 202, 1);
+        padding: 20px;        
+    }
+
+    .circle-2{
+        margin-top: 10px;
+        font-size: 80px;
+        color: rgb(226, 28, 28);
+    }
+
+    .proceed-2{
+        background: rgb(226, 28, 28);
+        color: white;
+        font-weight: 500;
+        border-radius: 10px;
+    }
+
+    .proceed-2:hover{
+        background: rgb(170, 10, 10);
+        color: white;
+        font-weight: 500;
+        border-radius: 10px;
+    }
+</style>
+
+{% endblock content %}

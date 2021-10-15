@@ -11,4 +11,17 @@ urlpatterns = [
     #Dashboard
     path('Affiliate_Dashboard_FLLS/<hashid:user>/', affiliate_views.Marketer_Dashboard , name="affiliate_dashboard"), 
     
+    #Rquest_payout
+    path('Payout_FLLS/<hashid:user>/', affiliate_views.Request_Payout, name="request_payout"), 
+    path('Balance_FLLS/<hashid:user>/', affiliate_views.Balance_status, name="balance_status"), 
+
+    #Add Bank details
+    path('Add_Bank_Details_FLLS/<hashid:user>/', affiliate_views.Add_bank_account, name="add-bank"),     
+
+    #Payout History
+    path('Payout_History_FLLS/<hashid:user>/', affiliate_views.Payout_History_list, name="payout_history"),     
+    path('Payout_History_Details_FLLS/<hashid:user>/', affiliate_views.Payout_History_Details, name="payout_history_details"),     
+
+    #deLETE BANK DETAILS
+    path('Delete_Account_FLLS/<hashid:pk>/', affiliate_views.Delete_account, name="delete_account"),     
 ]

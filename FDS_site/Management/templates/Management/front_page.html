@@ -17,7 +17,9 @@
         <span class=" fas fa-bars"></span>
     </button>         
 </nav>
-<div class="container-fluid">   
+<div class="container-fluid"
+            
+            >   
     <div class="row mt-4">
         <div class="col-lg-3"> </div>
         <div class="col-lg-6"> 
@@ -205,6 +207,9 @@
 
 
             {% if request.user|admin:"MANAGEMENT_ADMIN" %}
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">
                 {% for i in managers_report %}
                 <div class="pending text-center font-weight-bolder ">
                     <p> Pending</p>
@@ -219,14 +224,24 @@
                             </div>  
                             <div class="bd-highlight">
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_admin_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
                             </div>                           
                         </div>
                     </div> 
                 </div>
                 {% endfor %}
+            </div>
             {% endif %}
 
             {% if request.user|ACCOUNT:"ACCOUNT" %}
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">
                 {% for i in managers_report %}
                 <div class="pending text-center font-weight-bolder ">
                     <p> Pending</p>
@@ -241,14 +256,24 @@
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_account_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
                             </div>                           
                         </div>
                     </div> 
                 </div>
                 {% endfor %}
+            </div>
             {% endif %}
 
             {% if request.user|MANAGER_PH:"MANAGER_PH" %}
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">
                 {% for i in managers_report %}
                 <div class="pending text-center font-weight-bolder ">
                     <p> Pending</p>
@@ -263,14 +288,24 @@
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_ph_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
                             </div>                           
                         </div>
                     </div> 
                 </div>
                 {% endfor %}
+            </div>
             {% endif %}
 
             {% if request.user|MAINTENANCE:"MAINTENANCE" %}
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">
                 {% for i in managers_report %}
                     <div class="pending text-center font-weight-bolder ">
                         <p> Pending</p>
@@ -285,57 +320,88 @@
                                 </div>  
                                 <div class="bd-highlight">         
                                     <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_maintenance_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                    <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
                                 </div>                           
                             </div>
                         </div> 
                     </div>
                 {% endfor %}
+            </div>
             {% endif %}
             
             {% if request.user|FARM_TANK:"TANK" %}
-            {% for i in managers_report %}
-            <div class="pending text-center font-weight-bolder ">
-                <p> Pending</p>
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">
+                {% for i in managers_report %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight">          
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Tank_farm_report_title}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">         
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_tank_farm_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endfor %}
             </div>
-            <div class="list shadow-sm">
-                <div class="item">
-                    <div class="d-flex flex-row bd-highlight justify-content-between">
-                        <div class="bd-highlight">          
-                            <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Tank_farm_report_title}}</p>
-                            <br>
-                            <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
-                        </div>  
-                        <div class="bd-highlight">         
-                            <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_tank_farm_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
-                        </div>                           
-                    </div>
-                </div> 
-            </div>
-            {% endfor %}
             {% endif %}
 
-            {% if request.user|IWHADMIN:"IWH" %}           
-            {% for i in managers_report %}
-            <div class="pending text-center font-weight-bolder ">
-                <p> Pending</p>
+            {% if request.user|IWHADMIN:"IWH" %} 
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">          
+                {% for i in managers_report %}
+                <div class="pending text-center font-weight-bolder ">
+                    <p> Pending</p>
+                </div>
+                <div class="list shadow-sm">
+                    <div class="item">
+                        <div class="d-flex flex-row bd-highlight justify-content-between">
+                            <div class="bd-highlight">          
+                                <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Iwh_report_title}}</p>
+                                <br>
+                                <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
+                            </div>  
+                            <div class="bd-highlight">
+                                <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_iwh_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
+                            </div>                           
+                        </div>
+                    </div> 
+                </div>
+                {% endfor %}
             </div>
-            <div class="list shadow-sm">
-                <div class="item">
-                    <div class="d-flex flex-row bd-highlight justify-content-between">
-                        <div class="bd-highlight">          
-                            <p class="d-inline-block text-truncate font-weight-bold text-primary" style="max-width: 150px;">{{i.Iwh_report_title}}</p>
-                            <br>
-                            <small class="ticket-num font-weight-bold text-secondary">Ticket Number: {{i.ticket_num}}</small>
-                        </div>  
-                        <div class="bd-highlight">
-                            <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_iwh_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
-                        </div>                           
-                    </div>
-                </div> 
-            </div>
-            {% endfor %}
             {% endif %}   
-
+            
+            
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">            
             {% for i in flls_team %}
                 {% if request.user|fleet:"Fleet Manager" %}
                 <div class="pending text-center font-weight-bolder ">
@@ -351,6 +417,12 @@
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_fleet_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
                             </div>                           
                         </div>
                     </div> 
@@ -371,6 +443,12 @@
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_ict_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
                             </div>
                         </div>
                     </div> 
@@ -391,6 +469,12 @@
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_market_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
                             </div>                           
                         </div>
                     </div> 
@@ -398,7 +482,7 @@
                 {% endif %}                              
 
                 {% if request.user|front_desk:"Front Desk" %}
-                <div class="pending text-center font-weight-bolder ">
+                <div class="pending text-center font-weight-bolder">
                     <p> Pending</p>
                 </div>
                 <div class="list shadow-sm">
@@ -411,15 +495,25 @@
                             </div>  
                             <div class="bd-highlight">         
                                 <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_front_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                                <a class="btn btn-sm rounded-lg text-white"                                
+                                    hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                    hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                    style="background: #ffdada;"> 
+                                    <i class="far fa-trash-alt text-danger"></i> 
+                                </a>
                             </div>                           
                         </div>
                     </div> 
                 </div>
                 {% endif %}                 
             {% endfor %}
+            </div>
             {% endif %}
             
             {% if request.user|COMMERCIAL:"COMMERCIAL" %}
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">  
             {% for i in managers_report %}
             <div class="pending text-center font-weight-bolder ">
                 <p> Pending</p>
@@ -434,11 +528,18 @@
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_commercial_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            <a class="btn btn-sm rounded-lg text-white"                                
+                                hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                style="background: #ffdada;"> 
+                                <i class="far fa-trash-alt text-danger"></i> 
+                            </a>
                         </div>                           
                     </div>
                 </div> 
             </div>
             {% endfor %}
+            </div>
             {% endif %}
 
             {% if request.user|operations:"OPERATIONS" %}
@@ -457,6 +558,9 @@
                 </div>
             </div>
 
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">  
             {% for i in managers_report %}
             <div class="pending text-center font-weight-bolder ">
                 <p> Pending</p>
@@ -471,11 +575,18 @@
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            <a class="btn btn-sm rounded-lg text-white"                                
+                                hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                style="background: #ffdada;"> 
+                                <i class="far fa-trash-alt text-danger"></i> 
+                            </a>
                         </div>                           
                     </div>
                 </div> 
             </div>
             {% endfor %}
+            </div>
             {% endif %}
 
             {% if request.user|m_runyi:"MANAGEMENT_RUNYI" %}
@@ -494,6 +605,9 @@
                 </div>
             </div>
 
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">  
             {% for i in managers_report %}
             <div class="pending text-center font-weight-bolder ">
                 <p> Pending</p>
@@ -508,11 +622,18 @@
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_runyi_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            <a class="btn btn-sm rounded-lg text-white"                                
+                                hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                style="background: #ffdada;"> 
+                                <i class="far fa-trash-alt text-danger"></i> 
+                            </a>
                         </div>                           
                     </div>
                 </div> 
             </div>
             {% endfor %}
+            </div>
             {% endif %}
 
             {% if request.user|m_manager:"MANAGEMENT_MANAGER" %}
@@ -531,6 +652,10 @@
                 </div>
             </div>
 
+
+            <div                                 
+            hx-target= "#delete-request"
+            hx-swap="outterHTML">  
             {% for i in managers_report %}
             <div class="pending text-center font-weight-bolder ">
                 <p> Pending</p>
@@ -545,11 +670,18 @@
                         </div>  
                         <div class="bd-highlight">         
                             <a class="btn btn-sm rounded-lg text-white" role="button"  href="{% url 'edit_manager_report' i.id %}" style="background-color: #9191FF;"> Edit </a>
+                            <a class="btn btn-sm rounded-lg text-white"                                
+                                hx-delete="{% url 'delete_report' i.pk %}"                                                                
+                                hx-confirm= "Are you sure you want to delete this report {{i.ticket_num}}"
+                                style="background: #ffdada;"> 
+                                <i class="far fa-trash-alt text-danger"></i> 
+                            </a>
                         </div>                           
                     </div>
                 </div> 
             </div>
             {% endfor %}
+            </div>
             {% endif %}                                 
         </div>
         <div class="col-lg-3"> </div>

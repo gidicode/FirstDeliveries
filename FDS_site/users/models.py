@@ -427,6 +427,7 @@ class Front_desk(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$')
     customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)        
     riders = models.ForeignKey('BikeControl.RidersProfile', null=True, blank=True, on_delete= models.SET_NULL)        
+    Marketer_ID = models.ForeignKey('Affiliate.Affiliate_Group', null=True, blank=True, verbose_name="Referal Code", on_delete=models.SET_NULL)
     customer_name = models.CharField( max_length=100, null=True, blank=True)
     item_description = models.CharField(max_length=200, null=True, blank=True)
     customer_location = models.CharField(max_length=100, null=True, verbose_name='Delivery Address'  , blank=True)

@@ -5,6 +5,8 @@ from django.db.models.fields import DateTimeField
 from django.utils.regex_helper import Choice
 from users.models import Customer
 from django.utils import timezone
+from decimal import Decimal
+from django.http import request
 # Create your models here.
 
 
@@ -13,10 +15,10 @@ class Affiliate_Group(models.Model):
     Referal_ID = models.CharField(unique=True, null=True, max_length=5, editable=False)
     Date_Joined = models.DateTimeField(default=timezone.now, editable=False, null = True, blank=True)
     Total_Referal = models.IntegerField(default=0, editable=False, null=True)
-    Amount_Genreated = models.DecimalField(max_digits=6, editable=False, null = True, decimal_places=2)
-    Amount_Credited = models.DecimalField(max_digits=6, editable=False, null = True, decimal_places=2)
-    Wallet_Balance = models.DecimalField(max_digits=6, editable=False, null = True, decimal_places=2)
-    Profit_Generated = models.DecimalField(max_digits=6, editable=False, null = True, decimal_places=2)
+    Amount_Genreated = models.DecimalField(max_digits=10, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    Amount_Credited = models.DecimalField(max_digits=10, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    Wallet_Balance = models.DecimalField(max_digits=10, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    Profit_Generated = models.DecimalField(max_digits=10, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
 
     def __str__(self):
         return f"{self.Marketer}, {self.Referal_ID}"
@@ -41,28 +43,28 @@ class Referrals(models.Model):
     Choice_for_TP = models.CharField(max_length=10, choices = Vehicle, null=True)
     Delivery_status = models.CharField(max_length=20, editable=False, choices=STATUS, null=True)
     Trips_count = models.IntegerField(null= True, default=0,)
-    Delivery_Fee = models.DecimalField(max_digits=6, decimal_places=2)
-    Customer_percentage_profit = models.DecimalField(max_digits=6, decimal_places=2)
-    FLLS_perentage_profit = models.DecimalField(max_digits=6, decimal_places=2)
+    Delivery_Fee = models.DecimalField(max_digits=6, null=True, decimal_places=2)
+    Customer_percentage_profit = models.DecimalField(max_digits=6, null=True, decimal_places=2)
+    FLLS_perentage_profit = models.DecimalField(max_digits=6, null=True, decimal_places=2)
     Order_ID = models.CharField(max_length=8, null=True)
+    Completed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.marketer}, {self.Referal_ID}"
 
 class Bank_Account_Details(models.Model):
     def Check_Len(value):
-        if len(value) < 10:
+        if len(str(value)) < 10:
             raise ValidationError(
-                ('%(value) is less than 10 numbers, Please check and correct.'), params={'value':value},
+                ('%(value)  is less than 10 numbers, Please check and correct.'), params={'value':value},
             )   
-        elif len(value) > 10:
+        elif len(str(value)) > 10:
             raise ValidationError(
-                ('%(value) is more than 10 numbers, Please check and correct.'), params={'value':value},
-            )
-             
+                ('%(value)  is more than 10 numbers, Please check and correct.'), params={'value':value},
+            )              
     marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
-    Account_Number = models.IntegerField(validators=[Check_Len], unique=True, editable=False)
-    Account_Name = models.CharField(max_length = 100, null=True, unique=True, editable=False)
+    Account_Number = models.IntegerField(validators=[Check_Len], unique=True)
+    Account_Name = models.CharField(max_length = 100, null=True, unique=False)
     Bank_Name = models.CharField(max_length=100, null=True)
     
     def __str__(self):
@@ -74,7 +76,6 @@ class Request_Payout(models.Model):
         ('Canceled', 'Canceled'),
         ('Pending', 'Pending'),        
     }
-
     marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
     Debit_amount = models.IntegerField(default=0, null=True)
     Select_bank = models.ForeignKey(Bank_Account_Details, on_delete=models.CASCADE, null=True, related_name="banks")

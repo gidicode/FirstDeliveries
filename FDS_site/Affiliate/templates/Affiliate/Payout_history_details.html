@@ -1,0 +1,79 @@
+{% extends "FDS_app/base.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Request Payout {{user.username }} {% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3 ">           
+        </div>
+        <div class="col-md-6">
+            <section class="success p-3">
+                <div class="status text-center">
+                    <h5 class="details">Withdrawal Details  <i class="far fa-check-circle"></i></h5>
+                </div>
+                <table class="table mt-4">                    
+                    <tbody>
+                      <tr>                   
+                        <td>Request Date</td>
+                        <td class="font-weight-bold">12/02/2021</td>                       
+                      </tr>
+                      <tr>          
+                        <td>Request Amount</td>
+                        <td class="font-weight-bold">N5000</td>                        
+                      </tr>
+                      <tr>                
+                        <td>Payment Status</td>
+                        <td class="font-weight-bold">Pending</td>                        
+                      </tr>
+                      <tr>                
+                        <td>Transaction ID</td>
+                        <td class="font-weight-bold">12346738</td>                        
+                      </tr>
+                      <tr>                
+                        <td>Amount Paid</td>
+                        <td class="font-weight-bold">N5000</td>                        
+                      </tr>
+                      <tr>                
+                        <td>Bank Account</td>
+                        <td class="font-weight-bold">Zenith, 2234567343, Asuquo Etim Asuquo</td>                        
+                      </tr>
+                      <tr>                
+                        <td>Date Paid</td>
+                        <td class="font-weight-bold">12/02/2021</td>                        
+                      </tr>
+                    </tbody>
+                  </table>
+            </section>
+        </div>         
+        <div class="col-md-3">           
+        </div> 
+    </div>
+</div>
+
+<style>
+   .success{
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+   }
+
+   .status{
+       border-radius: 10px;
+       background: rgba(236, 252, 237, 1);
+       width: max-content;
+       padding: 5px;
+       width: 190px;       
+   }
+
+   .details{
+      color: rgb(0, 206, 27);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      margin-top: 10px;
+      font-size: 16px;
+   }
+</style>
+
+{% endblock content %}
