@@ -1,0 +1,49 @@
+{% extends "Affiliate/Affiliate_dashboard.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Delivery List {{user.username }} {% endblock title %}
+
+{% block content %}
+<main class="container mt-1">
+    <div class="row no-gutters">
+        <div class="col mt-4">   
+
+            <div class="mb-4">
+                <h5>ALL AFFILIATE MARKETERS</h5>
+            </div> 
+
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Referal ID</th>
+                    <th scope="col">Marketer Name</th>
+                    <th scope="col">Total Referal</th>
+                    <th scope="col">Amount Generated</th>
+                    <th scope="col">Amount Credited</th>
+                    <th scope="col">Cashed Out</th>
+                    <th scope="col">Wallet Balance</th>
+                    <th scope="col">Request Funds</th>                    
+                    <th scope="col">Our Profit(80%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                 
+                </tbody>
+              </table>
+        </div>            
+    </div>
+</main>
+
+<style>  
+   
+</style>
+
+{% endblock content %}

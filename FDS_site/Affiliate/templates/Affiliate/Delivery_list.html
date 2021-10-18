@@ -1,0 +1,65 @@
+{% extends "Affiliate/Affiliate_dashboard.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Delivery List {{user.username }} {% endblock title %}
+
+{% block content %}
+<main class="container mt-1">
+    <div class="row no-gutters">
+        <div class="col mt-4">     
+            <div class="mb-4">
+                <h5>Referal List Details</h5>
+            </div>       
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col">Referal ID</th>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Initiator Name</th>
+                    <th scope="col">Rider Name</th>
+                    <th scope="col">Vehicle Used</th>
+                    <th scope="col">Delivery Status</th>                    
+                    <th scope="col">Delivery Fee</th>
+                    <th scope="col">Customer (20%)</th>
+                    <th scope="col">Our Profit(80%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in all_referrals %}
+                  <tr>                    
+                    <th scope="row">{{ forloop.counter}}</th>
+                    <td>{{i.Date_Time|date:"d M Y"}}</td>
+                    <td>{{i.Referal_ID}}</td>
+                    <td>{{i.Order_ID}}</td>
+                    <td>{{i.marketer.Marketer.first_name|default:'o'}}</td>
+                    <td>{{i.Rider.first_name}}</td>
+                    <td>{{i.Choice_for_TP}}</td>
+                    <td>
+                        {% if i.Delivery_status == 'Pending'%}
+                        <button class="btn btn-sm btn-warning rounded">Pending</button>
+                        {% elif i.Delivery_status == 'Delivered' %}
+                        <button class="btn btn-sm btn-success rounded">Delivered</button>
+                        {% elif i.Delivery_status == 'Canceled' %}
+                        <button class="btn btn-sm btn-danger rounded">Canceled</button>                        
+                        {% endif %}
+                    <td>N{{i.Delivery_Fee|default:'0'}}</td>
+                    <td>N{{i.Customer_percentage_profit|default:'0'}}</td>
+                    <td>N{{i.FLLS_perentage_profit|default:'0'}}</td>
+                    {% empty %}
+                    <td>No records yet...</td>                   
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>            
+    </div>
+</main>
+
+<style>  
+   
+</style>
+
+{% endblock content %}

@@ -1,0 +1,49 @@
+{% extends "Affiliate/Affiliate_dashboard.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Delivery List {{user.username }} {% endblock title %}
+
+{% block content %}
+<main class="container mt-1">
+    <div class="row no-gutters">
+        <div class="col mt-4">     
+            <div class="mb-4">
+                <h5>FUNDS WITHDRAWAL</h5>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col">Referal ID</th>
+                    <th scope="col">Marketer Name</th>
+                    <th scope="col">Account Details </th>
+                    <th scope="col">Transaction ID</th>
+                    <th scope="col">Customer Balance</th>
+                    <th scope="col">Amount Requested</th>
+                    <th scope="col"> Payment Status</th>
+                    <th scope="col">Amount Paid</th>
+                    <th scope="col">Date Paid</th>
+                    <th scope="col">Update Transaction</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                 
+                </tbody>
+              </table>
+        </div>            
+    </div>
+</main>
+
+<style>  
+   
+</style>
+
+{% endblock content %}

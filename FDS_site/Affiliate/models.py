@@ -51,6 +51,9 @@ class Referrals(models.Model):
 
     def __str__(self):
         return f"{self.marketer}, {self.Referal_ID}"
+    
+    class Meta:
+        ordering = ('-Date_Time',)
 
 class Bank_Account_Details(models.Model):
     def Check_Len(value):
@@ -69,6 +72,7 @@ class Bank_Account_Details(models.Model):
     
     def __str__(self):
         return f"{self.Bank_Name}, {self.Account_Number}"
+    
 
 class Request_Payout(models.Model):
     STATUS = {
@@ -89,3 +93,6 @@ class Request_Payout(models.Model):
 
     def __str__(self):
         return f"{self.marketer}, {self.Debit_amount}"
+
+    class Meta:
+        ordering = ('-Date_Requested',)

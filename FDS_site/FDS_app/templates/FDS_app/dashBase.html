@@ -82,6 +82,8 @@
             {% if request.user|cashier:"Cashier" %}
               <a class="btn btn-success mt-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'cashier' user.id  %}" role="button">Cashier Dashboard</a>
             {% endif %} 
+            <a class="btn btn-success mt-3 btn-sm font-weight-bold text-white rounded-pill " href="{% url 'affiliate_dashboard' %}" role="button">Affiliate Dashboard</a>
+
             </div>
           </div>   
         </div>    
