@@ -1,0 +1,90 @@
+{% extends "Affiliate/Affiliate_dashboard.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block title %}Process Payout {{user.username }} {% endblock title %}
+
+{% block content %}
+<main class="container mt-4">
+ <div class="row">
+     <div class="col-md-1"></div>
+     <div class="col-md-4">
+        {% if item.Payment_status == 'Paid'%}
+        <p>You can no longer update payment as this process has been completed</p>
+        {% else %}
+        <form method="POST" > 
+            {% csrf_token %}                    
+            
+            <div class="form-row">
+                <div class="col">
+                {{Process_payment_form|crispy}}
+                </div>             
+            </div>  
+            <button class="btn btn-sm rounded-lg text-white" style="background-color: #0060f0;" type="submit" >Submit</button>                              
+        </form>
+        {% endif %}
+     </div>
+     <div class="col-md-1"></div>
+     <div class="col-md-6">
+        <table class="table mt-4"> 
+            <thead>
+                <h6 class="text-primary font-weight-bold">Payout Details</h6>
+            </thead>                   
+            <tbody>
+              
+                <tr>                   
+                    <td>Date Requested</td>
+                    <td class="font-weight-bold">{{item.Date_Requested}}</td>                       
+                </tr>
+
+              <tr>                   
+                <td>Marketer</td>
+                <td class="font-weight-bold">{{item.marketer.Marketer.first_name}} {{item.marketer.Marketer.last_name}}</td>                       
+              </tr>
+
+              <tr>           
+                <td>Referal ID</td>
+                <td class="font-weight-bold">{{item.marketer.Referal_ID}}</td>                        
+              </tr>
+
+              <tr>          
+                <td>Transaction_ID</td>
+                <td class="font-weight-bold">{{item.Transaction_ID}}</td>                        
+              </tr>
+
+              <tr>                
+                <td>Amount Requested</td>
+                <td class="font-weight-bold">{{item.Debit_amount}}</td>                        
+              </tr>
+
+              <tr>                
+                <td>Wallet_Balance</td>
+                <td class="font-weight-bold">{{item.marketer.Wallet_Balance}}</td>                        
+              </tr>
+
+              <tr>                
+                <td>Amount Paid</td>
+                <td class="font-weight-bold">{{item.Amount_credited}}</td>                        
+              </tr>  
+
+              <tr>                
+                <td>Payment Status</td>
+                <td class="font-weight-bold">{{item.Payment_status}}</td>                        
+              </tr>   
+
+              <tr>                
+                <td>Payment Account choosed</td>
+                <td class="font-weight-bold">{{item.Select_bank}}</td>                        
+              </tr>   
+                    
+            </tbody>
+          </table>  
+     </div>
+ </div>
+</main>
+
+<style>
+   
+</style>
+
+{% endblock content %}

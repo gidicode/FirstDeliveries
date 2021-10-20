@@ -32,5 +32,6 @@ urlpatterns = [
     path('Dashboard_Summary_FLLS/', affiliate_views.Dashboad_summary, name="dashboard_summary"),     
     path('Delivery_details_FLLS/', affiliate_views.Deliveries_list, name="deliveries_list"),        
     path('Customers_list_FLLS/', affiliate_views.Customer_List, name="customer_list"),        
-    path('Payout_list_FLLS/', affiliate_views.Payout_List, name="payout_list"),        
+    path('Payout_list_FLLS/', affiliate_views.Payout_List, name="payout_list"),     
+    path('Process_payment/<hashid:pk>/', affiliate_views.Process_payout, name="process_payment"),
 ]

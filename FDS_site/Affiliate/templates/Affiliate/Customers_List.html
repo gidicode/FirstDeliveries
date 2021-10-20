@@ -24,18 +24,23 @@
                     <th scope="col">Amount Credited</th>
                     <th scope="col">Cashed Out</th>
                     <th scope="col">Wallet Balance</th>
-                    <th scope="col">Request Funds</th>                    
-                    <th scope="col">Our Profit(80%)</th>
+                    <th scope="col">Our Profit(80%)</th>                     
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                {% for i in all_marketers %}
+                  <tr>                      
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{i.Referal_ID}}</td>
+                    <td>{{i.Marketer.first_name}} {{i.Marketer.last_name}}</td>
+                    <td>{{i.Total_Referal}}</td>
+                    <td>{{i.Amount_Genreated}}</td>
+                    <td>{{i.Amount_Credited}}</td>
+                    <td>{{i.cashed_out}}</td>
+                    <td>{{i.Wallet_Balance}}</td>
+                    <td>{{i.Profit_Generated}}</td>                 
                   </tr>
-                 
+                {% endfor %}
                 </tbody>
               </table>
         </div>            

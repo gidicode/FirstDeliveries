@@ -37,22 +37,27 @@
                         <td>Payment Status</td>
                         <td class="font-weight-bold">{{i.Payment_status}}</td>                        
                       </tr>
+                      
                       <tr>                
                         <td>Transaction ID</td>
                         <td class="font-weight-bold">{{i.Transaction_ID}}</td>                        
                       </tr>
+
                       <tr>                
                         <td>Amount Paid</td>
-                        <td class="font-weight-bold">N{{I.Amount_credited|default:"Not Paid"}}</td>                        
+                        <td class="font-weight-bold">N{{i.Amount_credited|default:"Not Paid"}}</td>                        
                       </tr>
+
                       <tr>                
                         <td>Bank Account</td>
-                        <td class="font-weight-bold">{{i.Selet_bank|default:"No account"}}</td>                        
+                        <td class="font-weight-bold">{{i.Select_bank|default:"No account"}}</td>                        
                       </tr>
+
                       <tr>                
                         <td>Date Paid</td>
                         <td class="font-weight-bold">{{i.Payment_date|default:"Not Paid"}}</td>                        
                       </tr>
+
                     </tbody>
                   </table>                
             </section>

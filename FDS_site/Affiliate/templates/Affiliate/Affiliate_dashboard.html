@@ -151,12 +151,12 @@
                     </section>
                 </div>
                 <div class="col-md-10">
-                    <section class="top">
-                        <div>
-                            <h5>hello</h5>
-                        </div>
+                    <section class="top p-3">
+                        <button type="button" class="btn btn-primary">
+                            Notifications <span class="badge badge-light">{{notification|length}}</span>
+                          </button>
                     </section>
-                    <div class="the-body">
+                    <div class="the-body mt-3">
                         {% block content %}                       
                         {% endblock content %}
                     </div>   

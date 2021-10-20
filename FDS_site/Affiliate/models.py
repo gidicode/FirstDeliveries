@@ -1,15 +1,12 @@
-from django.contrib.messages.api import error
+from datetime import time
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.fields import DateTimeField
-from django.utils.regex_helper import Choice
 from users.models import Customer
 from django.utils import timezone
 from decimal import Decimal
-from django.http import request
+
+
 # Create your models here.
-
-
 class Affiliate_Group(models.Model):
     Marketer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
     Referal_ID = models.CharField(unique=True, null=True, max_length=5, editable=False)
@@ -17,12 +14,14 @@ class Affiliate_Group(models.Model):
     Total_Referal = models.IntegerField(default=0, editable=False, null=True)
     Amount_Genreated = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
     Amount_Credited = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    cashed_out = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
     Wallet_Balance = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
     Profit_Generated = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
 
     def __str__(self):
-        return f"{self.Marketer}, {self.Referal_ID}"
-
+        return f"{self.Referal_ID}"     
+      
+            
 class Referrals(models.Model):
     Vehicle = [
                 ("Bike", "Bike"),
@@ -87,7 +86,7 @@ class Request_Payout(models.Model):
     Date_Requested = models.DateTimeField(default=timezone.now, null=True)
     Payment_status = models.CharField(choices=STATUS, default="Pending", max_length = 10, null=True)
     Transaction_ID = models.CharField(max_length=10, null=True, editable=False)
-    Amount_credited = models.IntegerField(null=True)
+    Amount_credited = models.IntegerField(null=True, verbose_name="Amount to pay", help_text="Dont input an amount more or less than the debit amount")
     Account_credited_to = models.ForeignKey(Bank_Account_Details, on_delete=models.CASCADE, null=True)
     Payment_date = models.DateField(default=None, null=True)
 
@@ -96,3 +95,15 @@ class Request_Payout(models.Model):
 
     class Meta:
         ordering = ('-Date_Requested',)
+
+class Notification(models.Model):
+    marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
+    message = models.CharField(max_length=200, null=True)
+    viewed = False
+    date = models.DateTimeField(default=timezone.now, null=True)
+
+class Notification_admin(models.Model):
+    marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
+    message = models.CharField(max_length=200, null=True)
+    viewed = False
+    date = models.DateTimeField(default=timezone.now, null=True)

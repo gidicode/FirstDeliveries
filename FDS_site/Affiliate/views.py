@@ -16,8 +16,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from users.decorators import *
 from datetime import datetime
+from django.utils import timezone
 from django.db import IntegrityError
-from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_http_methods    
 
 
@@ -38,13 +38,14 @@ def Creating_referal_code(request, user):
     return redirect('welcome_page', request.user.id)
 
 def Welcome_page(request, user):
-    affiliate_id  = Affiliate_Group.objects.get(Marketer = user)
+    customer = Customer.objects.get(user = request.user)
+    affiliate_id  = Affiliate_Group.objects.get(Marketer = customer)
     get_the_code = affiliate_id.Referal_ID
     return render(request, "Affiliate/Welcome_Page.html", {'Referal_id':get_the_code})
 
 def Marketer_Dashboard(request, user):
-
-    marketer = Affiliate_Group.objects.get(Marketer = user)
+    customer = Customer.objects.get(user = request.user)
+    marketer = Affiliate_Group.objects.get(Marketer = customer)
     all_customer_referral = Referrals.objects.filter(marketer = marketer)
     count_total_referals = all_customer_referral.count()
     all_time_earnings = marketer.Amount_Credited
@@ -56,6 +57,7 @@ def Marketer_Dashboard(request, user):
     customer_paginated_referrals = paginator.get_page(page_number)    
 
     context = {
+        'marketer':marketer,
         'wallet_balance':wallet_balance,
         'all_time_earnings':all_time_earnings,
         'all_customer_referral':all_customer_referral,
@@ -66,9 +68,9 @@ def Marketer_Dashboard(request, user):
     return render(request, 'Affiliate/Marketer_Dashboard.html', context)
 
 def Add_bank_account(request, user):    
-    Makerter = Affiliate_Group.objects.get(Marketer = user)
-    all_account = Makerter.bank_account_details_set.all()   
-    print(all_account) 
+    customer = Customer.objects.get(user = request.user)
+    Makerter = Affiliate_Group.objects.get(Marketer = customer)
+    all_account = Makerter.bank_account_details_set.all()      
     if request.method == 'POST':
         bank_form = Add_account(request.POST)
         if bank_form.is_valid():
@@ -101,15 +103,9 @@ def Request_Payout_form(request, user):
             instance = request_form.save(commit=False)            
             instance.marketer = Marketer
             instance.save()       
-
-            #Withdrawing the money
-            Marketer.Wallet_Balance -= instance.Debit_amount
-            Marketer.save()
+            
             wallet_balance = Marketer.Wallet_Balance
-            messages.success(request, f"""
-                                Request Successful, Amount debited is {instance.Debit_amount}/n 
-                                Wallet Balance is {wallet_balance}
-                            """)
+            messages.success(request, f"Request Successful, Payment is being processed")
 
             return redirect('affiliate_dashboard', user = user)
     else:
@@ -121,7 +117,8 @@ def Request_Payout_form(request, user):
     return render(request, 'Affiliate/Request_payout.html', context)
 
 def Payout_History_list(request, user):
-    Marketer = Affiliate_Group.objects.get(Marketer = user)
+    customer = Customer.objects.get(user = request.user)
+    Marketer = Affiliate_Group.objects.get(Marketer = customer)
     all_payout = Marketer.request_payout_set.all()
     return render(request, 'Affiliate/Payout_history.html', {'all_payout':all_payout},)
 
@@ -130,7 +127,8 @@ def Payout_History_Details(request, pk):
     return render(request, 'Affiliate/Payout_history_details.html', {'payout_details':payout_details})
 
 def Balance_status(request, user):
-    marketer = Affiliate_Group.objects.get(Marketer = user )
+    customer = Customer.objects.get(user = request.user)
+    marketer = Affiliate_Group.objects.get(Marketer = customer)
     return render(request, 'Affiliate/Balance_status.html', {'Balance':marketer})
 
 def Delivery_Details(request, pk):
@@ -159,6 +157,9 @@ def Dashboad_summary(request):
     Total_amount_made_today = Referrals.objects.filter(Date_Time__date = today).aggregate(Sum('Delivery_Fee'))    
     Total_deliveries_today = Referrals.objects.filter(Date_Time__date = today).count()
 
+    #Notiication
+    notification = Notification_admin.objects.all()
+
     context = {     
         'Affiliate_customers':Affiliate_customers,
         'Total_Deliveries':Total_Deliveries,
@@ -171,6 +172,7 @@ def Dashboad_summary(request):
         'Total_profit':Total_profit,
         'Total_amount_made_today':Total_amount_made_today,
         'Total_deliveries_today':Total_deliveries_today,
+        'notification':notification,
     }
     return render(request, 'Affiliate/Dashboard_Summary.html', context)
 
@@ -182,7 +184,51 @@ def Deliveries_list(request):
     return render(request, 'Affiliate/Delivery_list.html', context)
 
 def Customer_List(request):
-    return render(request, 'Affiliate/Customers_List.html')
+    all_marketers = Affiliate_Group.objects.all()
+
+    context = {
+        'all_marketers':all_marketers,
+    }
+    return render(request, 'Affiliate/Customers_List.html', context)
 
 def Payout_List(request):
-    return render(request, 'Affiliate/Payout_list_details.html')
+    payout_list = Request_Payout.objects.all()
+
+    context = {
+        "payout_list":payout_list,
+    }
+    return render(request, 'Affiliate/Payout_list_details.html', context)
+    
+def Process_payout(request, pk):      
+       
+    item = Request_Payout.objects.get(id = pk)
+    if request.method == 'POST':
+        Process_payment_form = Update_cash_out(request.POST, instance=item)
+        if Process_payment_form.is_valid():
+            instance = Process_payment_form.save(commit=False)
+            instance.Payment_date =  timezone.now()
+            instance.save()
+            #Withdrawing the money
+            if instance.Payment_status == "Paid":
+                Marketer = Affiliate_Group.objects.get(Marketer = instance.marketer.Marketer)  
+                Marketer.Wallet_Balance -= instance.Amount_credited
+                Marketer.save()
+                messages.success(request, f'Payment status updated to "PAID" successfully') 
+
+            if instance.Payment_status == "Canceled":
+                messages.warning(request, f'You have changed payment status to Canceled')        
+            return redirect('payout_list')
+    
+    else:
+        Process_payment_form = Update_cash_out(instance=item)
+
+    context = {
+        'Process_payment_form':Process_payment_form,
+        'item':item,
+    }
+    return render(request, 'Affiliate/Process_Payment.html', context)
+
+def admin_view_notification(request):
+    all_notification = Notification_admin.objects.all()
+    return render(request, 'Affiliate/Admin_view_notification_list.html', {'all_notification':all_notification})
+

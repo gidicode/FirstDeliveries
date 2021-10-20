@@ -30,7 +30,7 @@ import requests
 from django.core.paginator import Paginator
 import json
 from django.db.models import Q
-from Affiliate.models import *
+from Affiliate.models import Referrals, Affiliate_Group, Notification, Notification_admin
 from decimal import Decimal
 
 #Error 404 page
@@ -493,7 +493,7 @@ def FrontErrand(request, user):
             adminNotification.objects.create(
                 customer=instance.customer,
                 item_created = "Front Desk",
-                order_id = h   
+                order_id = h 
             )         
                         
             Referrals.objects.create(
@@ -503,6 +503,21 @@ def FrontErrand(request, user):
                 Delivery_status = instance.status,                
                 Order_ID = h,
             )
+
+            Notification.objects.create(
+                marketer = instance.Marketer_ID,
+                message = "New Referal, Your Referee just requested for a delivery"                
+            )
+
+            Notification_admin.objects.create(
+                marketer = instance.Marketer_ID,
+                message = "New Referal",
+            )
+
+            #updating total referal            
+            marketer = Affiliate_Group.objects.get( Referal_ID = instance.Marketer_ID)
+            marketer.Total_Referal += 1
+            marketer.save()
             
             return redirect('frontdesk', user=user)
     else:
@@ -2533,6 +2548,7 @@ def UpdateFForm(request, pk):
                     marketer.Amount_Credited += Decimal(20/100) * obj.profit                     
                     marketer.Wallet_Balance += Decimal(20/100) * obj.profit
                     marketer.Profit_Generated += Decimal(80/100) * obj.profit
+                                       
                     marketer.save()                              
                     all_customer_referral.filter(Order_ID = obj.order_id).update(Completed = True)                    
 

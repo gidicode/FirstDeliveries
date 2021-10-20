@@ -29,13 +29,22 @@
                   </tr>
                 </thead>
                 <tbody>
+                    {% for i in payout_list%}
                   <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <th scope="row">{{forloop.counter }}</th>
+                    <td>{{i.Date_Requested|date:"d M Y"}}</td>
+                    <td>{{i.marketer.Referal_ID}}</td>
+                    <td>{{i.marketer.Marketer.first_name}} {{i.marketer.Marketer.last_name}}</td>
+                    <td>{{i.Select_bank}}</td>
+                    <td>{{i.Transaction_ID}}</td>
+                    <td>{{i.marketer.Wallet_Balance}}</td>
+                    <td>{{i.Debit_amount}}</td>
+                    <td>{{i.Payment_status}}</td>
+                    <td>{{i.Amount_credited|default:'--'}}</td>
+                    <td>{{i.Payment_date|default:'--'}}</td>
+                    <td><a href="{% url 'process_payment' i.pk %}" class="btn btn-warning btn-sm rounded">Update</a></td>
                   </tr>
-                 
+                    {% endfor %}
                 </tbody>
               </table>
         </div>            

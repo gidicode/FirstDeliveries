@@ -43,5 +43,25 @@ class Request_Funds(forms.ModelForm):
         if content > wallet_balance:
             raise ValidationError((f'Insufficient Funds, Max amount you can request for with drawal is {wallet_balance}'),  params= {'wallet_balance':wallet_balance})       
         return content  
+
+
+class Update_cash_out(forms.ModelForm): 
+    Debit_amount = forms.CharField(widget=forms.TextInput(attrs={"readonly": "readonly"}))   
+    class Meta:
+        model = Request_Payout
+        fields = ['Debit_amount','Payment_status', 'Amount_credited', 'Account_credited_to']  
+              
+    def clean(self):        
+        cleaned_data = super().clean()            
+        Debit_amount = int(cleaned_data.get('Debit_amount'))          
+        Amount_credited = cleaned_data.get('Amount_credited')           
+        print(Amount_credited)  
+
+        if Amount_credited > Debit_amount:
+            raise ValidationError((f'"{Amount_credited}" amount entered is aboved the requested amount "{Debit_amount}"'), params= {'Debit_amount':Debit_amount, 'Amount_credited':Amount_credited})
+        elif Amount_credited < Debit_amount:
+            raise ValidationError((f'"{Amount_credited}" amount entered is below the requested amount "{Debit_amount}"'), params= {'Debit_amount':Debit_amount, 'Amount_credited':Amount_credited})
+
+        return cleaned_data
     
-    
+
