@@ -2547,6 +2547,7 @@ def UpdateFForm(request, pk):
                     marketer.Amount_Genreated  += obj.profit
                     marketer.Amount_Credited += Decimal(20/100) * obj.profit                     
                     marketer.Wallet_Balance += Decimal(20/100) * obj.profit
+                    marketer.Tempoary_wallet_balance += Decimal(20/100) * obj.profit
                     marketer.Profit_Generated += Decimal(80/100) * obj.profit
                                        
                     marketer.save()                              

@@ -152,11 +152,31 @@
                 </div>
                 <div class="col-md-10">
                     <section class="top p-3">
-                        <button type="button" class="btn btn-primary">
+                        <a href="{% url 'view_notification' %}" role="button" class="btn btn-primary btn-sm">
                             Notifications <span class="badge badge-light">{{notification|length}}</span>
-                          </button>
+                        </a>
                     </section>
                     <div class="the-body mt-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col">
+                                    {% if messages %}
+                                    <div class="messages p-3 container align-self-center">
+                                        {% for message in messages %}
+                                        <div {% if message.tags %} class=" alert alert-{{message.tags}} alert-dismissible fade show" role="alert" {% endif %}>{{ message }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button> 
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col"></div>
+                            </div>    
+                        </div>
+                        
                         {% block content %}                       
                         {% endblock content %}
                     </div>   

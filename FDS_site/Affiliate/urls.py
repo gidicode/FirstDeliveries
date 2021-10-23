@@ -27,6 +27,10 @@ urlpatterns = [
 
     path('Delivery_Details_FLLS/<hashid:pk>/', affiliate_views.Delivery_Details, name="delivery_details"),     
 
+    #Notification
+    path('Notification_FLLS/<hashid:user>/', affiliate_views.Notification_markter, name="customer_view_notification"),
+    path('Update_Notification_FLLS/<hashid:pk>/', affiliate_views.Notification_view, name="customer_update_notification"),     
+
     #COMPANY DASHBOARD 
     path('Affiiate_Dashboard_FLLS/', affiliate_views.Dashboard_Affilite, name="affiliate_dashboard"),     
     path('Dashboard_Summary_FLLS/', affiliate_views.Dashboad_summary, name="dashboard_summary"),     
@@ -34,4 +38,6 @@ urlpatterns = [
     path('Customers_list_FLLS/', affiliate_views.Customer_List, name="customer_list"),        
     path('Payout_list_FLLS/', affiliate_views.Payout_List, name="payout_list"),     
     path('Process_payment/<hashid:pk>/', affiliate_views.Process_payout, name="process_payment"),
+    path('View_Notification/', affiliate_views.admin_view_notification, name="view_notification"),
+    path('Update_notification/<hashid:pk>/', affiliate_views.update_admin_notification, name="update_notification"),
 ]

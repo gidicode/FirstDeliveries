@@ -9,11 +9,11 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            {% if Balance.Wallet_Balance >= 1000 %}  
+            {% if Balance.Tempoary_wallet_balance >= 1000 %}  
             <section class="text-center">
                 <small>
                     <strong>
-                        Hello Gideon, you can request for withdrawal. 
+                        Hello {{Balance.Marketer}}, you can request for withdrawal. 
                     </strong>
                 </small>     
                 <br>
@@ -22,7 +22,7 @@
                 <div class="background text-center">
                     <div class="second-back">                        
                         <h4 class="balance">Balance</h4>
-                        <h4 class="amount">N{{Balance.Wallet_Balance}}</h4>
+                        <h4 class="amount">N{{Balance.Tempoary_wallet_balance}}</h4>
                         <div class="line"></div>
                         <div class="line2"></div>
                         <div class="line3"></div>
@@ -30,20 +30,18 @@
                         <a href="{% url 'request_payout' user.id %}" class="btn proceed mt-4 text-white" role="button">Proceed <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
-            </section>
+            </section>            
             {% else %}
-
-            <section >
-               
+            <section >               
                 <small class="text-left">
                     Hello Gideon, you can not request for withdrawal at the 
-                    moment because  your balance is below the withdrawl limit 
+                    moment because your balance is below the withdrawl limit 
                     or its not yet the withfrawal period. 
                 </small>
                 <div class="background-2 text-center">
                     <div class="second-back-2">                        
                         <h4 class="balance-2">Balance</h4>
-                        <h4 class="amount-2">N{{Balance.Wallet_Balance}}</h4>
+                        <h4 class="amount-2">N{{Balance.Tempoary_wallet_balance}}</h4>
                         <div class="line-2"></div>
                         <div class="line2-3"></div>
                         <div class="line3-3"></div>

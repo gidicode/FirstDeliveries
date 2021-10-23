@@ -31,7 +31,12 @@ def Creating_referal_code(request, user):
         Affiliate_Group.objects.create(
             Marketer = Marketer,
             Referal_ID = Referal_id
-        )    
+        )
+
+        Notification_admin.objects.create(
+                marketer = Marketer,
+                message = f"{Marketer} Just joined the affiliate program"
+            )  
     except IntegrityError as e:
         e = f"'{Referal_id}' is already registered"
         return render(request, "Affiliate/AlreadyExist.html", {"message": e})
@@ -50,13 +55,17 @@ def Marketer_Dashboard(request, user):
     count_total_referals = all_customer_referral.count()
     all_time_earnings = marketer.Amount_Credited
     wallet_balance = marketer.Wallet_Balance
+    tempoary_balance = marketer.Tempoary_wallet_balance
     payout_history = marketer.request_payout_set.filter(Payment_status = 'Pending').count()
     
     paginator = Paginator(all_customer_referral, 5)
     page_number = request.GET.get('page')
     customer_paginated_referrals = paginator.get_page(page_number)    
 
+    notification = marketer.notification_set.filter(viewed = False)
+    
     context = {
+        'notification':notification,
         'marketer':marketer,
         'wallet_balance':wallet_balance,
         'all_time_earnings':all_time_earnings,
@@ -64,6 +73,7 @@ def Marketer_Dashboard(request, user):
         'count_total_referals':count_total_referals,
         'customer_paginated_referrals':customer_paginated_referrals,
         'payout_history':payout_history,
+        'tempoary_balance':tempoary_balance,
     }
     return render(request, 'Affiliate/Marketer_Dashboard.html', context)
 
@@ -77,6 +87,10 @@ def Add_bank_account(request, user):
             instance = bank_form.save(commit=False)
             instance.marketer = Makerter
             instance.save()
+            Notification_admin.objects.create(
+                marketer = Makerter,
+                message = f"{Makerter} Just added an account number, {instance}"
+            )
             return redirect('add-bank', user = user)
     else:
         bank_form = Add_account()
@@ -90,24 +104,35 @@ def Add_bank_account(request, user):
 @require_http_methods(['DELETE'])
 def Delete_account(request, pk):
     Bank_Account_Details.objects.filter(id =pk).delete()
+    
     return redirect('add-bank', user = request.user.pk)
 
-
 def Request_Payout_form(request, user):
-    Marketer = Affiliate_Group.objects.get(Marketer = user)
-    wallet_balance = Marketer.Wallet_Balance
+    customer = Customer.objects.get(user= user)
+    Marketer = Affiliate_Group.objects.get(Marketer = customer)      
     
     if request.method == "POST":
         request_form = Request_Funds(user=request.user, data=request.POST)
         if request_form.is_valid():
             instance = request_form.save(commit=False)            
             instance.marketer = Marketer
-            instance.save()       
-            
-            wallet_balance = Marketer.Wallet_Balance
+            instance.save()
+
+            #Generating the transactional ID
+            hash
+
+            #withdrawing from tempoary account balance
+            Marketer.Tempoary_wallet_balance -= instance.Debit_amount   
+            Marketer.save()  
+
+            Notification_admin.objects.create(
+                marketer = Marketer,
+                message = f"{Marketer} drop a request for funds, amount N{instance.Debit_amount}"
+            )  
+                        
             messages.success(request, f"Request Successful, Payment is being processed")
 
-            return redirect('affiliate_dashboard', user = user)
+            return redirect('affiliate_dashboard', user = user) 
     else:
         request_form = Request_Funds(user=request.user)
     context = {
@@ -128,17 +153,37 @@ def Payout_History_Details(request, pk):
 
 def Balance_status(request, user):
     customer = Customer.objects.get(user = request.user)
-    marketer = Affiliate_Group.objects.get(Marketer = customer)
-    return render(request, 'Affiliate/Balance_status.html', {'Balance':marketer})
+    marketer = Affiliate_Group.objects.get(Marketer = customer)        
+    context = {        
+        'Balance':marketer,
+    }
+    
+    return render(request, 'Affiliate/Balance_status.html', context)
 
 def Delivery_Details(request, pk):
     delivery_details = Referrals.objects.filter(id = pk)
     return render(request, 'Affiliate/DeliveryDetails.html', {'delivery_details':delivery_details})
 
-#COMPANY-DASHBOARD
+def Notification_markter(request, user):
+    customer = Customer.objects.get(user = user)
+    marketer = Affiliate_Group.objects.get(Marketer = customer)
+    relation_with_notification = marketer.notification_set.filter(viewed = False)
+    
+    context = {
+        'relation_with_notification':relation_with_notification,
+    }
+    return render(request, 'Affiliate/customer_notification.html', context)
 
+def Notification_view(request, pk):
+    get_notification = Notification.objects.get(id = pk)
+    get_notification.viewed = True
+    get_notification.save()
+    return redirect('customer_view_notification', user = request.user.pk)
+
+#COMPANY-DASHBOARD
 def Dashboard_Affilite(request):    
-    return render(request, 'Affiliate/Affiliate_dashboard.html')
+    notification = Notification_admin.objects.filter(viewed=False)
+    return render(request, 'Affiliate/Affiliate_dashboard.html', {'notification':notification})
 
 def Dashboad_summary(request):
     Affiliate_customers = Affiliate_Group.objects.all()    
@@ -158,7 +203,7 @@ def Dashboad_summary(request):
     Total_deliveries_today = Referrals.objects.filter(Date_Time__date = today).count()
 
     #Notiication
-    notification = Notification_admin.objects.all()
+    notification = Notification_admin.objects.filter(viewed=False)
 
     context = {     
         'Affiliate_customers':Affiliate_customers,
@@ -177,30 +222,35 @@ def Dashboad_summary(request):
     return render(request, 'Affiliate/Dashboard_Summary.html', context)
 
 def Deliveries_list(request):
+    notification = Notification_admin.objects.filter(viewed=False)
     all_referrals = Referrals.objects.all()
     context = {
+        'notification':notification,
         'all_referrals': all_referrals,
     }
     return render(request, 'Affiliate/Delivery_list.html', context)
 
 def Customer_List(request):
+    notification = Notification_admin.objects.filter(viewed=False)
     all_marketers = Affiliate_Group.objects.all()
-
     context = {
+        'notification':notification,
         'all_marketers':all_marketers,
     }
     return render(request, 'Affiliate/Customers_List.html', context)
 
 def Payout_List(request):
+    notification = Notification_admin.objects.filter(viewed=False)
     payout_list = Request_Payout.objects.all()
 
     context = {
+        'notification':notification,
         "payout_list":payout_list,
     }
     return render(request, 'Affiliate/Payout_list_details.html', context)
     
 def Process_payout(request, pk):      
-       
+    notification = Notification_admin.objects.filter(viewed=False)
     item = Request_Payout.objects.get(id = pk)
     if request.method == 'POST':
         Process_payment_form = Update_cash_out(request.POST, instance=item)
@@ -212,23 +262,47 @@ def Process_payout(request, pk):
             if instance.Payment_status == "Paid":
                 Marketer = Affiliate_Group.objects.get(Marketer = instance.marketer.Marketer)  
                 Marketer.Wallet_Balance -= instance.Amount_credited
+                Marketer.cashed_out += instance.Amount_credited
                 Marketer.save()
                 messages.success(request, f'Payment status updated to "PAID" successfully') 
 
+                Notification.objects.create(
+                    marketer = instance.marketer,
+                    message = f"Hello {instance.marketer}, funds withdrawal has been processed to you successfully"
+                )
+
             if instance.Payment_status == "Canceled":
                 messages.warning(request, f'You have changed payment status to Canceled')        
+                Notification.objects.create(
+                    marketer = instance.marketer,
+                    message = f"Hello {instance.marketer}, funds withdrawal request has been canceled"
+                )
             return redirect('payout_list')
     
     else:
         Process_payment_form = Update_cash_out(instance=item)
 
     context = {
+        'notification':notification,
         'Process_payment_form':Process_payment_form,
         'item':item,
     }
     return render(request, 'Affiliate/Process_Payment.html', context)
 
 def admin_view_notification(request):
-    all_notification = Notification_admin.objects.all()
-    return render(request, 'Affiliate/Admin_view_notification_list.html', {'all_notification':all_notification})
+    notification = Notification_admin.objects.filter(viewed=False)
+    all_notification = Notification_admin.objects.filter(viewed =False)
+
+    context = {
+        'notification':notification,
+        'all_notification':all_notification,
+    }
+    return render(request, 'Affiliate/Admin_view_notification_list.html', context)
+
+def update_admin_notification(request, pk):
+    get_notification = Notification_admin.objects.get(id = pk)
+    get_notification.viewed = True
+    get_notification.save()
+    return redirect('view_notification')
+    
 

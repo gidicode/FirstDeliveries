@@ -16,6 +16,7 @@ class Affiliate_Group(models.Model):
     Amount_Credited = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
     cashed_out = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
     Wallet_Balance = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
+    Tempoary_wallet_balance = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
     Profit_Generated = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
 
     def __str__(self):
@@ -99,11 +100,11 @@ class Request_Payout(models.Model):
 class Notification(models.Model):
     marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
     message = models.CharField(max_length=200, null=True)
-    viewed = False
+    viewed = models.BooleanField(default = False)
     date = models.DateTimeField(default=timezone.now, null=True)
 
 class Notification_admin(models.Model):
     marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
     message = models.CharField(max_length=200, null=True)
-    viewed = False
+    viewed = models.BooleanField(default = False)
     date = models.DateTimeField(default=timezone.now, null=True)

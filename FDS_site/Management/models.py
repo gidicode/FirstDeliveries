@@ -147,7 +147,7 @@ class OFFICE_REPORT(models.Model):
     seenn_GGM_feedback = models.BooleanField(default=False)  
     seenn_Chairman_feedback = models.BooleanField(default=False)    
 
-    Commectial_Report_Title = models.CharField(null=True, blank=True, max_length=200)
+    Commectial_Report_Title = models.CharField(null=True, blank=True, max_length=200, verbose_name = "Commercial Report")
     Commercial_Report = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Report Details")
     Commercial_Challenges = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Challenges")
     Commercial_Accomplishment = tinymce_models.HTMLField(null = True, blank = True, max_length = 5000, verbose_name = "Acomplishment")

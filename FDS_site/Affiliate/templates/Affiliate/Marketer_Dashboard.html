@@ -5,42 +5,42 @@
 {% block title %}Marketer Dashboard {{user.username }} {% endblock title %}
 
 {% block content %}
-<div class="container mt-1">
+
+<div class="container-fluid mt-1">    
     <div class="row">
         <div class="col">
-            <div class="d-flex flex-row bd-highlight mb-3">
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
                 <div class="p-2 bd-highlight">                    
                     <div class="spinner-border htmx-indicator text-primary" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
-                    <a href="{% url 'balance_status' user.id %}" class="btn btn-sm text-white request" role="button">Request Payout                        
+                    <a href="{% url 'balance_status' user.id %}" class="btn btn-sm text-white request" role="button">
+                        Payout                        
                     </a>
                 </div>
                 <div class="p-2 bd-highlight">
-                    <a href="{% url 'add-bank' user.id%}" class="text-decoration-none create"><i class="fas fa-university"></i></a>
-                    </div>                
+                    <a href="{% url 'add-bank' user.id%}" class=" create"><i class="fas fa-university"></i></a>                            
                 </div>
-        </div>
-        <div class="col">
-            <div class="d-flex flex-row bd-highlight mb-3 justify-content-end">                
+
                 <div class="p-2 bd-highlight">
-                    <div class="circle ">
-                        <i class="far fa-user-circle good"></i>
-                    </div>                               
-                </div>
+                    <a href="{% url 'customer_view_notification' user.id %}">
+                        <div class="Notification mt-2">
+                            <i class="far fa-bell size"></i>
+                            <div class="circle2 text-center">
+                                <p class="font-weight-bold text-light notification_count">{{notification|length}}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div> 
+
                 <div class="p-2 bd-highlight">                   
-                    <p class="referal">REFERAL CODE: <span class="Username">{{marketer.Referal_ID}}</span></p>
+                    <p class="referal text-nowrap"><span class="Username">{{marketer.Referal_ID}}</span></p>
                 </div>
             </div>
-        </div>        
-    </div>
-</div>
+        </div>           
+    </div>  
 
-<div class="container">
-    <div class="row">
-        <div class="col"></div>
-
-
+    <div class="row">        
         <div class="col">
             {% if messages %}
             <div class="messages p-3 container align-self-center">
@@ -53,56 +53,49 @@
                 {% endfor %}
             </div>
             {% endif %}
-        </div>
-
-
-        <div class="col"></div>
+        </div>  
     </div>    
-</div>
 
-
-
-<main class="container">
-    <div class="row no-gutters ">
+    <div class="row center-summation">
         <div class="col">            
-            <div class="d-flex flex-row bd-highlight mb-3 justify-content-end">
-                <div class="p-2 bd-highlight">
+            <div class="d-flex flex-row bd-highlight mb-1">
+                <div class="p-2 bd-highlight ">
                     <section class="earnings">
-                        <h6 class="all">All time earnings</h6>
-                        <h3 class="money">{{all_time_earnings}}</h3>
+                        <h6 class="all">Earnings</h6>
+                        <h3 class="money">N{{all_time_earnings}}</h3>
                         <figure class="circle-money">
                             <i class="fas fa-money-bill-alt bill"></i>
                         </figure>
                     </section>
                 </div>
-                <div class="p-2 bd-highlight">
+                <div class="p-2 bd-highlight reduce1">
                     <section class="balance">
-                        <h6 class="account">Account Balance</h6>
-                        <h3 class="money2">{{wallet_balance}}</h3>
+                        <h6 class="account">Balance</h6>
+                        <h3 class="money2">N{{wallet_balance}}</h3>
                         <figure class="circle-money2">
-                            <img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1 bill2" style="height: 30px; width: 30px;" alt="Naira Sign">                            
-                        </figure>
+                            <i class="fas fa-coins bill2"></i>                            
+                        </figure>                        
                     </section>
                 </div>               
             </div>
         </div>
         
         <div class="col">
-            <div class="d-flex flex-row bd-highlight mb-3">
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-start">
                 <div class="p-2 bd-highlight">
                     <section class="referred">
-                        <h6 class="orders">All Referred Deliveries</h6>
+                        <h6 class="orders">Referred</h6>
                         <h3 class="count">{{count_total_referals}}</h3>
                         <figure class="circle-box"> 
                             <i class="fas fa-box-open box"></i>                                
                         </figure>
                     </section>
                 </div>
-                <div class="p-2 bd-highlight">
+                <div class="p-2 bd-highlight reduce2">
                     <section class="History">
                         <h6 class="history">Payout History</h6>
                         <a href="{% url 'payout_history' user.id %}" class="btn btn-sm view text-white" role="button">View</a>
-                        <figure class="circle-time"> 
+                        <figure class="circle-time text-center"> 
                             <i class="fas fa-history time"></i>                                                            
                         </figure>
                         <button type="button" class="btn pending">
@@ -114,7 +107,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="">
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
@@ -146,35 +139,49 @@
                 </section>                
                {% endfor %}
                <div class="pagination mb-3">
-                <span class="step-links">
-                {% if customer_paginated_referrals.has_previous %}
-                    <a class="btn btn-warning" href="?page=1">&laquo; first</a>
-                    <a class="btn btn-danger" href="?page={{ customer_paginated_referrals.previous_page_number }}">previous</a>
-                {% endif %}
-        
-                <span class="current">
-                    Page {{ customer_paginated_referrals.number }} of {{ customer_paginated_referrals.paginator.num_pages }}.
-                </span>
-        
-                {% if customer_paginated_referrals.has_next %}
-                    <a class="btn btn-warning" href="?page={{ customer_paginated_referrals.next_page_number }}">next</a>
-                    <a class="btn btn-danger" href="?page={{ customer_paginated_referrals.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </div>
+                    <span class="step-links">
+                    {% if customer_paginated_referrals.has_previous %}
+                        <a class="btn btn-light btn-sm" href="?page=1">&laquo; first</a>
+                        <a class="btn btn-secondary btn-sm" href="?page={{ customer_paginated_referrals.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ customer_paginated_referrals.number }} of {{ customer_paginated_referrals.paginator.num_pages }}.
+                    </span>
+            
+                    {% if customer_paginated_referrals.has_next %}
+                        <a class="btn btn-light btn-sm" href="?page={{ customer_paginated_referrals.next_page_number }}">next</a>
+                        <a class="btn btn-secondary btn-sm" href="?page={{ customer_paginated_referrals.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </div>
             </div>
             <div class="col-md-3"></div>
         </div>
     </div>
-</main>
+</div>
 
 
 <style>
-  .request{
+@media (max-width: 575.98px) { 
+    .center-summation{
+        position: relative;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .request{
     background: #4aeb60;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     font-weight: 700; 
     font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+  }
+  
+  .htmx-indicator{
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
   }
 
   .request:hover{
@@ -182,10 +189,9 @@
   }
 
   .create{
-      color: #022BBD;
+      color: #020fbd;
       font-family: 'Nunito', sans-serif;
-      font-style: normal;
-      font-weight: 700;
+      font-style: normal;      
       font-size: 24px;
   }
 
@@ -193,19 +199,18 @@
       color: #022BBD;
       font-family: 'Nunito', sans-serif;
       font-style: normal;
-      font-weight: 700;
-      font-size: 15px;
+      font-weight: 700px;
+      font-size: 14px;
   }
 
   .referal{
-      color: #7a97ff;
+      color: #0633d8;
       font-family: 'Nunito', sans-serif;
       font-style: normal;
-      font-weight: 600;
+      font-weight: 700px;
       font-size: 12px;
       line-height: 30px;
   }
-
   .circle{
         padding: 5px 8px;
         border-radius: 50%;               
@@ -214,6 +219,33 @@
         background: #E4EAFF;
         backdrop-filter: blur(10px);
         position: relative;        
+    }
+
+    .circle2{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 18px;
+        height: 18px;
+        background: #003496;
+        backdrop-filter: blur(10px);
+        position: relative; 
+        top: -33px;
+        left: 6px; 
+        border-style: solid;
+        border-width: 1px;
+        border-color: azure;        
+    }
+
+    .size{
+        font-size: 18px;
+        color: #003496;
+    }
+    
+    .notification_count{
+        position: relative;
+        top: -6px;
+        right: 3px;
+        font-size: 13px;
     }
 
     .good{
@@ -225,200 +257,182 @@
     }
 
     .earnings{
-        width: 234px;
-        height: 152px;
-        left: 235px;
-        top: 287px;
+        width: 160px;
+        height: 120px;
+        position: relative; 
+        right: 10px;       
         background: #EFE8FF;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 21px;
         padding: 10px;
-    }
-
+    }    
     .all{
         position: relative;
-        top: 30px;
-        left: 105px;
+        top: 20px;
+        left: 58px;
         color: #2D2C2C;
         font-family: 'Nunito', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 600;        
     }
-
     .money{
         position: relative;
-        top: 50px;
-        left: 50px;
+        top: 40px;
+        left: 15px;
         color: #8756FB;
         font-family: 'Roboto', sans-serif; 
-        font-size: 36px;
+        font-size: 28px;
         font-weight: 800;
     }
-
-    .money2{
-        position: relative;
-        top: 50px;
-        left: 50px;
-        color: #36df4c;
-        font-family: 'Roboto', sans-serif; 
-        font-size: 36px;
-        font-weight: 800;
-    }
-
     .circle-money{
         padding: 5px 8px;
         border-radius: 50%;               
-        width: 52px;
-        height: 52px;
+        width: 45px;
+        height: 45px;
         background: #e2d6ff;
         backdrop-filter: blur(10px);
         position: relative;   
-        bottom: 70px;
+        bottom: 60px;
     }
-
-    .circle-money2{
-        padding: 5px 8px;
-        border-radius: 50%;               
-        width: 52px;
-        height: 52px;
-        background: #ceffca;
-        backdrop-filter: blur(10px);
-        position: relative;   
-        bottom: 70px;
-    }
-
-    .circle-box{
-        padding: 5px 8px;
-        border-radius: 50%;               
-        width: 52px;
-        height: 52px;
-        background: #FFE6CE;
-        backdrop-filter: blur(10px);
-        position: relative;   
-        bottom: 80px;
-    }
-
-    .circle-time{
-        padding: 5px 8px;
-        border-radius: 50%;               
-        width: 52px;
-        height: 52px;
-        background: #D1FB77;
-        backdrop-filter: blur(10px);
-        position: relative;   
-        bottom: 50px;
-    }
-    
-
     .bill{
         color: #8756FB;
         position: relative;
         right: -3px;
         top: 20%;
-        font-size: 25px;
+        font-size: 18px;
     }
 
+
+    .balance{
+        width: 160px;
+        height: 120px;       
+        background: #DBFFDE;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 21px;
+        padding: 10px;
+        position: relative;
+        right: 15px; 
+    }
+    .account{        
+        position: relative;
+        top: 20px;
+        left: 58px;
+        color: #2D2C2C;
+        font-family: 'Nunito', sans-serif;
+        font-size: 12px;
+        font-weight: 600;        
+        width: 100px;
+    }    
+    .money2{
+        position: relative;
+        top: 40px;
+        left: 15px;
+        color: #36df4c;
+        font-family: 'Roboto', sans-serif; 
+        font-size: 28px;
+        font-weight: 800;        
+        width: 120px;
+    }
+    .circle-money2{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 45px;
+        height: 45px;
+        background: #ceffca;
+        backdrop-filter: blur(10px);
+        position: relative;   
+        bottom: 60px;       
+    }
+    .tempoary{        
+        position: relative;
+        bottom: 25px;
+        margin-left: 130px;  
+        font-weight: 600;
+        font-family: 'Nunito', sans-serif;
+        color: #b4faae;
+    }
     .bill2{
         color: #36df4c;
         position: relative;
         right: -3px;
         top: 20%;
-        font-size: 25px;
+        font-size: 18px;
+    }
+    .reduce1{
+        width: 100px;        
     }
 
+
+    .referred{
+        width: 160px;
+        height: 120px;        
+        background: #FFF3E8;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 21px;
+        padding: 10px;
+        position: relative;
+        right: 10px;
+    }
+    .orders{
+        position: relative;
+        top: 20px;
+        left: 50px;
+        color: #2D2C2C;
+        font-family: 'Nunito', sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+    }    
+    .count{
+        position: relative;
+        top: 40px;
+        left: 55px;
+        color: #FCAE67;
+        font-family: 'Roboto', sans-serif; 
+        font-size: 30px;
+        font-weight: 800;          
+    }    
+    .circle-box{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 45px;
+        height: 45px;
+        background: #FFE6CE;
+        backdrop-filter: blur(10px);
+        position: relative;   
+        bottom: 60px;      
+    }
     .box{
         color: #FCAE67;
         position: relative;
         right: -3px;
         top: 20%;
-        font-size: 25px;
-    }
-
-    .time{
-        color: #69842F;
-        position: relative;
-        right: -3px;
-        top: 20%;
-        font-size: 25px;
-    }
-
-    .balance{
-        width: 234px;
-        height: 152px;
-        left: 235px;
-        top: 287px;
-        background: #DBFFDE;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 21px;
-        padding: 10px;
-    }
-
-    .account{
-        position: relative;
-        top: 30px;
-        left: 105px;
-        color: #2D2C2C;
-        font-family: 'Nunito', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-    }    
-
-    .referred{
-        width: 234px;
-        height: 152px;
-        left: 235px;
-        top: 287px;
-        background: #FFF3E8;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 21px;
-        padding: 10px;
+        font-size: 18px;  
     }
 
     .History{
-        width: 234px;
-        height: 152px;
-        left: 235px;
-        top: 287px;
+        width: 160px;
+        height: 120px;       
         background: #E7FFB4;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 21px;
         padding: 10px;
-    }
-
-    .orders{
         position: relative;
-        top: 30px;
-        left: 70px;
-        color: #2D2C2C;
-        font-family: 'Nunito', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-    }    
-
+        right: 15px;
+    }
     .history{
         position: relative;
-        top: 30px;
-        left: 115px;
+        top: 20px;
+        left: 65px;
         color: #2D2C2C;
         font-family: 'Nunito', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 600;        
+        width: 90px;
     }    
-
-    .count{
-        position: relative;
-        top: 50px;
-        left: 70px;
-        color: #FCAE67;
-        font-family: 'Roboto', sans-serif; 
-        font-size: 48px;
-        font-weight: 800;        
-    }
-
     .view{
         position: relative;
-        top: 37px;
-        left: 95px;
+        top: 25px;
+        left: 70px;
         color: white;
         font-family: 'Roboto', sans-serif; 
         font-size: 14px;
@@ -427,31 +441,48 @@
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
         border-radius: 10px;  
     }
-
     .view:hover{
         position: relative;
-        top: 37px;
-        left: 95px;
+        top: 25px;
+        left: 70px;
         color: white;
         font-family: 'Roboto', sans-serif; 
         font-size: 14px;
         font-weight: 400;
         background: #659204;
-        box-shadow: 0px 4px 4px rgba(65, 9, 9, 0.08);
-        border-radius: 10px;  
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+        border-radius: 10px;        
     }
-
-    .pending{
-        position: relative;
+    .circle-time{
+        padding: 5px 8px;
+        border-radius: 50%;               
+        width: 45px;
+        height: 45px;
         background: #D1FB77;
+        backdrop-filter: blur(10px);
+        position: relative;   
+        bottom: 45px;             
+    }
+    .time{
+        color: #69842F;
+        position: relative;       
+        top: 20%;
+        font-size: 18px; 
+    }
+    .pending{
+        position: relative;        
         color: #69842F;        
         box-shadow: 0px 4px 4px rgba(231, 215, 215, 0.08);
         border-radius: 5px;
         height: min-content;  
         font-size: 12px;
         font-weight: bold;
-        bottom: 20px;
+        bottom: 35px;        
     }
+    .reduce2{
+        width: 100px;        
+    }
+
 
     .color{
         color: #021f8a;
@@ -459,20 +490,22 @@
 
     .orders-list{
         width: auto;
-        height: 70px;
+        height: 60px;
         background-image: linear-gradient(to right, rgb(224, 237, 255), rgb(250, 254, 255));
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(150, 150, 150, 0.25);
+        border-radius: 10px;
         padding: 10px;        
     }
-
     .date{
+        position: relative;
+        bottom: 15px;
         font-weight: bold;       
         color: rgb(109, 109, 109);
         font-family: 'Nunito', sans-serif;
     }
-
     .cus-name{
+        position: relative;
+        bottom: 10px;
         font-weight: bold;
         line-height: 20px;
         color: rgb(44, 132, 247);
@@ -486,8 +519,7 @@
         top: 5px;
     }
 
-    .status-background{
-        background: rgb(229, 240, 255);
+    .status-background{        
         border-radius: 10px;        
     }  
 
@@ -500,7 +532,9 @@
         font-family: 'Nunito', sans-serif;   
         color: rgb(44, 132, 247);
     }
-    
+}
+
+
 </style>
 
 {% endblock content %}
