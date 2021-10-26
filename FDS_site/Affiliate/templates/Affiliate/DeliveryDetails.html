@@ -9,7 +9,10 @@
     <div class="row">
         <div class="col-md-3 ">           
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6">  
+          <p>
+            <input type=button id="back" value="back">
+          </p>      
           {% for i in delivery_details %}     
             
             <section class="success p-3">                              
@@ -44,7 +47,7 @@
                       </tr>
 
                       <tr>                
-                        <td>Delivery Status</td>
+                        <td>Status</td>
                         <td class="font-weight-bold">{{i.Delivery_status|default:"Not Paid"}}</td>                        
                       </tr>
 
@@ -106,6 +109,22 @@
       margin-top: 10px;
       font-size: 16px;
    }
-</style>
 
+   @media (max-width: 575.98px) {
+     td{
+       font-size: 12px;
+     }
+   }
+</style>
+<script>
+  function init(){
+    var b = document.getElementById("back")
+    b.addEventListener("click",goback,false);   
+  }
+
+  function goback(){
+    window.history.back();
+    console.log("going back")
+  }
+</script>
 {% endblock content %}
