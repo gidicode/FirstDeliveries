@@ -73,7 +73,6 @@ class ProfileUpdateForm(forms.ModelForm):
         model =Customer
         fields = ['image']
 
-
 class OrderForm(forms.ModelForm): 
     OPTIONS2 = [
             ( "Van", "Van"),
@@ -169,7 +168,6 @@ class Request_Cash(forms.ModelForm):
             ("loading", "Loading"),
             ( "off Loading", "Off Loading"),
     ]
-
     Choice_for_TP = forms.ChoiceField(label="Choice for Transportation", choices=OPTIONS2, widget=forms.RadioSelect)
     reciever_phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', required=False, label='Reciever Number',
                     min_length=11, widget= forms.TextInput)
@@ -242,10 +240,8 @@ class AnonForm(forms.ModelForm):
     class Meta:
         model = Anonymous 
         fields = [ 'Package_description', 'Your_phone_number', 'Your_location', 'Location', 'Choice_for_TP',]
-#
-#
-#Errand Service forms.
 
+#Errand Service forms.
 class Fuel_errand(forms.ModelForm):
     class Meta:
         model = Errand_service
@@ -256,8 +252,6 @@ class Gas_errand(forms.ModelForm):
     class Meta:
         model = Errand_service
         fields = ['Gas_Quantity', 'payment_channel', 'your_location']
-
-
 
 def chk_drug(value):
     illegal_drugs = [
@@ -324,7 +318,7 @@ class Other_errand(forms.ModelForm):
 class Front_desk_pick(forms.ModelForm):
     class Meta:
         model = Front_desk
-        fields = [ 'Marketer_ID','customer_name', 'Customer_phone_number', 'item_description', 'delivery_destination', 'Reciever_phone_number', 'customer_location', 'Amount_Payable', 'Choice_for_TP', 'Note' ]
+        fields = ['Marketer_ID','customer_name', 'Customer_phone_number', 'item_description', 'delivery_destination', 'Reciever_phone_number', 'customer_location', 'Amount_Payable', 'Choice_for_TP', 'Note' ]
 
 class Front_desk_errand(forms.ModelForm):
     class Meta:
