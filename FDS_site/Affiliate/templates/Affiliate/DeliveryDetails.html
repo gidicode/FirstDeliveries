@@ -2,17 +2,14 @@
 {% load static%}
 {% load crispy_forms_tags %}
 
-{% block title %}Delivery Details {{user.username }} {% endblock title %}
+{% block title %}Delivery Details{{user.username }} {% endblock title %}
 
 {% block content %}
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-3 ">           
         </div>
-        <div class="col-md-6">  
-          <p>
-            <input type=button id="back" value="back">
-          </p>      
+        <div class="col-md-6">           
           {% for i in delivery_details %}     
             
             <section class="success p-3">                              
@@ -116,15 +113,4 @@
      }
    }
 </style>
-<script>
-  function init(){
-    var b = document.getElementById("back")
-    b.addEventListener("click",goback,false);   
-  }
-
-  function goback(){
-    window.history.back();
-    console.log("going back")
-  }
-</script>
 {% endblock content %}

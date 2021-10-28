@@ -54,7 +54,7 @@ def register(request):
             username = form.cleaned_data.get( 'username')
             group = Group.objects.get(name='customer')
             user.groups.add(group)
-            user.save()            
+            user.save()
             messages.success(request, f' Hello {username} Your account has been created! You are now able to log in!')
             return redirect('login')
     else:
@@ -70,6 +70,7 @@ def redirectView(request):
         return redirect('management_dashboard', user = request.user.pk)
     else:
         return redirect('dashboard', user = request.user.pk)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'FLLS',
@@ -292,8 +293,6 @@ def FleetManager(request, user):
     paginator6 = Paginator(request6, 10)
     page_number6 = request.GET.get('page')
     page_obj6 = paginator6.get_page(page_number6)
-
-   
     
     context = {
         'assign':assign,
@@ -434,7 +433,6 @@ def PickDrop(request, user):
             instance.customer = customer
             instance.Delivery_type = 'Pick & Drop'
             instance.save()
-
       
             messages.success(request, f'Hello {request.user.username}, action Successful')
 
@@ -446,7 +444,30 @@ def PickDrop(request, user):
                 customer=instance.customer,
                 item_created = "Front Desk",
                 order_id = h   
-            )        
+            )
+
+            Referrals.objects.create(
+                marketer = instance.Marketer_ID,
+                Referal_ID = instance.Marketer_ID,                
+                Choice_for_TP = instance.Choice_for_TP,
+                Delivery_status = instance.status,                
+                Order_ID = h,
+            )
+            #Notification for customer
+            Notification.objects.create(
+                marketer = instance.Marketer_ID,
+                message = "New Referal, Your Referee just requested for a delivery"                
+            )
+            #Notification for admin
+            Notification_admin.objects.create(
+                marketer = instance.Marketer_ID,
+                message = "New Referal",
+            )   
+
+            #updating total referal            
+            marketer = Affiliate_Group.objects.get( Referal_ID = instance.Marketer_ID)
+            marketer.Total_Referal += 1
+            marketer.save()
             return redirect('frontdesk', user=user)
     else:
         pickdrop_Form = Front_desk_pick(instance = customer)
@@ -504,11 +525,13 @@ def FrontErrand(request, user):
                 Order_ID = h,
             )
 
+            #Notification for customer
             Notification.objects.create(
                 marketer = instance.Marketer_ID,
                 message = "New Referal, Your Referee just requested for a delivery"                
             )
 
+            #Notification for customer
             Notification_admin.objects.create(
                 marketer = instance.Marketer_ID,
                 message = "New Referal",
@@ -727,7 +750,7 @@ def requestForm_Online(request, user):
     n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         o_form = OrderForm(request.POST)
-        if o_form.is_valid() : 
+        if o_form.is_valid(): 
             instance = o_form.save(commit=False)
             instance.customer = customer
             instance.save()

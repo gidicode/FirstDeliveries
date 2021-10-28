@@ -167,7 +167,6 @@ EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
 HASHIDS_SALT = env('HASHIDS_SALT')
 HASHID_FIELD_SALT = env('HASHID_FIELD_SALT')
 
@@ -196,6 +195,10 @@ MANAGEMENT = env('THEMANAGEMENT')
 
 MANAGEMENT2 = env('THEMANAGEMENT2')
 
+TRANSACTION = env('TRANSACTION_ID')
+
+TRANSACTION2 = env('TRANSACTION_ID2')
+
 TINYMCE_JS_URL = STATIC_URL + 'tinymce/tinymce.min.js'
 
 TINYMCE_JS_ROOT = STATIC_ROOT + 'tinymce'
@@ -204,7 +207,7 @@ TINYMCE_DEFAULT_CONFIG = {
     "height": "320px",
     "width": "auto",
     "menubar": "file edit view insert format tools table help",
-    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "
+    "plugins": "advlist autolink lists image charmap print preview anchor searchreplace visualblocks code "
     "fullscreen insertdatetime media table paste code wordcount spellchecker",
     "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
     "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "

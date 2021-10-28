@@ -137,8 +137,7 @@
                         <div class="p-2 bd-highlight">
                             <div class="del-back text-center">
                                 <h6 class="del-amount p-2"><img src="{% static '/FDS_app/Naira Sign2.svg'%}" class="mr-1" style="height: 16px; width: 17px;" alt="Naira Sign">{{i.Customer_percentage_profit|default:"0" }}</h6>
-                            </div>
-                            
+                            </div>                            
                         </div>                    
                     </div>                                
                 </section>                
@@ -148,12 +147,10 @@
                     {% if customer_paginated_referrals.has_previous %}
                         <a class="btn btn-light btn-sm" href="?page=1">&laquo; first</a>
                         <a class="btn btn-secondary btn-sm" href="?page={{ customer_paginated_referrals.previous_page_number }}">previous</a>
-                    {% endif %}
-            
+                    {% endif %}            
                     <span class="current">
                         Page {{ customer_paginated_referrals.number }} of {{ customer_paginated_referrals.paginator.num_pages }}.
-                    </span>
-            
+                    </span>            
                     {% if customer_paginated_referrals.has_next %}
                         <a class="btn btn-light btn-sm" href="?page={{ customer_paginated_referrals.next_page_number }}">next</a>
                         <a class="btn btn-secondary btn-sm" href="?page={{ customer_paginated_referrals.paginator.num_pages }}">last &raquo;</a>
