@@ -26,12 +26,9 @@ environ.Env.read_env()
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY =env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'ff37-197-210-79-69.ngrok.io']
 
 
 # Application definition
@@ -160,9 +157,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "flls.ng"
-EMAIL_PORT = 465
+EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_HOST_USER = 'support@flls.ng'
-EMAIL_HOST_PASSWORD = '78f8r7y#nU48Z5@G'
+EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
