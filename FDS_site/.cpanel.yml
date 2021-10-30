@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/fllsdnqe/Testing/
+    - /bin/cp -R * $DEPLOYPATH
+    
