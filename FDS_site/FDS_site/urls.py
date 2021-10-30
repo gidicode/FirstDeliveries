@@ -7,7 +7,6 @@ from users import views as user_views
 from django.contrib.auth import views as auth_views #2nd
 from django.conf import settings
 from django.conf.urls.static import static
-from . import settings
 from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
 from users.views import LoginView
 from users.utils import HashIdConverter

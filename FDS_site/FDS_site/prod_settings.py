@@ -1,4 +1,4 @@
-from .base import *
+from .settings import *
 
 DEBUG = False
 
@@ -16,4 +16,3 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = ['flls.ng', 'www.flls.ng']
-

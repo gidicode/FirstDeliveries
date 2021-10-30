@@ -82,6 +82,7 @@ def Creating_referal_code(request, user):
         'Affiliate_customers', 'Affiliate_admin'])
 def Welcome_page(request, user):
     customer = Customer.objects.get(user = request.user)
+    print(customer)
     affiliate_id  = Affiliate_Group.objects.get(Marketer = customer)
     get_the_code = affiliate_id.Referal_ID
     return render(request, "Affiliate/Welcome_Page.html", {'Referal_id':get_the_code})
