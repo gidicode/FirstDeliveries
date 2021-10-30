@@ -2,12 +2,12 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/fllsdnqe/Testing/
-    - /bin/cp -R Affiliate $DEPLOYPATH
-    - /bin/cp -R BikeControl $DEPLOYPATH
-    - /bin/cp -R FDS_app $DEPLOYPATH
-    - /bin/cp -R FDS_site $DEPLOYPATH
-    - /bin/cp -R Management $DEPLOYPATH
-    - /bin/cp -R PortHarcourt $DEPLOYPATH
-    - /bin/cp -R users $DEPLOYPATH
+    - /bin/cp -r Affiliate $DEPLOYPATH
+    - /bin/cp -r BikeControl $DEPLOYPATH
+    - /bin/cp -r FDS_app $DEPLOYPATH
+    - /bin/cp -r FDS_site $DEPLOYPATH
+    - /bin/cp -r Management $DEPLOYPATH
+    - /bin/cp -r PortHarcourt $DEPLOYPATH
+    - /bin/cp -r users $DEPLOYPATH
     - /bin/cp manage.py $DEPLOYPATH
     - /bin/cp requirements.txt $DEPLOYPATH
