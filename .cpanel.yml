@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/fllsdnqe/Testing
-    - /bin/cp /FDS_site/* $DEPLOYPATH
+    - /bin cp /FDS_site/* $DEPLOYPATH
