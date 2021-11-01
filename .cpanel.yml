@@ -1,11 +1,6 @@
 ---
 deployment:
   tasks:
-<<<<<<< HEAD
     - export DEPLOYPATH=/home/fllsdnqe/Testing/
     - /bin/cp -R FDS_site/* $DEPLOYPATH
     
-=======
-    - export DEPLOYPATH=/home/fllsdnqe/Testing/    
-    - /bin/cp -R FDS_site/* $DEPLOYPATH
->>>>>>> 100b1cdc960cca6ff8315f11a5f8c3a4b0e23463
