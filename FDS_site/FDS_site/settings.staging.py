@@ -1,8 +1,9 @@
-from .settings import *
+try:
+    from shared_settings import *
+except ImportError:
+    pass
 
 DEBUG = False
-
-SECRET_KEY = env('SECRET_KEY')
 
 DATABASES = {
     'default': {
@@ -22,3 +23,7 @@ STATIC_ROOT = '/home/fllsdnqe/runtest.flls.ng/static/FDS_app'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+TINYMCE_JS_URL = STATIC_URL + 'tinymce/tinymce.min.js'
+
+TINYMCE_JS_ROOT = STATIC_ROOT + 'tinymce'
