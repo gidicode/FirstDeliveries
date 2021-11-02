@@ -10,3 +10,4 @@ pip-delete-this-directory.txt
 __pycache__
 db.sqlite3
 media
+settings.py
