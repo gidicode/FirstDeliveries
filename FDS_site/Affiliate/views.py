@@ -50,23 +50,26 @@ def Affiliate_joinPage(request, user):
 def Creating_referal_code(request, user):    
     Marketer = Customer.objects.get(user = request.user)
     Referal_id = request.user.username.upper()
-    try:
-        Affiliate_Group.objects.create(
-            Marketer = Marketer,
-            Referal_ID = Referal_id
-        )
-        group = Group.objects.get(name='Affiliate_customers')
-        group.user_set.add(user)
-        marketter = Affiliate_Group.objects.get(Referal_ID = Referal_id)
-        Notification_admin.objects.create(
-                marketer = marketter,
-                message = f"{marketter} Just joined the affiliate program"
-            )  
-    except IntegrityError as e:
-        e = f"'{Referal_id}' is already registered"
-        return render(request, "Affiliate/AlreadyExist.html", {"message": e})
-    return redirect('welcome_page', request.user.id)
-
+    check_customer = Affiliate_Group.objects.filter(Referal_ID=Referal_id).exists()    
+    if check_customer == False:        
+        try:
+            Affiliate_Group.objects.create(
+                Marketer = Marketer,
+                Referal_ID = Referal_id
+            )
+            group = Group.objects.get(name='Affiliate_customers')
+            group.user_set.add(user)
+            marketter = Affiliate_Group.objects.get(Referal_ID = Referal_id)
+            Notification_admin.objects.create(
+                    marketer = marketter,
+                    message = f"{marketter} Just joined the affiliate program"
+                )  
+        except IntegrityError as e:
+            e = f"'{Referal_id}' is already registered"
+            return render(request, "Affiliate/AlreadyExist.html", {"message": e})
+        return redirect('welcome_page', request.user.id)
+    else:
+        return redirect('affiliate_dashboard', request.user.id)
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=[
