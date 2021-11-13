@@ -354,14 +354,14 @@ def Notification_view(request, pk):
 #COMPANY-DASHBOARD
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Dashboard_Affilite(request):    
     notification = Notification_admin.objects.filter(viewed=False)
     return render(request, 'Affiliate/Affiliate_dashboard.html', {'notification':notification})
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER' ])
 def Dashboad_summary(request):
     Affiliate_customers = Affiliate_Group.objects.all()    
     today = datetime.now().date()    
@@ -400,7 +400,7 @@ def Dashboad_summary(request):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Deliveries_list(request):
     notification = Notification_admin.objects.filter(viewed=False)
     all_referrals = Referrals.objects.all()
@@ -412,7 +412,7 @@ def Deliveries_list(request):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Customer_List(request):
     notification = Notification_admin.objects.filter(viewed=False)
     all_marketers = Affiliate_Group.objects.all()
@@ -423,7 +423,7 @@ def Customer_List(request):
     return render(request, 'Affiliate/Customers_List.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Payout_List(request):
     notification = Notification_admin.objects.filter(viewed=False)
     payout_list = Request_Payout.objects.all()
@@ -435,7 +435,7 @@ def Payout_List(request):
     return render(request, 'Affiliate/Payout_list_details.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Process_payout(request, pk):      
     notification = Notification_admin.objects.filter(viewed=False)
     item = Request_Payout.objects.get(id = pk)
@@ -478,7 +478,7 @@ def Process_payout(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def admin_view_notification(request):
     notification = Notification_admin.objects.filter(viewed=False)
     all_notification = Notification_admin.objects.filter(viewed =False)
@@ -491,7 +491,7 @@ def admin_view_notification(request):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def update_admin_notification(request, pk):
     get_notification = Notification_admin.objects.get(id = pk)
     get_notification.viewed = True
