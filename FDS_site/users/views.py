@@ -2641,7 +2641,7 @@ def UpdateFForm(request, pk):
     context = {'o_form': o_form,
               'customer':customer 
               }
-    return render(request, 'users/FleetManagerUpdateF.html', context)
+    return render(request, 'users/fleetManagerUpdateF.html', context)
 #adminUpdateErrand
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin',
