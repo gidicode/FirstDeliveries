@@ -66,14 +66,13 @@ class Bank_Account_Details(models.Model):
                 ('%(value) is more than 10 numbers, Please check and correct.'), params={'value':value},
             )              
     marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
-    Account_Number = models.BigIntegerField(validators=[Check_Len], unique=True)
+    Account_Number = models.CharField(validators=[Check_Len], max_length=10, unique=True)
     Account_Name = models.CharField(max_length = 100, null=True, unique=False)
     Bank_Name = models.CharField(max_length=100, null=True)
     
     def __str__(self):
         return f"{self.Bank_Name}, {self.Account_Number}"
     
-
 class Request_Payout(models.Model):
     STATUS = {
         ('Paid', 'Paid'),

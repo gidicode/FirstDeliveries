@@ -17,8 +17,5 @@ __pycache__
 db.sqlite3
 media
 FDS_site/static/
-settings.py
-**/migrations/**
-!**/migrations
-!**/migrations/__init__.py
+FDS_site/settings.py
 FDS_site/__init__.py

@@ -1967,9 +1967,10 @@ def customerDashboardPage(request, user):
     request_filter_errand = customer.errand_service_set.all()
     request_filter_shopping = customer.shopping_set.all()    
     n_filter = customer.delivered_set.all()
-    n = n_filter.filter(viewed = False)    
-
+    n = n_filter.filter(viewed = False)
+    check_user_in_affiliate = Affiliate_Group.objects.filter(Marketer = user).exists()        
     context = {
+        'check_user_in_affiliate':check_user_in_affiliate,
         'request_filter_cash':request_filter_cash,
         'request_filter':request_filter,
         'request_filter_errand':request_filter_errand,
@@ -2086,13 +2087,15 @@ def CashierUpdateAnonForm(request, pk):
     return render(request, 'users/CashierUpdateA.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=[
+        'admin', 'FLLS',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier'])
+        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier'
+        ])
 def CashierUpdateErrandForm(request, pk):
     r_request = Errand_service.objects.get(id=pk)  
     customer = Customer.objects.get(user=request.user) 
@@ -2554,12 +2557,12 @@ def UpdateFForm(request, pk):
                 marketer = Affiliate_Group.objects.get(Referal_ID = obj.Marketer_ID.Referal_ID)                               
                 all_customer_referral = Referrals.objects.filter(marketer = obj.Marketer_ID)  
 
-                print(Decimal(20)/Decimal(100) * obj.profit)              
+                            
                 all_customer_referral.filter(Order_ID = obj.order_id).update(
                     Rider = obj.riders,
                     Delivery_Fee = obj.profit,
-                    Customer_percentage_profit = Decimal(20)/Decimal(100) * obj.profit,
-                    FLLS_perentage_profit = Decimal(80)/Decimal(100) * obj.profit,
+                    Customer_percentage_profit = Decimal(10)/Decimal(100) * obj.profit,
+                    FLLS_perentage_profit = Decimal(90)/Decimal(100) * obj.profit,
                     Delivery_status = obj.status,
                 )     
 
@@ -2568,12 +2571,12 @@ def UpdateFForm(request, pk):
                 check_process_complete = getting_the_order.Completed
                 if check_process_complete == False:                                            
                     marketer.Amount_Genreated  += obj.profit
-                    marketer.Amount_Credited += Decimal(20/100) * obj.profit                     
-                    marketer.Wallet_Balance += Decimal(20/100) * obj.profit
-                    marketer.Tempoary_wallet_balance += Decimal(20/100) * obj.profit
-                    marketer.Profit_Generated += Decimal(80/100) * obj.profit
-                                       
-                    marketer.save()                              
+                    marketer.Amount_Credited += Decimal(10/100) * obj.profit                     
+                    marketer.Wallet_Balance += Decimal(10/100) * obj.profit
+                    marketer.Tempoary_wallet_balance += Decimal(10/100) * obj.profit
+                    marketer.Profit_Generated += Decimal(90/100) * obj.profit                                       
+                    marketer.save()  
+                                                
                     all_customer_referral.filter(Order_ID = obj.order_id).update(Completed = True)                    
 
             if obj.status != 'Delivered' and get_rider == None:
