@@ -131,7 +131,6 @@ def Create_report(request, user):
             instance.customer = customer
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
-            instance.for_runyi = True
             instance.Categoty = 'Operations'
             instance.save()
 
@@ -139,9 +138,9 @@ def Create_report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id) 
             
-            #email_list = ['benjaminokpodu@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -172,12 +171,11 @@ def Edit_Report(request, pk):
             instance = E_form.save(commit=False)            
             instance.for_chairman_manager = True
             instance.for_manager_FLM = True
-            instance.for_runyi = True
             instance.save()
             
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")                      
             return redirect('management_dashboard', request.user.pk)
 
@@ -228,9 +226,9 @@ def Fleet_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'benjaminokpodu@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'okafochuma@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
@@ -267,9 +265,9 @@ def Edit_Fleet_Report(request, pk):
             instance.for_runyi = True 
             instance.save()           
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'benjaminokpodu@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'okafochuma@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -319,9 +317,9 @@ def ICT_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
 
-            #email_list = ['benjaminokpodu@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)          
+            email_list = ['okafochuma@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)          
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -356,9 +354,9 @@ def Edit_ict_Report(request, pk):
             instance.for_runyi = True 
             instance.save()
             
-            #email_list = ['benjaminokpodu@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['okafochuma@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -371,7 +369,7 @@ def Edit_ict_Report(request, pk):
     return render(request, 'Management/Edit_ict_form.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['FLLS', 'Marketing', 'admin',])
+@allowed_user(allowed_roles=['FLLS', 'Marketing', 'Front Desk', 'admin',])
 def Marketing_Report(request, user):
     customer = Customer.objects.get(user=user)
     if customer.staff_created == False:
@@ -408,9 +406,9 @@ def Marketing_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)
 
-            #email_list = ['benjaminokpodu@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['okafochuma@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -423,7 +421,7 @@ def Marketing_Report(request, user):
     return render(request, 'Management/Marketing_report_.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['FLLS', 'Marketing', 'admin',])
+@allowed_user(allowed_roles=['FLLS', 'Marketing', 'Front Desk', 'admin',])
 def Edit_market_Report(request, pk):
     customer = Customer.objects.get(user= request.user)
     market_report = OFFICE_REPORT.objects.get(id = pk)
@@ -446,9 +444,9 @@ def Edit_market_Report(request, pk):
             instance.for_runyi = True 
             instance.save()
 
-            #email_list = ['benjaminokpodu@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['okafochuma@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -498,9 +496,9 @@ def Front_Desk_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)
 
-            #email_list = ['benjaminokpodu@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)          
+            email_list = ['okafochuma@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)          
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -536,9 +534,9 @@ def Edit_front_Report(request, pk):
             instance.for_runyi = True 
             instance.save()
 
-            #email_list = ['benjaminokpodu@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)            
+            email_list = ['okafochuma@gmail.com', 'festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)            
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -585,26 +583,26 @@ def Runyi_Report(request, user):
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id) 
 
             if instance.for_operation and instance.for_manager_FLM == True:
-                #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-                #Staff_Name = instance.customer.first_name
-                #Notification_email(email_list, Staff_Name)  
+                email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+                Staff_Name = instance.customer.first_name
+                Notification_email(email_list, Staff_Name)  
                 messages.success(request, f"Your report has been submitted successfully to Chairman, GGM & GM Operations.")
                 
             elif instance.for_operation == True and instance.for_manager_FLM == False:                
-                #email_list = ['festybaba80@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-                #Staff_Name = instance.customer.first_name
-                #Notification_email(email_list, Staff_Name)   
+                email_list = ['festybaba80@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+                Staff_Name = instance.customer.first_name
+                Notification_email(email_list, Staff_Name)   
                 messages.success(request, f"Your report has been submitted successfully to Chairman & GM Operations.")
 
             elif instance.for_operation == False and instance.for_manager_FLM == True:                
-                #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'usuugwo@gmail.com']
-                #Staff_Name = instance.customer.first_name
-                #Notification_email(email_list, Staff_Name)
+                email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'usuugwo@gmail.com']
+                Staff_Name = instance.customer.first_name
+                Notification_email(email_list, Staff_Name)
                 messages.success(request, f"Your report has been submitted successfully to Chairman & GGM.")
             else:                
-                #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
-                #Staff_Name = instance.customer.first_name
-                #Notification_email(email_list, Staff_Name) 
+                email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
+                Staff_Name = instance.customer.first_name
+                Notification_email(email_list, Staff_Name) 
                 messages.success(request, f"Your report has been submitted successfully to Chairman only.")
                     
             
@@ -640,26 +638,26 @@ def Edit_Runyi_Report(request, pk):
             instance.save()           
 
             if instance.for_operation and instance.for_manager_FLM == True:
-                #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-                #Staff_Name = instance.customer.first_name
-                #Notification_email(email_list, Staff_Name)  
+                email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+                Staff_Name = instance.customer.first_name
+                Notification_email(email_list, Staff_Name)  
                 messages.success(request, f"Your report has been submitted successfully to Chairman, GGM & GM Operations.")
                 
             elif instance.for_operation == True and instance.for_manager_FLM == False:                
-                #email_list = ['festybaba80@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-                #Staff_Name = instance.customer.first_name
-                #Notification_email(email_list, Staff_Name)   
+                email_list = ['festybaba80@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+                Staff_Name = instance.customer.first_name
+                Notification_email(email_list, Staff_Name)   
                 messages.success(request, f"Your report has been submitted successfully to Chairman & GM Operations.")
 
             elif instance.for_operation == False and instance.for_manager_FLM == True:                
-                #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'usuugwo@gmail.com']
-                #Staff_Name = instance.customer.first_name
-                #Notification_email(email_list, Staff_Name)
+                email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'usuugwo@gmail.com']
+                Staff_Name = instance.customer.first_name
+                Notification_email(email_list, Staff_Name)
                 messages.success(request, f"Your report has been submitted successfully to Chairman & GGM.")
             else:                
-                #email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
-                #Staff_Name = instance.customer.first_name
-                #Notification_email(email_list, Staff_Name) 
+                email_list = ['festybaba80@gmail.com', 'usuugwo@gmail.com']
+                Staff_Name = instance.customer.first_name
+                Notification_email(email_list, Staff_Name) 
                 messages.success(request, f"Your report has been submitted successfully to Chairman only.")
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
@@ -710,9 +708,9 @@ def IWH_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id) 
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'usuugwo@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)           
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'usuugwo@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)           
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
     else:
@@ -748,9 +746,9 @@ def Edit_IWH_Report(request, pk):
             instance.for_runyi = True
             instance.save()
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -799,9 +797,9 @@ def TANK_FARM_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)          
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)          
             messages.success(request, f"Your report has been submitted successfully")            
             return redirect('management_dashboard', user)
     else:
@@ -836,9 +834,9 @@ def Edit_Tank_Farm_Report(request, pk):
             instance.for_operation = True
             instance.save()
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)
 
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
@@ -888,9 +886,9 @@ def Manager_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)        
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)        
 
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
@@ -925,9 +923,9 @@ def Edit_Manager_Report(request, pk):
             instance.for_runyi = True                
             instance.save()
 
-            #email_list = ['borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)  
+            email_list = ['borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)  
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -977,9 +975,9 @@ def Commercial_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)        
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)        
 
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
@@ -1015,9 +1013,9 @@ def Edit_Commercial_Report(request, pk):
             instance.for_runyi = True  
             instance.save()
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)  
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)  
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -1068,9 +1066,9 @@ def Admin_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com',  'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)        
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com',  'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)        
 
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
@@ -1106,9 +1104,9 @@ def Edit_admin_Report(request, pk):
             instance.for_runyi = True  
             instance.save()
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com',  'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)  
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com',  'borowasborn@gmail.com', 'runyi4ojomo@gmail.com', 'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)  
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -1157,9 +1155,9 @@ def Account_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com',  'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)        
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com',  'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)        
 
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
@@ -1194,9 +1192,9 @@ def Edit_account_Report(request, pk):
             instance.for_runyi = True  
             instance.save()
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com',  'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)  
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com',  'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)  
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -1246,9 +1244,9 @@ def MaintenanceAccount_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com',  'runyi4ojomo@gmail.com',  'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)        
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com',  'runyi4ojomo@gmail.com',  'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)        
 
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
@@ -1284,9 +1282,9 @@ def Edit_maintenance_Report(request, pk):
             instance.for_operation = True
             instance.save()
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com',  'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)  
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com',  'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)  
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -1338,9 +1336,9 @@ def PortHatcourt_office_Report(request, user):
             hashing_the_id = hashids.encode(instance.id)
             customer.office_report_set.filter(id = instance.id).update(ticket_num = hashing_the_id)  
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com',  'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)  
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com',  'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)  
 
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', user)
@@ -1378,9 +1376,9 @@ def Edit_portharcourt_office_Report(request, pk):
             instance.for_mangerFLLS = True   
             instance.save()
 
-            #email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com',  'usuugwo@gmail.com']
-            #Staff_Name = instance.customer.first_name
-            #Notification_email(email_list, Staff_Name)  
+            email_list = ['festybaba80@gmail.com', 'idminat@gmail.com', 'runyi4ojomo@gmail.com', 'borowasborn@gmail.com',  'usuugwo@gmail.com']
+            Staff_Name = instance.customer.first_name
+            Notification_email(email_list, Staff_Name)  
             messages.success(request, f"Your report has been submitted successfully")
             return redirect('management_dashboard', request.user.pk)
     else:
@@ -1911,12 +1909,10 @@ def Admin_report_list(request, user):
         'filter_name':filter_name,
         'page_obj':page_obj,
     }
-    return render(request, 'Management/admin_view_list.html', context)  
-
+    return render(request, 'Management/admin_view_list.html', context)    
+    
 @require_http_methods(['DELETE'])
 def Delete_report(request, pk):    
     OFFICE_REPORT.objects.filter(id = pk).delete()
-    messages.success(request, f"Deleted")
     return redirect('management_dashboard', request.user.pk)
-    
 

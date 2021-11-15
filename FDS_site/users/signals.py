@@ -24,15 +24,13 @@ def Delivered_signals(sender, instance, created, **kwargs):
                                 title = 'Delivered!',
                                 Message= f"Hello {instance.customer}, your parcel with the following Order ID '{instance.order_id}' has been delivered Thanks for using our service.")
 
-#@receiver(post_save, sender= adminNotification)
-#def adminNotification_General(sender, instance, created, **kwargs):
-#    if created:
-#        send_mail(
-#                subject ='New Request!!!', 
-#                message = f"A customer just initiated a request: Order ID; {instance.order_id}, TYPE; {instance.item_created}",                
-#                from_email = 'support@flls.ng',
-#                recipient_list= ['usuugwo@gmail.com', ],
-#                fail_silently = True,
-#                )
-                
-#'judembu10@gmail.com'
+@receiver(post_save, sender= adminNotification)
+def adminNotification_General(sender, instance, created, **kwargs):
+    if created:
+        send_mail(
+                subject ='New Request!!!', 
+                message = f"A customer just initiated a request: Order ID; {instance.order_id}, TYPE; {instance.item_created}",                
+                from_email = 'support@flls.ng',
+                recipient_list= ['usuugwo@gmail.com', 'judembu10@gmail.com'],
+                fail_silently = True,
+                )                

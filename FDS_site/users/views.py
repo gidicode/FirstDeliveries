@@ -1,4 +1,3 @@
-from re import search
 from BikeControl.models import RidersDeliveries, RidersProfile
 from django.shortcuts import render, redirect
 
@@ -26,12 +25,14 @@ from .forms import *
 from .filters import OrderFilter, AdminFilter, AdminFilterUsers
 
 from .decorators import unauthenticated_user, allowed_user, admin_only
+
 import requests
+
 from django.core.paginator import Paginator
+
 import json
+
 from django.db.models import Q
-from Affiliate.models import Referrals, Affiliate_Group, Notification, Notification_admin
-from decimal import Decimal
 
 #Error 404 page
 def response_error_handler(request, exception = None):
@@ -54,12 +55,13 @@ def register(request):
             username = form.cleaned_data.get( 'username')
             group = Group.objects.get(name='customer')
             user.groups.add(group)
-            user.save()
-            messages.success(request, f' Hello {username} Your account has been created! You are now able to log in!')
+            user.save()            
+            
+            messages.success(request, f' Hello {username} Your account has been created! Log in to request dispatch!')
             return redirect('login')
     else:
         form = UserRegisterForm()
-    return render(request, 'users/signUp.html', {'form':form})
+    return render(request, 'users/SignUp.html', {'form':form})
 
 class LoginView(auth_views.LoginView):
     form_class = LoginForm
@@ -71,15 +73,14 @@ def redirectView(request):
     else:
         return redirect('dashboard', user = request.user.pk)
 
-
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def locationChange(request, user):
     customer = Customer.objects.get(user=user)
     form = UpdateLocation(instance=customer)
@@ -95,13 +96,13 @@ def locationChange(request, user):
 
 #Password update Page
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def PasswordChange(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
@@ -126,13 +127,13 @@ def PasswordChange(request, user):
 
 #Profile update Page
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def customerProfileUpdatePage(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
@@ -146,7 +147,7 @@ def customerProfileUpdatePage(request, user):
             messages.success(request, f'Your Profile has been Updated!')
             return redirect('profileUpdate', user=user)
         else:
-            messages.error(request, f'An error occured, please correct the error below')
+            messages.error(request, f'An error occured, please correcthe error below')
     else:
         u_form = UserUpdateForm(instance=customer)
         p_form = ProfileUpdateForm(instance=customer)
@@ -159,13 +160,13 @@ def customerProfileUpdatePage(request, user):
     return render(request, 'users/customer_profile.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier',])
+             'Cashier',])
 def Cashier(request, user):
     customer = Customer.objects.get(user = request.user)
     request1 = MakeRequest.objects.all()
@@ -234,15 +235,15 @@ def Cashier(request, user):
 
 #Fleet Manager page
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Fleet Manager'])
+             'Fleet Manager'])
 def FleetManager(request, user):
-    customer = Customer.objects.get(user = request.user) 
+    customer = Customer.objects.get(user = request.user)
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
     request3 = Shopping.objects.all()
@@ -293,6 +294,8 @@ def FleetManager(request, user):
     paginator6 = Paginator(request6, 10)
     page_number6 = request.GET.get('page')
     page_obj6 = paginator6.get_page(page_number6)
+
+   
     
     context = {
         'assign':assign,
@@ -327,13 +330,13 @@ def FleetManager(request, user):
 
 #Front desk page
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Front Desk'])
+             'Front Desk'])
 def front_desk(request, user):
     request1 = MakeRequest.objects.all()
     request2 = MakeRequestCash.objects.all()
@@ -342,7 +345,7 @@ def front_desk(request, user):
     request5 = Errand_service.objects.all()
     request6 = Front_desk.objects.all()
 
-    customer = Customer.objects.get( user= request.user )
+    customer = Customer.objects.get( user = request.user )
     notification_filter = adminNotification.objects.all()
     notify = notification_filter.filter(viewed = False) 
 
@@ -417,13 +420,13 @@ def front_desk(request, user):
 
 # Front desk pick drop form
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Front Desk'])
+             'Front Desk'])
 def PickDrop(request, user):
     customer = Customer.objects.get(user = request.user)
     if request.method == "POST":
@@ -433,7 +436,7 @@ def PickDrop(request, user):
             instance.customer = customer
             instance.Delivery_type = 'Pick & Drop'
             instance.save()
-      
+
             messages.success(request, f'Hello {request.user.username}, action Successful')
 
             hashids = Hashids(salt=settings.FRONT_DESK, min_length=7)
@@ -444,30 +447,28 @@ def PickDrop(request, user):
                 customer=instance.customer,
                 item_created = "Front Desk",
                 order_id = h   
-            )
-
-            Referrals.objects.create(
-                marketer = instance.Marketer_ID,
-                Referal_ID = instance.Marketer_ID,                
-                Choice_for_TP = instance.Choice_for_TP,
-                Delivery_status = instance.status,                
-                Order_ID = h,
-            )
-            #Notification for customer
-            Notification.objects.create(
-                marketer = instance.Marketer_ID,
-                message = "New Referal, Your Referee just requested for a delivery"                
-            )
-            #Notification for admin
-            Notification_admin.objects.create(
-                marketer = instance.Marketer_ID,
-                message = "New Referal",
-            )   
-
-            #updating total referal            
-            marketer = Affiliate_Group.objects.get( Referal_ID = instance.Marketer_ID)
-            marketer.Total_Referal += 1
-            marketer.save()
+            ) 
+            
+            def SendSms():
+                url = 'https://app.multitexter.com/v2/app/sendsms'
+                link = f' http://flls.ng/SearchId/?order_id={h}'
+                sms_message = f"Thanks for using our service, click to view your delivery details {link}"
+                number = instance.Customer_phone_number                
+                payload = json.dumps({         
+                    'message' : sms_message,
+                    'sender_name' : 'FLLS',
+                    'recipients' : number,                
+                    })
+                headers = {                
+                    'Authorization': 'Bearer E9jriOUBg5ssOLSAc6DzE94O9cjxQ5kB6iW7DEv6mEADXs5Q2QcPXgOS0AVL',
+                    'Content-Type': 'application/json',
+                }
+                response = requests.request('POST', url, headers=headers, data=payload)                            
+                result = response.json()
+    
+                return result
+            SendSms()
+            
             return redirect('frontdesk', user=user)
     else:
         pickdrop_Form = Front_desk_pick(instance = customer)
@@ -480,16 +481,15 @@ def PickDrop(request, user):
 
 # Front desk Errand form
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Front Desk'])
+             'Front Desk'])
 def FrontErrand(request, user):
     customer = Customer.objects.get(user = request.user)
-    all_frontdesk = Front_desk.objects.all()    
     if request.method == "POST":
         errand_Form = Front_desk_errand(request.POST)
         if errand_Form.is_valid():
@@ -497,6 +497,8 @@ def FrontErrand(request, user):
             instance.customer = customer
             instance.Delivery_type = 'Errand'
             instance.save()
+
+            messages.success(request, f'Hello {request.user.username}, action Successful')
 
             hashids = Hashids(salt=settings.FRONT_DESK, min_length=7)
             h = hashids.encode(instance.id)
@@ -509,38 +511,32 @@ def FrontErrand(request, user):
                 Front_desk.objects.filter(pk = instance.id).update(Total= instance.Delivery_Fee)
             elif chk_none!= None:
                 get_total = instance.Enter_amount + instance.Delivery_Fee
-                Front_desk.objects.filter(pk = instance.id).update(Total= get_total)                                                
-        
+                Front_desk.objects.filter(pk = instance.id).update(Total= get_total) 
+
             adminNotification.objects.create(
                 customer=instance.customer,
                 item_created = "Front Desk",
-                order_id = h 
-            )         
-                        
-            Referrals.objects.create(
-                marketer = instance.Marketer_ID,
-                Referal_ID = instance.Marketer_ID,                
-                Choice_for_TP = instance.Choice_for_TP,
-                Delivery_status = instance.status,                
-                Order_ID = h,
+                order_id = h   
             )
-
-            #Notification for customer
-            Notification.objects.create(
-                marketer = instance.Marketer_ID,
-                message = "New Referal, Your Referee just requested for a delivery"                
-            )
-
-            #Notification for customer
-            Notification_admin.objects.create(
-                marketer = instance.Marketer_ID,
-                message = "New Referal",
-            )
-
-            #updating total referal            
-            marketer = Affiliate_Group.objects.get( Referal_ID = instance.Marketer_ID)
-            marketer.Total_Referal += 1
-            marketer.save()
+            def SendSms():
+                url = 'https://app.multitexter.com/v2/app/sendsms'
+                link = f' http://flls.ng/SearchId/?order_id={h}'
+                sms_message = f"Thanks for using our service, click to view your delivery details {link}"
+                number = instance.Customer_phone_number                
+                payload = json.dumps({         
+                    'message' : sms_message,
+                    'sender_name' : 'FLLS',
+                    'recipients' : number,                
+                    })
+                headers = {                
+                    'Authorization': 'Bearer E9jriOUBg5ssOLSAc6DzE94O9cjxQ5kB6iW7DEv6mEADXs5Q2QcPXgOS0AVL',
+                    'Content-Type': 'application/json',
+                }
+                response = requests.request('POST', url, headers=headers, data=payload)                            
+                result = response.json()
+    
+                return result
+            SendSms()
             
             return redirect('frontdesk', user=user)
     else:
@@ -583,13 +579,13 @@ def Inhousesearch(request):
     return render(request, 'users/Search.html', context)
 # Cash Request
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def requestForm_Cash(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
@@ -627,7 +623,7 @@ def requestForm_Cash(request, user):
             item_5 = [
                     chk_none.Address_of_reciever5, chk_none.Package_description5,
                     chk_none.reciever_phone_number5, chk_none.reciever_name5
-                    ]           
+                    ]
             if tp_choice_1:
                 charge_amount = 500
                 count_item2 = item_2.count('')
@@ -676,6 +672,7 @@ def requestForm_Cash(request, user):
                 count_item3 = item_3.count('')
                 count_item4 = item_4.count('')
                 count_item5 = item_5.count('')
+                
                 charge_amount = 1000
                 customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
                 if count_item2 >= 3:
@@ -703,15 +700,15 @@ def requestForm_Cash(request, user):
                     customer.makerequestcash_set.filter(order_id = h).update(Amount_Payable = charge_amount)
 
                 if charge_amount == 2000:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
                 elif charge_amount == 3000:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
                 elif charge_amount == 4000:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
                 elif charge_amount == 5000:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
                 else:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Single Delivery.')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')
             ForPayments.objects.create(
                 customer = customer,
                 For_cash_payment = instance,
@@ -733,24 +730,24 @@ def requestForm_Cash(request, user):
         'customer':customer,
         'n':n,
         }
-    return render(request, 'users/requestForm_Cash.html', context) 
+    return render(request, 'users/requestForm_Cash.html', context)
 
 #Online payment request
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def requestForm_Online(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
     n = n_filter.filter(viewed = False)
     if request.method == 'POST':
         o_form = OrderForm(request.POST)
-        if o_form.is_valid(): 
+        if o_form.is_valid() : 
             instance = o_form.save(commit=False)
             instance.customer = customer
             instance.save()
@@ -788,6 +785,7 @@ def requestForm_Online(request, user):
                 count_item3 = item_3.count('')
                 count_item4 = item_4.count('')
                 count_item5 = item_5.count('')
+                
                 customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
                 if count_item2 >= 3:
                     pass
@@ -829,6 +827,7 @@ def requestForm_Online(request, user):
                 count_item3 = item_3.count('')
                 count_item4 = item_4.count('')
                 count_item5 = item_5.count('')
+                
                 charge_amount = 1000
                 customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
                 if count_item2 >= 3:
@@ -856,15 +855,15 @@ def requestForm_Online(request, user):
                     customer.makerequest_set.filter(order_id = h).update(Amount_Payable = charge_amount)
 
                 if charge_amount == 2000:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 2 ')
                 elif charge_amount == 3000:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 3')
                 elif charge_amount == 4000:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 4')
                 elif charge_amount == 5000:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Total Deliveries is 5')
                 else:
-                    messages.success(request, f'Your choice of transportation is Tricycle Your delivery Fee is NGN{charge_amount}, Single Delivery.')            
+                    messages.success(request, f'Your choice of transportation is Bike Your delivery Fee is NGN{charge_amount}, Single Delivery.')            
             
             def initialize_card_payent(request, user):                
                 url = "https://api.paystack.co/transaction/initialize"
@@ -901,7 +900,7 @@ def requestForm_Online(request, user):
             customer.makerequest_set.filter(pk = instance.id).update(charge_id = initialized['data']['reference'])
             link = initialized['data']['authorization_url']
             adminNotification.objects.create(
-                customer = instance.customer,
+                customer=instance.customer,
                 item_created = "Card Request",
                 order_id = h  
             ) 
@@ -917,13 +916,13 @@ def requestForm_Online(request, user):
 
 #Shopping Request
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def ShoppingForm(request, user):
     customer = Customer.objects.get(user=user)
     n_filter = customer.delivered_set.all()
@@ -985,7 +984,7 @@ def ShoppingForm(request, user):
     else:
         s_form=Shopping_Form(instance=customer)
 
-    return render (request, 'users/shopping.html', {'s_form':s_form, 'n':n, 'customer':customer})          
+    return render (request, 'users/shopping.html', {'s_form':s_form, 'n':n, 'customer':customer})      
 
 #Success Page
 @login_required(login_url='login')
@@ -1004,6 +1003,7 @@ def successPage(request, user):
             "Authorization": settings.PAYSTACK_SECRETKEY,
             'Content-Type': 'appliation/json'
             }
+            
             payload =json.dumps ({
                 "reference": payment.charge_id
             })
@@ -1953,21 +1953,22 @@ def customers_list(request):
 
 #Customer Dashboard
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'ICT', 'customer', 'Fleet Manager', 'Front Desk', 'Cashier',])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def customerDashboardPage(request, user):
     customer = Customer.objects.get( user= user )
     request_filter = customer.makerequest_set.all()
     request_filter_cash = customer.makerequestcash_set.all()
     request_filter_errand = customer.errand_service_set.all()
-    request_filter_shopping = customer.shopping_set.all()    
+    request_filter_shopping = customer.shopping_set.all()
+
     n_filter = customer.delivered_set.all()
-    n = n_filter.filter(viewed = False)    
+    n = n_filter.filter(viewed = False)
 
     context = {
         'request_filter_cash':request_filter_cash,
@@ -1975,18 +1976,18 @@ def customerDashboardPage(request, user):
         'request_filter_errand':request_filter_errand,
         'request_filter_shopping':request_filter_shopping,
         'customer':customer,
-        'n':n,        
+        'n':n
     }
     return render(request, 'users/customerDashboard.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier'])
+             'Cashier'])
 def CashierUpdateE_RequestForm(request, pk):
     r_request = MakeRequest.objects.get(id=pk)  
     customer = Customer.objects.get(user=request.user) 
@@ -2006,13 +2007,13 @@ def CashierUpdateE_RequestForm(request, pk):
     return render(request, 'users/CashierUpdateE.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier'])
+             'Cashier'])
 def CashierUpdateCash_RequestForm(request, pk):
     r_request = MakeRequestCash.objects.get(id=pk)  
     customer = Customer.objects.get(user=request.user) 
@@ -2033,13 +2034,13 @@ def CashierUpdateCash_RequestForm(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier'])
+             'Cashier'])
 def CashierUpdateShoppingForm(request, pk):
     r_request = Shopping.objects.get(id=pk)  
     customer = Customer.objects.get(user=request.user) 
@@ -2060,13 +2061,13 @@ def CashierUpdateShoppingForm(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier'])
+             'Cashier'])
 def CashierUpdateAnonForm(request, pk):
     r_request = Anonymous.objects.get(id=pk)  
     customer = Customer.objects.get(user=request.user) 
@@ -2086,13 +2087,13 @@ def CashierUpdateAnonForm(request, pk):
     return render(request, 'users/CashierUpdateA.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier'])
+             'Cashier'])
 def CashierUpdateErrandForm(request, pk):
     r_request = Errand_service.objects.get(id=pk)  
     customer = Customer.objects.get(user=request.user) 
@@ -2112,13 +2113,13 @@ def CashierUpdateErrandForm(request, pk):
     return render(request, 'users/CashierUpdateErr.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Cashier'])
+             'Cashier'])
 def CashierUpdateFrontForm(request, pk):
     r_request = Front_desk.objects.get(id=pk)  
     customer = Customer.objects.get(user=request.user) 
@@ -2139,17 +2140,18 @@ def CashierUpdateFrontForm(request, pk):
 
 #Fleet Manager Update E
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+            'Fleet Manager'])
 def UpdateEForm(request, pk):
     r_request = MakeRequest.objects.get(id=pk)
     o_form = FleetManagerUpdateE(instance= r_request)
-    customer = Customer.objects.get(user=request.user)         
+    customer = Customer.objects.get(user=request.user) 
+    
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateE(request.POST,instance=r_request)
@@ -2158,18 +2160,14 @@ def UpdateEForm(request, pk):
             obj.save()
             get_rider = obj.riders
 
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 MakeRequest.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
@@ -2219,17 +2217,17 @@ def UpdateEForm(request, pk):
 
 #Fleet Manager Update C
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+            'Fleet Manager'])
 def UpdateCForm(request, pk):
     r_request = MakeRequestCash.objects.get(id=pk)
     o_form = FleetManagerUpdateC(instance= r_request)
-    customer = Customer.objects.get(user=request.user)    
+    customer = Customer.objects.get(user=request.user)
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateC(request.POST,instance=r_request)
@@ -2238,18 +2236,14 @@ def UpdateCForm(request, pk):
             obj.save()
             get_rider = obj.riders
 
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 MakeRequestCash.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
@@ -2297,40 +2291,37 @@ def UpdateCForm(request, pk):
               }
     return render(request, 'users/FleetManagerUpdateC.html', context)
 
-#Fleet Manager Update S
+#Fleet Manager Update Shopping form
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+            'Fleet Manager'])
 def UpdateSForm(request, pk):
     r_request = Shopping.objects.get(id=pk)
     o_form = FleetManagerUpdateS(instance= r_request)
-    customer = Customer.objects.get(user=request.user)        
+    customer = Customer.objects.get(user=request.user)
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateS(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
+            obj.save()
            
             get_rider = obj.riders
 
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 Shopping.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
@@ -2380,38 +2371,34 @@ def UpdateSForm(request, pk):
 
 #Fleet Manager Update Errand Service
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+            'Fleet Manager'])
 def UpdateErrForm(request, pk):
     r_request = Errand_service.objects.get(id=pk)
     o_form = FleetManagerUpdateErr(instance= r_request)
-    customer = Customer.objects.get(user=request.user)         
+    customer = Customer.objects.get(user=request.user) 
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateErr(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
-            obj.save()           
+            obj.save()
             get_rider = obj.riders
 
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
-                Errand_service.objects.filter(pk = obj.pk).update(assigned = True)            
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
+                Errand_service.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
                 search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
@@ -2460,24 +2447,24 @@ def UpdateErrForm(request, pk):
 
 #Fleet Manager Update Anon
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+            'Fleet Manager'])
 def UpdateAForm(request, pk):
     r_request = Anonymous.objects.get(id=pk)
     o_form = FleetManagerUpdateA(instance= r_request)
-    customer = Customer.objects.get(user=request.user)         
+    customer = Customer.objects.get(user=request.user) 
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateA(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
-            get_rider = obj.riders          
+            get_rider = obj.riders
 
             if obj.status != 'Delivered' and get_rider == None:
                 messages.warning(request, f'You just updated a customer status to {obj.status}')                     
@@ -2520,6 +2507,7 @@ def UpdateAForm(request, pk):
                 the_count = all_search.count(False) 
                 if the_count >= 13:
                     RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+            
                 messages.success(request, f'You just updated a customer satus to delivered {obj.order_id}')
 
             return redirect('fleetManager', user = pk)
@@ -2530,64 +2518,35 @@ def UpdateAForm(request, pk):
 
 #Fleet Manager Update Front Desk form
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+            'Fleet Manager', 'Front Desk',])
 def UpdateFForm(request, pk):
     r_request = Front_desk.objects.get(id=pk)
     o_form = FleetManagerUpdateF(instance= r_request)
-    customer = Customer.objects.get(user=request.user)         
+    customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         o_form = FleetManagerUpdateF(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
-            obj.save()            
+            obj.save()
             get_rider = obj.riders
 
-            #Affiliate marketers logic
-            if obj.status == 'Delivered' and obj.Marketer_ID != None:
-                marketer = Affiliate_Group.objects.get(Referal_ID = obj.Marketer_ID.Referal_ID)                               
-                all_customer_referral = Referrals.objects.filter(marketer = obj.Marketer_ID)  
-
-                print(Decimal(20)/Decimal(100) * obj.profit)              
-                all_customer_referral.filter(Order_ID = obj.order_id).update(
-                    Rider = obj.riders,
-                    Delivery_Fee = obj.profit,
-                    Customer_percentage_profit = Decimal(20)/Decimal(100) * obj.profit,
-                    FLLS_perentage_profit = Decimal(80)/Decimal(100) * obj.profit,
-                    Delivery_status = obj.status,
-                )     
-
-                #updating the wallet balance                
-                getting_the_order = Referrals.objects.get(Order_ID = obj.order_id)
-                check_process_complete = getting_the_order.Completed
-                if check_process_complete == False:                                            
-                    marketer.Amount_Genreated  += obj.profit
-                    marketer.Amount_Credited += Decimal(20/100) * obj.profit                     
-                    marketer.Wallet_Balance += Decimal(20/100) * obj.profit
-                    marketer.Tempoary_wallet_balance += Decimal(20/100) * obj.profit
-                    marketer.Profit_Generated += Decimal(80/100) * obj.profit
-                                       
-                    marketer.save()                              
-                    all_customer_referral.filter(Order_ID = obj.order_id).update(Completed = True)                    
-
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 Front_desk.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
@@ -2632,8 +2591,6 @@ def UpdateFForm(request, pk):
             if request.user.groups.filter(name = 'Fleet Manager'):
                 return redirect('fleetManager', user = pk)
             elif request.user.groups.filter(name = 'Front Desk'):
-                return redirect('frontdesk', user = pk)   
-            else:
                 return redirect('frontdesk', user = pk)
     context = {'o_form': o_form,
               'customer':customer 
@@ -2647,31 +2604,27 @@ def UpdateFForm(request, pk):
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+            'Fleet Manager'])
 def Update_Errand_Form(request, pk):
     r_request =Errand_service.objects.get(id=pk)
     o_form = AdminErrandForm(instance= r_request)
-    customer = Customer.objects.get(user=request.user)          
+    customer = Customer.objects.get(user=request.user)  
 
     if request.method == 'POST':
         o_form = AdminErrandForm(request.POST,instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
-            obj.save()    
+            obj.save()            
             get_rider = obj.riders
 
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 Errand_service.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
@@ -2720,39 +2673,36 @@ def Update_Errand_Form(request, pk):
 
 #adminUpdateFront
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Front Desk', 'MANAGEMENT_ADMIN', 'Fleet_Manager'])
+            'Fleet Manager'])
 def Update_Front_Fesk_Form(request, pk):
     r_request = Front_desk.objects.get(id=pk)
     o_form = AdminFrontForm(instance= r_request)
-    customer = Customer.objects.get(user = request.user)         
+    customer = Customer.objects.get(user = request.user)
 
     if request.method == 'POST':
         o_form = AdminFrontForm(request.POST, instance=r_request)
         if o_form.is_valid():
             obj = o_form.save(commit=False)
             obj.save()
-            get_rider = obj.riders           
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            get_rider = obj.riders
+            
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 Front_desk.objects.filter(pk = obj.pk).update(assigned = True)
 
-            if obj.status == 'Delivered':                                                                              
+            if obj.status == 'Delivered':                                               
                 search_makeRequest = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
                 search_makeRequest_out = MakeRequest.objects.filter(riders = get_rider).filter(status = 'Out for delivery').exists()
                 search_makeRequestCash = MakeRequestCash.objects.filter(riders = get_rider).filter(status = 'Pending').exists()
@@ -2789,10 +2739,11 @@ def Update_Front_Fesk_Form(request, pk):
                                 Item_delivered = obj,
                                 order_id = obj.order_id
                                 )
-                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')                    
+                messages.success(request, f'You just updated a customer satus to delivered: {obj.order_id}')
 
             return redirect('allfront-request')
-    context = {'o_form': o_form,
+    context = {
+              'o_form': o_form,
               'customer':customer 
               }
     return render(request, 'users/AdminUpdateFront.html', context)
@@ -2801,7 +2752,7 @@ def Update_Front_Fesk_Form(request, pk):
 @admin_only
 def updateRequestAnon(request, pk):
     r_request = Anonymous.objects.get(id=pk)
-    a_form = AdminAnonForm(instance= r_request)        
+    a_form = AdminAnonForm(instance= r_request)
 
     if request.method == 'POST':
         a_form = AdminAnonForm(request.POST,instance=r_request)
@@ -2810,18 +2761,14 @@ def updateRequestAnon(request, pk):
             instance.save()
             get_rider = instance.riders
 
-            if instance.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {instance.status}')                     
-            elif instance.status != 'Delivered' and get_rider != None:
+            if instance.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {instance.status}')
-            elif instance.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {instance.order_id} and No rider was assigned')                
-            elif instance.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {instance.order_id}')
 
-            if get_rider != None:
+            elif instance.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer status to canceled: {instance.order_id}')
+
+            if instance.riders != None:
                 Anonymous.objects.filter(pk = instance.pk).update(assigned = True)
 
             if instance.status == 'Delivered':                                               
@@ -2851,6 +2798,7 @@ def updateRequestAnon(request, pk):
                 the_count = all_search.count(False)  
                 if the_count >= 13:
                     RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+
             messages.success(request, f'Successful:{instance.order_id}')
 
             return redirect('anonymous-request')
@@ -2910,7 +2858,7 @@ def cancelRequestAnon(request, pk):
 def updateRequestForm(request, pk):
     r_request = MakeRequest.objects.get(id=pk)
     o_form = adminform(instance= r_request)    
-    customer = Customer.objects.get(user=request.user)         
+    customer = Customer.objects.get(user=request.user) 
 
     if request.method == 'POST':
         o_form = adminform(request.POST,instance=r_request)
@@ -2919,18 +2867,14 @@ def updateRequestForm(request, pk):
             obj.save()     
             get_rider = obj.riders
 
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 MakeRequest.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
@@ -2984,7 +2928,7 @@ def updateRequestForm(request, pk):
 def updateRequestFormCash(request, pk):
     r_request1 = MakeRequestCash.objects.get(id=pk)
     c_form = adminformCash(instance= r_request1)
-    customer = Customer.objects.get(user=request.user)         
+    customer = Customer.objects.get(user=request.user) 
 
     if request.method == 'POST':
         c_form = adminformCash(request.POST,instance = r_request1)
@@ -2993,18 +2937,14 @@ def updateRequestFormCash(request, pk):
             obj.save()
             get_rider = obj.riders
 
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 MakeRequestCash.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
@@ -3059,28 +2999,25 @@ def updateRequestFormCash(request, pk):
 def updateRequestFormShopping(request, pk):
     r_request2 = Shopping.objects.get(id=pk)
     s_form = adminformShopping(instance= r_request2)
-    customer = Customer.objects.get(user=request.user)         
+    customer = Customer.objects.get(user=request.user) 
+    rider = RidersDeliveries.objects.all()
+    riders_profile = RidersProfile.objects.all()
 
     if request.method == 'POST':
         s_form = adminformShopping(request.POST,instance = r_request2)
         if s_form.is_valid():
             obj = s_form.save(commit=False)            
             obj.save()
+            get_rider = obj.riders
 
-            get_rider = obj.riders 
-
-            if obj.status != 'Delivered' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to {obj.status}')                     
-            elif obj.status != 'Delivered' and get_rider != None:
+            if obj.status != 'Delivered':
                 RidersProfile.objects.filter(pk = get_rider.pk).update(busy = True)
-                messages.warning(request, f'You just updated a customer status to {obj.status}')
-            elif obj.status == 'Canceled' and get_rider == None:
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id} and No rider was assigned')                
-            elif obj.status == 'Canceled' and get_rider != None: 
-                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
-                messages.warning(request, f'You just updated a customer status to canceled: {obj.order_id}')
 
-            if get_rider != None:
+            elif obj.status == 'Canceled':
+                RidersProfile.objects.filter(pk = get_rider.pk).update(busy = False)
+                messages.success(request, f'You just updated a customer satus to canceled: {obj.order_id}')
+
+            if obj.riders != None:
                 Shopping.objects.filter(pk = obj.pk).update(assigned = True)
 
             if obj.status == 'Delivered':                                               
@@ -3188,13 +3125,13 @@ def cancelRequestShopping(request, pk):
 
 #Delete Request Order History
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def orderHistory(request, user):
     customer = Customer.objects.get( user=user )
 
@@ -3239,13 +3176,13 @@ def orderHistory(request, user):
 
 #Customer Notification
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def Notifications_show(request, user): 
     customer = Customer.objects.get(user= user)
     n_filter = customer.delivered_set.all()
@@ -3254,13 +3191,13 @@ def Notifications_show(request, user):
 
 #Mark As Read
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def Notifications_delete(request, pk):    
     cust = Delivered.objects.get(id = pk)
     cust.viewed = True
@@ -3269,13 +3206,13 @@ def Notifications_delete(request, pk):
 
 #Admin Notification
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Fleet Manager', 'Front Desk', 'Cashier'])
+             'Fleet Manager', 'Front Desk', 'Cashier'])
 def adminNotificationShow(request):
     customer = Customer.objects.get(user=request.user)
     notification_filter = adminNotification.objects.all()
@@ -3285,13 +3222,13 @@ def adminNotificationShow(request):
 
 #Admin Notification Delete
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'Fleet Manager'])
+             'Fleet Manager'])
 def adminNotificationDelete(request, pk): 
     cust1 = adminNotification.objects.get(id=pk)
     cust1.viewed = True
@@ -3299,28 +3236,29 @@ def adminNotificationDelete(request, pk):
     return redirect('adminNotificationShow')
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def ErrandMenu(request, user):
     customer = Customer.objects.get(user=request.user)
     n_filter = customer.delivered_set.all()
     n = n_filter.filter(viewed = False)
 
-    return render(request, 'users/ErrandService.html', {'n':n, 'customer':customer})
+    return render(request, 'users/ErrandService.html', {'n':n})
+
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def fuel_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -3405,13 +3343,13 @@ def fuel_errand(request, user):
     return render(request, 'users/Fuelerrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def gas_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -3496,13 +3434,13 @@ def gas_errand(request, user):
     return render(request, 'users/Gaserrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])            
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])            
 def drugs_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -3587,13 +3525,13 @@ def drugs_errand(request, user):
     return render(request, 'users/Drugserrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def bread_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -3678,13 +3616,13 @@ def bread_errand(request, user):
     return render(request, 'users/Breaderrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def shawarma_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -3769,13 +3707,13 @@ def shawarma_errand(request, user):
     return render(request, 'users/Shawarmaerrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def pizza_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -3860,13 +3798,13 @@ def pizza_errand(request, user):
     return render(request, 'users/Pizzaerrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def fruits_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -3951,13 +3889,13 @@ def fruits_errand(request, user):
     return render(request, 'users/Fruitserrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def icecream_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -4042,13 +3980,13 @@ def icecream_errand(request, user):
     return render(request, 'users/Icecreamerrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def food_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -4133,13 +4071,13 @@ def food_errand(request, user):
     return render(request, 'users/Fooderrand.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'FLLS',
+@allowed_user(allowed_roles=['admin',
         'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-        'Fleet Manager', 'Front Desk', 'MANAGEMENT_ADMIN',  'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
+             'customer', 'Fleet Manager', 'Front Desk', 'Cashier'])
 def other_errand(request, user):
     customer = Customer.objects.get(user = request.user)
     n_filter = customer.delivered_set.all()
@@ -4222,4 +4160,3 @@ def other_errand(request, user):
         'n':n
     }
     return render(request, 'users/Othererrand.html', context)
-
