@@ -27,7 +27,7 @@
   <div class="row">
     <div class="col-md-2"></div>
       <div class="col-md-4 pt-4">
-        <div class="affiliate_background ">
+        <div class="affiliate_background " onclick="DisplayInfo()">
           <figure class="circle bg-light">
             <img src="{% static '/FDS_app/money FLLS.png'%}" class="img-fluid mr-4"  alt="FLLS">          
           </figure>
@@ -43,7 +43,7 @@
             </div>
           {% else %}
           <div class="join-position text-center mb-3">
-            <a role="button" href="{% url 'join_affiliate' user.id %}" class="btn btn-light rounded-lg ">Join our Affiliate Program</a>
+            <a role="button" href="{% url 'join_affiliate' user.id %}" class="btn btn-light rounded-lg disabled">Join our Affiliate Program</a>
           </div>
           {% endif %}          
         </div>        
@@ -981,6 +981,10 @@
 <script> 
 function Location() {
   window.alert("Confirm your location is the same city you are currently present in")
+}
+
+function DisplayInfo() {
+  alert("Affiliate Marketing Program would commence soon!!");
 }
 </script>
 {% endblock content2 %}
