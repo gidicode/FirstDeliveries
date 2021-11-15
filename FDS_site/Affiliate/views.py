@@ -50,23 +50,26 @@ def Affiliate_joinPage(request, user):
 def Creating_referal_code(request, user):    
     Marketer = Customer.objects.get(user = request.user)
     Referal_id = request.user.username.upper()
-    try:
-        Affiliate_Group.objects.create(
-            Marketer = Marketer,
-            Referal_ID = Referal_id
-        )
-        group = Group.objects.get(name='Affiliate_customers')
-        group.user_set.add(user)
-        marketter = Affiliate_Group.objects.get(Referal_ID = Referal_id)
-        Notification_admin.objects.create(
-                marketer = marketter,
-                message = f"{marketter} Just joined the affiliate program"
-            )  
-    except IntegrityError as e:
-        e = f"'{Referal_id}' is already registered"
-        return render(request, "Affiliate/AlreadyExist.html", {"message": e})
-    return redirect('welcome_page', request.user.id)
-
+    check_customer = Affiliate_Group.objects.filter(Referal_ID=Referal_id).exists()    
+    if check_customer == False:        
+        try:
+            Affiliate_Group.objects.create(
+                Marketer = Marketer,
+                Referal_ID = Referal_id
+            )
+            group = Group.objects.get(name='Affiliate_customers')
+            group.user_set.add(user)
+            marketter = Affiliate_Group.objects.get(Referal_ID = Referal_id)
+            Notification_admin.objects.create(
+                    marketer = marketter,
+                    message = f"{marketter} Just joined the affiliate program"
+                )  
+        except IntegrityError as e:
+            e = f"'{Referal_id}' is already registered"
+            return render(request, "Affiliate/AlreadyExist.html", {"message": e})
+        return redirect('welcome_page', request.user.id)
+    else:
+        return redirect('affiliate_dashboard', request.user.id)
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=[
@@ -82,6 +85,7 @@ def Creating_referal_code(request, user):
         'Affiliate_customers', 'Affiliate_admin'])
 def Welcome_page(request, user):
     customer = Customer.objects.get(user = request.user)
+    print(customer)
     affiliate_id  = Affiliate_Group.objects.get(Marketer = customer)
     get_the_code = affiliate_id.Referal_ID
     return render(request, "Affiliate/Welcome_Page.html", {'Referal_id':get_the_code})
@@ -350,14 +354,14 @@ def Notification_view(request, pk):
 #COMPANY-DASHBOARD
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Dashboard_Affilite(request):    
     notification = Notification_admin.objects.filter(viewed=False)
     return render(request, 'Affiliate/Affiliate_dashboard.html', {'notification':notification})
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER' ])
 def Dashboad_summary(request):
     Affiliate_customers = Affiliate_Group.objects.all()    
     today = datetime.now().date()    
@@ -396,7 +400,7 @@ def Dashboad_summary(request):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Deliveries_list(request):
     notification = Notification_admin.objects.filter(viewed=False)
     all_referrals = Referrals.objects.all()
@@ -408,7 +412,7 @@ def Deliveries_list(request):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Customer_List(request):
     notification = Notification_admin.objects.filter(viewed=False)
     all_marketers = Affiliate_Group.objects.all()
@@ -419,7 +423,7 @@ def Customer_List(request):
     return render(request, 'Affiliate/Customers_List.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Payout_List(request):
     notification = Notification_admin.objects.filter(viewed=False)
     payout_list = Request_Payout.objects.all()
@@ -431,7 +435,7 @@ def Payout_List(request):
     return render(request, 'Affiliate/Payout_list_details.html', context)
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Process_payout(request, pk):      
     notification = Notification_admin.objects.filter(viewed=False)
     item = Request_Payout.objects.get(id = pk)
@@ -474,7 +478,7 @@ def Process_payout(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def admin_view_notification(request):
     notification = Notification_admin.objects.filter(viewed=False)
     all_notification = Notification_admin.objects.filter(viewed =False)
@@ -487,7 +491,7 @@ def admin_view_notification(request):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'Affiliate_admin'])
+@allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def update_admin_notification(request, pk):
     get_notification = Notification_admin.objects.get(id = pk)
     get_notification.viewed = True

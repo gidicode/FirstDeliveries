@@ -183,6 +183,16 @@ def ACCOUNT_GROUP(user, ACCOUNT):
         return group in user.groups.all()
     else:
         return False 
+
+@register.filter(name='Affiliate_admin') 
+def AFFILIATE_GROUP(user, Affiliate_admin):
+    group = Group.objects.filter(name = Affiliate_admin)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False 
+    
     
 
 

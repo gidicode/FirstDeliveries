@@ -22,29 +22,57 @@
         </div>
         {% endif %}
     </div>
-
   </div>
 
   <div class="row">
-      <div class="col-md-4 pt-4"></div>
-      <div class="col-md-4 pt-5">
-        <a class="btn btn-primary rounded-pill" href="{% url 'join_affiliate' user.id %}"  role="button"> Join affiliate</a>
+    <div class="col-md-2"></div>
+      <div class="col-md-4 pt-4">
+        <div class="affiliate_background ">
+          <figure class="circle bg-light">
+            <img src="{% static '/FDS_app/money FLLS.png'%}" class="img-fluid mr-4"  alt="FLLS">          
+          </figure>
+          <h5 class="text-center earn text-white">Earn 10% on delivery fee, when you refer your friends and family to us.</h5>   
+          {% if check_user_in_affiliate == True %}
+            <div class="join-position text-center mb-3">
+              <a role="button" href="{% url 'affiliate_dashboard' user.id %}" class="btn btn-light rounded-lg ">
+                <div class="spinner-border htmx-indicator text-primary" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                View Referrals
+              </a>
+            </div>
+          {% else %}
+          <div class="join-position text-center mb-3">
+            <a role="button" href="{% url 'join_affiliate' user.id %}" class="btn btn-light rounded-lg ">Join our Affiliate Program</a>
+          </div>
+          {% endif %}          
+        </div>        
+      </div>
+
+      <div class="col-md-4 pt-5">        
         <!--Strt-->
-        <div class="d-flex flex-row bd-highlight mb-3 justify-content-center text-white text-center">            
+        <div class="d-flex flex-row bd-highlight mb-3 mt-4 justify-content-center text-white text-center">            
             <div id="errand" class="mr-2 zoom eps">
-                <div class="p-2 bd-highlight">                        
-                  <h1><i class="fas fa-boxes"></i></h1>
+                <div class="p-2 bd-highlight">   
+
+                  <figure class="description_circle">               
+                    <h3><i class="fas fa-boxes big-box"></i></h3>
+                  </figure> 
+
                   {% if customer.Location == 'Calabar'%}
-                  <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a></h6>
-                  {% elif customer.Location == 'Port Harcourt' %}
-                  <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errand_menu_ph' user.id %}" role="button">Errand Service</a></h6>
+                    <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errandmenu' user.id %}" role="button">Errand Service</a></h6>
+                    {% elif customer.Location == 'Port Harcourt' %}
+                    <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'errand_menu_ph' user.id %}" role="button">Errand Service</a></h6>
                   {% endif %}
                 </div>
             </div>
             
             <div id="request" class="zoom" data-toggle="modal" data-target="#Gaserrand">
-                <div class="p-2 bd-highlight">       
-                    <h1><i class="fas fa-shipping-fast"></i></h1>                    
+                <div class="p-2 bd-highlight">   
+
+                  <figure class="description_circle_2">     
+                    <h3><i class="fas fa-shipping-fast dispatch-vehicle"></i></h3>
+                  </figure>
                     {% if customer.Location == 'Calabar'%}            
                     <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'requestForm_Cash' user.id %}" >Request Dispatch</a></h6>
                     {% elif customer.Location == 'Port Harcourt' %}
@@ -58,7 +86,9 @@
           {% if customer.Location == 'Calabar' %}
           <div id="Erequest" class="mr-2 zoom">
             <div class="p-2 bd-highlight">
-              <h1><i class="fas fa-truck"></i></h1>
+              <figure class="description_circle_3">
+                <h3><i class="fas fa-truck dispatch-vehicle2"></i></h3>
+              </figure>
               <h6><a class="text-decoration-none text-white font-weight-bold" href="{% url 'requestForm_Online' user.id %}">Request Dispatch (E-payment)</a></h6>
             </div>
           </div>
@@ -67,7 +97,9 @@
           {% if customer.Location == 'Calabar' %}
           <div id="shopping" class="zoom" data-toggle="modal" data-target="#Gaserrand">
             <div class="p-2 bd-highlight">
-              <h1><i class="fas fa-dolly"></i></h1>
+              <figure class="description_circle_4">
+                <h3><i class="fas fa-dolly shopping"></i></h3>
+              </figure>
               <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'shopping' user.id %}">Shopping Request</h6>
               </a>              
             </div>
@@ -75,7 +107,7 @@
           {% elif customer.Location == 'Port Harcourt' %}          
           <div id="shopping2" class="zoom" data-toggle="modal" data-target="#Gaserrand">
             <div class="p-2 bd-highlight">
-              <h1><i class="fas fa-dolly"></i></h1>
+              <h1><i class="fas fa-dolly "></i></h1>
               <h6><a class="text-decoration-none text-white font-weight-bold text-truncate" href="{% url 'shopping' user.id %}">Shopping Request</h6>
               </a>              
             </div>
@@ -791,14 +823,14 @@
           {% endfor %}                                   
         </div>
       </div>
-      <div class="col-md-4 pt-4"></div>
+      <div class="col-md-2 pt-4"></div>
   </div>
 </div>
 
 <style>
   #errand {
       height: 120px; 
-      background-color: rgb(233, 161, 94);
+      background: rgba(194, 44, 89, 1);
       width: 160px;
       border-radius: 12px;   
   }
@@ -814,21 +846,21 @@
   #request {
       height: 120px;
       width: 160px;
-      background-color: rgb(128, 52, 67);
+      background: rgba(234, 23, 86, 1);
       border-radius: 12px;   
   }
 
   #Erequest {
       height: 120px;
       width: 160px;
-      background-color: crimson;
+      background: rgba(119, 6, 40, 1);
       border-radius: 12px;   
   }
 
   #shopping {
       height: 120px;
       width: 160px;
-      background-color: rgb(83, 168, 202);
+      background: rgba(193, 81, 114, 1);
       border-radius: 12px;   
   }
 
@@ -854,7 +886,96 @@
     z-index: 10;
     float: right;
     width: fit-content;    
-  }  
+  } 
+  
+  .affiliate_background{
+    background: rgba(96, 159, 233, 1);
+    height: auto;
+    margin-top: 50px;
+    border-radius: 20px;
+    padding: 10px;
+    
+  }
+
+  .description_circle{        
+    border-radius: 50%; 
+    padding: 10px;
+    width: 50px;
+    height: 50px;    
+    background: rgba(206, 33, 85, 1);    
+    margin-left: auto;
+    margin-right: auto;  
+  }
+
+  .description_circle_2{ 
+    border-radius: 50%; 
+    padding: 10px;
+    width: 50px;
+    height: 50px;    
+    background: rgba(246, 30, 95, 1);    
+    margin-left: auto;
+    margin-right: auto;  
+  }
+
+  .description_circle_3{ 
+    border-radius: 50%; 
+    padding: 10px;
+    width: 50px;
+    height: 50px;    
+    background: rgba(134, 7, 45, 1);  
+    margin-left: auto;
+    margin-right: auto;  
+  }
+
+  .description_circle_4{ 
+    border-radius: 50%; 
+    padding: 10px;
+    width: 50px;
+    height: 50px;    
+    background: rgba(189, 66, 102, 1);   
+    margin-left: auto;
+    margin-right: auto;  
+  }
+
+  .circle{    
+    position: relative;
+    border-radius: 50%; 
+    padding: 20px;
+    width: 130px;
+    height: 130px;    
+    box-shadow: 0px 4px 4px rgba(194, 110, 110, 0.25);
+    margin-left: auto;
+    margin-right: auto;
+    bottom: 70px;
+  }
+
+  .big-box{
+    color: rgba(242, 47, 106, 1);
+  }
+
+  .dispatch-vehicle{
+    color: rgba(255, 100, 147, 1);    
+  }
+
+  .dispatch-vehicle2{
+    color: rgba(189, 13, 65, 1);    
+  }
+
+  .shopping{
+    color: rgba(222, 72, 116, 1);    
+  }
+
+  .earn{
+    position: relative;
+    top: -40px;
+  }
+
+  .htmx-indicator{
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+  }
 </style>
 
 <script> 

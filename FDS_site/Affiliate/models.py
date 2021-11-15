@@ -18,7 +18,7 @@ class Affiliate_Group(models.Model):
     Wallet_Balance = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
     Tempoary_wallet_balance = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
     Profit_Generated = models.DecimalField(max_digits=20, default=Decimal('0.00'), editable=True, null = True, decimal_places=2)
-
+ 
     def __str__(self):
         return f"{self.Referal_ID}"     
       
@@ -59,26 +59,25 @@ class Bank_Account_Details(models.Model):
     def Check_Len(value):
         if len(str(value)) < 10:
             raise ValidationError(
-                ('%(value)  is less than 10 numbers, Please check and correct.'), params={'value':value},
+                ('%(value) is less than 10 numbers, Please check and correct.'), params={'value':value},
             )   
         elif len(str(value)) > 10:
             raise ValidationError(
-                ('%(value)  is more than 10 numbers, Please check and correct.'), params={'value':value},
+                ('%(value) is more than 10 numbers, Please check and correct.'), params={'value':value},
             )              
     marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
-    Account_Number = models.IntegerField(validators=[Check_Len], unique=True)
+    Account_Number = models.CharField(validators=[Check_Len], max_length=10, unique=True)
     Account_Name = models.CharField(max_length = 100, null=True, unique=False)
     Bank_Name = models.CharField(max_length=100, null=True)
     
     def __str__(self):
         return f"{self.Bank_Name}, {self.Account_Number}"
     
-
 class Request_Payout(models.Model):
     STATUS = {
         ('Paid', 'Paid'),
         ('Canceled', 'Canceled'),
-        ('Pending', 'Pending'),        
+        ('Pending', 'Pending'),
     }
     
     marketer = models.ForeignKey(Affiliate_Group, on_delete=models.CASCADE, null=True)
