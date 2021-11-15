@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 register = template.Library() 
 
 @register.filter(name='front_desk') 
-def has_group(user, Front_Desk):
+def Front_Desk(user, Front_Desk):
     group = Group.objects.filter(name=Front_Desk)
     if group:
         group = group.first()
@@ -13,7 +13,7 @@ def has_group(user, Front_Desk):
         return False
 
 @register.filter(name='fleet') 
-def has_group(user, Fleet_Manager):
+def Fleet_Manager(user, Fleet_Manager):
     group = Group.objects.filter(name=Fleet_Manager)
     if group:
         group = group.first()
@@ -22,7 +22,7 @@ def has_group(user, Fleet_Manager):
         return False
 
 @register.filter(name='cashier') 
-def has_group(user, Cashier):
+def Cashier(user, Cashier):
     group = Group.objects.filter(name=Cashier)
     if group:
         group = group.first()
@@ -31,7 +31,7 @@ def has_group(user, Cashier):
         return False
         
 @register.filter(name='operations') 
-def has_group(user, OPERATIONS):
+def Operations(user, OPERATIONS):
     group = Group.objects.filter(name=OPERATIONS)
     if group:
         group = group.first()
@@ -40,7 +40,7 @@ def has_group(user, OPERATIONS):
         return False
 
 @register.filter(name='Marketing') 
-def has_group(user, Marketing):
+def Marketerting(user, Marketing):
     group = Group.objects.filter(name= Marketing)
     if group:
         group = group.first()
@@ -49,7 +49,7 @@ def has_group(user, Marketing):
         return False
 
 @register.filter(name='ICT') 
-def has_group(user, ICT):
+def ICT(user, ICT):
     group = Group.objects.filter(name=ICT)
     if group:
         group = group.first()
@@ -57,9 +57,8 @@ def has_group(user, ICT):
     else:
         return False
 
-
 @register.filter(name='chairman') 
-def has_group(user, MANAGEMENT_CHAIRMAN):
+def Chairman_Group(user, MANAGEMENT_CHAIRMAN):
     group = Group.objects.filter(name= MANAGEMENT_CHAIRMAN)
     if group:
         group = group.first()
@@ -68,7 +67,7 @@ def has_group(user, MANAGEMENT_CHAIRMAN):
         return False
 
 @register.filter(name='m_operation') 
-def has_group(user, MANAGEMENT_OPERATION):
+def Manager_Operation(user, MANAGEMENT_OPERATION):
     group = Group.objects.filter(name= MANAGEMENT_OPERATION)
     if group:
         group = group.first()
@@ -77,7 +76,7 @@ def has_group(user, MANAGEMENT_OPERATION):
         return False
 
 @register.filter(name='m_manager') 
-def has_group(user, MANAGEMENT_MANAGER):
+def Manager_FLLS(user, MANAGEMENT_MANAGER):
     group = Group.objects.filter(name= MANAGEMENT_MANAGER)
     if group:
         group = group.first()
@@ -86,7 +85,7 @@ def has_group(user, MANAGEMENT_MANAGER):
         return False
 
 @register.filter(name='m_runyi') 
-def has_group(user, MANAGEMENT_RUNYI):
+def GM_Admin(user, MANAGEMENT_RUNYI):
     group = Group.objects.filter(name= MANAGEMENT_RUNYI)
     if group:
         group = group.first()
@@ -95,7 +94,7 @@ def has_group(user, MANAGEMENT_RUNYI):
         return False
 
 @register.filter(name='management') 
-def has_group(user, MANAGEMENT):
+def Management(user, MANAGEMENT):
     group = Group.objects.filter(name= MANAGEMENT)
     if group:
         group = group.first()
@@ -104,7 +103,7 @@ def has_group(user, MANAGEMENT):
         return False
 
 @register.filter(name='admin') 
-def has_group(user, MANAGEMENT_ADMIN):
+def Admin_Group(user, MANAGEMENT_ADMIN):
     group = Group.objects.filter(name= MANAGEMENT_ADMIN)
     if group:
         group = group.first()

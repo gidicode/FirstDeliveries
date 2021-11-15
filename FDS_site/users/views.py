@@ -449,6 +449,26 @@ def PickDrop(request, user):
                 item_created = "Front Desk",
                 order_id = h   
             ) 
+
+            Referrals.objects.create(
+                marketer = instance.Marketer_ID,
+                Referal_ID = instance.Marketer_ID,                
+                Choice_for_TP = instance.Choice_for_TP,
+                Delivery_status = instance.status,                
+                Order_ID = h,
+            )
+
+            #Notification for customer
+            Notification.objects.create(
+                marketer = instance.Marketer_ID,
+                message = "New Referal, Your Referee just requested for a delivery"                
+            )
+
+            #Notification for customer
+            Notification_admin.objects.create(
+                marketer = instance.Marketer_ID,
+                message = "New Referal",
+            )
             
             def SendSms():
                 url = 'https://app.multitexter.com/v2/app/sendsms'
@@ -482,13 +502,13 @@ def PickDrop(request, user):
 
 # Front desk Errand form
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin',
-        'FLLS', 'MANAGEMENT', 'ICT',
+@allowed_user(allowed_roles=[
+        'admin', 'FLLS', 'MANAGEMENT', 'ICT',
         'MANAGEMENT_OPERATION', 'OPERATIONS',
         'FLM MANAGER', 'TANK', 'IWH', 'MANAGEMENT_RUNYI', 
         'MANAGEMENT_MANAGER', 'MANAGEMENT_OPERATION',
         'MANAGEMENT_CHAIRMAN', 'Marketing',
-             'Front Desk'])
+        'Front Desk'])
 def FrontErrand(request, user):
     customer = Customer.objects.get(user = request.user)
     if request.method == "POST":
@@ -518,6 +538,26 @@ def FrontErrand(request, user):
                 customer=instance.customer,
                 item_created = "Front Desk",
                 order_id = h   
+            )
+
+            Referrals.objects.create(
+                marketer = instance.Marketer_ID,
+                Referal_ID = instance.Marketer_ID,                
+                Choice_for_TP = instance.Choice_for_TP,
+                Delivery_status = instance.status,                
+                Order_ID = h,
+            )
+
+            #Notification for customer
+            Notification.objects.create(
+                marketer = instance.Marketer_ID,
+                message = "New Referal, Your Referee just requested for a delivery"                
+            )
+
+            #Notification for customer
+            Notification_admin.objects.create(
+                marketer = instance.Marketer_ID,
+                message = "New Referal",
             )
             def SendSms():
                 url = 'https://app.multitexter.com/v2/app/sendsms'
