@@ -114,8 +114,8 @@ def search(request):
             
     return render(request, 'FDS_app/Search.html', {'query': query, 'results':results})
 
-def notification(request):
-    return render(request, 'FDS_app/notification.html')
+def SignUpBase(request):
+    return render(request, 'FDS_app/signupBase.html')
 
 def order(request):
     return render(request, 'FDS_app/order.html')
