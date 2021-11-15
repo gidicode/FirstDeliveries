@@ -15,7 +15,6 @@ pip-delete-this-directory.txt
 *.pyc
 __pycache__
 db.sqlite3
-media
+media/
 FDS_site/static/
-FDS_site/settings.py
 FDS_site/__init__.py
