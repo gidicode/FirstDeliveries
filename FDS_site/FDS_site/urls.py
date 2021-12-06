@@ -10,6 +10,8 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
 from users.views import LoginView
 from users.utils import HashIdConverter
+from django.views.decorators.csrf import csrf_exempt
+from graphene_django.views import GraphQLView
 register_converter(HashIdConverter, "hashid")
 
 urlpatterns = [
@@ -29,6 +31,8 @@ urlpatterns = [
     path('404/', user_views.response_error_handler),
 
     path('register/', user_views.register, name='register'),
+
+    path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 
     path('profileUpdate/<hashid:user>/', user_views.customerProfileUpdatePage, name='profileUpdate'),
 
