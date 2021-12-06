@@ -7,4 +7,4 @@ import AllCashRequest from '@/components/AllCashRequest'
 import AllErrandService from '@/components/AllErrandService'
 import AllFrontDesk from '@/components/AllFrontDesk'
 import AllShopping from '@/components/AllShopping'
-import 
+import AllAdmin from '@/components/AllAdmin'
