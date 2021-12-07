@@ -1,9 +1,22 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-import 'bootstrap/dist/css/bootstrap.css';
 
-Vue.use(BootstrapVue);
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap"
 
-createApp(App).mount("#app");
+import router from './router'
+
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
+
+const httpLink = createHttpLink({
+    url: 'http://localhost:8000/graphql',
+})
+
+const cache = new  InMemoryCache()
+
+const apolloClient = new ApolloClient({
+    link:httpLink,
+    cache,
+})
+
+createApp(App).use(router, apolloClient).mount("#app");
