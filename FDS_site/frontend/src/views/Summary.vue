@@ -7,7 +7,7 @@
                         <section class="affiliate-customers">
                             <h5 class="all-affiliate-customers">Total <br>Customers</h5>
                             <div class="affiliate-marketer-count-background text-center">
-                                <h3 class="affiliate-marketer-count">{{ count_customers }}</h3>
+                                <h3 class="affiliate-marketer-count">{{ TotalCustomers}}</h3>
                             </div>
                             <figure class="customers_icon_background">
                                 <i class="fas fa-users customers_icon"></i>                            
@@ -19,7 +19,7 @@
                         <section class="Total_deliveries" >                            
                             <h5 class="Total_deliveries_font">Total <br>Deliveries</h5>
                             <div class="Total_deliveries_count_background text-center">
-                                <h3 class="Total_deliveries_count"> {{ count_Delivery.length }}</h3>
+                                <h3 class="Total_deliveries_count" >{{TotalDeliveries}}</h3>
                             </div>
                             <figure class="Total_deliveries_icon_background text-center">
                                 <i class="far fa-clock Total_deliveries_icon"></i>
@@ -32,7 +32,7 @@
                         <section class="Pending_deliveries_section">
                             <h5 class="Pending_deliveries">Total <br> Riders</h5>
                             <div class="Pending_deliveries_count_background">
-                                <h3 class="Pending_deliveries_count">{{ count_riders }}</h3>
+                                <h3 class="Pending_deliveries_count">{{TotalRiders}}</h3>
                             </div>
                             <figure class="Pending_deliveries_icon_background text-center">                                                        
                                 <i class="fas fa-hourglass-half Pending_deliveries_icon"></i>
@@ -45,7 +45,7 @@
                         <section class="Pending_payout_section">
                             <h5 class="Pending_payout">Pending <br> Deliveries</h5>                        
                             <div class="Pending_payout_count_background">
-                                <h3 class="Pending_payout_count">{{ count_pending }}</h3>
+                                <h3 class="Pending_payout_count">{{PendingDeliveries}}</h3>
                             </div>
                             <figure class="Pending_payout_icon_background text-center"> 
                                 <i class="fas fa-money-bill Pending_payout_icon"></i>                                                                                   
@@ -62,7 +62,7 @@
                         <section class="Total_delivery_fee_section">
                             <h5 class="Total_delivery_fee">Total <br>Fleet</h5>
                             <div class="Total_delivery_fee_calculation_background text-center">
-                                <h3 class="Total_delivery_fee_calculation">{{ count_fleet }}</h3>
+                                <h3 class="Total_delivery_fee_calculation">{{TotalFleet}}</h3>
                             </div>
                             <figure class="Total_delivery_fee_icon_background">
                                 <i class="fas fa-truck Total_delivery_fee_icon"></i>
@@ -74,7 +74,7 @@
                         <section class="Credited_marketers_section">
                             <h5 class="Credited_marketers">FrontDesk<br>Requests</h5>
                             <div class="Credited_marketers_sum_background text-center">
-                                <h3 class="Credited_marketers_sum">{{ count_frontdesk }}</h3>
+                                <h3 class="Credited_marketers_sum">{{FrontDesk}}</h3>
                             </div>
                             <figure class="Credited_marketers_icon_background text-center">
                                 <i class="fas fa-money-bill Credited_marketers_icon"></i>                            
@@ -86,7 +86,7 @@
                         <section class="Total_cashout_section">
                             <h5 class="Total_cashout">Customers<br>Contact</h5>
                             <div class="Total_cashout_sum_background"> 
-                                <h3 class="Total_cashout_sum">{{ count_contacts }}</h3>
+                                <h3 class="Total_cashout_sum">{{CustomersContact}}</h3>
                             </div>
                             <figure class="Total_cashout_icon_background text-center">                             
                                 <i class="fas fa-money-bill Total_cashout_icon"></i>                                                                                   
@@ -96,40 +96,46 @@
 
                     <div class="p-2 bd-highlight">
                         <section class="Balance_marketers_section">
-                            <h5 class="Balance_marketers">Balance <br> To Marketers</h5>                        
+                            <h5 class="Balance_marketers">Orders <br> Today</h5>                        
                             <div class="Balance_marketers_sum_background">
-                                <h3 class="Balance_marketers_sum">N</h3>
+                                <h3 class="Balance_marketers_sum">{{TotalOrders}}</h3>
                             </div>
                             <figure class="Balance_marketers_icon_background text-center">
                                 <i class="fas fa-money-bill-wave-alt Balance_marketers_icon"></i>                            
                             </figure>
                         </section>
+                        
                     </div> 
                 </div>
-            </div>                          
-        </div>                    
+            </div>     
+        </div>                                       
     </div>    
 </template>
 
 <script>
+import { computed } from '@vue/reactivity'
+
+import {
+        paymentByCashDelivered,
+        errandDelivered,
+        FrontDeskDelivered,
+        shoppingDelivered,
+        allPHcustomers,
+         } from '../graphql'
+
 export default {
-    data() {
+    setup() {
+        let TotalDeliveries = computed(() => paymentByCashDelivered.value.length +
+                errandDelivered.value.length +
+                FrontDeskDelivered.value.length +
+                shoppingDelivered.value.length)        
+            
+        let TotalCustomers = computed(() =>  allPHcustomers.value.length)    
+    
         return {
-          count_Delivery: [
-              {id:1, details:"wow"},
-              {id:2, details:"thats good"},
-              {id:3, details:"intresting"}
-          ],          
-          count_customers: 50,
-          count_riders: 40,
-          count_pending: 20,
-          count_fleet: 20,
-          count_frontdesk: 322,
-          count_contacts: 56,        
+            TotalDeliveries,
+            TotalCustomers,
         }
-    },
-    created() {
-        this.count_Delivery.length
     },
 }
 </script>
