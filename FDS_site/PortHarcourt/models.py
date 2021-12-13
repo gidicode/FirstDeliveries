@@ -1,5 +1,6 @@
 from PIL import Image
 from django.db import models
+from django.db.models.base import Model
 from users.models import Customer
 from django.utils import timezone
 from django.core.validators import RegexValidator
@@ -303,3 +304,11 @@ class PH_adminNotification(models.Model):
          return f'Anonymous, {self.viewed, self.item_created}'
         else:
             return f'{self.customer, self.viewed}'
+
+class Contact_of_customers(models.Model):
+    Customer_name = models.CharField(max_length=200, null=True, blank=True)
+    Customer_address = models.CharField(max_length=100, null=True, blank=True)
+    Customer_contact = models.CharField(max_length=11, null=True, unique=True)
+    Used_service_count = models.IntegerField(null=True)
+    date_created = models.DateTimeField(default=timezone.now, null=True)
+    
