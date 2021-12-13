@@ -145,9 +145,8 @@
 
 
 <style scoped>
-    * {
-  box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
+    
     .dashboard-body{
             background-color: rgb(16, 0, 61);        
             height: 620px;
@@ -188,8 +187,8 @@
     }
 
     .the-body{
-        height: 530px;
-        overflow: scroll;
+        height: auto;
+        overflow: scroll;       
     }    
 
     /*Working on the scroll bar*/

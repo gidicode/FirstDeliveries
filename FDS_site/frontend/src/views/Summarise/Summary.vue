@@ -54,8 +54,7 @@
                     </div> 
                 </div>
             </div>
-
-
+            
             <div class="col">            
                 <div class="d-flex flex-row bd-highlight mb-3 justify-content-right">
                     <div class="p-2 bd-highlight">
@@ -94,8 +93,9 @@
                         </section>
                     </div>
 
-                    <div class="p-2 bd-highlight">
-                        <section class="Balance_marketers_section">
+                    <div class="p-2 bd-highlight" @click="changeModal">
+                        
+                        <section class="Balance_marketers_section" >
                             <h5 class="Balance_marketers">Orders <br> Today</h5>                        
                             <div class="Balance_marketers_sum_background">
                                 <h3 class="Balance_marketers_sum">{{TotalOrders}}</h3>
@@ -103,44 +103,101 @@
                             <figure class="Balance_marketers_icon_background text-center">
                                 <i class="fas fa-money-bill-wave-alt Balance_marketers_icon"></i>                            
                             </figure>
-                        </section>
-                        
+                        </section>                        
                     </div> 
                 </div>
-            </div>     
-        </div>                                       
-    </div>    
+            </div>             
+        </div> 
+        <div v-if="showModal" > 
+            <TodayOrders 
+                @close="changeModal"
+                v-bind:cashLength= "CashOrdersToday.length" 
+                v-bind:errandLength= "ErrandOrdersToday.length"
+                v-bind:frontLength= "FrontDeskOrdersToday.length"
+                v-bind:shoppingLength= "ShoppingOrdersToday.length"
+            />
+        </div>  
+    </div>
 </template>
 
 <script>
-import { computed } from '@vue/reactivity'
+import { computed, ref } from '@vue/reactivity'
+import { paymentByCashDelivered, errandDelivered, FrontDeskDelivered,
+        shoppingDelivered, allPHcustomers, allRiders, 
+        allFleets, byCashPending, byErrandPending, 
+        byFrontDeskPending, byAllShoppingPending, 
+        allFrontDesk, allContact, cashDateToday, 
+        errandDateToday, frontDeskDateToday, 
+        shoppingDateToday,
+    } from '../../graphql'
 
-import {
-        paymentByCashDelivered,
-        errandDelivered,
-        FrontDeskDelivered,
-        shoppingDelivered,
-        allPHcustomers,
-         } from '../graphql'
+import TodayOrders from './TodayOrders.vue'
 
 export default {
-    setup() {
-        let TotalDeliveries = computed(() => paymentByCashDelivered.value.length +
+    name:"Summary",
+    components: {TodayOrders},
+    emits: ['close'],
+
+    setup(props, context) {
+        const TotalDeliveries = computed(() => paymentByCashDelivered.value.length +
                 errandDelivered.value.length +
                 FrontDeskDelivered.value.length +
-                shoppingDelivered.value.length)        
-            
-        let TotalCustomers = computed(() =>  allPHcustomers.value.length)    
-    
-        return {
+                shoppingDelivered.value.length
+            )                    
+        const TotalCustomers = computed(() => allPHcustomers.value.length)    
+        const TotalRiders = computed(() => allRiders.value.length)
+        const TotalFleet = computed(() => allFleets.value.length)
+        const PendingDeliveries = computed(() => byCashPending.value.length +
+                byErrandPending.value.length +
+                byFrontDeskPending.value.length +
+                byAllShoppingPending.value.length
+            )
+        const FrontDesk = computed(() => allFrontDesk.value.length)    
+        const CustomersContact = computed(() => allContact.value.length)
+        const TotalOrders = computed(() => cashDateToday.value.length +
+                errandDateToday.value.length +
+                frontDeskDateToday.value.length +
+                shoppingDateToday.value.length
+            )            
+        const CashOrdersToday = cashDateToday.value
+        const ErrandOrdersToday = errandDateToday.value
+        const FrontDeskOrdersToday = frontDeskDateToday.value
+        const ShoppingOrdersToday = shoppingDateToday.value
+        let showModal = ref(false)        
+         function changeModal() {                         
+             return showModal.value = !showModal.value              
+         }         
+
+         const sendEvent = () => {
+            context.emit('close')        
+        }
+        
+        return { 
             TotalDeliveries,
             TotalCustomers,
+            TotalRiders,
+            TotalFleet,
+            PendingDeliveries,
+            FrontDesk,
+            CustomersContact,
+            TotalOrders,
+            CashOrdersToday,
+            ErrandOrdersToday,
+            FrontDeskOrdersToday,
+            ShoppingOrdersToday,
+            showModal,  
+            changeModal ,
+            sendEvent,         
         }
     },
 }
 </script>
 
 <style scope>  
+
+    .mode{
+        display: block;
+    }
     .affiliate-customers{
         width: 232px;
         height: 131px;                
@@ -495,12 +552,22 @@ export default {
 
     .Balance_marketers_section{
         width: 232px;
-        height: 131px;                
-        background: rgba(255, 255, 255, 1);
+        height: 131px;
+        background: rgb(139, 144, 179);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 10px;        
         position: relative;
     }
+
+    .Balance_marketers_section:hover{
+        width: 232px;
+        height: 131px;                
+        background: rgb(245, 251, 255);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;        
+        position: relative;
+    }
+    
     .Balance_marketers{
         position: relative;
         top: 10px;

@@ -410,7 +410,6 @@ def Deliveries_list(request):
     }
     return render(request, 'Affiliate/Delivery_list.html', context)
 
-
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'Affiliate_admin', 'FLLS', 'MANAGEMENT', 'MANAGEMENT_MANAGER'])
 def Customer_List(request):
