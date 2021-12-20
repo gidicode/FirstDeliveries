@@ -54,7 +54,6 @@ class ContacType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     #riders & Fleet
-
     all_fleets = graphene.List(FleetType) 
     def resolve_all_fleets(root, info):
         return models.Fleets_PH.objects.all()
@@ -144,4 +143,63 @@ class Query(graphene.ObjectType):
     def resolve_byAllShoppingDate(root, info):
         return models.Shopping_PH.objects.filter(date_created__date =today)
 
-schema = graphene.Schema(query=Query)
+
+#**********************************MUTATION*************************#
+class CreateRiders(graphene.Mutation):    
+    class Arguments:
+        id = graphene.ID()
+        attached_bike_id = graphene.Int(name="attachedBike")
+        first_name = graphene.String()
+        last_name = graphene.String()
+        phone_number = graphene.String()        
+        Address = graphene.String()                    
+    riders = graphene.Field(RidersType)
+    
+    @classmethod
+    def mutate(
+            root, info, id, attached_bike_id, first_name, 
+            last_name, phone_number, Address
+        ):        
+        riders = models.RidersProfile_PH.objects.create(
+            first_name = first_name, 
+            last_name = last_name,
+            phone_number = phone_number,             
+            Address = Address,
+        ) 
+        if attached_bike_id is not None:           
+            attached_bike_object = models.Fleets_PH.objects.get(pk = attached_bike_id)                        
+        riders.attached_bike = attached_bike_object
+        riders.save()        
+        return CreateRiders(riders=riders)
+
+class CreateFleet(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+        fleet_plate_number = graphene.String()
+        Tracker_id = graphene.String()
+        Tracker_phone_num = graphene.String()
+        category = graphene.String()
+        vehicle_name = graphene.String()
+        date_created = graphene.types.DateTime()
+
+    fleet = graphene.Field(FleetType)
+
+    @classmethod
+    def mutate( 
+        root, info, id, fleet_plate_number, 
+        Tracker_id, Tracker_phone_num, category,
+        vehicle_name, date_created
+    ):
+        fleet = models.Fleets_PH.objects.create(
+            fleet_plate_number = fleet_plate_number,
+            Tracker_id = Tracker_id, Tracker_phone_num = Tracker_phone_num,
+            category = category, vehicle_name = vehicle_name, 
+            date_created = date_created
+        )
+        return CreateFleet(fleet = fleet)
+        
+class Mutation(graphene.ObjectType):
+    createRiders = CreateRiders.Field()
+    createFleet = CreateFleet.Field()
+
+schema = graphene.Schema(query=Query, mutation=Mutation)

@@ -13,8 +13,8 @@ class Fleets_PH(models.Model):
                 ( "Tricycle", "Tricycle"),
     ]
 
-    fleet_plate_number = models.CharField(max_length=100, null=True)
-    Tracker_id = models.CharField(max_length=100, null=True)
+    fleet_plate_number = models.CharField(max_length=100, null=True, unique=True)
+    Tracker_id = models.CharField(max_length=100, null=True, unique=True)
     Tracker_phone_num = models.CharField(max_length=100, null=True)
     category = models.CharField(max_length=100, choices=OPTIONS1, null=True)
     vechile_name = models.CharField(max_length=100, null=True)    

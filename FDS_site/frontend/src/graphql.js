@@ -1,14 +1,17 @@
 import gql from "graphql-tag"
 import {provideApolloClient, useQuery, useResult} from '@vue/apollo-composable'
 import { ApolloClient, InMemoryCache, createHttpLink} from '@apollo/client/core'
+import { onError } from '@apollo/client/link/error'
+import { logErrorMessages } from '@vue/apollo-util'
 
-import { watch } from 'vue'
-
+const errorlink = onError(error => {
+  logErrorMessages(error)
+})
 
 const cache = new  InMemoryCache()
 const link = createHttpLink({uri: 'http://localhost:8000/graphql'})
 const apolloClient  = new ApolloClient({   
-    cache, link
+    cache, link: errorlink.concat(link)
 })
 provideApolloClient(apolloClient)
 
@@ -31,61 +34,135 @@ const {result} = useQuery(gql`
           },
 
           allCustomers {
-          id
-        },
+            id            
+            firstName
+            lastName
+            user{
+              id
+              username
+              dateJoined
+            }
+            email
+            phoneNumber
+            AltPhoneNum           
+          },
 
-        allFleets {
-          id
-        },
+          allFleets {
+            id
+            fleetPlateNumber
+            vechileName       
+          },
 
-        allRiders {
-          id
-        },
+          allRiders {
+            id
+          },
 
-        byCashPending {
-          id
-        },
+          byCashPending {
+            id
+          },
 
-        byErrandPending {
-          id
-        },
+          byErrandPending {
+            id
+          },
 
-        byFrontDeskPending {
-          id
-        },
+          byFrontDeskPending {
+            id
+          },
 
-        byAllShoppingPending {
-          id
-        },
+          byAllShoppingPending {
+            id
+          },
 
-        allFrontDesk {
-          id
-        },
+          allFrontDesk {
+            id
+          },
 
-        allContact {
-          id
-        },
+          allContact {
+            id
+          },
 
-        byCashDate {
-          id
-        },
+          byCashDate {
+            id
+            customer {
+              firstName
+              lastName
+              phoneNumber
+            }
+            dateCreated
+            status
+          },
 
-        byErrandDate {
-          id
-        },
+          byErrandDate {
+            id
+            customer {
+              firstName
+              lastName
+              phoneNumber
+            }
+            dateCreated
+            status
+          },
 
-        byFrontDeskDate {
-          id
-        },
+          byFrontDeskDate {
+            id
+            CustomerPhoneNumber
+            RecieverPhoneNumber
+            dateCreated
+            status
+          },
 
-        byAllShoppingDate {
-          id
-        },
+          byAllShoppingDate {
+            id
+            customer {
+              firstName
+              lastName
+              phoneNumber
+            }
+            dateCreated
+            status
+          },
 
-      }
-  `,null, {
-      pollInterval: 1000,
+        }
+    `,null, {
+        pollInterval: 1000,
     }) 
+
+
+
+/*  
+export const { mutate: createRiders } = useMutation(gql`
+  mutation createRiders (      
+      $firstName: String!,
+      $lastName: String!,
+      $PhoneNumber: String!,      
+      $inputAddress: String!,
+      $SelectVehicle: String!
+    ){
+    createRiders(          
+      firstName: $firstName,
+      lastName: $lastName,
+      phoneNumber: $PhoneNumber,     
+      Address: $inputAddress,    
+      attachedBike: $SelectVehicle,    
+    ){
+      riders {
+        id      
+        firstName
+        lastName
+        phoneNumber    
+        Address
+        attachedBike {
+          id
+          TrackerId
+          TrackerPhoneNum
+          dateCreated        
+        }
+      }
+    } 
+  }
+`)
+console.log(createRiders)
+*/
 export const paymentByCashDelivered = useResult(result, [], data => data.byCashDelivered)
 export const errandDelivered = useResult(result, [], data => data.byErrandDelivered)
 export const FrontDeskDelivered = useResult(result, [],  data => data.byFrontDeskDelivered)
@@ -115,7 +192,3 @@ export const cashDateToday = useResult(result, [], data => data.byCashDate)
 export const errandDateToday = useResult(result, [], data => data.byErrandDate)
 export const frontDeskDateToday = useResult(result, [], data => data.byFrontDeskDate)
 export const shoppingDateToday = useResult(result, [], data => data.byAllShoppingDate)
-
-watch(result, value => {
-  console.log(value)
-})

@@ -13,15 +13,42 @@
                         <div class="accordion accordion-flush" id="accordionFlushExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="flush-headingOne">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                    <div class="d-flex flex-row bd-highlight">
-                                        <div class="bd-highlight widths">Customers Orders</div>
-                                        <div class="bd-highlight"> <span class="badge alert-primary ms-2 w-80">{{ cashLength }}</span></div>                                    
-                                    </div>                                 
+                                <button class="accordion-button collapsed" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#flush-collapseOne" 
+                                        aria-expanded="false" 
+                                        aria-controls="flush-collapseOne"
+                                        >
+                                        <div class="d-flex flex-row bd-highlight">
+                                            <div class="bd-highlight widths">Customers Orders</div>
+                                            <div class="bd-highlight"> <span class="badge alert-primary ms-2 w-80">{{ cashLength }}</span></div>                                    
+                                        </div>                                 
                                 </button>
                                 </h2>
                                 <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+                                    <div class="accordion-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Customer Name</th>
+                                                <th scope="col">Customer Phone</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>              
+                                                <tr v-for="i in listCustomersOrder" :key="i.id">
+                                                    <th scope="row" ></th>
+                                                    <td>{{ i.customer.firstName }} {{ i.customer.lastName }}</td>
+                                                    <td>{{ i.customer.phoneNumber }}</td>
+                                                    <td>{{ i.dateCreated }}</td>
+                                                    <td>{{ i.status }}</td>
+                                                </tr>                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="accordion-item">
@@ -34,7 +61,28 @@
                                 </button>
                                 </h2>
                                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                                    <div class="accordion-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">Customer Name</th>
+                                                    <th scope="col">Customer Phone</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Status</th>                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                                
+                                                <tr v-for="i in listErrandOrders" :key="i.id">
+                                                    <th scope="row" ></th>
+                                                    <td>{{ i.customer.firstName }} {{ i.customer.lastName }}</td>
+                                                    <td>{{ i.customer.phoneNumber }}</td>
+                                                    <td>{{ i.dateCreated }}</td>
+                                                    <td>{{ i.status }}</td>
+                                                </tr>                                                  
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="accordion-item">
@@ -47,7 +95,28 @@
                                 </button>
                                 </h2>
                                 <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    <div class="accordion-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Phone Number</th>
+                                                <th scope="col">Reciever Phone</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="i in listFrontdeskOrders" :key="i.id">
+                                                <th scope="row" ></th>
+                                                <td>{{ i.CustomerPhoneNumber }} </td>
+                                                <td>{{ i.RecieverPhoneNumber }}</td>
+                                                <td>{{ i.dateCreated }}</td>
+                                                <td>{{ i.status }}</td>
+                                                </tr>                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="accordion-item">
@@ -60,7 +129,29 @@
                                 </button>
                                 </h2>
                                 <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    <div class="accordion-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Phone</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="i in listShoppingOrders" :key="i.id">
+                                                    <th scope="row" ></th>
+                                                    <td>{{ i.customer.firstName }} {{ i.customer.lastName }}</td>
+                                                    <td>{{ i.RecieverPhoneNumber }}</td>
+                                                    <td>{{ i.dateCreated }}</td>
+                                                    <td>{{ i.status }}</td>
+                                                </tr>                                                
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -75,17 +166,22 @@
 <script>
 export default {
     name:"OrdersToday",
-    props: {cashLength:Number,
-            errandLength:Number,
-            frontLength:Number,
-            shoppingLength:Number,            
-    },
+    props: [
+        'cashLength',
+        'errandLength',
+        'frontLength',
+        'shoppingLength',        
+        'listErrandOrders',
+        'listFrontdeskOrders',
+        'listShoppingOrders',
+        'listCustomersOrder'
+    ],
     emits: ['close'],
     
     setup(props, context){
         const sendEvent = () => {                  
             context.emit('close') 
-        }
+        }        
     return { sendEvent}
     }    
 }

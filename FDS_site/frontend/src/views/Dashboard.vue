@@ -27,17 +27,19 @@
                                 </div>                            
                             </div>
                         </router-link>
-
-                        <div class="d-flex flex-row bd-highlight mb-3 background">
-                            <div class="p-2 bd-highlight">
-                               <h6>
-                                   <i class="fas fa-users"></i>
-                                </h6>
+                        
+                        <router-link :to="{ name: 'Riders'}">
+                            <div class="d-flex flex-row bd-highlight mb-3 background">
+                                <div class="p-2 bd-highlight">
+                                <h6>
+                                    <i class="fas fa-users"></i>
+                                    </h6>
+                                </div>
+                                <div class="p-2 bd-highlight">
+                                    <a href=""><h6 role="button">Riders</h6></a>
+                                </div>                            
                             </div>
-                            <div class="p-2 bd-highlight">
-                                <a href=""><h6 role="button">Riders</h6></a>
-                            </div>                            
-                        </div>
+                        </router-link>
 
                         <div class="d-flex flex-row bd-highlight mb-3 background">
                             <div class="p-2 bd-highlight">
@@ -126,16 +128,8 @@
                     </section>
                     <div class="the-body mt-3">
                         <div class="container">
-                            <div class="row">
-                                <div class="col"></div>
-                                <div class="col">
-                                    <router-view/>                                 
-                                </div>
-                                <div class="col"></div>
-                            </div>    
-                        </div>
-                        
-                      
+                               <router-view/>    
+                        </div>                                              
                     </div>   
                 </div>
             </div> 
@@ -189,7 +183,11 @@
     .the-body{
         height: auto;
         overflow: scroll;       
-    }    
+    }
+
+    .a {
+        text-decoration: none;
+    }
 
     /*Working on the scroll bar*/
     ::-webkit-scrollbar{
