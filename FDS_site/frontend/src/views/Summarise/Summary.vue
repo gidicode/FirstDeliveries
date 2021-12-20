@@ -25,8 +25,7 @@
                                 <i class="far fa-clock Total_deliveries_icon"></i>
                             </figure>
                         </section>
-                    </div>  
-                    
+                    </div>                      
 
                     <div class="p-2 bd-highlight">
                         <section class="Pending_deliveries_section">
@@ -111,10 +110,14 @@
         <div v-if="showModal" > 
             <TodayOrders 
                 @close="changeModal"
-                v-bind:cashLength= "CashOrdersToday.length" 
-                v-bind:errandLength= "ErrandOrdersToday.length"
-                v-bind:frontLength= "FrontDeskOrdersToday.length"
-                v-bind:shoppingLength= "ShoppingOrdersToday.length"
+                :cashLength= "CashOrdersToday" 
+                :errandLength= "ErrandOrdersToday"
+                :frontLength= "FrontDeskOrdersToday"
+                :shoppingLength= "ShoppingOrdersToday"
+                :listErrandOrders = "listErrandsToday"
+                :listFrontdeskOrders = "listFrontDeskToday"
+                :listShoppingOrders = "listShoppingToday"
+                :listCustomersOrders= "listCustomerOrderToday"
             />
         </div>  
     </div>
@@ -135,10 +138,9 @@ import TodayOrders from './TodayOrders.vue'
 
 export default {
     name:"Summary",
-    components: {TodayOrders},
-    emits: ['close'],
+    components: {TodayOrders},    
 
-    setup(props, context) {
+    setup() {
         const TotalDeliveries = computed(() => paymentByCashDelivered.value.length +
                 errandDelivered.value.length +
                 FrontDeskDelivered.value.length +
@@ -159,19 +161,19 @@ export default {
                 frontDeskDateToday.value.length +
                 shoppingDateToday.value.length
             )            
-        const CashOrdersToday = cashDateToday.value
-        const ErrandOrdersToday = errandDateToday.value
-        const FrontDeskOrdersToday = frontDeskDateToday.value
-        const ShoppingOrdersToday = shoppingDateToday.value
-        let showModal = ref(false)        
-         function changeModal() {                         
-             return showModal.value = !showModal.value              
-         }         
-
-         const sendEvent = () => {
-            context.emit('close')        
-        }
+        const CashOrdersToday = computed(() => cashDateToday.value.length)
         
+        const ErrandOrdersToday =computed(() => errandDateToday.value.length)
+        const FrontDeskOrdersToday = computed(() => frontDeskDateToday.value.length)
+        const ShoppingOrdersToday = computed(() => shoppingDateToday.value.length)        
+        const showModal = ref(false)        
+        const changeModal = () => showModal.value = !showModal.value      
+
+        const listErrandsToday = computed(() => errandDateToday.value)
+        const listFrontDeskToday = computed(() => frontDeskDateToday.value)        
+        const listShoppingToday = computed(() => shoppingDateToday.vlaue)
+        const listCustomerOrderToday = computed(() => cashDateToday.value)
+
         return { 
             TotalDeliveries,
             TotalCustomers,
@@ -186,8 +188,11 @@ export default {
             FrontDeskOrdersToday,
             ShoppingOrdersToday,
             showModal,  
-            changeModal ,
-            sendEvent,         
+            changeModal , 
+            listErrandsToday,   
+            listFrontDeskToday, 
+            listShoppingToday,
+            listCustomerOrderToday, 
         }
     },
 }
@@ -246,8 +251,7 @@ export default {
         right: -3px;
         top: 20%;
         font-size: 25px;
-    }
-    
+    }    
 
     .Total_deliveries{
         width: 232px;
@@ -298,8 +302,6 @@ export default {
         top: 20%;
         font-size: 25px;
     }
-
-
     .Pending_deliveries_section{
         width: 232px;
         height: 131px;                
