@@ -9,7 +9,11 @@
 
                 <div class="riders-list shadow mb-4">
                     <p>You currently doo not have Vehicles registered</p>
-                    <button class="btn btn-sm addBtn rounded"><i class="fas fa-user-plus"></i> Add Vehicles</button>
+                    <button class="btn btn-sm addBtn rounded" 
+                            @click="changeVehicleFormState">
+                            <i class="fas fa-user-plus"></i> 
+                            Add Vehicles
+                    </button>
                 </div>   
 
                 <div class="d-flex flex-row bd-highlight justify-content-around mb-3">
@@ -32,6 +36,11 @@
                 <div v-if="ViewRiderForm">
                     <AddRiderForm @CloseRidersForm="changeRiderFormState"/>
                 </div>
+           
+                <div v-if="ViewCreateVehicleForm">
+                    <AddVehicles @CloseVehicleForm="changeVehicleFormState"/>
+                </div>
+             
             </div>
             <div class="col">
             Column
@@ -42,22 +51,30 @@
 
 <script>
 import AddRiderForm from './AddRiderForm.vue'
+import AddVehicles from './AddVehicles.vue'
 import { ref } from '@vue/reactivity'
 
 export default {
-    name:'RidersPage',
-    components: {AddRiderForm},
+    name:'RidersControl',
+    components: {AddRiderForm, AddVehicles},
 
     setup() {
         const ViewRiderForm = ref(false)
+        const ViewCreateVehicleForm = ref(false)
         const changeRiderFormState = () => ViewRiderForm.value = !ViewRiderForm.value
+        const changeVehicleFormState = () => ViewCreateVehicleForm.value = !ViewCreateVehicleForm.value
+        
         return {
             AddRiderForm,
+            AddVehicles,
+
             ViewRiderForm,
-            changeRiderFormState
+            ViewCreateVehicleForm,
+
+            changeRiderFormState,            
+            changeVehicleFormState
         }
-    }
-    
+    }    
 }
 </script>
 

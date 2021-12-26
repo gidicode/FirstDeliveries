@@ -13,12 +13,13 @@ class Fleets_PH(models.Model):
                 ( "Tricycle", "Tricycle"),
     ]
 
-    fleet_plate_number = models.CharField(max_length=100, null=True, unique=True)
-    Tracker_id = models.CharField(max_length=100, null=True, unique=True)
+    fleet_plate_number = models.CharField(max_length=100, null=True)
+    Tracker_id = models.CharField(max_length=100, null=True)
     Tracker_phone_num = models.CharField(max_length=100, null=True)
     category = models.CharField(max_length=100, choices=OPTIONS1, null=True)
     vechile_name = models.CharField(max_length=100, null=True)    
     date_created = models.DateTimeField(default=timezone.now, null=True)
+    attached = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.fleet_plate_number}, {self.category}, {self.vechile_name}"

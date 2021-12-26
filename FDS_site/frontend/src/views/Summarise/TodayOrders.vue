@@ -147,8 +147,7 @@
                                                     <td>{{ i.RecieverPhoneNumber }}</td>
                                                     <td>{{ i.dateCreated }}</td>
                                                     <td>{{ i.status }}</td>
-                                                </tr>                                                
-                                                
+                                                </tr>                                                                                                
                                             </tbody>
                                         </table>
                                     </div>

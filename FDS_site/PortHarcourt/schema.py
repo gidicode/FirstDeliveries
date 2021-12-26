@@ -166,10 +166,15 @@ class CreateRiders(graphene.Mutation):
             phone_number = phone_number,             
             Address = Address,
         ) 
+        
         if attached_bike_id is not None:           
             attached_bike_object = models.Fleets_PH.objects.get(pk = attached_bike_id)                        
-        riders.attached_bike = attached_bike_object
+        riders.attached_bike = attached_bike_object         
         riders.save()        
+        update_attached_bike = models.Fleets_PH.objects.get(pk = attached_bike_id)
+        update_attached_bike.attached = True
+        update_attached_bike.save()
+
         return CreateRiders(riders=riders)
 
 class CreateFleet(graphene.Mutation):
@@ -179,7 +184,7 @@ class CreateFleet(graphene.Mutation):
         Tracker_id = graphene.String()
         Tracker_phone_num = graphene.String()
         category = graphene.String()
-        vehicle_name = graphene.String()
+        vechile_name = graphene.String()
         date_created = graphene.types.DateTime()
 
     fleet = graphene.Field(FleetType)
@@ -188,12 +193,12 @@ class CreateFleet(graphene.Mutation):
     def mutate( 
         root, info, id, fleet_plate_number, 
         Tracker_id, Tracker_phone_num, category,
-        vehicle_name, date_created
+        vechile_name, date_created
     ):
         fleet = models.Fleets_PH.objects.create(
             fleet_plate_number = fleet_plate_number,
             Tracker_id = Tracker_id, Tracker_phone_num = Tracker_phone_num,
-            category = category, vehicle_name = vehicle_name, 
+            category = category, vechile_name = vechile_name, 
             date_created = date_created
         )
         return CreateFleet(fleet = fleet)

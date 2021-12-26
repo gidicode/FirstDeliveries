@@ -4,7 +4,7 @@ import Dashboard from '../views/Dashboard.vue'
 import Summary from '../views/Summarise/Summary.vue'
 import Customers from '../views/Customers/Customers.vue'
 import CustomerDetails from '../views/Customers/CustomerDetails.vue'
-import Riders from '../views/Riders/Riders.vue'
+import RidersSummary from '../views/Riders/RidersSummary.vue'
 
 const routes = [
     {
@@ -35,7 +35,7 @@ const routes = [
     {
         path: '/riders',
         name: 'Riders',
-        component: Riders,
+        component: RidersSummary,
     }
 ]
 

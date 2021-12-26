@@ -50,7 +50,8 @@ const {result} = useQuery(gql`
           allFleets {
             id
             fleetPlateNumber
-            vechileName       
+            vechileName
+            attached       
           },
 
           allRiders {
