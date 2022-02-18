@@ -1,16 +1,11 @@
 <template>
-<div>
-
-  <Dashboard />  
-</div>
-  
-
+  <div>
+    <Dashboard />  
+  </div>
 </template>
 
 <script>
 import Dashboard from './views/Dashboard.vue'
-
-
 
 export default {  
   

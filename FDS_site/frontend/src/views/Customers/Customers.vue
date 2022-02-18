@@ -97,7 +97,7 @@ export default {
 
 .title-background{
   background: rgb(122, 164, 255);
-  color: rgb(255, 255, 255);
+  color: rgb(253, 185, 185);
   padding: 5px;  
 }
 

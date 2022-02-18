@@ -164,6 +164,7 @@ export const { mutate: createRiders } = useMutation(gql`
 `)
 console.log(createRiders)
 */
+
 export const paymentByCashDelivered = useResult(result, [], data => data.byCashDelivered)
 export const errandDelivered = useResult(result, [], data => data.byErrandDelivered)
 export const FrontDeskDelivered = useResult(result, [],  data => data.byFrontDeskDelivered)
