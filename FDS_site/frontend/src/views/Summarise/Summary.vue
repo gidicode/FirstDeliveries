@@ -1,7 +1,7 @@
 <template >
     <div class="container mt-1" id="summ1" >
         <div class="row no-gutters">
-            <div class="col">            
+            <div class="col">
                 <div class="d-flex flex-row bd-highlight mb-3 justify-content-right">
                     <div class="p-2 bd-highlight">
                         <section class="affiliate-customers">

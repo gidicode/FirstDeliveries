@@ -107,10 +107,9 @@
             const { handleSubmit } = useForm({
                 validationSchema: schema,
             })
-            const onSubmit = handleSubmit((values, {resetForm}) => {              
-                createRiders()
-                onDone(() => {                                      
-                    console.log("hello")      
+            const onSubmit = handleSubmit((values, {resetForm}) => {                              
+                createRiders()                
+                onDone(() => {                                                          
                      resetForm({
                     values: {
                         phoneNumber: '',
@@ -119,7 +118,11 @@
                         Address: '',
                         attachedBike: '',
                         }
-                    })                                            
+                    }) 
+                    
+                    showSuccess.value = !showSuccess.value
+                    showError.value = false
+                    setTimeout(hideSuccess, 5000)     
                 })                                               
                                              
             })
@@ -130,18 +133,16 @@
             const {value: Address, errorMessage: AddressError} = useField('Address')
             const {value: attachedBike, errorMessage: attachedBikeError} = useField('attachedBike')            
 
-            const ListFleets = computed(() => allFleets.value)                        
-
-            console.log(ListFleets.value)
+            const ListFleets = computed(() => allFleets.value)            
                                 
-            const { mutate: createRiders, onDone, onError, error: sendMessageError, loading: sendMessageLoading} = useMutation(gql`
+            const { mutate: createRiders, onDone, error: sendMessageError, loading: sendMessageLoading} = useMutation(gql`
                 mutation createRiders( 
                     $firstName: String!,
                     $lastName: String!,
                     $phoneNumber: String!,      
                     $Address: String!,
-                    $attachedBike: Int!){ 
-                    
+                    $attachedBike: Int!
+                    ){
                     createRiders (
                         firstName: $firstName,
                         lastName: $lastName,
@@ -172,26 +173,8 @@
                     Address: Address.value,
                     attachedBike: attachedBike.value  
                 },                         
-            }))       
-            
-            onDone(() => {                                      
-                showSuccess.value = !showSuccess.value
-                showError.value = false
-                setTimeout(hideSuccess, 5000)                
-            }) 
-
-            onError(({graphQLErrors, networkError}) => {
-                if (graphQLErrors)
-                    graphQLErrors.map(({message, locations, path}) => 
-                        console.log(
-                            `[GraphQL error]: Message: ${message}, 
-                                            Location: ${locations},
-                                            Path: ${path}`,                        
-                        ),
-                    )
-                
-                if (networkError) console.log(`[Network error]: ${networkError}`)
-            })
+            }),
+        )                                         
             
 
             return {       
